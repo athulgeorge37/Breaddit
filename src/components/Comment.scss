@@ -1,0 +1,110 @@
+@import "../variables.scss";
+
+.Comment {
+    display: flex;
+    padding: 0.5em;
+    width: 100%;
+    
+    .default_profile_pic_div {
+        margin-right: 10px;
+        padding: 0.5em;
+        border-radius: 6px;
+        background-color: $light-grey;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .default_profile_pic {
+            width: 30px;
+            height: 30px;
+            @include white-filter_color;
+        }
+    }
+
+    .comment_content_and_votes {
+        display: flex;
+        justify-content: space-between;
+
+        width: calc(100% - 5em);
+        box-sizing: border-box;
+
+        .comment_content {
+            // calculate the entire value including padding , margin, border
+            // that this div, and the votes div take
+            width: calc(100% - 6em);
+            box-sizing: border-box;
+
+            overflow-wrap: break-word;
+            
+            .comment_author {
+                margin-bottom: 0.2em;
+            }
+            
+        }
+
+        .votes {
+            display: flex;
+            
+
+            .up_votes,
+            .down_votes {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .down_votes {
+                margin-left: 0.2em;
+            }
+
+            .up_arrow,
+            .down_arrow {
+                margin-right: 0.2em;
+            }
+
+
+            .up_arrow, 
+            .down_arrow {
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background: none;
+                border: none;
+                padding: 0.5em;
+                border-radius: 6px;
+                color: inherit;
+                cursor: pointer;   
+                
+                &:hover {
+                    background-color: $light-grey;
+                }
+            }
+
+            .vote_img {
+                width: 15px;
+                @include light-grey-filter_color;
+            }
+
+            .down {
+                transform: rotate(180deg);
+            }
+
+            .up_vote {
+                @include blue-filter_color;
+            }
+
+            .down_vote {
+                @include red-filter_color;
+            }
+        }
+    }
+
+    
+}

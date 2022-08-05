@@ -1,0 +1,111 @@
+@import "../variables.scss";
+
+.Create_Post {
+    width: 50%;
+    margin-bottom: calc(2 * $inner_padding);
+
+    .collapsed_post_view {
+        display: flex;
+        justify-content: space-evenly;
+        background-color: $dark-grey;
+        border-radius: $default-border-radius;
+        padding: $inner_padding;
+        border: 1px solid $light-grey;
+
+
+        .default_profile_pic_div {
+            margin-right: 10px;
+            padding: 0.5em;
+            border-radius: 6px;
+            background-color: $light-grey;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .default_profile_pic {
+                width: 30px;
+                height: 30px;
+                filter: invert(94%) sepia(7%) saturate(300%) hue-rotate(171deg) brightness(92%) contrast(84%);
+            }
+        }
+
+        input {
+            @include input_styles;
+            width: 100%;
+        }
+    
+       
+    }
+
+    .expanded_post_view {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        
+        background-color: $dark-grey;
+        border-radius: $default-border-radius;
+        padding: $inner_padding;
+        border: 1px solid $light-grey;
+
+
+        h2 {
+            margin-bottom: 16px;
+        }
+
+        .post_inputs {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            
+
+            .post_title {
+                width: calc(100% - (4 * $inner_padding));
+                margin-bottom: 16px;
+                @include input_styles;
+            }   
+    
+            .post_body {
+                width: 100%;
+                height: 150px;
+                margin-bottom: 16px;
+                @include input_styles;
+                resize: vertical;
+            }       
+            
+        }
+
+
+        .characters_and_btns {
+            display: flex;
+            justify-content: space-between;
+            width: calc(100% - (2 * $inner_padding));
+
+            .characters_left
+            ,.post_btns {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .cancel_btn {
+                @include btn-styles($blue);
+            }
+
+            .post_btn {
+                @include btn-styles($green);
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+
+.text_editor {
+    color: black;
+}

@@ -1,0 +1,312 @@
+@import "../variables.scss";
+
+
+// when displaying content from text editor, these
+// styles will ensure it is the same as the one seen in the text editor
+// all styles inside the .text_content nest
+
+// add this react component where u want so these styles are applied
+
+//import parse from 'html-react-parser';
+// <div className="text_content">
+//     <div className="display_text">
+//         <h1 className="Title">{post_title}</h1>
+//         <div className="parsed_text">
+//             {parse(post_text)}
+//         </div>
+//     </div>
+// </div>
+
+.PostContent {
+    margin-bottom: calc(2 * $inner_padding);
+    background-color: $dark-grey;
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+
+
+    .post_user_and_awards {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // padding: $inner_padding 0 10px $inner_padding;
+        padding: 0.5em;
+        border-bottom: 1px solid $light-grey;
+
+        .post_user {
+            display: flex;
+            align-items: center;
+
+            .default_profile_pic_div {
+                margin-right: 10px;
+                padding: 0.5em;
+                border-radius: 6px;
+                background-color: $light-grey;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+    
+                &:hover {
+                    cursor: pointer;
+                }
+    
+                .default_profile_pic {
+                    width: 30px;
+                    height: 30px;
+                    @include white-filter_color;
+                }
+            }
+        }
+
+        .awards {
+            @include btn-styles($green);
+            height: 32px;
+        }
+    }
+
+    .main_content_and_votes {
+        display: flex;
+        justify-content: space-between;
+
+        .text_content {
+            background-color: $dark-grey;
+            color: $white;
+
+            // calculate the entire value including padding , margin, border
+            // that this div, and the votes div take
+            width: calc(100% - 3em);
+            box-sizing: border-box;
+        
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0.5em 0.5em 0.5em 1em;
+
+            .display_text {
+                width: 100%;
+                overflow-wrap: break-word;
+                
+                .parsed_text {
+        
+                    // font styles
+                    $font_sizes: (
+                        text-tiny: 0.7em,
+                        text-small: 0.85em,
+                        text-big: 1.4em,
+                        text-huge: 1.8em
+                    );
+        
+                    @each $font_type, $font_size in $font_sizes {
+                        .#{$font_type} {
+                            font-size: $font_size;
+                        }
+                    }
+        
+                    p {
+                        font-size: 1em;
+                    }
+        
+                    // highlighting styles
+                    $highlight_colors: (
+                        marker-yellow: #fdfd77,
+                        marker-green: #62f962,
+                        marker-pink: #fc7899,
+                        marker-blue: #72ccfd
+                    );
+        
+                    @each $highlight_name, $highlight_color in $highlight_colors {
+                        .#{$highlight_name} {
+                            background-color: $highlight_color;
+                        }
+                    }
+        
+                    .pen-red {
+                        background-color: transparent;
+                        color: #e71313;
+                    }
+        
+                    .pen-green {
+                        background-color: transparent;
+                        color: #128a00;
+                    }
+        
+        
+                    ul, ol {
+                        margin-left: calc(2 * $text_margin_left);
+                    }
+        
+                    pre {
+                        position: relative;
+                        padding: 1em;
+                        // color: hsl(0, 0%, 20.8%);
+                        // background-color: #eeeeee;
+                        background-color: $black;
+                        color: $white;
+                        border: 1px solid $light-grey;
+                        // border: 1px solid hsl(0, 0%, 77%);
+                        border-radius: 2px;
+                        text-align: left;
+                        direction: ltr;
+                        tab-size: 4;
+                        white-space: pre-wrap;
+                        font-style: normal;
+                    }
+        
+                    code {
+                        // background-color: #eeeeee;
+                        border-radius: 2px;
+                        padding: 0.15em;
+                    }
+        
+        
+                    $code_languages: (
+                        language-plaintext: "Plain Text",
+                        language-c: "C",
+                        language-cs: "C#",
+                        language-cpp: "C++",
+                        language-css: "CSS",
+                        language-diff: "Diff",
+                        language-html: "HTML",
+                        language-java: "Java",
+                        language-javascript: "JavaScript",
+                        language-php: "PHP",
+                        language-python: "Python",
+                        language-ruby: "Ruby",
+                        language-typescript: "Typescript",
+                        language-xml: "XML",
+                    );
+        
+                    @each $language_class, $language_name in $code_languages {
+                        .#{$language_class}::after {
+                            content: $language_name;
+        
+                            position: absolute;
+                            // background-color: #757575;
+                            // color: white;
+                            background-color: $light-grey;
+                            font-family: Helvetica,Arial,Tahoma,Verdana,Sans-Serif;
+                            font-size: 10px;
+                            line-height: 16px;
+                            padding: calc(0.6em * 0.3) calc(0.6em * 0.8);
+                            right: 10px;
+                            top: -1px;
+                            white-space: nowrap;
+                        }
+                    }
+        
+                    hr {
+                        background-color: #dedede;
+                        border: 0;
+                        height: 4px;
+                        margin: 15px 0;
+                    }
+        
+                    
+        
+                    table {
+                       border-spacing: 0;
+                       border-collapse: collapse;
+                       width: 100%;
+        
+                        th {
+                            background-color: rgb(0 0 0 / 5%);
+                        }
+        
+                        td, th {
+                            // border:  1px solid #bfbfbf;
+                            border: 1px solid #343536;
+                            min-width: 2em;
+                            padding: 0.4em;
+                        }
+                    }
+                }
+            }
+
+            .show_less {
+                height: 200px;
+                overflow: hidden;
+            }
+        }
+
+        .votes {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-right: 0.5em;
+            margin: 0.5em 0;
+
+            .up_arrow, 
+            .down_arrow {
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background: none;
+                border: none;
+                padding: 0.5em;
+                border-radius: 6px;
+                color: inherit;
+                cursor: pointer;   
+                
+                &:hover {
+                    background-color: $light-grey;
+                }
+            }
+
+            .vote_img {
+                width: 25px;
+                @include light-grey-filter_color;
+            }
+
+            .down {
+                transform: rotate(180deg);
+            }
+
+            .up_vote {
+                @include blue-filter_color;
+            }
+
+            .down_vote {
+                @include red-filter_color;
+            }
+        }
+    }
+
+    .post_btns {
+        padding: 0.5em;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid $light-grey;
+
+        
+        .show_more_less_btn {
+            @include btn-styles($blue)
+        }
+
+
+        .both_comments_btns {
+            .add_comment_btn {
+                @include btn-styles($blue)
+            }
+    
+            .cancel_btn {
+                @include btn-styles($red)
+            }
+    
+            .comments_btn {
+                margin-left: 10px;
+            }
+    
+            .show_comments {
+                @include btn-styles($blue);
+            }
+    
+            .hide_comments {
+                @include btn-styles($red);
+            }
+        }
+    }
+}

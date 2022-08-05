@@ -1,0 +1,7 @@
+@import "../variables.scss";
+
+.Comment_Section {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid $light-grey;
+}

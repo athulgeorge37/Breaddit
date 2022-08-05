@@ -1,0 +1,40 @@
+@import "../variables.scss";
+
+.PopUpMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    padding: 16px;
+    width: 250px;
+
+    z-index: 2;
+    background-color: $dark-grey;
+    border: 1px solid $light-grey;
+    border-radius: 6px;
+
+    .pop_up_title,
+    .pop_up_info {
+        margin-bottom: 16px;
+    }
+
+    .pop_up_btns {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        // margin-top: 16px;
+        
+
+        .btn_1 {
+            @include btn-styles($blue)
+        }
+
+        .btn_2 {
+            @include btn-styles($red)
+        }
+
+    }
+
+}

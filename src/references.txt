@@ -1,0 +1,11 @@
+
+Stuff I have used:
+- react with npx create react app
+- scss for styling
+
+- text editor from https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/frameworks/react.html
+- html parser from https://www.npmjs.com/package/html-react-parser
+
+- uuidv4 for unique ID's
+
+- icons all from flaticon

@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import './PostContent.scss';
 
 import parse from 'html-react-parser';
+import { v4 as uuid } from 'uuid';
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 
-// import '.../public/images/up_arrow.png';
 
 function PostContent({ post_details }) {
 
@@ -20,8 +20,6 @@ function PostContent({ post_details }) {
 
     const [allow_show_more_btn, set_allow_show_more_btn] = useState(false);
     const [show_more_content, set_show_more_content] = useState(false);
-
-    
 
     // required for read_more/less button
     const posted_content_ref = useRef();
@@ -98,6 +96,36 @@ function PostContent({ post_details }) {
 
         // updates the local storage of down votes
         update_local_storage_post_vote(post_up_votes, post_down_votes - 1) 
+    }
+
+    const handle_add_comment_surface_level = (comment_content) => {
+
+        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+
+        const new_comment = {
+            comment_id: uuid(),
+            parent_id: "none",
+            children_comments: [],
+            indented: true,
+            comment_date_time: new Date().getTime(),
+            comment_content: comment_content,
+            comment_author: "commenter",  // need to change to current user logged in
+            comment_up_votes: 0,
+            comment_down_votes: 0
+        }
+
+        for (const post of all_posts) {
+            if (post.post_id === post_details.post_id) {
+                post.post_comments = [...post.post_comments,
+                    new_comment
+                ]
+            }
+        }
+
+        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+
+        set_show_add_comment(false)
+        set_show_comments_section(true)
     }
 
 
@@ -213,9 +241,7 @@ function PostContent({ post_details }) {
                     show_add_comment &&
 
                     <AddComment 
-                        post_id={post_details.post_id}
-                        set_show_add_comment={set_show_add_comment}
-                        set_show_comments_section={set_show_comments_section}
+                        handle_add_comment={handle_add_comment_surface_level}
                     />
                 }
             </div>

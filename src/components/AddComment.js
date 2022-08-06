@@ -1,42 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './AddComment.scss'
 
-import { v4 as uuid } from 'uuid';
+
 
 function AddComment(props) {
 
     const [comment_content, set_comment_content] = useState("");
 
-
-    const handle_add_comment = () => {
-
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
-
-        const new_comment = {
-            comment_id: uuid(),
-            parent_id: "none",
-            children_comments: [],
-            indent_level: 0,
-            comment_date_time: new Date().getTime(),
-            comment_content: comment_content,
-            comment_author: "commenter",  // need to change to current user logged in
-            comment_up_votes: 0,
-            comment_down_votes: 0
-        }
-
-        for (const post of all_posts) {
-            if (post.post_id === props.post_id) {
-                post.post_comments = [...post.post_comments,
-                    new_comment
-                ]
-            }
-        }
-
-        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
-
-        props.set_show_add_comment(false)
-        props.set_show_comments_section(true)
-    }
 
     const handle_resize = (e) => {
 
@@ -79,7 +49,7 @@ function AddComment(props) {
 
             <button
                 className="comment_btn"
-                onClick={handle_add_comment}
+                onClick={() => props.handle_add_comment(comment_content)}
             >
                 Comment
             </button>

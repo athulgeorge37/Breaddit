@@ -10,12 +10,15 @@ import Profile from './components/Profile';
 import Posts from './components/Posts';
 
 
-const AVAILABLE_PAGES = ["Home", "Sign Up", "Sign In", "Profile", "Posts"]
-const PAGE_RELATED_COMPONENTS = [<Home/>, <SignUp/>, <SignIn/>, <Profile/>, <Posts/>]
+const AVAILABLE_PAGES = 
+	["Home", "Sign Up", "Sign In", "Profile", "Posts"]
+
+const PAGE_RELATED_COMPONENTS = 
+	[<Home/>, <SignUp/>, <SignIn/>, <Profile/>, <Posts/>]
 
 function App() {
 
-	const [curr_page, set_curr_page] = useState("Home");
+	const [curr_page, set_curr_page] = useState("Posts");
 
 	const body_page = () => {
 		// returns the respective component based

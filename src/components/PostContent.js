@@ -12,8 +12,8 @@ import { calculate_time_passed } from '../helper_functions/calculate_time_passed
 
 function PostContent({ post_details }) {
 
-    const [up_votes, set_up_votes] = useState(0);
-    const [down_votes, set_down_votes] = useState(0);
+    const [post_up_votes, update_post_up_votes] = useState(0);
+    const [post_down_votes, update_post_down_votes] = useState(0);
 
     const [show_add_comment, set_show_add_comment] = useState(false);
     const [show_comments_section, set_show_comments_section] = useState(false);
@@ -47,10 +47,60 @@ function PostContent({ post_details }) {
         }
     }
 
-    const handle_votes = () => {
-        // need to implement once login is done
-        // this is to track whether the current user logged in has voted or not
+
+    const initialise_post_votes = () => {
+        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+
+        for (const post of all_posts) {
+            if (post.post_id === post_details.post_id) {
+                update_post_up_votes(post.post_up_votes)
+                update_post_down_votes(post.post_down_votes)
+                break;
+            }
+        }
     }
+
+    useEffect(() => {
+        // executes on postcontent component load to initialise all votes for each post
+        initialise_post_votes()
+    }, [])
+
+
+    const update_local_storage_post_vote = (new_up_vote, new_down_vote) => {
+        // finds the appropriate post in localstorage, and
+        // updates localstorage to contain each post's up and down votes
+
+        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+
+        for (const post of all_posts) {
+            if (post.post_id === post_details.post_id) {
+
+                post.post_up_votes = new_up_vote
+                post.post_down_votes = new_down_vote
+                break;
+            }
+        }
+
+        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+    }
+
+    const handle_post_up_vote = () => {
+        // updates the UI of up votes
+        update_post_up_votes(post_up_votes + 1) 
+
+        // updates the local storage of up votes
+        update_local_storage_post_vote(post_up_votes + 1, post_down_votes) 
+    }
+
+    const handle_post_down_vote = () => {
+        // updates the UI of down votes
+        update_post_down_votes(post_down_votes - 1) 
+
+        // updates the local storage of down votes
+        update_local_storage_post_vote(post_up_votes, post_down_votes - 1) 
+    }
+
+
 
     return (
         <div className="PostContent">
@@ -65,7 +115,7 @@ function PostContent({ post_details }) {
                         />
                     </div>
                     <div className="posted_by_user">
-                        {post_details.post_author.username}: {calculate_time_passed(post_details.post_date_time)} ago
+                        <b>{post_details.post_author.username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
                     </div>
                 </div>
                 <button className="awards">
@@ -91,23 +141,31 @@ function PostContent({ post_details }) {
                 <div className="votes">
 
                     <div className="up_votes">
-                        {up_votes}
+                        {post_up_votes}
                     </div>
                     <button 
                         className="up_arrow"
-                        onClick={() => set_up_votes(up_votes + 1)}
+                        onClick={handle_post_up_vote}
                     >
-                        <img src="./images/up_arrow_v2.png" alt="up_vote" className="vote_img up_vote"/>
+                        <img 
+                            src="./images/up_arrow_v2.png" 
+                            alt="up_vote" 
+                            className="vote_img up_vote"
+                        />
                     </button>
 
                     <button 
                         className="down_arrow"
-                        onClick={() => set_down_votes(down_votes - 1)}
+                        onClick={handle_post_down_vote}
                     >
-                        <img src="./images/up_arrow_v2.png" alt="up_vote" className="vote_img down down_vote"/>
+                        <img 
+                            src="./images/up_arrow_v2.png" 
+                            alt="up_vote" 
+                            className="vote_img down down_vote"
+                        />
                     </button>
                     <div className="down_votes">
-                        {down_votes}
+                        {post_down_votes}
                     </div>
 
                 </div>

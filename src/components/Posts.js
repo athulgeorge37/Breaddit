@@ -44,6 +44,8 @@ function Posts() {
             post_title: post_title,
             post_text: post_text,
             post_date_time: new Date().getTime(),
+            post_up_votes: 0,
+            post_down_votes: 0,
             post_comments: []
         }
 

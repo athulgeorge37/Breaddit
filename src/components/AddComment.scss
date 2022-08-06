@@ -3,22 +3,46 @@
 .Add_Comment {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0.5em;
-    padding-top: 0;
+    border-top: 1px solid $light-grey;
 
     .add_comment_pic_and_input {
         display: flex;
         align-items: center;
         width: 100%;
 
+        .default_profile_pic_div {
+            padding: 0.5em;
+            border-radius: 6px;
+            background-color: $light-grey;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .default_profile_pic {
+                width: 30px;
+                height: 30px;
+                @include white-filter_color;
+            }
+        }
+
         .add_comment_input {
             @include input_styles;
             width: 100%;
             margin: 0 10px;
+            resize: none;
         }
+        
     }
 
     .comment_btn {
         @include btn-styles($green);
+        height: 32px;
     }
 }

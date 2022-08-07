@@ -83,6 +83,11 @@
 
             padding: 0.5em 0.5em 0.5em 1em;
 
+            .show_less {
+                height: 200px;
+                overflow: hidden;
+            }
+
             .display_text {
                 width: 100%;
                 overflow-wrap: break-word;
@@ -222,11 +227,6 @@
                     }
                 }
             }
-
-            .show_less {
-                height: 200px;
-                overflow: hidden;
-            }
         }
 
         .votes {
@@ -282,9 +282,14 @@
         border-top: 1px solid $light-grey;
 
         
-        .show_more_less_btn {
+        .read_less {
+            @include btn-styles($red)
+        }
+
+        .read_more {
             @include btn-styles($blue)
         }
+        
 
 
         .both_comments_btns {

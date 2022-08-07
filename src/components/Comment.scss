@@ -1,9 +1,11 @@
 @import "../variables.scss";
 
-.Comment {
+.comment_or_reply {
     display: flex;
     padding: 0.5em;
-    width: 100%;
+    // padding-bottom: 0;
+    border-top: 1px solid $light-grey;
+
     
     .default_profile_pic_div {
         margin-right: 10px;
@@ -26,20 +28,23 @@
         }
     }
 
-    .comment_content_and_votes {
+    .comment_content_container {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-
-        width: calc(100% - 5em);
+        width: calc(100% - 30px - 10px - 0.5em - 0.5em);
         box-sizing: border-box;
 
         .comment_content {
-            // calculate the entire value including padding , margin, border
-            // that this div, and the votes div take
-            width: calc(100% - 6em);
+            display: flex;
+            flex-direction: column;
             box-sizing: border-box;
-
             overflow-wrap: break-word;
+
+            .show_less {
+                height: 100px;
+                overflow: hidden;
+            }
             
             .comment_author {
                 margin-bottom: 0.2em;
@@ -51,64 +56,125 @@
             
         }
 
-        .votes {
+        .votes_and_reply_btns {
             display: flex;
-            
+            justify-content: space-between;
+            align-items: center;
 
-            .up_votes,
-            .down_votes {
+           
+
+            .votes {
                 display: flex;
-                justify-content: center;
                 align-items: center;
-            }
-
-            .down_votes {
-                margin-left: 0.2em;
-            }
-
-            .up_arrow,
-            .down_arrow {
-                margin-right: 0.2em;
-            }
-
-
-            .up_arrow, 
-            .down_arrow {
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                background: none;
-                border: none;
-                padding: 0.5em;
-                border-radius: 6px;
-                color: inherit;
-                cursor: pointer;   
                 
-                &:hover {
-                    background-color: $light-grey;
+                .up_votes,
+                .down_votes {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+    
+                .down_votes {
+                    margin-left: 0.2em;
+                }
+    
+                .up_arrow,
+                .down_arrow {
+                    margin-right: 0.2em;
+                }
+    
+    
+                .up_arrow, 
+                .down_arrow {
+    
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+    
+                    background: none;
+                    border: none;
+                    padding: 0.5em;
+                    border-radius: 6px;
+                    color: inherit;
+                    cursor: pointer;   
+                    
+                    &:hover {
+                        background-color: $light-grey;
+                    }
+                }
+    
+                .vote_img {
+                    width: 15px;
+                    @include light-grey-filter_color;
+                }
+    
+                .down {
+                    transform: rotate(180deg);
+                }
+    
+                .up_vote {
+                    @include blue-filter_color;
+                }
+    
+                .down_vote {
+                    @include red-filter_color;
+                }
+
+                .read_more_less_div {
+
+                    .read_more_less_btn {
+                        margin-left: 10px;
+                    }
+    
+                    .read_more {
+                        @include btn-style-text($blue)
+                    }
+    
+                    .read_less {
+                        @include btn-style-text($red)
+                    }
+
+                }
+                
+            }
+
+
+            .reply_btns {
+
+                .view_replies_btn {
+                    margin-left: 10px;
+                }
+
+                .cancel,
+                .hide_replies {
+                    @include btn-style-text($red)
+                }
+
+                .reply,
+                .view_replies {
+                    @include btn-style-text($blue)
+                }
+
+            }
+
+        }
+
+        .add_comments_and_show_replies {
+                
+            .Add_Comment {
+                padding: 0.5em 0;
+            }
+
+            .add_comments {
+                .default_profile_pic_div {
+                    margin-right: 0;
                 }
             }
+            
+        }
 
-            .vote_img {
-                width: 15px;
-                @include light-grey-filter_color;
-            }
-
-            .down {
-                transform: rotate(180deg);
-            }
-
-            .up_vote {
-                @include blue-filter_color;
-            }
-
-            .down_vote {
-                @include red-filter_color;
-            }
+        .comment_replies div.Reply:last-child {
+            padding-bottom: 0;
         }
     }
-
-    
 }

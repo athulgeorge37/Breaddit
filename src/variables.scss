@@ -72,6 +72,14 @@ $text_editor_max_width: 100%;
     }
 }
 
+@mixin btn-style-text($color) {
+    font-weight: bold;
+    background: none;
+    border: none;
+    color: $color;
+    cursor: pointer;
+}
+
 @mixin input_styles {
     border: 1px solid $blue;
     padding: 5px 12px;

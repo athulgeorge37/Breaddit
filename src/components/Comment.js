@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Comment.scss';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
-
 import { v4 as uuid } from 'uuid';
 
 import AddComment from './AddComment';
@@ -22,6 +21,28 @@ function Comment(props) {
     const [show_reply_to_comment, set_show_reply_to_comment] = useState(false);
     const [show_replies, set_show_replies] = useState(false);
 
+    const [allow_read_more_btn, set_allow_read_more_btn] = useState(false);
+    const [read_more_content, set_read_more_content] = useState(false);
+
+    // required for read_more/less button
+    const comment_content_ref = useRef();
+
+    useEffect(() => {
+        const comment_content_height = comment_content_ref.current.clientHeight
+
+        // only allowing component to render show more/less btn
+        // if the content of the post takes up more than 100px
+
+        //  if you want to change this value, u must also change in the css
+        // where the classname is .show_less
+        if (comment_content_height > 100) {
+            set_allow_read_more_btn(true)
+        }
+
+    }, [])
+ 
+
+
     const initialise_comment_votes = () => {
         let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
 
@@ -39,7 +60,6 @@ function Comment(props) {
                                 break;
                             }
                         }
-                        break;
                     } else {
                         // if comment rendered is a surface level comment, we
                         // update up and down votes like this
@@ -83,7 +103,6 @@ function Comment(props) {
                                 break;
                             }
                         }
-                        break;
                     } else {
                         // updating surface level commments for up and down votes
                         if (post.post_comments[n].comment_id === props.comment.comment_id) {
@@ -193,8 +212,23 @@ function Comment(props) {
     }
     
 
+    const determine_number_of_replies = () => {
+
+        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+
+
+        for (const post of all_posts) {
+            if (post.post_id === props.post_id) {
+                for (let n=0; n < post.post_comments.length; n++) {
+                    return post.post_comments[n].children_comments.length
+                }
+            }
+        }
+    }
+
+
     return (
-        <div className="Comment">
+        <div className={"comment_or_reply " + (props.indented ? "Reply" : "Comment")}>
 
             <div className="profile_picture">
                 <div className="default_profile_pic_div">
@@ -206,89 +240,132 @@ function Comment(props) {
                 </div>
             </div>
 
-            <div className="comment_content_and_votes">
+            <div className="comment_content_container">
 
                 <div className="comment_content">
                     <div className="comment_author">
                         <b>{props.comment.comment_author} • </b>{calculate_time_passed(props.comment.comment_date_time)} ago
                     </div>
-                    <div className="comment_content_text">{props.comment.comment_content}</div>
+                    <div 
+                        className={"comment_content_text " + (allow_read_more_btn ? (read_more_content ? "" : "show_less") : "")}
+                        ref={comment_content_ref}
+                    >
+                        {props.comment.comment_content}
+                    </div>
 
-                    {
-                        props.indented === false
-
-                        &&
-
-                        <div className="reply_btns">
-                            <button 
-                                className="reply"
-                                onClick={() => set_show_reply_to_comment(!show_reply_to_comment)}
-                            >
-                                {show_reply_to_comment ? "Cancel" : "Reply"}
-                            </button>
-
-                            <button 
-                                className="view_replies"
-                                onClick={() => set_show_replies(!show_replies)}
-                            >
-                                {show_replies ? "hide replies" : "show replies"}
-                            </button>
-                        </div>
-                    }
-
-                    {
-                        show_reply_to_comment 
-
-                        && 
-
-                        <AddComment 
-                            handle_add_comment={handle_add_comment_indented}
-                        />
-                    }
-
-                    {
-                        show_replies 
-                        
-                        &&
-                        
-                        render_indented_comments()
-                    }
                 </div>
 
-                <div className="votes">
+                <div className="votes_and_reply_btns">
+                    <div className="votes">
 
-                    <div className="up_votes">
-                        
-                        <button 
-                            className="up_arrow"
-                            onClick={handle_comment_up_vote}
-                        >
-                            <img 
-                                src="./images/up_arrow_v2.png" 
-                                alt="up_vote" 
-                                className="vote_img up_vote"
+                        <div className="up_votes">
+                            
+                            <button 
+                                className="up_arrow"
+                                onClick={handle_comment_up_vote}
+                            >
+                                <img 
+                                    src="./images/up_arrow_v2.png" 
+                                    alt="up_vote" 
+                                    className="vote_img up_vote"
+                                />
+                            </button>
+
+                            {comment_up_votes}
+                        </div>
+
+                        <div className="down_votes">
+
+                            <button 
+                                className="down_arrow"
+                                onClick={handle_comment_down_vote}
+                            >
+                                <img 
+                                    src="./images/up_arrow_v2.png" 
+                                    alt="down_vote" 
+                                    className="vote_img down down_vote"
+                                />
+                            </button>
+
+                            {comment_down_votes}
+                        </div>
+
+                        <div className="read_more_less_div">               
+                            {
+                                allow_read_more_btn &&
+
+                                <button 
+                                    className={"read_more_less_btn " + (read_more_content ? "read_less" : "read_more")}
+                                    onClick={() => set_read_more_content(!read_more_content)}
+                                >
+                                    {read_more_content ? "Read Less" : "Read More"}
+                                </button> 
+
+                            }
+                        </div>
+
+                    </div>
+                
+
+                    <div className="reply_btns">
+
+                        {
+                            props.indented === false
+
+                            &&
+////sdfdsfsfsd
+                            <div className="reply_btns">
+                                <button 
+                                    className={"reply_btn " + (show_reply_to_comment ? "cancel" : "reply")}
+                                    onClick={() => set_show_reply_to_comment(!show_reply_to_comment)}
+                                >
+                                    {show_reply_to_comment ? "Cancel" : "Reply"}
+                                </button>
+
+                                {
+                                    props.comment.children_comments.length > 0 &&
+                                    <button 
+                                        className={"view_replies_btn " + (show_replies ? "hide_replies" : "view_replies")}
+                                        onClick={() => set_show_replies(!show_replies)}
+                                    >
+                                        {show_replies ? "Hide Replies" : "Show Replies"}
+                                    </button>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+                    
+
+                <div className="add_comments_and_show_replies">
+
+                    <div className="add_comments">
+                        {
+                            show_reply_to_comment 
+
+                            && 
+
+                            <AddComment 
+                                handle_add_comment={handle_add_comment_indented}
+                                placeholder="Add Reply"
+                                btn_text="Reply"
                             />
-                        </button>
-
-                        {comment_up_votes}
+                        }
                     </div>
 
-                    <div className="down_votes">
+                    {
+                        props.indented === false &&
 
-                        <button 
-                            className="down_arrow"
-                            onClick={handle_comment_down_vote}
-                        >
-                            <img 
-                                src="./images/up_arrow_v2.png" 
-                                alt="down_vote" 
-                                className="vote_img down down_vote"
-                            />
-                        </button>
-
-                        {comment_down_votes}
-                    </div>
-
+                        <div className="comment_replies">
+                            {
+                                show_replies 
+                                
+                                &&
+                                
+                                render_indented_comments()
+                            }
+                        </div>
+                    } 
                 </div>
 
             </div>

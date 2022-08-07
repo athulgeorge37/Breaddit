@@ -38,7 +38,7 @@ function AddComment(props) {
                 </div>
                 <textarea 
                     name="add_comment" 
-                    placeholder="Add Comment" 
+                    placeholder={props.placeholder}
                     className="add_comment_input" 
                     rows={1}
                     autoFocus
@@ -51,7 +51,7 @@ function AddComment(props) {
                 className="comment_btn"
                 onClick={() => props.handle_add_comment(comment_content)}
             >
-                Comment
+                {props.btn_text}
             </button>
 
             

@@ -29,21 +29,14 @@ function PostContent({ post_details }) {
 
         // only allowing component to render show more/less btn
         // if the content of the post takes up more than 200px
+
+        //  if you want to change this value, u must also change in the css
+        // where the classname is .show_less
         if (post_content_height > 200) {
             set_allow_show_more_btn(true)
         }
     }, [])
 
-    const handle_show_more_less_btn = () => {
-        // inverting show more/less btn
-        set_show_more_content(!show_more_content)
-
-        // scrolling user back to top of content when user
-        // clicks the show less btn
-        if (show_more_content) {
-            posted_content_ref.current.scrollIntoView()
-        }
-    }
 
 
     const initialise_post_votes = () => {
@@ -106,7 +99,7 @@ function PostContent({ post_details }) {
             comment_id: uuid(),
             parent_id: "none",
             children_comments: [],
-            indented: true,
+            indented: false,
             comment_date_time: new Date().getTime(),
             comment_content: comment_content,
             comment_author: "commenter",  // need to change to current user logged in
@@ -203,18 +196,15 @@ function PostContent({ post_details }) {
 
                 <div>               
                     {
-                        allow_show_more_btn ?
+                        allow_show_more_btn &&
 
                         <button 
-                            className="show_more_less_btn"
-                            onClick={handle_show_more_less_btn}
+                            className={"show_more_less_btn " + (show_more_content ? "read_less" : "read_more")}
+                            onClick={() => set_show_more_content(!show_more_content)}
                         >
                             {show_more_content ? "Read Less" : "Read More"}
                         </button> 
 
-                        :
-
-                        <></>
                     }
                 </div>
 
@@ -242,6 +232,8 @@ function PostContent({ post_details }) {
 
                     <AddComment 
                         handle_add_comment={handle_add_comment_surface_level}
+                        placeholder="Add Comment"
+                        btn_text="Comment"
                     />
                 }
             </div>

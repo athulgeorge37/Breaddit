@@ -1,0 +1,26 @@
+@import "../variables.scss";
+
+.Sign_Up_Page {
+    display: flex;
+    flex-direction: column;
+
+
+    form {
+        width: 340px;
+        background-color: $dark-grey;
+        padding: 16px;
+        border: 1px solid $light-grey;
+        border-radius: 6px;
+
+        h2 {
+            margin-bottom: 16px
+        }
+
+        .submit_btn {
+            @include btn-styles($green);
+            width: 100%;
+        }
+
+       
+    }
+}

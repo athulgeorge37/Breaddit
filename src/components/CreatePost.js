@@ -30,8 +30,7 @@ function CreatePost({ set_all_posts }) {
             return
         }                                   
 
-        const user_who_posted = JSON.parse(localStorage.getItem("Login_Details"))
-        // must change this to the user id, instead, not the whole object
+        const user_who_posted = JSON.parse(localStorage.getItem("Current_User"))
 
         const new_post_details = {
             post_author: user_who_posted,

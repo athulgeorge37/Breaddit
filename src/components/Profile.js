@@ -8,12 +8,29 @@ import ProfilePicture from './ProfilePicture';
 
 function Profile() {
 
-    const [login_details, set_login_details] = useState(JSON.parse(window.localStorage.getItem("Login_Details")));
+    const initialise_user_details = () => {
+
+        const logged_in_user_id = JSON.parse(localStorage.getItem("Current_User"))
+        const all_users = JSON.parse(localStorage.getItem("All_Users"))
+
+        for (const user of all_users) {
+            if (user.user_id === logged_in_user_id) {
+                return user
+            }
+        }
+    }
+
+    const [user_details, set_user_details] = useState(initialise_user_details());
 
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
-    const [username_info, set_username_info] = useState({ username: login_details.username, validity: true});
-	const [email_info, set_email_info] = useState({email: login_details.email, validity: true});
+    const [username_info, set_username_info] = useState(
+        { username: user_details.username, validity: true}
+    );
+
+	const [email_info, set_email_info] = useState(
+        {email: user_details.email, validity: true}
+    );
 
     const update_username = (new_username) => {
         set_username_info({...username_info, username: new_username})
@@ -43,14 +60,26 @@ function Profile() {
             set_email_info({...email_info, validity: valid_email})
 
             if (valid_username && valid_email) {
-                const new_login_details = { ...login_details,
-                    username: username_info.username,
-                    email: email_info.email,
-                }
-    
-                window.localStorage.setItem("Login_Details", JSON.stringify(new_login_details))
-                set_login_details(new_login_details)
+                const logged_in_user_id = JSON.parse(localStorage.getItem("Current_User"))
+                let all_users = JSON.parse(localStorage.getItem("All_Users"))
 
+                let new_user_details = user_details
+                for (let n=0; n < all_users.length; n++) {
+                    if (all_users[n].user_id === logged_in_user_id) {
+
+                        all_users[n] = {
+                            ...all_users[n],
+                            username: username_info.username,
+                            email: email_info.email,
+                        }
+
+                        new_user_details = all_users[n]
+                        break
+                    }
+                }
+
+                localStorage.setItem("All_Users", JSON.stringify(all_users))
+                set_user_details(new_user_details)
                 set_edit_btn_active(false)
             } 
             
@@ -60,7 +89,7 @@ function Profile() {
     }
 
     const handle_delete_btn = () => {
-
+        // need to implement
     }
 
     return (
@@ -72,7 +101,7 @@ function Profile() {
                     <div className="profile_pic">
                         <ProfilePicture/>
                     </div>
-                    <div className="date_joined">Date Joined: {login_details.date_joined}</div>
+                    <div className="date_joined">Date Joined: {user_details.date_joined}</div>
                 </div>
                 
                 <div className="username_email">

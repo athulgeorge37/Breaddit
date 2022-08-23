@@ -83,11 +83,21 @@ function SignUp() {
 				password: password_1,
 				date_joined: getCurrentDate()
 			}
-			// putting user login details to local storage
-			localStorage.setItem("Login_Details", JSON.stringify(login_details))
 
-			// // so it loads later on
-			// localStorage.setItem("Available_Posts", "[]")
+			let all_users = JSON.parse(localStorage.getItem("All_Users"))
+
+			if (all_users === null) {
+				all_users = []
+			}
+
+			all_users = [...all_users, login_details]
+
+			// adding the user to a list of all users
+			localStorage.setItem("All_Users", JSON.stringify(all_users))
+
+			// setting the current user
+			localStorage.setItem("Current_User", JSON.stringify(login_details.user_id))
+
 		} else {
 			set_sign_up_btn("Sign Up")
 		}

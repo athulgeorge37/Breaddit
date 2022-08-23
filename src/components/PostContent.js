@@ -132,6 +132,22 @@ function PostContent({ post_details }) {
     }
 
 
+    const get_post_user_name = () => {
+        
+        const all_users = JSON.parse(localStorage.getItem("All_Users"))
+        const post_author_id = post_details.post_author
+
+        for (const user of all_users) {
+            if (user.user_id === post_author_id) {
+                return user.username
+            }
+        }
+
+        return "UNKNOWN"
+    }
+
+
+    // Password123!
 
     return (
         <div className="PostContent">
@@ -140,7 +156,7 @@ function PostContent({ post_details }) {
                 <div className="post_user">
                     <ProfilePicture/>
                     <div className="posted_by_user">
-                        <b>{post_details.post_author.username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
+                        <b>{get_post_user_name()} • </b>{calculate_time_passed(post_details.post_date_time)} ago
                     </div>
                 </div>
                 <button className="awards">

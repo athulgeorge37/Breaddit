@@ -5,13 +5,15 @@ import './Profile.scss';
 
 import ProfilePicture from './ProfilePicture';
 
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+
 
 function Profile() {
 
     const initialise_user_details = () => {
 
-        const logged_in_user_id = JSON.parse(localStorage.getItem("Current_User"))
-        const all_users = JSON.parse(localStorage.getItem("All_Users"))
+        const logged_in_user_id = get_item_local_storage("Current_User")
+        const all_users = get_item_local_storage("All_Users")
 
         for (const user of all_users) {
             if (user.user_id === logged_in_user_id) {
@@ -60,8 +62,8 @@ function Profile() {
             set_email_info({...email_info, validity: valid_email})
 
             if (valid_username && valid_email) {
-                const logged_in_user_id = JSON.parse(localStorage.getItem("Current_User"))
-                let all_users = JSON.parse(localStorage.getItem("All_Users"))
+                const logged_in_user_id = get_item_local_storage("Current_User")
+                let all_users = get_item_local_storage("All_Users")
 
                 let new_user_details = user_details
                 for (let n=0; n < all_users.length; n++) {
@@ -78,7 +80,7 @@ function Profile() {
                     }
                 }
 
-                localStorage.setItem("All_Users", JSON.stringify(all_users))
+                set_item_local_storage("All_Users", all_users)
                 set_user_details(new_user_details)
                 set_edit_btn_active(false)
             } 

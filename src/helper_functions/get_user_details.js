@@ -1,4 +1,4 @@
-
+import { get_item_local_storage } from "./local_storage"
 
 export const get_user_details = (my_user_id) => {
 
@@ -7,10 +7,10 @@ export const get_user_details = (my_user_id) => {
     // get_user_details(post_details.post_author).username
 
     if (my_user_id === "current_user") {
-        my_user_id = get_current_user_id()
+        my_user_id = get_item_local_storage("Current_User")
     }
         
-    const all_users = JSON.parse(localStorage.getItem("All_Users"))
+    const all_users = get_item_local_storage("All_Users")
     
     for (const user of all_users) {
         if (user.user_id === my_user_id) {
@@ -25,9 +25,4 @@ export const get_user_details = (my_user_id) => {
         user_id: "unknown",
         username: "unknown"
     }
-}
-
-
-export const get_current_user_id = () => {
-    return JSON.parse(localStorage.getItem("Current_User"))
 }

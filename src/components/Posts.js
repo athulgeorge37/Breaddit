@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Posts.scss';
 
-
-
 import CreatePost from './CreatePost';
 import PostContent from './PostContent';
+
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 function Posts() {
 
@@ -16,12 +16,12 @@ function Posts() {
         // called on initial Post Page load
         // we check if there are any posts in local storage and set it to that
         // otherwise just a list
-        const available_posts = localStorage.getItem("Available_Posts")
+        const available_posts = get_item_local_storage("Available_Posts")
 
-        if (available_posts) {
-            set_all_posts(JSON.parse(available_posts))
+        if (available_posts !== null) {
+            set_all_posts(available_posts)
         } else {
-            localStorage.setItem("Available_Posts", "[]")
+            set_item_local_storage("Available_Posts", [])
             set_all_posts([])
         }
 

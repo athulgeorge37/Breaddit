@@ -3,7 +3,8 @@ import './PostContent.scss';
 
 import parse from 'html-react-parser';
 import { v4 as uuid } from 'uuid';
-import { get_user_details, get_current_user_id } from '../helper_functions/get_user_details';
+import { get_user_details } from '../helper_functions/get_user_details';
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';
@@ -45,7 +46,7 @@ function PostContent({ post_details }) {
 
 
     const initialise_post_votes = () => {
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         for (const post of all_posts) {
             if (post.post_id === post_details.post_id) {
@@ -66,7 +67,7 @@ function PostContent({ post_details }) {
         // finds the appropriate post in localstorage, and
         // updates localstorage to contain each post's up and down votes
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         for (const post of all_posts) {
             if (post.post_id === post_details.post_id) {
@@ -77,7 +78,7 @@ function PostContent({ post_details }) {
             }
         }
 
-        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+        set_item_local_storage("Available_Posts", all_posts)
     }
 
     const handle_post_up_vote = () => {
@@ -98,7 +99,7 @@ function PostContent({ post_details }) {
 
     const handle_add_comment_surface_level = (comment_content) => {
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         if (comment_content.trim().length === 0) {
             show_add_comment_error_msg(true)
@@ -112,7 +113,7 @@ function PostContent({ post_details }) {
             indented: false,
             comment_date_time: new Date().getTime(),
             comment_content: comment_content,
-            comment_author: get_current_user_id(),
+            comment_author: get_item_local_storage("Current_User"),
             comment_up_votes: 0,
             comment_down_votes: 0
         }
@@ -125,7 +126,7 @@ function PostContent({ post_details }) {
             }
         }
 
-        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+        set_item_local_storage("Available_Posts", all_posts)
 
         show_add_comment_error_msg(false)
         set_show_add_comment(false)

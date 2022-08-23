@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './CommentSection.scss';
 
 import Comment from './Comment';
-
+import { get_item_local_storage } from '../helper_functions/local_storage';
 
 function CommentSection(props) {
 
@@ -11,7 +11,7 @@ function CommentSection(props) {
 
     useEffect(() => {
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {

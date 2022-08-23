@@ -6,6 +6,7 @@ import ProfilePicture from './ProfilePicture';
 import LoginInput from './LoginInput';
 
 import { v4 as uuid } from 'uuid';
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 const MAX_POST_TEXT_CHARACTERS = 250
 
@@ -30,7 +31,7 @@ function CreatePost({ set_all_posts }) {
             return
         }                                   
 
-        const user_who_posted = JSON.parse(localStorage.getItem("Current_User"))
+        const user_who_posted = get_item_local_storage("Current_User")
 
         const new_post_details = {
             post_author: user_who_posted,
@@ -44,12 +45,11 @@ function CreatePost({ set_all_posts }) {
         }
 
         // previous_posts is of type array
-        let previous_posts = localStorage.getItem("Available_Posts")
-        if (previous_posts) {
-            previous_posts = JSON.parse(previous_posts)
+        let previous_posts = get_item_local_storage("Available_Posts")
+        if (previous_posts !== null) {
             const updated_post_list = [new_post_details, ...previous_posts]
 
-            localStorage.setItem("Available_Posts", JSON.stringify(updated_post_list))
+            set_item_local_storage("Available_Posts", updated_post_list)
             set_all_posts(updated_post_list)
         }
 

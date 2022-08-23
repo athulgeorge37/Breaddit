@@ -4,6 +4,7 @@ import './SignUp.scss';
 import { v4 as uuid } from 'uuid';
 
 import LoginInput from './LoginInput';
+import { set_item_local_storage } from '../helper_functions/local_storage';
 
 function SignUp() {
 
@@ -93,10 +94,10 @@ function SignUp() {
 			all_users = [...all_users, login_details]
 
 			// adding the user to a list of all users
-			localStorage.setItem("All_Users", JSON.stringify(all_users))
+			set_item_local_storage("All_Users", all_users)
 
 			// setting the current user
-			localStorage.setItem("Current_User", JSON.stringify(login_details.user_id))
+			set_item_local_storage("Current_User", login_details.user_id)
 
 		} else {
 			set_sign_up_btn("Sign Up")

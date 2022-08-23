@@ -3,7 +3,9 @@ import './Comment.scss';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import { v4 as uuid } from 'uuid';
-import { get_user_details, get_current_user_id } from '../helper_functions/get_user_details';
+
+import { get_user_details } from '../helper_functions/get_user_details';
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 import AddComment from './AddComment';
 import ProfilePicture from './ProfilePicture';
@@ -46,7 +48,7 @@ function Comment(props) {
 
 
     const initialise_comment_votes = () => {
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {
@@ -86,7 +88,8 @@ function Comment(props) {
         // finds the appropriate comment in localstorage, and
         // updates localstorage to contain each comments up and down votes
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
+        
 
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {
@@ -121,7 +124,7 @@ function Comment(props) {
             }
         }
 
-        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+        set_item_local_storage("Available_Posts", all_posts)
     }
 
 
@@ -148,7 +151,8 @@ function Comment(props) {
         // with the relevant starter options for a reply
         // very similar to a comment, except no children comments object
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
+        
 
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {
@@ -163,7 +167,7 @@ function Comment(props) {
                                 indented: true,
                                 comment_date_time: new Date().getTime(),
                                 comment_content: comment_content,
-                                comment_author: get_current_user_id(), 
+                                comment_author: get_item_local_storage("Current_User"), 
                                 comment_up_votes: 0,
                                 comment_down_votes: 0
                             }
@@ -175,7 +179,8 @@ function Comment(props) {
             }
         }
 
-        localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
+        set_item_local_storage("Current_User", all_posts)
+        
 
         set_show_reply_to_comment(false)
         set_show_replies(true)
@@ -186,7 +191,7 @@ function Comment(props) {
 
         // this function will render all the replies of a surface level comment
 
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
+        let all_posts = get_item_local_storage("Available_Posts")
 
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {

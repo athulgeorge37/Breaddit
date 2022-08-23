@@ -5,7 +5,9 @@ import { calculate_time_passed } from '../helper_functions/calculate_time_passed
 import { v4 as uuid } from 'uuid';
 
 import AddComment from './AddComment';
+import ProfilePicture from './ProfilePicture';
 
+import AdjustableButton from './AdjustableButton';
 
 
 function Comment(props) {
@@ -40,7 +42,6 @@ function Comment(props) {
         }
 
     }, [])
- 
 
 
     const initialise_comment_votes = () => {
@@ -212,32 +213,12 @@ function Comment(props) {
     }
     
 
-    const determine_number_of_replies = () => {
-
-        let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
-
-
-        for (const post of all_posts) {
-            if (post.post_id === props.post_id) {
-                for (let n=0; n < post.post_comments.length; n++) {
-                    return post.post_comments[n].children_comments.length
-                }
-            }
-        }
-    }
-
 
     return (
         <div className={"comment_or_reply " + (props.indented ? "Reply" : "Comment")}>
 
             <div className="profile_picture">
-                <div className="default_profile_pic_div">
-                    <img 
-                        src="./images/default_user.png" 
-                        alt="profile_pic" 
-                        className="default_profile_pic"
-                    />
-                </div>
+                <ProfilePicture/>
             </div>
 
             <div className="comment_content_container">
@@ -294,12 +275,14 @@ function Comment(props) {
                             {
                                 allow_read_more_btn &&
 
-                                <button 
-                                    className={"read_more_less_btn " + (read_more_content ? "read_less" : "read_more")}
-                                    onClick={() => set_read_more_content(!read_more_content)}
-                                >
-                                    {read_more_content ? "Read Less" : "Read More"}
-                                </button> 
+                                <AdjustableButton
+                                    boolean_check={read_more_content}
+                                    execute_onclick={() => set_read_more_content(!read_more_content)}
+                                    original_class_name="read_more_less_btn"
+                                    active_name="Read Less"
+                                    inactive_name="Read More"
+                                    btn_type_txt={true}
+                                />
 
                             }
                         </div>
@@ -313,23 +296,27 @@ function Comment(props) {
                             props.indented === false
 
                             &&
-////sdfdsfsfsd
                             <div className="reply_btns">
-                                <button 
-                                    className={"reply_btn " + (show_reply_to_comment ? "cancel" : "reply")}
-                                    onClick={() => set_show_reply_to_comment(!show_reply_to_comment)}
-                                >
-                                    {show_reply_to_comment ? "Cancel" : "Reply"}
-                                </button>
+                                <AdjustableButton
+                                    boolean_check={show_reply_to_comment}
+                                    execute_onclick={() => set_show_reply_to_comment(!show_reply_to_comment)}
+                                    original_class_name="reply_btn"
+                                    active_name="Cancel"
+                                    inactive_name="Reply"
+                                    btn_type_txt={true}
+                                />
 
                                 {
-                                    props.comment.children_comments.length > 0 &&
-                                    <button 
-                                        className={"view_replies_btn " + (show_replies ? "hide_replies" : "view_replies")}
-                                        onClick={() => set_show_replies(!show_replies)}
-                                    >
-                                        {show_replies ? "Hide Replies" : "Show Replies"}
-                                    </button>
+                                    props.comment.children_comments.length > 0 
+                                    &&
+                                    <AdjustableButton
+                                    boolean_check={show_replies}
+                                    execute_onclick={() => set_show_replies(!show_replies)}
+                                    original_class_name="view_replies_btn"
+                                    active_name="Hide Replies"
+                                    inactive_name="Show Replies"
+                                    btn_type_txt={true}
+                                />
                                 }
                             </div>
                         }

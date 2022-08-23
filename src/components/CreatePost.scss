@@ -14,27 +14,6 @@
         border: 1px solid $light-grey;
 
 
-        .default_profile_pic_div {
-            margin-right: 10px;
-            padding: 0.5em;
-            border-radius: 6px;
-            background-color: $light-grey;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            &:hover {
-                cursor: pointer;
-            }
-
-            .default_profile_pic {
-                width: 30px;
-                height: 30px;
-                filter: invert(94%) sepia(7%) saturate(300%) hue-rotate(171deg) brightness(92%) contrast(84%);
-            }
-        }
-
         input {
             @include input_styles;
             width: 100%;
@@ -67,10 +46,13 @@
             
 
             .post_title {
-                width: calc(100% - (4 * $inner_padding));
-                margin-bottom: 16px;
-                @include input_styles;
-            }   
+                width: calc(100% - (2 * $inner_padding));
+                
+            } 
+            
+            .error_msg {
+                margin-top: 10px;
+            }
     
             .post_body {
                 width: 100%;
@@ -96,7 +78,7 @@
             }
 
             .cancel_btn {
-                @include btn-styles($blue);
+                @include btn-styles($red);
             }
 
             .post_btn {

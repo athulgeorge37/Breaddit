@@ -8,6 +8,8 @@ import AddComment from './AddComment';
 import CommentSection from './CommentSection';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
+import ProfilePicture from './ProfilePicture';
+import AdjustableButton from './AdjustableButton';
 
 
 function PostContent({ post_details }) {
@@ -20,6 +22,8 @@ function PostContent({ post_details }) {
 
     const [allow_show_more_btn, set_allow_show_more_btn] = useState(false);
     const [show_more_content, set_show_more_content] = useState(false);
+
+    const [add_comment_error_msg, show_add_comment_error_msg] =useState(false);
 
     // required for read_more/less button
     const posted_content_ref = useRef();
@@ -95,6 +99,11 @@ function PostContent({ post_details }) {
 
         let all_posts = JSON.parse(localStorage.getItem("Available_Posts"))
 
+        if (comment_content.trim().length === 0) {
+            show_add_comment_error_msg(true)
+            return
+        }
+
         const new_comment = {
             comment_id: uuid(),
             parent_id: "none",
@@ -117,6 +126,7 @@ function PostContent({ post_details }) {
 
         localStorage.setItem("Available_Posts", JSON.stringify(all_posts))
 
+        show_add_comment_error_msg(false)
         set_show_add_comment(false)
         set_show_comments_section(true)
     }
@@ -128,13 +138,7 @@ function PostContent({ post_details }) {
 
             <div className="post_user_and_awards">
                 <div className="post_user">
-                    <div className="default_profile_pic_div">
-                        <img 
-                            src="./images/default_user.png" 
-                            alt="profile_picture" 
-                            className="default_profile_pic"
-                        />
-                    </div>
+                    <ProfilePicture/>
                     <div className="posted_by_user">
                         <b>{post_details.post_author.username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
                     </div>
@@ -149,7 +153,10 @@ function PostContent({ post_details }) {
 
                 <div className="text_content">
                     <div 
-                        className={"display_text " + (allow_show_more_btn ? (show_more_content ? "" : "show_less") : "")}
+                        className={
+                            "display_text " + 
+                            (allow_show_more_btn ? (show_more_content ? "" : "show_less") : "")
+                        }
                         ref={posted_content_ref}
                     >
                         <h1 className="Title">{post_details.post_title}</h1>
@@ -198,30 +205,34 @@ function PostContent({ post_details }) {
                     {
                         allow_show_more_btn &&
 
-                        <button 
-                            className={"show_more_less_btn " + (show_more_content ? "read_less" : "read_more")}
-                            onClick={() => set_show_more_content(!show_more_content)}
-                        >
-                            {show_more_content ? "Read Less" : "Read More"}
-                        </button> 
+                        <AdjustableButton
+                            boolean_check={show_more_content}
+                            execute_onclick={() => set_show_more_content(!show_more_content)}
+                            original_class_name="show_more_less_btn"
+                            active_name="Read Less"
+                            inactive_name="Read More"
+                        />
 
                     }
                 </div>
 
                 <div className="both_comments_btns">
-                    <button 
-                        className={show_add_comment ? "cancel_btn" : "add_comment_btn"}
-                        onClick={() => set_show_add_comment(!show_add_comment)}
-                    >
-                        {show_add_comment ? "Cancel" : "Add Comment"}
-                    </button>
-
-                    <button 
-                        className={"comments_btn " + (show_comments_section ? "hide_comments" : "show_comments")}
-                        onClick={() => set_show_comments_section(!show_comments_section)}
-                    >
-                        {show_comments_section ? "Hide Comments" : "Show Comments"}
-                    </button>
+                    <AdjustableButton
+                        boolean_check={show_add_comment}
+                        execute_onclick={() => {
+                            set_show_add_comment(!show_add_comment)
+                            show_add_comment_error_msg(false)
+                        }}
+                        active_name="Cancel"
+                        inactive_name="Add Comment"
+                    />
+                    <AdjustableButton
+                        boolean_check={show_comments_section}
+                        execute_onclick={() => set_show_comments_section(!show_comments_section)}
+                        original_class_name="comments_btn"
+                        active_name="Hide Comments"
+                        inactive_name="Show Comments"
+                    />
                 </div>
                 
             </div>
@@ -234,7 +245,17 @@ function PostContent({ post_details }) {
                         handle_add_comment={handle_add_comment_surface_level}
                         placeholder="Add Comment"
                         btn_text="Comment"
-                    />
+                        show_errors={add_comment_error_msg}
+                    >
+                        Comment cannot be empty!
+                    </AddComment>
+                }
+
+                {
+                    add_comment_error_msg &&
+                    <div className="add_comment_error_msg">
+                        Comment cannot be empty!
+                    </div>
                 }
             </div>
 

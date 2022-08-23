@@ -35,27 +35,6 @@
         .post_user {
             display: flex;
             align-items: center;
-
-            .default_profile_pic_div {
-                margin-right: 10px;
-                padding: 0.5em;
-                border-radius: 6px;
-                background-color: $light-grey;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-    
-                &:hover {
-                    cursor: pointer;
-                }
-    
-                .default_profile_pic {
-                    width: 30px;
-                    height: 30px;
-                    @include white-filter_color;
-                }
-            }
         }
 
         .awards {
@@ -279,39 +258,22 @@
         padding: 0.5em;
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $light-grey;
+        border-top: 1px solid $light-grey;      
 
-        
-        .read_less {
-            @include btn-styles($red)
-        }
-
-        .read_more {
-            @include btn-styles($blue)
-        }
-        
-
-
-        .both_comments_btns {
-            .add_comment_btn {
-                @include btn-styles($blue)
-            }
-    
-            .cancel_btn {
-                @include btn-styles($red)
-            }
-    
+        .both_comments_btns {    
             .comments_btn {
                 margin-left: 10px;
             }
     
-            .show_comments {
-                @include btn-styles($blue);
-            }
-    
-            .hide_comments {
-                @include btn-styles($red);
-            }
+        }
+    }
+
+
+    .expanded_add_comment {
+        .add_comment_error_msg {
+            color: $red;
+            margin-left: calc(10px + 1em + 30px + 12px);
+            margin-bottom: 0.5em;
         }
     }
 }

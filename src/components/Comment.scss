@@ -7,26 +7,6 @@
     border-top: 1px solid $light-grey;
 
     
-    .default_profile_pic_div {
-        margin-right: 10px;
-        padding: 0.5em;
-        border-radius: 6px;
-        background-color: $light-grey;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        &:hover {
-            cursor: pointer;
-        }
-
-        .default_profile_pic {
-            width: 30px;
-            height: 30px;
-            @include white-filter_color;
-        }
-    }
 
     .comment_content_container {
         display: flex;
@@ -126,13 +106,6 @@
                         margin-left: 10px;
                     }
     
-                    .read_more {
-                        @include btn-style-text($blue)
-                    }
-    
-                    .read_less {
-                        @include btn-style-text($red)
-                    }
 
                 }
                 
@@ -145,16 +118,6 @@
                     margin-left: 10px;
                 }
 
-                .cancel,
-                .hide_replies {
-                    @include btn-style-text($red)
-                }
-
-                .reply,
-                .view_replies {
-                    @include btn-style-text($blue)
-                }
-
             }
 
         }
@@ -165,11 +128,11 @@
                 padding: 0.5em 0;
             }
 
-            .add_comments {
-                .default_profile_pic_div {
-                    margin-right: 0;
-                }
-            }
+            // .add_comments {
+            //     // .default_profile_pic_div {
+            //     //     margin-right: 0;
+            //     // }
+            // }
             
         }
 

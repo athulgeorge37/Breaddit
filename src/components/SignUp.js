@@ -84,7 +84,7 @@ function SignUp() {
 				date_joined: getCurrentDate()
 			}
 			// putting user login details to local storage
-			window.localStorage.setItem("Login_Details", JSON.stringify(login_details))
+			localStorage.setItem("Login_Details", JSON.stringify(login_details))
 
 			// // so it loads later on
 			// localStorage.setItem("Available_Posts", "[]")

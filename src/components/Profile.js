@@ -3,6 +3,8 @@ import LoginInput from './LoginInput';
 import PopUpMenu from './PopUpMenu';
 import './Profile.scss';
 
+import ProfilePicture from './ProfilePicture';
+
 
 function Profile() {
 
@@ -55,7 +57,6 @@ function Profile() {
         } else {
             set_edit_btn_active(true)
         }
-        
     }
 
     const handle_delete_btn = () => {
@@ -68,7 +69,9 @@ function Profile() {
             <div className="profile_container">
 
                 <div className="img_date">
-                    <div className="profile_pic">Img</div>
+                    <div className="profile_pic">
+                        <ProfilePicture/>
+                    </div>
                     <div className="date_joined">Date Joined: {login_details.date_joined}</div>
                 </div>
                 

@@ -20,7 +20,6 @@ function SignIn() {
   const submitSignIn = (e) => {
     e.preventDefault();
 
-    // let signup_mail = localStorage.getItem(("Login_Details").email)
 
     let all_field_entered = true
 		for (const field of [email, password]) {

@@ -37,10 +37,23 @@
             align-items: center;
         }
 
-        .awards {
-            @include btn-styles($green);
-            height: 32px;
+        .btns {
+            
+            .save_btn {
+                @include btn-styles($green)
+            }
+
+            .edit_btn {
+                margin: 0px 10px;
+            }
+
+            .awards {
+                @include btn-styles($green);
+                height: 32px;
+            }
         }
+
+        
     }
 
     .main_content_and_votes {
@@ -61,6 +74,16 @@
             justify-content: center;
 
             padding: 0.5em 0.5em 0.5em 1em;
+
+            .editable_content {
+                width: 100%;
+
+
+                .text_editor {
+                    margin-bottom: 0;
+                    width: 100%;
+                }
+            }
 
             .show_less {
                 height: 200px;

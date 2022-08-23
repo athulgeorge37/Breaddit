@@ -179,7 +179,7 @@ function Comment(props) {
             }
         }
 
-        set_item_local_storage("Current_User", all_posts)
+        set_item_local_storage("Available_Posts", all_posts)
         
 
         set_show_reply_to_comment(false)

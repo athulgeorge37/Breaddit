@@ -12,6 +12,7 @@ import CommentSection from './CommentSection';
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import ProfilePicture from './ProfilePicture';
 import AdjustableButton from './AdjustableButton';
+import TextEditor from './TextEditor';
 
 
 function PostContent({ post_details }) {
@@ -26,6 +27,11 @@ function PostContent({ post_details }) {
     const [show_more_content, set_show_more_content] = useState(false);
 
     const [add_comment_error_msg, show_add_comment_error_msg] =useState(false);
+
+
+    const [edit_btn_active, set_edit_btn_active] = useState(false);
+
+    const [post_text, set_post_text] = useState(post_details.post_text);
 
     // required for read_more/less button
     const posted_content_ref = useRef();
@@ -134,6 +140,24 @@ function PostContent({ post_details }) {
     }
 
 
+    const handle_edit_post = () => {
+        // must execute when user clicks save
+
+        let all_posts = get_item_local_storage("Available_Posts")
+
+        for (const post of all_posts) {
+            if (post.post_id === post_details.post_id) {
+                post.post_text = post_text
+            }
+        }
+
+        set_item_local_storage("Available_Posts", all_posts)
+
+        set_edit_btn_active(false)
+
+    }
+
+
     return (
         <div className="PostContent">
 
@@ -144,27 +168,69 @@ function PostContent({ post_details }) {
                         <b>{get_user_details(post_details.post_author).username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
                     </div>
                 </div>
-                <button className="awards">
-                    Give Award
-                </button>
+
+                <div className="btns">
+
+                    {
+                        edit_btn_active &&
+
+                        <button 
+                            className="save_btn"
+                            onClick={handle_edit_post}
+                        >
+                            Save
+                        </button>
+                    }
+
+
+                    {
+                        post_details.post_author === get_item_local_storage("Current_User") 
+                        &&
+                        <AdjustableButton
+                            boolean_check={edit_btn_active}
+                            execute_onclick={() => set_edit_btn_active(!edit_btn_active)}
+                            original_class_name="edit_btn"
+                            active_name="Cancel"
+                            inactive_name="Edit"
+                        />
+                    }
+
+                    <button className="awards">
+                        Give Award
+                    </button>
+
+                </div>
             </div>
 
 
             <div className="main_content_and_votes">
 
                 <div className="text_content">
-                    <div 
-                        className={
-                            "display_text " + 
-                            (allow_show_more_btn ? (show_more_content ? "" : "show_less") : "")
-                        }
-                        ref={posted_content_ref}
-                    >
-                        <h1 className="Title">{post_details.post_title}</h1>
-                        <div className="parsed_text">
-                            {parse(post_details.post_text)}
+                    {
+                        edit_btn_active 
+                        ?
+                        <div className="editable_content">
+                            <TextEditor 
+                                update_text={set_post_text} 
+                                post_text={post_text}
+                            />
                         </div>
-                    </div>
+
+                        :
+
+                        <div 
+                            className={
+                                "display_text " + 
+                                (allow_show_more_btn ? (show_more_content ? "" : "show_less") : "")
+                            }
+                            ref={posted_content_ref}
+                        >
+                            <h1 className="Title">{post_details.post_title}</h1>
+                            <div className="parsed_text">
+                                {parse(post_text)}
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <div className="votes">

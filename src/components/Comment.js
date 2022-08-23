@@ -3,6 +3,7 @@ import './Comment.scss';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import { v4 as uuid } from 'uuid';
+import { get_user_details, get_current_user_id } from '../helper_functions/get_user_details';
 
 import AddComment from './AddComment';
 import ProfilePicture from './ProfilePicture';
@@ -162,7 +163,7 @@ function Comment(props) {
                                 indented: true,
                                 comment_date_time: new Date().getTime(),
                                 comment_content: comment_content,
-                                comment_author: "commenter",  // need to change to current user logged in
+                                comment_author: get_current_user_id(), 
                                 comment_up_votes: 0,
                                 comment_down_votes: 0
                             }
@@ -225,7 +226,7 @@ function Comment(props) {
 
                 <div className="comment_content">
                     <div className="comment_author">
-                        <b>{props.comment.comment_author} • </b>{calculate_time_passed(props.comment.comment_date_time)} ago
+                        <b>{get_user_details(props.comment.comment_author).username} • </b>{calculate_time_passed(props.comment.comment_date_time)} ago
                     </div>
                     <div 
                         className={"comment_content_text " + (allow_read_more_btn ? (read_more_content ? "" : "show_less") : "")}

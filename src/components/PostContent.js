@@ -3,6 +3,7 @@ import './PostContent.scss';
 
 import parse from 'html-react-parser';
 import { v4 as uuid } from 'uuid';
+import { get_user_details, get_current_user_id } from '../helper_functions/get_user_details';
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';
@@ -111,7 +112,7 @@ function PostContent({ post_details }) {
             indented: false,
             comment_date_time: new Date().getTime(),
             comment_content: comment_content,
-            comment_author: "commenter",  // need to change to current user logged in
+            comment_author: get_current_user_id(),
             comment_up_votes: 0,
             comment_down_votes: 0
         }
@@ -132,23 +133,6 @@ function PostContent({ post_details }) {
     }
 
 
-    const get_post_user_name = () => {
-        
-        const all_users = JSON.parse(localStorage.getItem("All_Users"))
-        const post_author_id = post_details.post_author
-
-        for (const user of all_users) {
-            if (user.user_id === post_author_id) {
-                return user.username
-            }
-        }
-
-        return "UNKNOWN"
-    }
-
-
-    // Password123!
-
     return (
         <div className="PostContent">
 
@@ -156,7 +140,7 @@ function PostContent({ post_details }) {
                 <div className="post_user">
                     <ProfilePicture/>
                     <div className="posted_by_user">
-                        <b>{get_post_user_name()} • </b>{calculate_time_passed(post_details.post_date_time)} ago
+                        <b>{get_user_details(post_details.post_author).username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
                     </div>
                 </div>
                 <button className="awards">

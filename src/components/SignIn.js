@@ -5,7 +5,7 @@ import './SignIn.scss';
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  var signup_details = JSON.parse(window.localStorage.getItem("Login_Details"));
+  var signup_details = JSON.parse(window.localStorage.getItem("All_Users"));
 
 
   const [valid_signup_details, set_valid_signup_details] = useState(
@@ -31,14 +31,19 @@ function SignIn() {
     
     if (all_field_entered){
 
-      let valid_email = true
-      if (email !== signup_details.email) {
-        valid_email = false
-      }
-    
-      let valid_password = true
-      if (password !== signup_details.password) {
-        valid_password = false
+      let valid_email = false
+      let valid_password = false
+
+      for (let i =0; i < signup_details.length; ++i){
+
+        if (email === signup_details[i].email) {
+          valid_email = true
+        }
+                
+        if (password === signup_details[i].password) {
+          valid_password = true
+        }
+      
       }
 
       set_valid_signup_details({
@@ -51,6 +56,12 @@ function SignIn() {
         set_sign_in_btn("Signing In...")
       }
     }
+    // else {
+    //   set_valid_signup_details({
+    //     email_validity: false,
+    //     password_validity: false
+    //   })
+    // }
 
   }
 

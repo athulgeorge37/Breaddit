@@ -12,8 +12,11 @@ import CommentSection from './CommentSection';
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import ProfilePicture from './ProfilePicture';
 import AdjustableButton from './AdjustableButton';
-import TextEditor from './TextEditor';
+import EditPost from './EditPost';
 
+
+import { useEditPost } from './useEditPost';
+import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
 
 function PostContent({ post_details }) {
 
@@ -31,10 +34,23 @@ function PostContent({ post_details }) {
 
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
-    const [post_text, set_post_text] = useState(post_details.post_text);
+    // const [post_text, set_post_text] = useState(post_details.post_text);
 
     // required for read_more/less button
     const posted_content_ref = useRef();
+
+
+    const {
+        post_title, 
+        post_text, 
+        valid_title,
+        set_post_title,
+        set_valid_title,
+        set_post_text,
+        handle_add_post    // need to create and use an handle_edit_post
+    } = useEditPost(post_details.post_title, post_details.post_text); 
+
+
 
     useEffect(() => {
         const post_content_height = posted_content_ref.current.clientHeight
@@ -148,6 +164,9 @@ function PostContent({ post_details }) {
         for (const post of all_posts) {
             if (post.post_id === post_details.post_id) {
                 post.post_text = post_text
+                post.edited = true
+                post.post_date_time = new Date().getTime()
+                break;
             }
         }
 
@@ -164,9 +183,13 @@ function PostContent({ post_details }) {
             <div className="post_user_and_awards">
                 <div className="post_user">
                     <ProfilePicture/>
+
                     <div className="posted_by_user">
-                        <b>{get_user_details(post_details.post_author).username} • </b>{calculate_time_passed(post_details.post_date_time)} ago
+                        <b>{get_user_details(post_details.post_author).username} • </b>
+                        {get_post_by_post_id(post_details.post_id).edited === true && "(edited) • "}
+                        {calculate_time_passed(get_post_by_post_id( post_details.post_id).post_date_time)} ago
                     </div>
+                    
                 </div>
 
                 <div className="btns">
@@ -208,13 +231,17 @@ function PostContent({ post_details }) {
                 <div className="text_content">
                     {
                         edit_btn_active 
+
                         ?
-                        <div className="editable_content">
-                            <TextEditor 
-                                update_text={set_post_text} 
-                                post_text={post_text}
-                            />
-                        </div>
+
+                        <EditPost
+                            post_title={post_title}
+                            set_post_title={set_post_title}
+                            post_text={post_text}
+                            set_post_text={set_post_text}
+                            valid_title={valid_title}
+                            
+                        />
 
                         :
 
@@ -225,7 +252,7 @@ function PostContent({ post_details }) {
                             }
                             ref={posted_content_ref}
                         >
-                            <h1 className="Title">{post_details.post_title}</h1>
+                            <h1 className="Title">{post_title}</h1>
                             <div className="parsed_text">
                                 {parse(post_text)}
                             </div>
@@ -313,9 +340,7 @@ function PostContent({ post_details }) {
                         placeholder="Add Comment"
                         btn_text="Comment"
                         show_errors={add_comment_error_msg}
-                    >
-                        Comment cannot be empty!
-                    </AddComment>
+                    />
                 }
 
                 {

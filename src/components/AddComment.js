@@ -1,48 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import './AddComment.scss'
 
-
+import ProfilePicture from './ProfilePicture';
+import ExpandableInput from './ExpandableInput';
 
 function AddComment(props) {
 
     const [comment_content, set_comment_content] = useState("");
 
-
-    const handle_resize = (e) => {
-
-        set_comment_content(e.target.value)
-
-        // alows textarea to shrink when space is not being used
-        e.target.style.height = 'inherit';
-        
-        // e.target.style.height = `${e.target.scrollHeight}px`; 
-
-        // ensures add comment text_area does not exceed 150px
-        // if it does, it will turn into a scrollable area
-        e.target.style.height = `${Math.min(e.target.scrollHeight, 150)}px`;
-        
-    }
-
-
-
-
     return (
         <div className="Add_Comment">
             <div className="add_comment_pic_and_input">
-                <div className="default_profile_pic_div">
-                    <img 
-                        src="./images/default_user.png" 
-                        alt="profile_picture" 
-                        className="default_profile_pic"
-                    />
-                </div>
-                <textarea 
-                    name="add_comment" 
-                    placeholder={props.placeholder}
-                    className="add_comment_input" 
-                    rows={1}
-                    autoFocus
-                    onChange={handle_resize}
+                <ProfilePicture/>
+                <ExpandableInput
+                    set_input_content={set_comment_content}
+                    max_height_px={150}
+                    placeholder={props.placeholder} 
+                    // might want to prop drill this, as it comes from PostContent component
                 />
             </div>
 

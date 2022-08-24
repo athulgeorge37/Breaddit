@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Posts.scss';
 
 import CreatePost from '../components/CreatePost';
 import PostContent from '../components/PostContent';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+
+// exporting so we can acces this context in useEditPost file
+export const All_Posts_Context = React.createContext();
 
 function Posts() {
 
@@ -22,27 +25,30 @@ function Posts() {
             set_all_posts(available_posts)
         } else {
             set_item_local_storage("Available_Posts", [])
-            set_all_posts([])
+            set_all_posts([])  // might be redundant, cus we areleady have it initalised as []
         }
 
     }, [])
 
-    
 
   return (
     <div className="Posts_Page">
-        <CreatePost set_all_posts={set_all_posts}/>
+        <All_Posts_Context.Provider value={{set_all_posts}}>
 
-        <div className="All_Posts">
-            {all_posts.map((post_details, key) => {
-                return (
-                    <PostContent 
-                        post_details={post_details}
-                        key={key}
-                    />
-                )
-            })}
-        </div>
+            <CreatePost/>
+
+            <div className="All_Posts">
+                {all_posts.map((post_details, key) => {
+                    return (
+                        <PostContent 
+                            post_details={post_details}
+                            key={key}
+                        />
+                    )
+                })}
+            </div>
+
+        </All_Posts_Context.Provider>
         
     </div>
   )

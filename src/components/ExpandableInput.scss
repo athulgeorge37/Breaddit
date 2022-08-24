@@ -1,0 +1,7 @@
+@import "../variables.scss";
+
+.expandable_input {
+    @include input_styles;
+    width: 100%;
+    resize: none;
+}

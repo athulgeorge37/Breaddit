@@ -81,7 +81,8 @@ $text_editor_max_width: 100%;
 }
 
 @mixin input_styles {
-    border: 1px solid $blue;
+    border: 1px solid $light-grey;
+    outline: none;
     padding: 5px 12px;
     background-color: $black;
     color: $white;
@@ -89,7 +90,7 @@ $text_editor_max_width: 100%;
     font-size: 14px;
     line-height: 20px;
 
-    &:hover {
+    &:focus {
         border: 1px solid $blue;
     }
 }

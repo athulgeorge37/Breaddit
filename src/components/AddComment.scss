@@ -12,37 +12,11 @@
         align-items: center;
         width: 100%;
 
-        .default_profile_pic_div {
-            padding: 0.5em;
-            border-radius: 6px;
-            background-color: $light-grey;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            &:hover {
-                cursor: pointer;
-            }
-
-            .default_profile_pic {
-                width: 30px;
-                height: 30px;
-                @include white-filter_color;
-            }
-        }
-
-        .add_comment_input {
-            @include input_styles;
-            width: 100%;
-            margin: 0 10px;
-            resize: none;
-        }
-        
     }
 
     .comment_btn {
         @include btn-styles($green);
         height: 32px;
+        margin-left: 10px;
     }
 }

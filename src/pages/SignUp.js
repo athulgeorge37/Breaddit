@@ -122,11 +122,13 @@ function SignUp() {
 	return (
 		<div className='Sign_Up_Page'>
 
+			
+			<h2>Sign Up To Breaddit</h2>
+
 			<form onSubmit={submit_sign_up}>
 
-				<h2>Sign Up</h2>
-
 				<LoginInput 
+					autoFocus={true}
 					htmlFor="username" 
 					input_type="text" 
 					label_name="Username"

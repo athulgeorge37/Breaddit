@@ -5,7 +5,9 @@ import { NavLink } from 'react-router-dom';
 
 function Navbar() {
 
-	const determine_active_page = (isActive) => {return "page_link " + (isActive ? "active" : "")}
+	const determine_active_page = ({isActive}) => {
+		return "page_link " + (isActive ? "active" : "")
+	}
 
 	return (
 		<nav>
@@ -14,35 +16,35 @@ function Navbar() {
 			<div className="links">
 				<NavLink 
 					to="/" 
-					className={({isActive}) => determine_active_page(isActive)}
+					className={determine_active_page}
 				>
 					Home
 				</NavLink>
 
 				<NavLink 
 					to="/signup" 
-					className={({isActive}) => determine_active_page(isActive)}
+					className={determine_active_page}
 				>
 					Sign Up
 				</NavLink>
 
 				<NavLink 
 					to="/signin" 
-					className={({isActive}) => determine_active_page(isActive)}
+					className={determine_active_page}
 				>
 					Sign In
 				</NavLink>
 
 				<NavLink 
 					to="/profile" 
-					className={({isActive}) => determine_active_page(isActive)}
+					className={determine_active_page}
 				>
 					Profile
 				</NavLink>
 
 				<NavLink 
 					to="/posts" 
-					className={({isActive}) => determine_active_page(isActive)}
+					className={determine_active_page}
 				>
 					Posts
 				</NavLink>

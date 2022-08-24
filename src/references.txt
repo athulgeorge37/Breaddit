@@ -9,3 +9,5 @@ Stuff I have used:
 - uuidv4 for unique ID's
 
 - icons all from flaticon
+
+- routes from react router dom

@@ -10,12 +10,21 @@ body {
     background-color: $black;
 }
 
-
-
-.main_body {
+.App {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+
+    .navbar_and_main_body {
+        .main_body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }
+
+
 

@@ -1,25 +1,53 @@
 import React from 'react';
 import './Navbar.scss';
 
-function Navbar({ curr_page, set_curr_page, available_pages }) {
+import { NavLink } from 'react-router-dom';
+
+function Navbar() {
+
+	const determine_active_page = (isActive) => {return "page_link " + (isActive ? "active" : "")}
+
 	return (
 		<nav>
 			<div className='logo'>Logo</div>
 
 			<div className="links">
-				{available_pages.map((page) => {
-					return (
-						<div 
-							key={page}
-							onClick={() => set_curr_page(page)}
-							className={"page_link " + (page === curr_page ? "active" : "")}
-						>
-							{page}
-						</div>
-					)
-				})}
-			</div>
+				<NavLink 
+					to="/" 
+					className={({isActive}) => determine_active_page(isActive)}
+				>
+					Home
+				</NavLink>
 
+				<NavLink 
+					to="/signup" 
+					className={({isActive}) => determine_active_page(isActive)}
+				>
+					Sign Up
+				</NavLink>
+
+				<NavLink 
+					to="/signin" 
+					className={({isActive}) => determine_active_page(isActive)}
+				>
+					Sign In
+				</NavLink>
+
+				<NavLink 
+					to="/profile" 
+					className={({isActive}) => determine_active_page(isActive)}
+				>
+					Profile
+				</NavLink>
+
+				<NavLink 
+					to="/posts" 
+					className={({isActive}) => determine_active_page(isActive)}
+				>
+					Posts
+				</NavLink>
+
+			</div>
 		</nav>
 	)
 }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import LoginInput from './LoginInput';
-import PopUpMenu from './PopUpMenu';
+import LoginInput from '../components/LoginInput';
+import PopUpMenu from '../components/PopUpMenu';
 import './Profile.scss';
 
-import ProfilePicture from './ProfilePicture';
+import ProfilePicture from '../components/ProfilePicture';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LoginInput from './LoginInput';
+import LoginInput from '../components/LoginInput';
 import './SignIn.scss';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';

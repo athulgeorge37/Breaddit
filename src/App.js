@@ -1,54 +1,44 @@
-import { useState } from 'react';
 import './App.scss';
 
-// component imports
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+
 import Navbar from './components/Navbar';
-import Home from './components/Home';
-import SignUp from './components/SignUp';
-import SignIn from './components/SignIn';
-import Profile from './components/Profile';
-import Posts from './components/Posts';
+import Footer from './components/Footer';
 
+// page imports
+import Home from './pages/Home';
+import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
+import Profile from './pages/Profile';
+import Posts from './pages/Posts';
+import Error from './pages/Error';
 
-const AVAILABLE_PAGES = 
-	["Home", "Sign Up", "Sign In", "Profile", "Posts"]
-
-const PAGE_RELATED_COMPONENTS = 
-	[<Home/>, <SignUp/>, <SignIn/>, <Profile/>, <Posts/>]
 
 function App() {
-
-	const [curr_page, set_curr_page] = useState("Posts");
-
-	const body_page = () => {
-		// returns the respective component based
-		// on the currently active curr_page state
-
-		for (let n=0; n < AVAILABLE_PAGES.length; n++) {
-			if (curr_page === AVAILABLE_PAGES[n]) {
-				return PAGE_RELATED_COMPONENTS[n]
-			}
-		}
-		
-	}
-
 	return (
 		<div className="App">
+			<Router>
 
-			<Navbar 
-				curr_page={curr_page}
-				set_curr_page={set_curr_page} 
-				available_pages={AVAILABLE_PAGES}
-			/>
+				<div className="navbar_and_main_body">
 
-			<section className="main_body">
-				{body_page()}
-			</section>
+					<Navbar/>
 
-			<footer>
-				Footer
-			</footer>
+					<div className="main_body">
+						<Routes>
+							<Route path="/" element={<Home/>}/>
+							<Route path="/signup" element={<SignUp/>}/>
+							<Route path="/signin" element={<SignIn/>}/>
+							<Route path="/profile" element={<Profile/>}/>
+							<Route path="/posts" element={<Posts/>}/>
+							<Route path="*" element={<Error/>}/>
+						</Routes>
+					</div>
 
+				</div>
+
+				<Footer/>
+
+			</Router>
 		</div>
 	);
 }

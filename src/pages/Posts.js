@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Posts.scss';
 
-import CreatePost from './CreatePost';
-import PostContent from './PostContent';
+import CreatePost from '../components/CreatePost';
+import PostContent from '../components/PostContent';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 

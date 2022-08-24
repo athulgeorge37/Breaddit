@@ -3,10 +3,14 @@ import './SignUp.scss';
 
 import { v4 as uuid } from 'uuid';
 
-import LoginInput from './LoginInput';
-import { set_item_local_storage } from '../helper_functions/local_storage';
+import LoginInput from '../components/LoginInput';
+import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
+
+	const navigate = useNavigate();
 
 	const [username, set_username] = useState("");
 	const [email, set_email] = useState("");
@@ -85,7 +89,7 @@ function SignUp() {
 				date_joined: getCurrentDate()
 			}
 
-			let all_users = JSON.parse(localStorage.getItem("All_Users"))
+			let all_users = get_item_local_storage("All_Users")
 
 			if (all_users === null) {
 				all_users = []
@@ -98,6 +102,8 @@ function SignUp() {
 
 			// setting the current user
 			set_item_local_storage("Current_User", login_details.user_id)
+
+			setTimeout(() => navigate("/profile"), 1500)
 
 		} else {
 			set_sign_up_btn("Sign Up")

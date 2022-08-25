@@ -17,6 +17,11 @@ function SignIn() {
 
 	const [sign_in_btn, set_sign_in_btn] = useState("Sign In");
 
+	// Alert function
+	const blankError = (error) => {
+		alert(error)
+	  }
+
 	const submitSignIn = (e) => {
 		e.preventDefault();
 
@@ -34,6 +39,7 @@ function SignIn() {
 			let valid_email = false
 			let valid_password = false
 
+			// Check the if the entered email and password is valid
 			for (let i =0; i < all_users.length; ++i) {
 
 				if (email === all_users[i].email) {
@@ -54,6 +60,18 @@ function SignIn() {
 
 			if (valid_email && valid_password){
 				set_sign_in_btn("Signing In...")
+			}
+		}
+		// Alert the user everytime they submit the form without filling in password or email.
+		else {
+			if (email !== ""){
+				blankError("Please enter your password")
+			}
+			else if (password !== ""){
+				blankError("Please enter your email")
+			}
+			else{
+				blankError("Please fill in your details")
 			}
 		}
 	}

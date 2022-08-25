@@ -12,7 +12,8 @@ function SignIn() {
 
 	const [valid_signup_details, set_valid_signup_details] = useState({
 		email_validity: true,   
-		password_validity: true
+		password_validity: true,
+		format_validity: true
 	});
 
 	const [sign_in_btn, set_sign_in_btn] = useState("Sign In");
@@ -21,6 +22,15 @@ function SignIn() {
 	const blankError = (error) => {
 		alert(error)
 	  }
+
+	const errorMessage = () => {
+		if (valid_signup_details.format_validity){
+			return "The email address you entered isn't connected to an account."
+		}
+		else {
+			return "The email format is invalid. Email must contain an \"@\" and \".\" characters"
+		}
+	}
 
 	const submitSignIn = (e) => {
 		e.preventDefault();
@@ -38,6 +48,7 @@ function SignIn() {
 
 			let valid_email = false
 			let valid_password = false
+			let valid_format = false
 
 			// Check the if the entered email and password is valid
 			for (let i =0; i < all_users.length; ++i) {
@@ -52,9 +63,14 @@ function SignIn() {
 				}
 			}
 
+			if (email.includes("@") && email.includes(".")){
+				valid_format = true
+			}
+
 			set_valid_signup_details({
 				email_validity: valid_email,
-				password_validity: valid_password
+				password_validity: valid_password,
+				format_validity: valid_format
 			})
 
 
@@ -89,7 +105,7 @@ return (
 				update_on_change={setEmail}
 				boolean_check={valid_signup_details.email_validity}
 			>
-				The email address you entered isn't connected to an account.
+				{errorMessage()}
 			</LoginInput>
 
 			<LoginInput

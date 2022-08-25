@@ -22,11 +22,11 @@ function SignIn() {
 
 
 		let all_field_entered = true
-			for (const field of [email, password]) {
-				if (field === "") {
-					all_field_entered = false
-				}
+		for (const field of [email, password]) {
+			if (field === "") {
+				all_field_entered = false
 			}
+		}
 
 
 		if (all_field_entered) {

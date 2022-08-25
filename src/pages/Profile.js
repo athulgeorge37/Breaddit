@@ -187,8 +187,7 @@ function Profile() {
                         title="Delete Account?"
 
                         btn_1_txt="Cancel"
-                        btn_1_handler={set_delete_confirmation}
-                        btn_1_parameter={false}
+                        btn_1_handler={() => set_delete_confirmation(false)}
 
                         btn_2_txt="Delete"
                         btn_2_handler={handle_delete_btn}

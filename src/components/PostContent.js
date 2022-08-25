@@ -8,6 +8,7 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';
+import PopUpMenu from './PopUpMenu';
 
 import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import ProfilePicture from './ProfilePicture';
@@ -20,9 +21,6 @@ import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
 
 function PostContent({ post_details }) {
 
-    const [post_up_votes, update_post_up_votes] = useState(0);
-    const [post_down_votes, update_post_down_votes] = useState(0);
-
     const [show_add_comment, set_show_add_comment] = useState(false);
     const [show_comments_section, set_show_comments_section] = useState(false);
 
@@ -31,10 +29,8 @@ function PostContent({ post_details }) {
 
     const [add_comment_error_msg, show_add_comment_error_msg] =useState(false);
 
-
     const [edit_btn_active, set_edit_btn_active] = useState(false);
-
-    // const [post_text, set_post_text] = useState(post_details.post_text);
+    const [delete_btn_active, set_delete_btn_active] = useState(false);
 
     // required for read_more/less button
     const posted_content_ref = useRef();
@@ -42,14 +38,22 @@ function PostContent({ post_details }) {
 
     const {
         post_title, 
-        post_text, 
-        valid_title,
         set_post_title,
-        set_valid_title,
-        set_post_text,
-        handle_add_post    // need to create and use an handle_edit_post
-    } = useEditPost(post_details.post_title, post_details.post_text); 
 
+        post_text, 
+        set_post_text,
+
+        valid_title,
+       
+        post_up_votes,
+        handle_post_up_vote,
+
+        post_down_votes,
+        handle_post_down_vote,
+
+        handle_edit_post,
+        handle_delete_post
+    } = useEditPost(post_details); 
 
 
     useEffect(() => {
@@ -64,60 +68,7 @@ function PostContent({ post_details }) {
             set_allow_show_more_btn(true)
         }
     }, [])
-
-
-
-    const initialise_post_votes = () => {
-        let all_posts = get_item_local_storage("Available_Posts")
-
-        for (const post of all_posts) {
-            if (post.post_id === post_details.post_id) {
-                update_post_up_votes(post.post_up_votes)
-                update_post_down_votes(post.post_down_votes)
-                break;
-            }
-        }
-    }
-
-    useEffect(() => {
-        // executes on postcontent component load to initialise all votes for each post
-        initialise_post_votes()
-    }, [])
-
-
-    const update_local_storage_post_vote = (new_up_vote, new_down_vote) => {
-        // finds the appropriate post in localstorage, and
-        // updates localstorage to contain each post's up and down votes
-
-        let all_posts = get_item_local_storage("Available_Posts")
-
-        for (const post of all_posts) {
-            if (post.post_id === post_details.post_id) {
-
-                post.post_up_votes = new_up_vote
-                post.post_down_votes = new_down_vote
-                break;
-            }
-        }
-
-        set_item_local_storage("Available_Posts", all_posts)
-    }
-
-    const handle_post_up_vote = () => {
-        // updates the UI of up votes
-        update_post_up_votes(post_up_votes + 1) 
-
-        // updates the local storage of up votes
-        update_local_storage_post_vote(post_up_votes + 1, post_down_votes) 
-    }
-
-    const handle_post_down_vote = () => {
-        // updates the UI of down votes
-        update_post_down_votes(post_down_votes - 1) 
-
-        // updates the local storage of down votes
-        update_local_storage_post_vote(post_up_votes, post_down_votes - 1) 
-    }
+   
 
     const handle_add_comment_surface_level = (comment_content) => {
 
@@ -156,40 +107,65 @@ function PostContent({ post_details }) {
     }
 
 
-    const handle_edit_post = () => {
+    const submit_edit_post = () => {
         // must execute when user clicks save
 
-        let all_posts = get_item_local_storage("Available_Posts")
-
-        for (const post of all_posts) {
-            if (post.post_id === post_details.post_id) {
-                post.post_text = post_text
-                post.edited = true
-                post.post_date_time = new Date().getTime()
-                break;
-            }
-        }
-
-        set_item_local_storage("Available_Posts", all_posts)
-
+        handle_edit_post(post_details.post_id)
         set_edit_btn_active(false)
 
+    }
+
+
+    const submit_delete_post = () => {
+
+        handle_delete_post(post_details.post_id)
+
+        set_delete_btn_active(false)
+    }
+
+    const post_content_for_user = () => {
+
+        const updated_post_info = get_post_by_post_id(post_details.post_id)
+
+        return (
+            <div className="posted_by_user">
+                <b>{get_user_details(post_details.post_author).username} • </b>
+                {updated_post_info.edited === true && "(edited) • "}
+                {calculate_time_passed(updated_post_info.post_date_time)} ago
+            </div>
+        )
     }
 
 
     return (
         <div className="PostContent">
 
+            {
+                delete_btn_active &&
+
+                <div className="delete_post_pop_up_div">
+                    <PopUpMenu
+                        title="Delete Post?"
+
+                        btn_1_txt="Cancel"
+                        btn_1_handler={() => set_delete_btn_active(false)}
+
+                        btn_2_txt="Delete"
+                        btn_2_handler={submit_delete_post}
+                    >
+                        <p>
+                            Are you sure you want to delete this Post?
+                            This action is not reversible.
+                        </p>
+                    </PopUpMenu>
+                </div>
+            }
+
             <div className="post_user_and_awards">
                 <div className="post_user">
                     <ProfilePicture/>
 
-                    <div className="posted_by_user">
-                        <b>{get_user_details(post_details.post_author).username} • </b>
-                        {get_post_by_post_id(post_details.post_id).edited === true && "(edited) • "}
-                        {calculate_time_passed(get_post_by_post_id( post_details.post_id).post_date_time)} ago
-                    </div>
-                    
+                    {post_content_for_user()}
                 </div>
 
                 <div className="btns">
@@ -199,23 +175,30 @@ function PostContent({ post_details }) {
 
                         <button 
                             className="save_btn"
-                            onClick={handle_edit_post}
+                            onClick={submit_edit_post}
                         >
                             Save
                         </button>
                     }
 
-
                     {
                         post_details.post_author === get_item_local_storage("Current_User") 
                         &&
-                        <AdjustableButton
-                            boolean_check={edit_btn_active}
-                            execute_onclick={() => set_edit_btn_active(!edit_btn_active)}
-                            original_class_name="edit_btn"
-                            active_name="Cancel"
-                            inactive_name="Edit"
-                        />
+                        <>
+                            <AdjustableButton
+                                boolean_check={edit_btn_active}
+                                execute_onclick={() =>  set_edit_btn_active(!edit_btn_active)}
+                                original_class_name="edit_btn"
+                                active_name="Cancel"
+                                inactive_name="Edit"
+                            />
+                            <button 
+                                className="delete_btn"
+                                onClick={() => set_delete_btn_active(true)}
+                            >
+                                Delete
+                            </button>
+                        </>
                     }
 
                     <button className="awards">

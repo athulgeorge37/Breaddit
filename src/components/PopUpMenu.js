@@ -12,14 +12,14 @@ function PopUpMenu(props) {
 
             <button 
                 className="btn_1"
-                onClick={() => props.btn_1_handler(false)}
+                onClick={() => props.btn_1_handler()}
             >
                 {props.btn_1_txt}
             </button>
 
             <button 
                 className="btn_2"
-                onClick={() => props.btn_2_handler(false)}
+                onClick={() => props.btn_2_handler()}
             >
                 {props.btn_2_txt}
             </button>

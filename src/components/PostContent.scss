@@ -22,7 +22,17 @@
     background-color: $dark-grey;
     border: 1px solid $light-grey;
     border-radius: $default-border-radius;
+    position: relative;
 
+    .delete_post_pop_up_div {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        left: 50%;
+        top: 50%;
+    }
 
     .post_user_and_awards {
         display: flex;
@@ -45,6 +55,11 @@
 
             .edit_btn {
                 margin: 0px 10px;
+            }
+
+            .delete_btn {
+                @include btn-styles($red);
+                margin-right: 10px;
             }
 
             .awards {

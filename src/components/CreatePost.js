@@ -32,7 +32,12 @@ function CreatePost() {
         }
 
         // only handling post if there is a post title
-        handle_add_post()
+        handle_add_post(post_title, post_text)
+
+        set_valid_title(true)
+        set_post_title("")
+        set_post_text("")
+
         set_expanded_view(false)
 
     }

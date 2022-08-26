@@ -2,12 +2,14 @@ import React, { useState, useContext } from 'react';
 import LoginInput from '../components/LoginInput';
 import PopUpMenu from '../components/PopUpMenu';
 import './Profile.scss';
+import { useNavigate } from 'react-router-dom';
 
 import ProfilePicture from '../components/ProfilePicture';
 
-import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+import { get_item_local_storage, set_item_local_storage, remove_item_local_storage } from '../helper_functions/local_storage';
 import PostContent from '../components/PostContent';
 import { ALL_POSTS_CONTEXT } from '../App';
+
 
 
 const initializePosts = () => {
@@ -27,7 +29,7 @@ const initializePosts = () => {
 // importing the All_Posts_Context from posts.js
 
 function Profile() {
-
+    const navigate = useNavigate();
     //const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const initialise_user_details = () => {
@@ -65,8 +67,6 @@ function Profile() {
 
 
     const user_posts = initializePosts()
-
-
 
 
     const handle_edit_btn = () => {
@@ -117,7 +117,72 @@ function Profile() {
     }
 
     const handle_delete_btn = () => {
-        // need to implement
+
+        // delete the posts
+
+        const logged_in_user_id = get_item_local_storage("Current_User")
+        let all_posts = get_item_local_storage("Available_Posts")
+        let all_users = get_item_local_storage("All_Users")
+        
+
+        for (let i =0; i < all_posts.length; ++i) {
+            if (logged_in_user_id === all_posts[i].post_author) {
+                all_posts.splice(i, 1)
+                i--     
+            }
+        }
+
+        
+        // delete the comments and replies made by user
+
+        for (let t = 0; t < all_posts.length; ++t) {
+            let comments = all_posts[t].post_comments
+
+            for (let i = 0; i < comments.length; ++i){
+  
+                if (logged_in_user_id === comments[i].comment_author) {
+                    all_posts[t].post_comments.splice(i, 1)
+                    --i
+                    //++count
+                }
+                if (all_posts[t].post_comments.length !==0){
+                    //console.log(i)
+                    try{
+                        let children_comments = comments[i].children_comments
+                    //  console.log(children_comments)
+                        for (let j = 0; j < children_comments.length; ++j) {
+                            if (logged_in_user_id === children_comments[j].comment_author){
+                                all_posts[t].post_comments[i].children_comments.splice(j, 1)
+                                --j
+                                //++count
+                            }
+                        }
+                    }
+                    catch(err){
+
+                    }
+                }
+            }
+        }
+
+        set_item_local_storage("Available_Posts", all_posts)
+
+        // delete the user
+
+        for (let i = 0; i < all_users.length; ++i){
+
+            if (logged_in_user_id === all_users[i].user_id) {
+
+                all_users.splice(i, 1)
+            }
+        }
+        
+        set_item_local_storage("All_Users", all_users)
+
+        remove_item_local_storage("Current_User")
+
+        navigate("/signup")
+        
     }
 
     return (

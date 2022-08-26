@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 // importing the All_Posts_Context from posts.js
-import { All_Posts_Context } from '../pages/Posts';
+import { ALL_POSTS_CONTEXT } from '../pages/Posts';
 
 import { v4 as uuid } from 'uuid';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 export const useEditPost = (initial_post_details) => {
 
-    const { set_all_posts } = useContext(All_Posts_Context);
+    const { set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const [post_title, set_post_title] = useState(initial_post_details === undefined ? "": initial_post_details.post_title);
     const [post_text, set_post_text] = useState(initial_post_details === undefined ? "" : initial_post_details.post_text);
@@ -24,7 +24,6 @@ export const useEditPost = (initial_post_details) => {
         // we get all the previous post details
         // we add it to local storage, and update the state of all_posts
         // causes re-render showing the new post on the screen     
-
 
         const user_who_posted = get_item_local_storage("Current_User")
 
@@ -49,9 +48,8 @@ export const useEditPost = (initial_post_details) => {
             // using the context to acces set_all_posts function, without having to prop drill
             set_all_posts(updated_post_list)
 
-            set_item_local_storage("Available_Posts", updated_post_list)
 
-            
+            set_item_local_storage("Available_Posts", updated_post_list)
         }
 
     }
@@ -71,8 +69,10 @@ export const useEditPost = (initial_post_details) => {
             }
         }
 
+        // updating local storage
         set_item_local_storage("Available_Posts", all_posts)
 
+        // updating the UI for post_id specific post only
         set_post_text(post_text)
 
     }

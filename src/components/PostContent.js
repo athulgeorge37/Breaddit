@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useEditPost } from './useEditPost';
 import './PostContent.scss';
 
 import parse from 'html-react-parser';
 import { v4 as uuid } from 'uuid';
+
 import { get_user_details } from '../helper_functions/get_user_details';
+import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';
 import PopUpMenu from './PopUpMenu';
-
-import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
 import ProfilePicture from './ProfilePicture';
 import AdjustableButton from './AdjustableButton';
 import EditPost from './EditPost';
 
-
-import { useEditPost } from './useEditPost';
-import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
 
 function PostContent({ post_details }) {
 
@@ -56,6 +55,12 @@ function PostContent({ post_details }) {
     } = useEditPost(post_details); 
 
 
+    // useEffect(() => {
+    //     console.log(post_title, post_text)
+    // }, [post_title, post_text])
+
+
+    // for show more btn
     useEffect(() => {
         const post_content_height = posted_content_ref.current.clientHeight
 

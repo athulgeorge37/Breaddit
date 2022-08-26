@@ -4,6 +4,12 @@ import './SignUp.scss';
 import { v4 as uuid } from 'uuid';
 
 import LoginInput from '../components/LoginInput';
+
+import PasswordInput from './PasswordInput';
+import UsernameInput from './UsernameInput';
+import EmailInput from './EmailInput';
+
+
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +20,8 @@ function SignUp() {
 
 	const [username, set_username] = useState("");
 	const [email, set_email] = useState("");
+	const [password, set_password] = useState("");
+
 	const [password_1, set_password_1] = useState("");
 	const [password_2, set_password_2] = useState("");
 
@@ -96,7 +104,7 @@ function SignUp() {
 			}
 
 			all_users = [...all_users, login_details]
-
+		
 			// adding the user to a list of all users
 			set_item_local_storage("All_Users", all_users)
 
@@ -127,7 +135,11 @@ function SignUp() {
 
 			<form onSubmit={submit_sign_up}>
 
-				<LoginInput 
+				<EmailInput set_email={set_email}/>
+
+				<UsernameInput set_username={set_username}/>
+
+				{/* <LoginInput 
 					autoFocus={true}
 					htmlFor="username" 
 					input_type="text" 
@@ -136,18 +148,18 @@ function SignUp() {
 					boolean_check={valid_login_details.username_validity}
 				>
 					Username must be between 3 and 12 characters long
-				</LoginInput>
+				</LoginInput> */}
 
-				<LoginInput 
+				{/* <LoginInput 
 					htmlFor="email" 
 					input_type="email" 
 					update_on_change={set_email} 
 					boolean_check={valid_login_details.email_validity}
 				>
 					Email must contain an "@" and "." characters
-				</LoginInput>
+				</LoginInput> */}
 
-				<LoginInput 
+				{/* <LoginInput 
 					htmlFor="password_1" 
 					input_type="password" 
 					update_on_change={set_password_1} 
@@ -161,9 +173,11 @@ function SignUp() {
 						<li>1 Number</li>
 						<li>8 Characters</li>
 					</ul>
-				</LoginInput>
+				</LoginInput> */}
 
-				<LoginInput 
+				<PasswordInput set_password={set_password}/>
+
+				{/* <LoginInput 
 					htmlFor="password_2" 
 					input_type="password"
 					label_name="Confirm Password" 
@@ -171,7 +185,8 @@ function SignUp() {
 					boolean_check={valid_login_details.matching_password_validity}
 				>
 					Passwords do not match
-				</LoginInput>
+				</LoginInput> */}
+
 
 				<input 
 					type="submit" 

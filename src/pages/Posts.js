@@ -7,12 +7,12 @@ import PostContent from '../components/PostContent';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 // exporting so we can acces this context in useEditPost file
-export const All_Posts_Context = createContext();
+export const ALL_POSTS_CONTEXT = createContext();
 
 function Posts() {
 
-    // all_posts is passed to AvailablePosts component to render
-    // all of them with the appropriate
+    // all_posts is passed to PostContent component to render
+    // all of them with the appropriate data
     const [all_posts, set_all_posts] = useState([]);
 
     useEffect(() => {
@@ -36,13 +36,13 @@ function Posts() {
 
   return (
     <div className="Posts_Page">
-        <All_Posts_Context.Provider value={{set_all_posts}}>
+        <ALL_POSTS_CONTEXT.Provider value={{set_all_posts}}>
 
             <CreatePost/>
 
             {
                 all_posts.length === 0 
-                
+
                 ?
 
                 <div className="no_posts">
@@ -52,19 +52,18 @@ function Posts() {
                 :
                 
                 <div className="All_Posts">
-                    {all_posts.map((post_details, key) => {
-                        console.table(post_details)
+                    {all_posts.map((post_details) => {
                         return (
                             <PostContent 
                                 post_details={post_details}
-                                key={key}
+                                key={post_details.post_id}
                             />
                         )
                     })}
                 </div>
             }
 
-        </All_Posts_Context.Provider>
+        </ALL_POSTS_CONTEXT.Provider>
         
     </div>
   )

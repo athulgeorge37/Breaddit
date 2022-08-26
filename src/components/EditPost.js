@@ -5,7 +5,7 @@ import './EditPost.scss'
 
 function EditPost(props) {
 
-
+    // might want to prop drill this
 
     return (
         <div className="post_inputs">

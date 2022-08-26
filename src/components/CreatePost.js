@@ -57,6 +57,7 @@ function CreatePost() {
                     />
 
                     <div className="characters_and_btns">
+                        
                         <span className="characters_left">
                             {MAX_POST_TEXT_CHARACTERS - post_text.length}
                             {" "}
@@ -81,6 +82,7 @@ function CreatePost() {
                                 Post
                             </button>
                         </div>
+
                     </div>
                 </div>
 

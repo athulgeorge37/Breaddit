@@ -6,10 +6,29 @@ import './Profile.scss';
 import ProfilePicture from '../components/ProfilePicture';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+import PostContent from '../components/PostContent';
+import { ALL_POSTS_CONTEXT } from '../App';
 
 
+const initializePosts = () => {
+ 
+    const all_user_posts = []
+    let all_posts = get_item_local_storage("Available_Posts")
+    let current_author = get_item_local_storage("Current_User")
+    for (const post of all_posts){
+        if (post.post_author === current_author){
+            all_user_posts.push(post)
+        }
+    }
+    return all_user_posts
+
+}
+
+// importing the All_Posts_Context from posts.js
 
 function Profile() {
+
+    //const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const initialise_user_details = () => {
 
@@ -43,6 +62,12 @@ function Profile() {
     }
 
     const [delete_confirmation, set_delete_confirmation] = useState(false);
+
+
+    const user_posts = initializePosts()
+
+
+
 
     const handle_edit_btn = () => {
 
@@ -96,6 +121,7 @@ function Profile() {
     }
 
     return (
+       <>
         <div className="Profile_Page">
             <h1>Profile Page</h1>
             <div className="profile_container">
@@ -154,8 +180,6 @@ function Profile() {
                             </div>
                         </div>
                     }
-                    
-                    
                 </div>
 
                 <div className="profile_btns">
@@ -201,7 +225,35 @@ function Profile() {
                 }
 
             </div>
+ 
         </div>
+        <div className='user_posts'>
+                {
+                    user_posts.length === 0
+
+                    ?
+
+                    <div className='no_posts'>
+                        Wow, such empty!
+                    </div>
+
+                    :
+                    <div className="All_Posts">
+                        {user_posts.map((post_details) => {
+                            
+                            return (
+                                <PostContent 
+                                    post_details={post_details}
+                                    key={post_details.post_id}
+                                />
+                            )
+                        })}
+                    </div>
+                    
+                }
+            </div>
+        </>
+        
     )
 }
 

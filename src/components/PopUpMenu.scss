@@ -18,6 +18,9 @@
     .pop_up_title,
     .pop_up_info {
         margin-bottom: 16px;
+        ul {
+            margin-left: $inner-padding;
+        }
     }
 
     .pop_up_btns {

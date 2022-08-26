@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginInput from '../components/LoginInput';
 import './SignIn.scss';
 
@@ -8,6 +9,8 @@ function SignIn() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const  all_users = get_item_local_storage("All_Users");
+
+	const navigate = useNavigate();
 
 
 	const [valid_signup_details, set_valid_signup_details] = useState({
@@ -124,6 +127,11 @@ return (
 			/>
 
 		</form>
+
+		<div>
+			Dont Have an Account?
+			<button onClick={() => navigate("/signup")}>Sign Up</button>
+		</div>
 	</div>
 )
 }

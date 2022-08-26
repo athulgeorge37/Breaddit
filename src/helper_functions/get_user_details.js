@@ -10,7 +10,10 @@ export const get_user_details = (my_user_id) => {
         my_user_id = get_item_local_storage("Current_User")
     }
         
-    const all_users = get_item_local_storage("All_Users")
+    let all_users = get_item_local_storage("All_Users")
+    if (all_users === null) {
+        all_users = []
+    }
     
     for (const user of all_users) {
         if (user.user_id === my_user_id) {

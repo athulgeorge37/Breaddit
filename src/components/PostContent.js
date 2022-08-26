@@ -344,7 +344,7 @@ function PostContent({ post_details }) {
                     show_comments_section &&
 
                     <CommentSection
-                        post_id={post_details.post_id}
+                        post_details={post_details}
                     />
 
                 }

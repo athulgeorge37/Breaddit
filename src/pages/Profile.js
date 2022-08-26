@@ -6,7 +6,21 @@ import './Profile.scss';
 import ProfilePicture from '../components/ProfilePicture';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+import PostContent from '../components/PostContent';
 
+const initializePosts = () => {
+ 
+    const all_user_posts = []
+    let all_posts = get_item_local_storage("Available_Posts")
+    let current_author = get_item_local_storage("Current_User")
+    for (const post of all_posts){
+        if (post.post_author === current_author){
+            all_user_posts.push(post)
+        }
+    }
+    return all_user_posts
+
+}
 
 function Profile() {
 
@@ -42,6 +56,12 @@ function Profile() {
     }
 
     const [delete_confirmation, set_delete_confirmation] = useState(false);
+
+
+    const user_posts = initializePosts()
+
+
+
 
     const handle_edit_btn = () => {
 
@@ -199,6 +219,31 @@ function Profile() {
                     </PopUpMenu>
                 }
 
+            </div>
+            <div className='user_posts'>
+                {
+                    user_posts.length === 0
+
+                    ?
+
+                    <div className='no_posts'>
+                        Wow, such empty!
+                    </div>
+
+                    :
+                    <div className="All_Posts">
+                        {user_posts.map((post_details) => {
+                            
+                            return (
+                                <PostContent 
+                                    post_details={post_details}
+                                    key={post_details.post_id}
+                                />
+                            )
+                        })}
+                    </div>
+                    
+                }
             </div>
         </div>
     )

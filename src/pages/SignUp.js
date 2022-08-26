@@ -135,11 +135,13 @@ function SignUp() {
 
 			<form onSubmit={submit_sign_up}>
 
-				<EmailInput set_email={set_email}/>
+				{/* <EmailInput set_email={set_email}/>
 
 				<UsernameInput set_username={set_username}/>
 
-				{/* <LoginInput 
+				<PasswordInput set_password={set_password}/> */}
+
+				<LoginInput 
 					autoFocus={true}
 					htmlFor="username" 
 					input_type="text" 
@@ -148,18 +150,18 @@ function SignUp() {
 					boolean_check={valid_login_details.username_validity}
 				>
 					Username must be between 3 and 12 characters long
-				</LoginInput> */}
+				</LoginInput>
 
-				{/* <LoginInput 
+				<LoginInput 
 					htmlFor="email" 
 					input_type="email" 
 					update_on_change={set_email} 
 					boolean_check={valid_login_details.email_validity}
 				>
 					Email must contain an "@" and "." characters
-				</LoginInput> */}
+				</LoginInput>
 
-				{/* <LoginInput 
+				<LoginInput 
 					htmlFor="password_1" 
 					input_type="password" 
 					update_on_change={set_password_1} 
@@ -173,11 +175,11 @@ function SignUp() {
 						<li>1 Number</li>
 						<li>8 Characters</li>
 					</ul>
-				</LoginInput> */}
+				</LoginInput>
 
-				<PasswordInput set_password={set_password}/>
+				
 
-				{/* <LoginInput 
+				<LoginInput 
 					htmlFor="password_2" 
 					input_type="password"
 					label_name="Confirm Password" 
@@ -185,7 +187,7 @@ function SignUp() {
 					boolean_check={valid_login_details.matching_password_validity}
 				>
 					Passwords do not match
-				</LoginInput> */}
+				</LoginInput>
 
 
 				<input 

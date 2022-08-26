@@ -7,6 +7,8 @@ import ProfilePicture from '../components/ProfilePicture';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 import PostContent from '../components/PostContent';
+import { ALL_POSTS_CONTEXT } from '../App';
+
 
 const initializePosts = () => {
  
@@ -23,11 +25,10 @@ const initializePosts = () => {
 }
 
 // importing the All_Posts_Context from posts.js
-import { ALL_POSTS_CONTEXT } from '../App';
 
 function Profile() {
 
-    const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
+    //const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const initialise_user_details = () => {
 
@@ -120,6 +121,7 @@ function Profile() {
     }
 
     return (
+       <>
         <div className="Profile_Page">
             <h1>Profile Page</h1>
             <div className="profile_container">
@@ -178,8 +180,6 @@ function Profile() {
                             </div>
                         </div>
                     }
-                    
-                    
                 </div>
 
                 <div className="profile_btns">
@@ -225,7 +225,9 @@ function Profile() {
                 }
 
             </div>
-            <div className='user_posts'>
+ 
+        </div>
+        <div className='user_posts'>
                 {
                     user_posts.length === 0
 
@@ -250,7 +252,8 @@ function Profile() {
                     
                 }
             </div>
-        </div>
+        </>
+        
     )
 }
 

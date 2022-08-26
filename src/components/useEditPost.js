@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-// importing the All_Posts_Context from posts.js
-import { ALL_POSTS_CONTEXT } from '../pages/Posts';
+// importing the All_Posts_Context from app.js
+import { ALL_POSTS_CONTEXT } from '../App';
 
 import { v4 as uuid } from 'uuid';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';

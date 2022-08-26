@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import LoginInput from '../components/LoginInput';
 import PopUpMenu from '../components/PopUpMenu';
 import './Profile.scss';
@@ -8,7 +8,12 @@ import ProfilePicture from '../components/ProfilePicture';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
 
+// importing the All_Posts_Context from posts.js
+import { ALL_POSTS_CONTEXT } from '../App';
+
 function Profile() {
+
+    const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const initialise_user_details = () => {
 

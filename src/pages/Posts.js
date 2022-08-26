@@ -1,19 +1,19 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import './Posts.scss';
+
+// importing the All_Posts_Context from posts.js
+import { ALL_POSTS_CONTEXT } from '../App';
 
 import CreatePost from '../components/CreatePost';
 import PostContent from '../components/PostContent';
 
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
-// exporting so we can acces this context in useEditPost file
-export const ALL_POSTS_CONTEXT = createContext();
+
 
 function Posts() {
 
-    // all_posts is passed to PostContent component to render
-    // all of them with the appropriate data
-    const [all_posts, set_all_posts] = useState([]);
+    const { all_posts, set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     useEffect(() => {
         // called on initial Post Page load
@@ -30,14 +30,10 @@ function Posts() {
 
     }, [])
 
-    // useEffect(() => {
-    //     console.table(all_posts)
-    // }, [all_posts])
 
   return (
     <div className="Posts_Page">
-        <ALL_POSTS_CONTEXT.Provider value={{set_all_posts}}>
-
+        
             <CreatePost/>
 
             {
@@ -62,8 +58,7 @@ function Posts() {
                     })}
                 </div>
             }
-
-        </ALL_POSTS_CONTEXT.Provider>
+        
         
     </div>
   )

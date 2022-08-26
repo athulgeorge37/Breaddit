@@ -25,7 +25,6 @@ function Posts() {
             set_all_posts(available_posts)
         } else {
             set_item_local_storage("Available_Posts", [])
-            //set_all_posts([])  // might be redundant, cus we areleady have it initalised as []
         }
 
     }, [])

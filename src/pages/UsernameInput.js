@@ -6,7 +6,7 @@ import './UsernameInput.scss';
 const MIN_USERNAME_LENGTH = 3
 const MAX_USERNAME_LENGTH = 15
 
-function UsernameInput({ set_username }) {
+function UsernameInput({ set_username_info }) {
 
     const [characters_left, set_characters_left] = useState(0);
     const [usernname_validity, set_usernname_validity] = useState({
@@ -15,8 +15,6 @@ function UsernameInput({ set_username }) {
     });
 
     const validate_username = (new_username) => {
-
-        set_username(new_username)
 
         set_characters_left(new_username.length)
 
@@ -40,6 +38,11 @@ function UsernameInput({ set_username }) {
             unique_name: unique_name
         })  
 
+        set_username_info({
+            username: new_username,
+            valid: correct_length && unique_name
+        })
+
     }
 
     return (
@@ -56,7 +59,6 @@ function UsernameInput({ set_username }) {
             </div>
 
             <div className="errors">
-                {/* <span>Username must contain atleast:</span> */}
                 <ul>
                     <li 
                         className={usernname_validity.unique_name ? "valid" : "invalid"}

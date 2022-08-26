@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { get_user_details } from '../helper_functions/get_user_details';
 import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
-import { calculate_time_passed } from '../helper_functions/calculate_time_passed';
+import { calculate_time_passed } from '../helper_functions/time';
 
 import AddComment from './AddComment';
 import CommentSection from './CommentSection';

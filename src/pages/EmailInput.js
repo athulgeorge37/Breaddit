@@ -1,23 +1,22 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { get_item_local_storage } from '../helper_functions/local_storage';
 
+
 import './EmailInput.scss';
 
 
-
-function EmailInput({ set_email }) {
+function EmailInput({ set_email_info }) {
 
     const navigate = useNavigate();
 
     const [email_validity, set_email_validity] = useState({
         valid_email: false,
         unique_email: true
-    });
+    });  
 
     const validate_email = (new_email) => {
-
-        set_email(new_email)
 
         let valid_email = false
         if (/\S+@\S+\.\S+/.test(new_email)) {
@@ -39,6 +38,11 @@ function EmailInput({ set_email }) {
             unique_email: unique_email
         })
 
+        set_email_info({
+            email: new_email,
+            valid: unique_email && valid_email
+        })
+
     }
 
 
@@ -53,9 +57,7 @@ function EmailInput({ set_email }) {
                 />
             </div>
 
-            <div className="errors">
-                {/* <span>Email must contain atleast:</span> */}
-                
+            <div className="errors">               
                     {
                         email_validity.unique_email  
                         ?
@@ -76,8 +78,6 @@ function EmailInput({ set_email }) {
                             </button>
                         </div>
                     }
-                    
-                
             </div>
         </div>
     )

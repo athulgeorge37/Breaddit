@@ -99,8 +99,6 @@ function CreatePost() {
             }
 
         </div>
-
-        
     )
 }
 

@@ -4,7 +4,7 @@ import './PasswordInput.scss';
 
 const MIN_PASSWORD_LENGTH = 6
 
-function PasswordInput({ set_password }) {
+function PasswordInput({ set_password_info }) {
 
     const input_ref = useRef(null);
 
@@ -20,8 +20,6 @@ function PasswordInput({ set_password }) {
 
 
     const validate_password = (new_password) => {
-
-        set_password(new_password)
 
         let uppercase_letter = false
         let lowercase_letter = false
@@ -53,6 +51,11 @@ function PasswordInput({ set_password }) {
             number: number,
             valid_length: valid_length
         })
+
+        set_password_info({
+            password: new_password,
+            valid: uppercase_letter && lowercase_letter && special_character && number && valid_length
+        })
     }
 
     return (
@@ -76,7 +79,6 @@ function PasswordInput({ set_password }) {
             </div>
 
             <div className="errors">
-                {/* <span>Password must contain atleast:</span> */}
                 <ul>
                     <li 
                         className={password_validity.uppercase_letter ? "valid" : "invalid"}

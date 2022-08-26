@@ -11,15 +11,27 @@
         font-size: 14px;
     }
 
-    .email_input:focus-within {
-        border: 1px solid $blue;
-    }
+    // .initial_input {
+    //     border: 1px solid $blue;
+    // }
+
+    // .valid_input {
+    //     border: 1px solid $green;
+    // }
+
+    // .invalid_input {
+    //     border: 1px solid $red;
+    // }
+
+    // .email_input:focus-within {
+    //     border: 1px solid $blue;
+    // }
 
     .email_input {
         display: flex;
         justify-content: space-between;
         
-        border: 1px solid $light-grey;
+        border: 1px solid $blue;
         padding: 5px 12px;
 
         background-color: $black;
@@ -35,6 +47,17 @@
             font-size: 14px;
             line-height: 20px;
             width: 100%;
+
+            
+        }
+
+        // prevents default sytling when autofilling
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: $white !important;
         }
 
     }

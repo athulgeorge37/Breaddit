@@ -1,198 +1,94 @@
-import React, { useState } from 'react';
+// styles import
 import './SignUp.scss';
 
-import { v4 as uuid } from 'uuid';
+// hook imports
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import LoginInput from '../components/LoginInput';
-
+// component imports
 import PasswordInput from './PasswordInput';
 import UsernameInput from './UsernameInput';
 import EmailInput from './EmailInput';
 
-
+// function imports
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
+import { get_current_date } from "../helper_functions/time";
+import { v4 as uuid } from 'uuid';
 
-import { useNavigate } from 'react-router-dom';
+
 
 function SignUp() {
 
 	const navigate = useNavigate();
 
-	const [username, set_username] = useState("");
-	const [email, set_email] = useState("");
-	const [password, set_password] = useState("");
+	const [signed_up, set_signed_up] = useState(false);
 
-	const [password_1, set_password_1] = useState("");
-	const [password_2, set_password_2] = useState("");
+	const [email_info, set_email_info] = useState({ email: "", valid: false });
+	const [username_info, set_username_info] = useState({ username: "", valid: false });
+	const [password_info, set_password_info] = useState({ password: "", valid: false });
 
-	const [valid_login_details, set_valid_login_details] = useState(
-		{
-			username_validity: true,
-			email_validity: true,
-			matching_password_validity: true,
-			password_validity: true
+
+	useEffect(() => {
+		// preventing errors when localstorage is not set
+		if (get_item_local_storage("All_Users") === null) {
+			set_item_local_storage("All_Users", [])
 		}
-	);
+	}, [])
 
-	const [sign_up_btn, set_sign_up_btn] = useState("Sign Up");
-
-
-	const getCurrentDate = () => {
-
-		const newDate = new Date()
-		const date = newDate.getDate();
-		const month = newDate.getMonth() + 1;
-		const year = newDate.getFullYear();
-		
-		return `${date}/${month}/${year}`
-	}
 
 	const submit_sign_up = (e) => {
 		// prevents default form submission actions
 		e.preventDefault();
 
-		// checks if all fields have been entered
-		let all_field_entered = true
-		for (const field of [username, email, password_1, password_2]) {
-			if (field === "") {
-				all_field_entered = false
+		for(const sign_up_input of [email_info, username_info, password_info]) {
+			if (sign_up_input.valid === false) {
+				return
 			}
 		}
 
-		// checks if username is of correct length
-		let valid_username = false
-		if (username.length >= 1 && username.length <= 30) {
-			valid_username = true
+		// visual cue for sign up
+		set_signed_up(true)
+
+		const login_details = {
+			user_id: uuid(),
+			username: username_info.username,
+			email: email_info.email,
+			password: password_info.password,
+			date_joined: get_current_date()
 		}
 
-		let valid_email = false
-		if (email.includes("@") && email.includes(".")) {
-			valid_email = true
-		}
+		// setting user_details to localstorage
+		let all_users = get_item_local_storage("All_Users")
 
-		// checks if password 1 and 2 are the same	
-		let matching_passwords = false
-		if (password_1 === password_2) {
-			matching_passwords = true		
-		}
+		all_users = [...all_users, login_details]
 
-		// and if password has atleast 1 uppercase, 1 lowercase, 1 number, 1 special character
-		// and is atleast 8 characters or more in length
-		let valid_password = false
-		const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-		if (regex.test(password_1)) {
-			valid_password = true
-		}
+		// adding the user to a list of all users
+		set_item_local_storage("All_Users", all_users)
 
-		// checks if all values are true, if so, it will be added to local storage
-		if (all_field_entered && valid_username && valid_email && matching_passwords && valid_password) {
+		// setting the current user
+		set_item_local_storage("Current_User", login_details.user_id)
 
-			set_sign_up_btn("... Signing Up")
-
-			const login_details = {
-				user_id: uuid(),
-				username: username,
-				email: email,
-				password: password_1,
-				date_joined: getCurrentDate()
-			}
-
-			let all_users = get_item_local_storage("All_Users")
-
-			if (all_users === null) {
-				all_users = []
-			}
-
-			all_users = [...all_users, login_details]
-		
-			// adding the user to a list of all users
-			set_item_local_storage("All_Users", all_users)
-
-			// setting the current user
-			set_item_local_storage("Current_User", login_details.user_id)
-
-			setTimeout(() => navigate("/profile"), 1500)
-
-		} else {
-			set_sign_up_btn("Sign Up")
-		}
-
-		// required to get apropriate error messages
-		set_valid_login_details({
-			username_validity: valid_username,
-			email_validity: valid_email,
-			matching_password_validity: matching_passwords,
-			password_validity: valid_password
-		})
+		// navigating to profile page after short delay
+		setTimeout(() => navigate("/profile"), 1500)
 	}
 
 
 	return (
 		<div className='Sign_Up_Page'>
-
 			
 			<h2>Sign Up To Breaddit</h2>
 
 			<form onSubmit={submit_sign_up}>
 
-				{/* <EmailInput set_email={set_email}/>
+				<EmailInput set_email_info={set_email_info}/>
 
-				<UsernameInput set_username={set_username}/>
+				<UsernameInput set_username_info={set_username_info}/>
 
-				<PasswordInput set_password={set_password}/> */}
-
-				<LoginInput 
-					autoFocus={true}
-					htmlFor="username" 
-					input_type="text" 
-					label_name="Username"
-					update_on_change={set_username} 
-					boolean_check={valid_login_details.username_validity}
-				>
-					Username must be between 3 and 12 characters long
-				</LoginInput>
-
-				<LoginInput 
-					htmlFor="email" 
-					input_type="email" 
-					update_on_change={set_email} 
-					boolean_check={valid_login_details.email_validity}
-				>
-					Email must contain an "@" and "." characters
-				</LoginInput>
-
-				<LoginInput 
-					htmlFor="password_1" 
-					input_type="password" 
-					update_on_change={set_password_1} 
-					boolean_check={valid_login_details.password_validity}
-				>
-					<span>Password must contain atleast:</span>
-					<ul>
-						<li>1 Uppercase letter</li>
-						<li>1 Lowercase letter</li>
-						<li>1 Special Character</li>
-						<li>1 Number</li>
-						<li>8 Characters</li>
-					</ul>
-				</LoginInput>
-
-				
-
-				<LoginInput 
-					htmlFor="password_2" 
-					input_type="password"
-					label_name="Confirm Password" 
-					update_on_change={set_password_2} 
-					boolean_check={valid_login_details.matching_password_validity}
-				>
-					Passwords do not match
-				</LoginInput>
-
+				<PasswordInput set_password_info={set_password_info}/>
 
 				<input 
 					type="submit" 
-					value={sign_up_btn}
+					value={signed_up ? "...Signing Up" : "Sign Up"}
 					className="submit_btn"
 				/>
 

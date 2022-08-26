@@ -1,4 +1,14 @@
 
+export const get_current_date = () => {
+
+    const newDate = new Date()
+    const date = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    
+    return `${date}/${month}/${year}`
+}
+
 
 export const calculate_time_passed = (date_posted) => {
 

@@ -9,6 +9,8 @@ import ProfilePicture from '../components/ProfilePicture';
 import { get_item_local_storage, set_item_local_storage, remove_item_local_storage } from '../helper_functions/local_storage';
 import PostContent from '../components/PostContent';
 import { get_user_details } from '../helper_functions/get_user_details';
+import UsernameInput from './UsernameInput';
+import EmailInput from './EmailInput';
 
 
 
@@ -35,28 +37,20 @@ function Profile() {
 
 
     const [user_details, set_user_details] = useState(get_user_details(get_item_local_storage("Current_User")));
+    const user_posts = initialise_user_posts();
 
     const [edit_btn_active, set_edit_btn_active] = useState(false);
+    const [delete_confirmation, set_delete_confirmation] = useState(false);
 
     const [username_info, set_username_info] = useState(
-        { username: user_details.username, validity: true}
+        { username: user_details.username, valid: true}
     );
 
 	const [email_info, set_email_info] = useState(
-        {email: user_details.email, validity: true}
+        {email: user_details.email, valid: true}
     );
 
-    const update_username = (new_username) => {
-        set_username_info({...username_info, username: new_username})
-    }
-    const update_email = (new_email) => {
-        set_email_info({...email_info, email: new_email})
-    }
-
-    const [delete_confirmation, set_delete_confirmation] = useState(false);
-
-
-    const user_posts = initialise_user_posts()
+   
 
 
     const handle_edit_btn = () => {
@@ -104,6 +98,49 @@ function Profile() {
         } else {
             set_edit_btn_active(true)
         }
+    }
+
+    const handle_edit_user_details = () => {
+
+        if (edit_btn_active === false) {
+            set_edit_btn_active(true)
+            return
+        }
+
+        for(const input of [email_info, username_info]) {
+			if (input.valid === false) {
+				return
+			}
+		}
+
+		// setting user_details to localstorage
+		let all_users = get_item_local_storage("All_Users")
+
+        const logged_in_user_id = get_item_local_storage("Current_User")
+
+        // modifying user details
+        let new_user_details = user_details
+        for (let n=0; n < all_users.length; n++) {
+            if (all_users[n].user_id === logged_in_user_id) {
+
+                all_users[n] = {
+                    ...all_users[n],
+                    username: username_info.username,
+                    email: email_info.email,
+                }
+
+                new_user_details = all_users[n]
+                break
+            }
+        }
+
+        // adding the user to a list of all users
+		set_item_local_storage("All_Users", all_users)
+
+        // updating state so profile page shows everything
+        set_user_details(new_user_details)
+        set_edit_btn_active(false)
+
     }
 
     const handle_delete_btn = () => {
@@ -171,6 +208,15 @@ function Profile() {
         
     }
 
+
+    const handle_sign_out = () => {
+
+        remove_item_local_storage("Current_User")
+
+        navigate("/signin")
+
+    }
+
     return (
         <div className="Profile_Page">
             {
@@ -208,12 +254,12 @@ function Profile() {
 
                                     : 
 
-                                    <div className="username_div">
-                                        <label htmlFor="username">Username:</label>
-                                        <div id="username">
-                                            {username_info.username}
+                                        <div className="username_div">
+                                            <label htmlFor="username">Username:</label>
+                                            <div id="username">
+                                                {username_info.username}
+                                            </div>
                                         </div>
-                                    </div>
                                 }
 
                                 {
@@ -231,19 +277,19 @@ function Profile() {
 
                                     : 
 
-                                    <div className="email_div">
-                                        <label htmlFor="email">Email:</label>
-                                        <div id="email">
-                                            {email_info.email}
+                                        <div className="email_div">
+                                            <label htmlFor="email">Email:</label>
+                                            <div id="email">
+                                                {email_info.email}
+                                            </div>
                                         </div>
-                                    </div>
                                 }
                             </div>
 
                             <div className="profile_btns">
                                 <button 
                                     className="confirm_edit_btn" 
-                                    onClick={handle_edit_btn}
+                                    onClick={handle_edit_user_details}
                                 >
                                     <img 
                                         src={edit_btn_active ? "./images/confirm.png"  : "./images/edit.png"}
@@ -287,6 +333,10 @@ function Profile() {
                                     </p>
                                 </PopUpMenu>
                             }
+
+                            <div className="logout">
+                                <button onClick={handle_sign_out}>Sign Out</button>
+                            </div>
 
                         </div>
                     </div>

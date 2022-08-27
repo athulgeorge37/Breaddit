@@ -93,6 +93,8 @@ function SignIn() {
 				blankError("Please fill in your details")
 			}
 		}
+
+		setTimeout(() => navigate("/profile"), 1500)
 	}
 
 return (

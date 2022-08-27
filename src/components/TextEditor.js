@@ -17,7 +17,7 @@ function TextEditor(props) {
 		<div className="text_editor">
 			<CKEditor
 				editor={Editor}
-				data={props.post_text}                // you can put html in here: <h1>Some Title</h1>
+				data={props.post_text}                // you can put html in here: <p>Some text</p>
 				onChange={(e, editor) => {
 					const data = editor.getData();
 					props.update_text(data)

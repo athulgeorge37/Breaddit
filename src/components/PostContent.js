@@ -19,6 +19,7 @@ import EditPost from './EditPost';
 import { Image } from 'cloudinary-react';
 
 
+
 function PostContent({ post_details }) {
 
     const [show_add_comment, set_show_add_comment] = useState(false);
@@ -58,9 +59,6 @@ function PostContent({ post_details }) {
     } = useEditPost(post_details); 
 
 
-    // useEffect(() => {
-    //     console.log(post_title, post_text)
-    // }, [post_title, post_text])
 
 
     // for show more btn
@@ -72,7 +70,7 @@ function PostContent({ post_details }) {
 
         //  if you want to change this value, u must also change in the css
         // where the classname is .show_less
-        if (post_content_height > 200) {
+        if (post_content_height > 500) {
             set_allow_show_more_btn(true)
         }
     }, [])

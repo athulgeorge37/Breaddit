@@ -15,7 +15,7 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 import { get_current_date } from "../helper_functions/time";
 import { v4 as uuid } from 'uuid';
 
-
+import emailjs from "emailjs-com";
 
 function SignUp() {
 
@@ -35,7 +35,10 @@ function SignUp() {
 		}
 	}, [])
 
-
+	const generate_random_code = () => {
+		let val = Math.floor(100000 + Math.random() * 900000)
+		return val
+	}
 	const submit_sign_up = (e) => {
 		// prevents default form submission actions
 		e.preventDefault();
@@ -56,6 +59,14 @@ function SignUp() {
 			password: password_info.password,
 			date_joined: get_current_date()
 		}
+
+		emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
+			.then((result) => {
+          		console.log(result.text);
+      		}, (error) => {
+          		console.log(error.text);
+      		});
+
 
 		// setting user_details to localstorage
 		let all_users = get_item_local_storage("All_Users")
@@ -90,6 +101,11 @@ function SignUp() {
 					type="submit" 
 					value={signed_up ? "...Signing Up" : "Sign Up"}
 					className="submit_btn"
+				/>
+				<input 
+					type="text"
+					name="verification_code"
+					value={generate_random_code()}
 				/>
 
 			</form>

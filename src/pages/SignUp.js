@@ -17,6 +17,11 @@ import { v4 as uuid } from 'uuid';
 
 import emailjs from "emailjs-com";
 
+
+const generate_random_code = () => {
+	return Math.floor(100000 + Math.random() * 900000)
+}
+
 function SignUp() {
 
 	const navigate = useNavigate();
@@ -27,6 +32,10 @@ function SignUp() {
 	const [username_info, set_username_info] = useState({ username: "", valid: false });
 	const [password_info, set_password_info] = useState({ password: "", valid: false });
 
+	const initial_verification_code = generate_random_code(); // initial code generated, that is sent via email
+
+	const [verification_code, set_verification_code] = useState(""); 	// what the user types in here
+
 
 	useEffect(() => {
 		// preventing errors when localstorage is not set
@@ -35,13 +44,11 @@ function SignUp() {
 		}
 	}, [])
 
-	const generate_random_code = () => {
-		let val = Math.floor(100000 + Math.random() * 900000)
-		return val
-	}
-	const submit_sign_up = (e) => {
-		// prevents default form submission actions
-		e.preventDefault();
+
+
+
+	const submit_sign_up = () => {
+		
 
 		for(const sign_up_input of [email_info, username_info, password_info]) {
 			if (sign_up_input.valid === false) {
@@ -60,12 +67,10 @@ function SignUp() {
 			date_joined: get_current_date()
 		}
 
-		emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
-			.then((result) => {
-          		console.log(result.text);
-      		}, (error) => {
-          		console.log(error.text);
-      		});
+		// verify verification_code here
+		if (verification_code !== initial_verification_code) {
+			return
+		}
 
 
 		// setting user_details to localstorage
@@ -83,6 +88,20 @@ function SignUp() {
 		setTimeout(() => navigate("/profile"), 1500)
 	}
 
+	const handle_submit_form = (e) => {
+		// prevents default form submission actions
+		e.preventDefault();
+
+		emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
+			.then((result) => {
+          		console.log(result.text);
+      		}, (error) => {
+          		console.log(error.text);
+      		});
+
+
+	}
+
 
 	return (
 		<div className='Sign_Up_Page'>
@@ -98,17 +117,33 @@ function SignUp() {
 				<PasswordInput set_password_info={set_password_info}/>
 
 				<input 
-					type="submit" 
-					value={signed_up ? "...Signing Up" : "Sign Up"}
-					className="submit_btn"
-				/>
-				<input 
 					type="text"
 					name="verification_code"
-					value={generate_random_code()}
+					value={initial_verification_code}
+				/>
+
+				
+				<input 
+					type="submit" 
+					value={"Send Verification"}
+					className="submit_btn"
 				/>
 
 			</form>
+
+			{/* <input 
+				type="submit" 
+				value={signed_up ? "...Signing Up" : "Sign Up"}
+				className="submit_btn"
+			/> */}
+
+			<input 
+				type="text"
+				placeholder='enter your verification code'
+				onChange={(e) => set_verification_code(e.target.value)}
+			/>
+
+			<button onClick={submit_sign_up}>Sign Up</button>
 
 		</div>
 	)

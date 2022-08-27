@@ -51,7 +51,13 @@ function Profile() {
     );
 
    
+    const update_email = (new_email) => {
+        set_email_info({...email_info, email: new_email})
+    }
 
+    const update_username = (new_username) => {
+        set_username_info({...username_info, username: new_username})
+    }
 
     const handle_edit_btn = () => {
 

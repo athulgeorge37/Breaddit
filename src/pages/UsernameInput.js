@@ -54,6 +54,7 @@ function UsernameInput({ set_username_info }) {
                     type="text"
                     onChange={(e) => validate_username(e.target.value)} 
                     maxLength={MAX_USERNAME_LENGTH}
+                    name = "username"
                 />
                 <div className="characters_left">{characters_left}</div>
             </div>

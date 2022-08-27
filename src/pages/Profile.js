@@ -172,7 +172,7 @@ function Profile() {
     }
 
     return (
-        <>
+        <div className="Profile_Page">
             {
                 user_details.user_id === "unknown"
                 ?
@@ -180,7 +180,7 @@ function Profile() {
                 :
             
                 <>
-                    <div className="Profile_Page">
+                    <div className="User_Info">
                         <h1>Profile Page</h1>
                         <div className="profile_container">
 
@@ -319,7 +319,7 @@ function Profile() {
                     </div>
                 </>
             }
-        </>
+        </div>
         
     )
 }

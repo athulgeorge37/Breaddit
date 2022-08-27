@@ -19,7 +19,9 @@ function CreatePost() {
         set_post_title,
         set_valid_title,
         set_post_text,
-        handle_add_post
+        handle_add_post,
+
+        image_stuff
     } = useEditPost(); 
 
 
@@ -32,11 +34,12 @@ function CreatePost() {
         }
 
         // only handling post if there is a post title
-        handle_add_post(post_title, post_text)
+        handle_add_post(post_title, post_text, image_stuff.image_url)
 
         set_valid_title(true)
         set_post_title("")
         set_post_text("")
+        image_stuff.set_image_url("")
 
         set_expanded_view(false)
 
@@ -54,6 +57,7 @@ function CreatePost() {
                         set_post_title={set_post_title}
                         valid_title={valid_title}
                         set_post_text={set_post_text}
+                        image_stuff={image_stuff}
                     />
 
                     <div className="characters_and_btns">
@@ -70,6 +74,7 @@ function CreatePost() {
                                 onClick={() => {
                                     set_expanded_view(false)
                                     set_valid_title(true)
+                                    image_stuff.set_image_url("")
                                 }}
                             >
                                 Cancel

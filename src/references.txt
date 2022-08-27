@@ -11,3 +11,6 @@ Stuff I have used:
 - icons all from flaticon
 
 - routes from react router dom
+
+- npm install axios
+- npm installl cloudinary-react

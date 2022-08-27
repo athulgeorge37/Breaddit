@@ -112,6 +112,13 @@
                 // height: 100%;
                 // gotta make the title be at the top of the post content
 
+                .image_display {
+                    img {
+                        width: 100%;
+                        border-radius: $default-border-radius;
+                    }
+                }
+
                 
                 .parsed_text {
         

@@ -5,11 +5,16 @@ import { ALL_POSTS_CONTEXT } from '../App';
 import { v4 as uuid } from 'uuid';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
 
+import Axios from 'axios';
+
+const UPLOAD_PRESET = "yqbnco9l"
+const CLOUD_NAME = "dhnxodaho";
+
 export const useEditPost = (initial_post_details) => {
 
     const { set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
-    const [post_title, set_post_title] = useState(initial_post_details === undefined ? "": initial_post_details.post_title);
+    const [post_title, set_post_title] = useState(initial_post_details === undefined ? "" : initial_post_details.post_title);
     const [post_text, set_post_text] = useState(initial_post_details === undefined ? "" : initial_post_details.post_text);
 
     const [post_up_votes, update_post_up_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_up_votes);
@@ -17,8 +22,32 @@ export const useEditPost = (initial_post_details) => {
 
     const [valid_title, set_valid_title] = useState(true);
 
+    // const [selected_image, set_selected_image] = useState("");
+    const [image_url, set_image_url] = useState(initial_post_details === undefined ? "" : initial_post_details.post_img_url)
+
+    const [loading_img, set_loading_img] = useState(false);
+
+    const upload_img = (new_img) => {
+
+        const formData = new FormData()
+
+        formData.append("file", new_img)
+        formData.append("upload_preset", UPLOAD_PRESET)
+
+        set_loading_img(true)
+
+        Axios.post(
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, formData
+        ).then((response) => {
+
+            const new_image_url = response.data.secure_url
+            set_image_url(new_image_url)
+            set_loading_img(false)
+        })
+    }
+
     
-    const handle_add_post = (new_post_title, new_post_text) => {
+    const handle_add_post = (new_post_title, new_post_text, new_image_url) => {
 
         // collates all the details of the post we are trying to post
         // we get all the previous post details
@@ -30,6 +59,7 @@ export const useEditPost = (initial_post_details) => {
         const new_post_details = {
             post_author: user_who_posted,
             post_id: uuid(),
+            post_img_url: new_image_url,
             post_title: new_post_title,
             post_text: new_post_text,
             post_date_time: new Date().getTime(),
@@ -62,7 +92,9 @@ export const useEditPost = (initial_post_details) => {
 
         for (const post of all_posts) {
             if (post.post_id === post_id) {
+                post.post_title = post_title
                 post.post_text = post_text
+                post.post_img_url = image_url
                 post.edited = true
                 post.post_date_time = new Date().getTime()
                 break;
@@ -135,6 +167,15 @@ export const useEditPost = (initial_post_details) => {
 
         valid_title,
         set_valid_title,
+
+        image_stuff: {
+            set_image_url,
+            image_url,
+            upload_img,
+            CLOUD_NAME,
+            loading_img
+        },
+
        
         post_up_votes,
         handle_post_up_vote,

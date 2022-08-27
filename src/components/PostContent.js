@@ -16,6 +16,7 @@ import PopUpMenu from './PopUpMenu';
 import ProfilePicture from './ProfilePicture';
 import AdjustableButton from './AdjustableButton';
 import EditPost from './EditPost';
+import { Image } from 'cloudinary-react';
 
 
 function PostContent({ post_details }) {
@@ -51,7 +52,9 @@ function PostContent({ post_details }) {
         handle_post_down_vote,
 
         handle_edit_post,
-        handle_delete_post
+        handle_delete_post,
+
+        image_stuff
     } = useEditPost(post_details); 
 
 
@@ -228,7 +231,7 @@ function PostContent({ post_details }) {
                             post_text={post_text}
                             set_post_text={set_post_text}
                             valid_title={valid_title}
-                            
+                            image_stuff={image_stuff}
                         />
 
                         :
@@ -241,6 +244,16 @@ function PostContent({ post_details }) {
                             ref={posted_content_ref}
                         >
                             <h1 className="Title">{post_title}</h1>
+                            {
+                                image_stuff.image_url !== ""
+                                &&
+                                <div className="image_display">
+                                    <Image 
+                                        cloudName={image_stuff.CLOUD_NAME}
+                                        publicId={image_stuff.image_url}
+                                    />
+                                </div>
+                            }
                             <div className="parsed_text">
                                 {parse(post_text)}
                             </div>

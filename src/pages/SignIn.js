@@ -12,7 +12,7 @@ function SignIn() {
 
 	const navigate = useNavigate();
 
-
+	// constructor to deal with the validity of email and password
 	const [valid_signup_details, set_valid_signup_details] = useState({
 		email_validity: true,   
 		password_validity: true,
@@ -26,6 +26,8 @@ function SignIn() {
 		alert(error)
 	  }
 
+	// error function - prints out the error message based on whether the user entered an incorrect email or an email 
+	// with an incorrect format.
 	const errorMessage = () => {
 		if (valid_signup_details.format_validity){
 			return "The email address you entered isn't connected to an account."
@@ -38,7 +40,7 @@ function SignIn() {
 	const submitSignIn = (e) => {
 		e.preventDefault();
 
-
+		// checks if the form is filled out or not
 		let all_field_entered = true
 		for (const field of [email, password]) {
 			if (field === "") {

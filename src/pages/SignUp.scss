@@ -9,22 +9,32 @@
         margin-bottom: $inner_padding;
     }
 
-    form {
+    .sign_up_card {
+
         width: 340px;
         background-color: $dark-grey;
         padding: 16px;
         border: 1px solid $light-grey;
         border-radius: 6px;
 
-        h2 {
-            margin-bottom: 16px
+        form {
+    
+            .verification_code_input {
+                visibility: hidden;
+            }
+    
+            h2 {
+                margin-bottom: 16px
+            }
+    
+            .submit_btn {
+                @include btn-styles($green);
+                width: 100%;
+            }
+    
         }
 
-        .submit_btn {
-            @include btn-styles($green);
-            width: 100%;
-        }
-
-       
     }
+
+   
 }

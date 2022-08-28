@@ -14,3 +14,14 @@ Stuff I have used:
 
 - npm install axios
 - npm installl cloudinary-react
+
+- npm install emailjs-com --save
+
+Breaddit email account:
+email: BreadditVerifySignUp@gmail.com
+Password: BreadditVerify#69
+
+EmailJS account:
+service ID: Breaddit_Service_69420
+User ID / Public Key: VHjgLz-ZTg3h0Y_xh
+TemplateID: template_9wj4cqc

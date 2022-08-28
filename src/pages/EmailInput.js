@@ -54,7 +54,7 @@ function EmailInput({ set_email_info }) {
                     id="email"
                     type="text"
                     onChange={(e) => validate_email(e.target.value)} 
-                    name = "email"
+                    name="email"
                 />
             </div>
 

@@ -15,7 +15,13 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 import { get_current_date } from "../helper_functions/time";
 import { v4 as uuid } from 'uuid';
 
+// email js import for code verification
 import emailjs from "emailjs-com";
+
+
+const SERVICE_ID = "Breaddit_Service_69420"
+const TEMPLATE_ID = "template_9wj4cqc"
+const PUBLIC_KEY = "VHjgLz-ZTg3h0Y_xh" // aka User ID
 
 
 const generate_random_code = () => {
@@ -32,7 +38,7 @@ function SignUp() {
 	const [username_info, set_username_info] = useState({ username: "", valid: false });
 	const [password_info, set_password_info] = useState({ password: "", valid: false });
 
-	const initial_verification_code = generate_random_code(); // initial code generated, that is sent via email
+	const [initial_verification_code, set_initial_verification_code] = useState(generate_random_code())
 
 	const [verification_code, set_verification_code] = useState(""); 	// what the user types in here
 
@@ -56,9 +62,6 @@ function SignUp() {
 			}
 		}
 
-		// visual cue for sign up
-		set_signed_up(true)
-
 		const login_details = {
 			user_id: uuid(),
 			username: username_info.username,
@@ -68,10 +71,12 @@ function SignUp() {
 		}
 
 		// verify verification_code here
-		if (verification_code !== initial_verification_code) {
+		if (verification_code !== initial_verification_code.toString()) {
 			return
 		}
 
+		// visual cue for sign up
+		set_signed_up(true)
 
 		// setting user_details to localstorage
 		let all_users = get_item_local_storage("All_Users")
@@ -92,12 +97,26 @@ function SignUp() {
 		// prevents default form submission actions
 		e.preventDefault();
 
-		emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
-			.then((result) => {
-          		console.log(result.text);
-      		}, (error) => {
-          		console.log(error.text);
-      		});
+		// emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
+		// 	.then((result) => {
+        //   		console.log(result.text);
+      	// 	}, (error) => {
+        //   		console.log(error.text);
+      	// 	});
+
+		for(const sign_up_input of [email_info, username_info, password_info]) {
+			if (sign_up_input.valid === false) {
+
+				return
+			}
+		}
+
+		emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, e.target, PUBLIC_KEY)
+		.then((result) => {
+			console.log(result.text);
+		}, (error) => {
+			console.log(error.text);
+		});
 
 
 	}
@@ -108,42 +127,59 @@ function SignUp() {
 			
 			<h2>Sign Up To Breaddit</h2>
 
-			<form onSubmit={submit_sign_up}>
+			<div className="sign_up_card">
+				<form onSubmit={handle_submit_form}>
 
-				<EmailInput set_email_info={set_email_info}/>
+					<EmailInput set_email_info={set_email_info}/>
 
-				<UsernameInput set_username_info={set_username_info}/>
+					<UsernameInput set_username_info={set_username_info}/>
 
-				<PasswordInput set_password_info={set_password_info}/>
+					<PasswordInput set_password_info={set_password_info}/>
+
+					<input 
+						id="verification_code"
+						type="text"
+						name="verification_code"
+						className="verification_code_input"
+						hidden="true"
+						value={initial_verification_code}
+					/>
+
+					
+					<input 
+						type="submit" 
+						value={"Send Verification"}
+						className="submit_btn"
+					/>
+					<div className="verfication_error">
+						{(email_info.valid && username_info.valid && password_info.valid) 
+						?
+						""
+						:
+						"Please ensure all sign up fields are valid!"
+					}
+					</div>
+
+				</form>
+
+				{/* <input 
+					type="submit" 
+					value={signed_up ? "...Signing Up" : "Sign Up"}
+					className="submit_btn"
+				/> */}
 
 				<input 
 					type="text"
-					name="verification_code"
-					value={initial_verification_code}
+					placeholder='enter your verification code'
+					onChange={(e) => set_verification_code(e.target.value)}
 				/>
 
-				
-				<input 
-					type="submit" 
-					value={"Send Verification"}
-					className="submit_btn"
-				/>
+				<button onClick={submit_sign_up}>
+					{signed_up ? "...Signing Up" : "Sign Up"}
+				</button>
 
-			</form>
+			</div>
 
-			{/* <input 
-				type="submit" 
-				value={signed_up ? "...Signing Up" : "Sign Up"}
-				className="submit_btn"
-			/> */}
-
-			<input 
-				type="text"
-				placeholder='enter your verification code'
-				onChange={(e) => set_verification_code(e.target.value)}
-			/>
-
-			<button onClick={submit_sign_up}>Sign Up</button>
 
 		</div>
 	)

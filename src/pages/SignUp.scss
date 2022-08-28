@@ -30,13 +30,13 @@
             .verify_btn_green {
                 @include btn-styles($green);
                 width: 100%;
-                margin-bottom: 5px;
+                margin-bottom: 4px;
             }
 
             .verify_btn_red {
                 @include btn-styles($red);
                 width: 100%;
-                margin-bottom: 5px;
+                margin-bottom: 4px;
             }
             .verfication_error {
                 color: $red;

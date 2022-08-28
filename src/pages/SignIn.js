@@ -45,6 +45,7 @@ function SignIn() {
 		for (const field of [email, password]) {
 			if (field === "") {
 				all_field_entered = false
+				return
 			}
 		}
 
@@ -81,6 +82,7 @@ function SignIn() {
 
 			if (valid_email && valid_password){
 				set_sign_in_btn("Signing In...")
+				setTimeout(() => navigate("/profile"), 1500)
 			}
 		}
 		// Alert the user everytime they submit the form without filling in password or email.
@@ -96,46 +98,50 @@ function SignIn() {
 			}
 		}
 
-		setTimeout(() => navigate("/profile"), 1500)
+		
 	}
 
 return (
 	<div className="Sign_In_Page">
+
 		<h2>Sign In</h2>
-		<p>By continuing, you agree to our User Agreement and Privacy Policy.</p>
-		<hr />
 
-		<form onSubmit={submitSignIn}>
-			<LoginInput
-				htmlFor="email"
-				input_type="email"
-				update_on_change={setEmail}
-				boolean_check={valid_signup_details.email_validity}
-			>
-				{errorMessage()}
-			</LoginInput>
+		<div className="sign_in_card">
 
-			<LoginInput
-				htmlFor="password"
-				input_type="password"
-				update_on_change={setPassword}
-				boolean_check={valid_signup_details.password_validity}
-			>
-				The password that you've entered is incorrect.
-			</LoginInput>
+			<form onSubmit={submitSignIn}>
+				<LoginInput
+					htmlFor="email"
+					input_type="email"
+					update_on_change={setEmail}
+					boolean_check={valid_signup_details.email_validity}
+				>
+					{errorMessage()}
+				</LoginInput>
 
-			<input 
-				type="submit" 
-				value={sign_in_btn}
-				className="submit_btn"
-			/>
+				<LoginInput
+					htmlFor="password"
+					input_type="password"
+					update_on_change={setPassword}
+					boolean_check={valid_signup_details.password_validity}
+				>
+					The password that you've entered is incorrect.
+				</LoginInput>
 
-		</form>
+				<input 
+					type="submit" 
+					value={sign_in_btn}
+					className="submit_btn"
+				/>
 
-		<div>
-			Dont Have an Account?
-			<button onClick={() => navigate("/signup")}>Sign Up</button>
+			</form>
+
+			<div className="redirect_from_sign_in">
+				Dont Have an Account?
+				<button onClick={() => navigate("/signup")}>Sign Up</button>
+			</div>
+
 		</div>
+		
 	</div>
 )
 }

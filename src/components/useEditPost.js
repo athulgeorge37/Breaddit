@@ -56,6 +56,10 @@ export const useEditPost = (initial_post_details) => {
 
         const user_who_posted = get_item_local_storage("Current_User")
 
+        // if (user_who_posted === null) {
+        //     return
+        // }
+
         const new_post_details = {
             post_author: user_who_posted,
             post_id: uuid(),

@@ -23,6 +23,14 @@
        
     }
 
+    .redirect_from_posts {
+        display: flex;
+        justify-content: center;
+        .sign_in_btn {
+            @include btn-style-text($blue);
+        }
+    }
+
     .expanded_post_view {
         display: flex;
         align-items: center;

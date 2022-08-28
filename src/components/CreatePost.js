@@ -4,11 +4,14 @@ import './CreatePost.scss';
 import ProfilePicture from './ProfilePicture';
 import EditPost from './EditPost';
 
+import { get_item_local_storage } from '../helper_functions/local_storage';
 import { useEditPost } from './useEditPost';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_POST_TEXT_CHARACTERS = 250
 
 function CreatePost() {
+    const navigate = useNavigate();
 
     const [expanded_view, set_expanded_view] = useState(false);
 
@@ -50,46 +53,64 @@ function CreatePost() {
             {
                 expanded_view ?
                 
-                <div className="expanded_post_view">
-                    <h2>Create Post</h2>
-
-                    <EditPost
-                        set_post_title={set_post_title}
-                        valid_title={valid_title}
-                        set_post_text={set_post_text}
-                        image_stuff={image_stuff}
-                    />
-
-                    <div className="characters_and_btns">
-                        
-                        <span className="characters_left">
-                            {MAX_POST_TEXT_CHARACTERS - post_text.length}
-                            {" "}
-                            characters left
-                        </span>
-
-                        <div className="post_btns">
+                <>
+                    {
+                        get_item_local_storage("Current_User") === null
+                        ?
+                        <div className="redirect_from_posts">
+                            Please{" "}
                             <button 
-                                className="cancel_btn"
-                                onClick={() => {
-                                    set_expanded_view(false)
-                                    set_valid_title(true)
-                                    image_stuff.set_image_url("")
-                                }}
+                                className='sign_in_btn'
+                                onClick={() => navigate("/signin")}
                             >
-                                Cancel
+                                Sign In
                             </button>
+                            {" "}
+                            to Post
+                        </div>  
+                        :
+                        <div className="expanded_post_view">
+                            <h2>Create Post</h2>
 
-                            <button
-                                className="post_btn"
-                                onClick={handle_post_submit}
-                            >
-                                Post
-                            </button>
+                            <EditPost
+                                set_post_title={set_post_title}
+                                valid_title={valid_title}
+                                set_post_text={set_post_text}
+                                image_stuff={image_stuff}
+                            />
+
+                            <div className="characters_and_btns">
+                                
+                                <span className="characters_left">
+                                    {MAX_POST_TEXT_CHARACTERS - post_text.length}
+                                    {" "}
+                                    characters left
+                                </span>
+
+                                <div className="post_btns">
+                                    <button 
+                                        className="cancel_btn"
+                                        onClick={() => {
+                                            set_expanded_view(false)
+                                            set_valid_title(true)
+                                            image_stuff.set_image_url("")
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        className="post_btn"
+                                        onClick={handle_post_submit}
+                                    >
+                                        Post
+                                    </button>
+                                </div>
+
+                            </div>
                         </div>
-
-                    </div>
-                </div>
+                    }
+                </>
 
                 :
 

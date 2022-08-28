@@ -8,20 +8,25 @@ Stuff I have used:
 
 - uuidv4 for unique ID's
 
-- icons all from flaticon
+- icons all from flaticon  https://www.flaticon.com/
 
 - routes from react router dom
+    - required to switch pages
 
-- npm install axios
+- npm install axios             
+    - to send a post request to cloudninary
 - npm installl cloudinary-react
+    - so we can add images from a url
+    - cloudinary stores all our images for free
 
 - npm install emailjs-com --save
+    - required for MFA
 
-Breaddit email account:
-email: BreadditVerifySignUp@gmail.com
-Password: BreadditVerify#69
+    Breaddit email account:
+    email: BreadditVerifySignUp@gmail.com
+    Password: BreadditVerify#69
 
-EmailJS account:
-service ID: Breaddit_Service_69420
-User ID / Public Key: VHjgLz-ZTg3h0Y_xh
-TemplateID: template_9wj4cqc
+    EmailJS account:
+    service ID: Breaddit_Service_69420
+    User ID / Public Key: VHjgLz-ZTg3h0Y_xh
+    TemplateID: template_9wj4cqc

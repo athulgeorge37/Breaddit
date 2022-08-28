@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { get_item_local_storage } from '../helper_functions/local_storage';
+import { get_item_local_storage } from '../../../helper_functions/local_storage';
 
 import './UsernameInput.scss';
 

@@ -4,7 +4,9 @@ import './Footer.scss';
 function Footer() {
   return (
     <footer>
-        Footer
+        <div>
+          Made by Athul George and Shrey Singhal 
+        </div>
     </footer>
   )
 }

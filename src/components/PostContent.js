@@ -11,16 +11,19 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 import { calculate_time_passed } from '../helper_functions/time';
 
 import AddComment from './AddComment';
-import CommentSection from './CommentSection';
+
 import PopUpMenu from './PopUpMenu';
 import ProfilePicture from './ProfilePicture';
 import AdjustableButton from './AdjustableButton';
 import EditPost from './EditPost';
 import { Image } from 'cloudinary-react';
+import Comment from './Comment';
 
 
 
 function PostContent({ post_details }) {
+
+    const [all_comments, set_all_comments] = useState(post_details.post_comments);
 
     const [show_add_comment, set_show_add_comment] = useState(false);
     const [show_comments_section, set_show_comments_section] = useState(false);
@@ -110,6 +113,7 @@ function PostContent({ post_details }) {
         show_add_comment_error_msg(false)
         set_show_add_comment(false)
         set_show_comments_section(true)
+        set_all_comments([...all_comments, new_comment])
     }
 
 
@@ -351,14 +355,40 @@ function PostContent({ post_details }) {
             </div>
 
             <div className="expanded_comments_section">
+
                 {
-                    show_comments_section &&
-
-                    <CommentSection
-                        post_details={post_details}
-                    />
-
+                    show_comments_section
+                    &&
+                    <div className="Comment_Section">
+                        {
+                            all_comments.length > 0 
+                
+                            ?
+                
+                            all_comments.map((comment, map_id) => {
+                                return (
+                                    <Comment 
+                                        post_id={post_details.post_id}
+                                        comment={comment} 
+                                        indented={false}
+                                        key={comment.comment_id}
+                                        set_all_comments={set_all_comments}
+                                    />
+                                )
+                            })
+                
+                            :
+                
+                            <div className="No_Comments">
+                                No Comments
+                            </div>
+                        }
+                    </div>
                 }
+
+
+
+
             </div>
 
         </div>

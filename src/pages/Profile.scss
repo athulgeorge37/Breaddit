@@ -6,6 +6,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 
     .User_Info{
         display: flex;
@@ -93,9 +94,10 @@
     
     .user_posts {
         display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     
         .All_Posts {
             width: 50%;

@@ -8,6 +8,7 @@ import { get_item_local_storage } from '../helper_functions/local_storage';
 import { useEditPost } from './useEditPost';
 import { useNavigate } from 'react-router-dom';
 
+
 const MAX_POST_TEXT_CHARACTERS = 250
 
 function CreatePost() {

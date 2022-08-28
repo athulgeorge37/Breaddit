@@ -7,15 +7,6 @@
 
 // add this react component where u want so these styles are applied
 
-//import parse from 'html-react-parser';
-// <div className="text_content">
-//     <div className="display_text">
-//         <h1 className="Title">{post_title}</h1>
-//         <div className="parsed_text">
-//             {parse(post_text)}
-//         </div>
-//     </div>
-// </div>
 
 .PostContent {
     margin-bottom: calc(2 * $inner_padding);
@@ -323,6 +314,20 @@
             color: $red;
             margin-left: calc(10px + 1em + 30px + 12px);
             margin-bottom: 0.5em;
+        }
+
+        .Comment_Section {
+            display: flex;
+            flex-direction: column;
+        
+            .No_Comments {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5em;
+        
+                border-top: 1px solid $light-grey;
+            }
         }
     }
 }

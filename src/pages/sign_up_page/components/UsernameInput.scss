@@ -1,6 +1,6 @@
-@import "../variables.scss";
+@import "../../../variables.scss";
 
-.PasswordInput {
+.UsernameInput {
     margin-bottom: $inner_padding;
     display: flex;
     flex-direction: column;
@@ -10,11 +10,11 @@
         font-size: 14px;
     }
 
-    .password_input:focus-within {
+    .username_input:focus-within {
         border: 1px solid $blue;
     }
 
-    .password_input {
+    .username_input {
         display: flex;
         justify-content: space-between;
         
@@ -36,15 +36,16 @@
             width: 100%;
         }
 
-
-        img {
-            width: 20px;
-            @include white-filter_color;
-
-            &:hover {
-                cursor: pointer;
-            }
+        // might be affecting user from having active mouse when doing autofill
+        // prevents default sytling when autofilling
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: $white !important;
         }
+
     }
 
     .errors {

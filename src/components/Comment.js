@@ -153,7 +153,6 @@ function Comment(props) {
 
         let all_posts = get_item_local_storage("Available_Posts")
         
-
         for (const post of all_posts) {
             if (post.post_id === props.post_id) {
                 for (let n=0; n < post.post_comments.length; n++) {
@@ -172,6 +171,7 @@ function Comment(props) {
                                 comment_down_votes: 0
                             }
                         ]
+                        props.set_all_comments(post.post_comments)
                         break;
                     }
                 }
@@ -180,6 +180,7 @@ function Comment(props) {
         }
 
         set_item_local_storage("Available_Posts", all_posts)
+        
         
 
         set_show_reply_to_comment(false)
@@ -204,7 +205,7 @@ function Comment(props) {
                                         post_id={props.post_id}
                                         comment={reply} 
                                         indented={true}
-                                        key={map_id}
+                                        key={reply.comment_id}
                                     />
                                 )
                             })

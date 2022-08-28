@@ -6,13 +6,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // component imports
-import PasswordInput from './PasswordInput';
-import UsernameInput from './UsernameInput';
-import EmailInput from './EmailInput';
+import PasswordInput from './components/PasswordInput';
+import UsernameInput from './components/UsernameInput';
+import EmailInput from './components/EmailInput';
 
 // function imports
-import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
-import { get_current_date } from "../helper_functions/time";
+import { get_item_local_storage, set_item_local_storage } from '../../helper_functions/local_storage';
+import { get_current_date } from "../../helper_functions/time";
 import { v4 as uuid } from 'uuid';
 
 // email js import for code verification

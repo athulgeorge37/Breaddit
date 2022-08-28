@@ -9,8 +9,8 @@ import ProfilePicture from '../components/ProfilePicture';
 import { get_item_local_storage, set_item_local_storage, remove_item_local_storage } from '../helper_functions/local_storage';
 import PostContent from '../components/PostContent';
 import { get_user_details } from '../helper_functions/get_user_details';
-import UsernameInput from './UsernameInput';
-import EmailInput from './EmailInput';
+// import UsernameInput from './UsernameInput';
+// import EmailInput from './EmailInput';
 
 
 

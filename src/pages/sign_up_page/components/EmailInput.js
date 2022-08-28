@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { get_item_local_storage } from '../helper_functions/local_storage';
+import { get_item_local_storage } from '../../../helper_functions/local_storage';
 
 
 import './EmailInput.scss';

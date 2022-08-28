@@ -106,7 +106,6 @@ function SignUp() {
 
 		for(const sign_up_input of [email_info, username_info, password_info]) {
 			if (sign_up_input.valid === false) {
-
 				return
 			}
 		}
@@ -141,23 +140,25 @@ function SignUp() {
 						type="text"
 						name="verification_code"
 						className="verification_code_input"
-						hidden="true"
+						hidden={true}
 						value={initial_verification_code}
+						onChange={((e) => {})}
 					/>
 
 					
 					<input 
 						type="submit" 
-						value={"Send Verification"}
-						className="submit_btn"
+						value="Send Email Verification Code"
+						className={(email_info.valid && username_info.valid && password_info.valid) ? "verify_btn_green" : "verify_btn_red"}
 					/>
 					<div className="verfication_error">
-						{(email_info.valid && username_info.valid && password_info.valid) 
-						?
-						""
-						:
-						"Please ensure all sign up fields are valid!"
-					}
+						{
+							(email_info.valid && username_info.valid && password_info.valid) 
+							?
+							""
+							:
+							"Please ensure all sign up fields are valid!"
+						}
 					</div>
 
 				</form>
@@ -169,12 +170,13 @@ function SignUp() {
 				/> */}
 
 				<input 
+					className="verify_input"
 					type="text"
 					placeholder='enter your verification code'
 					onChange={(e) => set_verification_code(e.target.value)}
 				/>
 
-				<button onClick={submit_sign_up}>
+				<button onClick={submit_sign_up} className="submit_btn">
 					{signed_up ? "...Signing Up" : "Sign Up"}
 				</button>
 

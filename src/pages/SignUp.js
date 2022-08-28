@@ -23,7 +23,7 @@ const SERVICE_ID = "Breaddit_Service_69420"
 const TEMPLATE_ID = "template_9wj4cqc"
 const PUBLIC_KEY = "VHjgLz-ZTg3h0Y_xh" // aka User ID
 
-
+// verification code for authentication.
 const generate_random_code = () => {
 	return Math.floor(100000 + Math.random() * 900000)
 }
@@ -110,7 +110,7 @@ function SignUp() {
 				return
 			}
 		}
-
+		// send an email out using emailjs that will based on the details entered by the user. 
 		emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, e.target, PUBLIC_KEY)
 		.then((result) => {
 			console.log(result.text);

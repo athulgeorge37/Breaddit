@@ -12,7 +12,7 @@ import { get_user_details } from '../helper_functions/get_user_details';
 // import UsernameInput from './UsernameInput';
 // import EmailInput from './EmailInput';
 
-
+import ProfileV2 from './ProfileV2';
 
 const initialise_user_posts = () => {
  
@@ -225,6 +225,7 @@ function Profile() {
 
     return (
         <div className="Profile_Page">
+            <ProfileV2/>
             {
                 user_details.user_id === "unknown"
                 ?
@@ -232,7 +233,7 @@ function Profile() {
                 :
             
                 <>
-                    <div className="User_Info">
+                    {/* <div className="User_Info">
                         <h1>Profile Page</h1>
                         <div className="profile_container">
 
@@ -345,7 +346,7 @@ function Profile() {
                             </div>
 
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='user_posts'>
                         {

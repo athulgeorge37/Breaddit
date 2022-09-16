@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { get_item_local_storage } from '../../../helper_functions/local_storage';
 
 import './UsernameInput.scss';
@@ -6,13 +6,14 @@ import './UsernameInput.scss';
 const MIN_USERNAME_LENGTH = 3
 const MAX_USERNAME_LENGTH = 15
 
-function UsernameInput({ set_username_info }) {
+function UsernameInput({ set_username_info, initial_username }) {
 
     const [characters_left, set_characters_left] = useState(0);
     const [usernname_validity, set_usernname_validity] = useState({
         correct_length: false,
         unique_name: false
     });
+
 
     const validate_username = (new_username) => {
 
@@ -33,6 +34,10 @@ function UsernameInput({ set_username_info }) {
             }
         }
 
+        if ((initial_username !== undefined) && (new_username === initial_username)) {
+            unique_name = true
+        }
+
         set_usernname_validity({
             correct_length: correct_length,
             unique_name: unique_name
@@ -45,6 +50,14 @@ function UsernameInput({ set_username_info }) {
 
     }
 
+    useEffect(() => {
+        // required for edit profile component
+        // where we initialise the pasword
+        if (initial_username !== undefined) {
+            validate_username(initial_username)
+        }
+    }, [])
+
     return (
         <div className="UsernameInput">
             <label htmlFor="username">Username:</label>
@@ -55,6 +68,7 @@ function UsernameInput({ set_username_info }) {
                     onChange={(e) => validate_username(e.target.value)} 
                     maxLength={MAX_USERNAME_LENGTH}
                     name="username"
+                    defaultValue={initial_username}
                 />
                 <div className="characters_left">{characters_left}</div>
             </div>

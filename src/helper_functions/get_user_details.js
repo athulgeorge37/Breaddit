@@ -26,6 +26,8 @@ export const get_user_details = (my_user_id) => {
         email: "unknown",
         password: "unknown",
         user_id: "unknown",
-        username: "unknown"
+        username: "unknown",
+        profile_picture_url: "",
+        image_properties: ""
     }
 }

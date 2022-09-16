@@ -17,8 +17,8 @@ export const useEditPost = (initial_post_details) => {
     const [post_title, set_post_title] = useState(initial_post_details === undefined ? "" : initial_post_details.post_title);
     const [post_text, set_post_text] = useState(initial_post_details === undefined ? "" : initial_post_details.post_text);
 
-    const [post_up_votes, update_post_up_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_up_votes);
-    const [post_down_votes, update_post_down_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_down_votes);
+    // const [post_up_votes, update_post_up_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_up_votes);
+    // const [post_down_votes, update_post_down_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_down_votes);
 
     const [valid_title, set_valid_title] = useState(true);
 
@@ -31,6 +31,8 @@ export const useEditPost = (initial_post_details) => {
 
         const formData = new FormData()
 
+        // console.log("new_img", new_img)
+        
         formData.append("file", new_img)
         formData.append("upload_preset", UPLOAD_PRESET)
 
@@ -46,6 +48,12 @@ export const useEditPost = (initial_post_details) => {
         })
     }
 
+
+    const handle_cancel_edit_post = () => {
+        set_post_title(initial_post_details.post_title)
+        set_post_text(initial_post_details.post_text)
+        set_image_url(initial_post_details.post_img_url)
+    }
     
     const handle_add_post = (new_post_title, new_post_text, new_image_url) => {
 
@@ -128,39 +136,39 @@ export const useEditPost = (initial_post_details) => {
         set_all_posts(all_posts)
     }
 
-    const handle_post_votes = (new_up_vote, new_down_vote) => {
-        // finds the appropriate post in localstorage, and
-        // updates localstorage to contain each post's up and down votes
+    // const handle_post_votes = (new_up_vote, new_down_vote) => {
+    //     // finds the appropriate post in localstorage, and
+    //     // updates localstorage to contain each post's up and down votes
 
-        let all_posts = get_item_local_storage("Available_Posts")
+    //     let all_posts = get_item_local_storage("Available_Posts")
 
-        for (const post of all_posts) {
-            if (post.post_id === initial_post_details.post_id) {
+    //     for (const post of all_posts) {
+    //         if (post.post_id === initial_post_details.post_id) {
 
-                post.post_up_votes = new_up_vote
-                post.post_down_votes = new_down_vote
-                break;
-            }
-        }
+    //             post.post_up_votes = new_up_vote
+    //             post.post_down_votes = new_down_vote
+    //             break;
+    //         }
+    //     }
 
-        set_item_local_storage("Available_Posts", all_posts)
-    }
+    //     set_item_local_storage("Available_Posts", all_posts)
+    // }
 
-    const handle_post_up_vote = () => {
-        // updates the UI of up votes
-        update_post_up_votes(post_up_votes + 1) 
+    // const handle_post_up_vote = () => {
+    //     // updates the UI of up votes
+    //     update_post_up_votes(post_up_votes + 1) 
 
-        // updates the local storage of up votes
-        handle_post_votes(post_up_votes + 1, post_down_votes) 
-    }
+    //     // updates the local storage of up votes
+    //     handle_post_votes(post_up_votes + 1, post_down_votes) 
+    // }
 
-    const handle_post_down_vote = () => {
-        // updates the UI of down votes
-        update_post_down_votes(post_down_votes - 1) 
+    // const handle_post_down_vote = () => {
+    //     // updates the UI of down votes
+    //     update_post_down_votes(post_down_votes - 1) 
 
-        // updates the local storage of down votes
-        handle_post_votes(post_up_votes, post_down_votes - 1) 
-    }
+    //     // updates the local storage of down votes
+    //     handle_post_votes(post_up_votes, post_down_votes - 1) 
+    // }
 
     return {
         post_title, 
@@ -181,14 +189,15 @@ export const useEditPost = (initial_post_details) => {
         },
 
        
-        post_up_votes,
-        handle_post_up_vote,
+        // post_up_votes,
+        // handle_post_up_vote,
 
-        post_down_votes,
-        handle_post_down_vote,
+        // post_down_votes,
+        // handle_post_down_vote,
 
         handle_add_post,
         handle_edit_post,
-        handle_delete_post
+        handle_delete_post,
+        handle_cancel_edit_post
     }
 }

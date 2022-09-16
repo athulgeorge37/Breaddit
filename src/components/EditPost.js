@@ -1,14 +1,15 @@
 // scss import
 import './EditPost.scss'
 
+// hook imports
+import { useRef } from 'react';
 
 // component imports
 import TextEditor from './TextEditor';
 import LoginInput from './LoginInput';
 import Loading from './Loading';
 import { Image } from 'cloudinary-react';
-
-
+import Button from './Button';
 
 function EditPost(props) {
     // might want to prop drill these props
@@ -17,9 +18,11 @@ function EditPost(props) {
         image_url,
         upload_img,  // is a function
         CLOUD_NAME,
-        loading_img
+        loading_img,
+        set_image_url
     } = props.image_stuff 
 
+    const img_input_ref = useRef();
 
     return (
         <div className="post_inputs">
@@ -36,24 +39,47 @@ function EditPost(props) {
                 >
                     Title cannot be empty!
                 </LoginInput>
-            </div>
 
-            <div className="image_upload">
-                <label htmlFor="upload_img">
+                <div className="img_btns">
                     <input 
                         id="upload_img"
                         type="file" 
+                        ref={img_input_ref}
                         onChange={(e) => upload_img(e.target.files[0])}
+                        hidden={true}
                     />
-                    {image_url === "" ? "Upload Image" : "Replace Image"}
-                </label>
+                    
+                    <Button 
+                        handle_btn_click={() => img_input_ref.current.click()}
+                        type="add_img"
+                        span_text={image_url === "" ? "Upload Image" : "Replace Image"}
+                        img_name="add_img"
+                    />   
 
-                {
-                    loading_img && <Loading/>
+                    {
+                        image_url !== "" 
+                        &&
+                        <Button 
+                            handle_btn_click={() => set_image_url("")}
+                            type="remove_img"
+                            span_text="Remove Image"
+                            img_name="remove_img"
+                            margin_left={true}
+                        />
+                    }
+                </div>
+            </div>
+
+
+            
+                {       
+                    loading_img && 
+                    <div className="image_display">
+                        <Loading/>
+                    </div>
+                    
                 }
-            </div>   
 
-            <div className="image_display">
                 {
                     loading_img === false
                     &&
@@ -61,14 +87,16 @@ function EditPost(props) {
                         {   
                             image_url !== ""
                             &&
-                            <Image 
-                                cloudName={CLOUD_NAME}
-                                publicId={image_url}
-                            />
+                            <div className="image_display">
+                                <Image 
+                                    cloudName={CLOUD_NAME}
+                                    publicId={image_url}
+                                />
+                            </div>
                         }  
                     </>
                 }
-            </div>                  
+                          
 
             <TextEditor 
                 update_text={props.set_post_text}

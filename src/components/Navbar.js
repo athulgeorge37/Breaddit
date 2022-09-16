@@ -11,7 +11,14 @@ function Navbar() {
 
 	return (
 		<nav>
-			<div className='logo'>Logo</div>
+			<div className='logo'>
+				<img 
+					src="./images/breaddit_logo.png" 
+					alt="logo" 
+					className="logo_img"
+				/>
+				Breaddit
+			</div>
 
 			<div className="links">
 				<NavLink 

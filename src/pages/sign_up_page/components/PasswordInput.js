@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { useState, useRef } from 'react';
 import './PasswordInput.scss';
 
 
 const MIN_PASSWORD_LENGTH = 6
 
-function PasswordInput({ set_password_info }) {
+function PasswordInput({ set_password_info, initial_password }) {
 
     const input_ref = useRef(null);
 
@@ -16,7 +17,6 @@ function PasswordInput({ set_password_info }) {
         number: false,
         valid_length: false
     });
-
 
 
     const validate_password = (new_password) => {
@@ -44,6 +44,8 @@ function PasswordInput({ set_password_info }) {
             }
         }
 
+
+
         set_password_validity({
             uppercase_letter: uppercase_letter,
             lowercase_letter: lowercase_letter,
@@ -58,6 +60,14 @@ function PasswordInput({ set_password_info }) {
         })
     }
 
+    useEffect(() => {
+        // required for edit profile component
+        // where we initialise the pasword
+        if (initial_password !== undefined) {
+            validate_password(initial_password)
+        }
+    }, [])
+
     return (
         <div className="PasswordInput">
             <label htmlFor="password">Password:</label>
@@ -67,6 +77,7 @@ function PasswordInput({ set_password_info }) {
                     type={show_password ? "text" : "password"}
                     onChange={(e) => validate_password(e.target.value)} 
                     ref={input_ref}
+                    defaultValue={initial_password}
                 />
                 <img 
                     src={show_password ? "./images/visible.png" : "./images/not_visible.png"} 

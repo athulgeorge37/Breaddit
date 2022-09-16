@@ -8,7 +8,7 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 function SignIn() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const  all_users = get_item_local_storage("All_Users");
+	
 
 	const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ function SignIn() {
 	// Alert function
 	const blankError = (error) => {
 		alert(error)
-	  }
+	}
 
 	// error function - prints out the error message based on whether the user entered an incorrect email or an email 
 	// with an incorrect format.
@@ -56,6 +56,7 @@ function SignIn() {
 			let valid_password = false
 			let valid_format = false
 
+			const all_users = get_item_local_storage("All_Users");
 			// Check the if the entered email and password is valid
 			for (let i =0; i < all_users.length; ++i) {
 
@@ -124,7 +125,7 @@ return (
 					update_on_change={setPassword}
 					boolean_check={valid_signup_details.password_validity}
 				>
-					The password that you've entered is incorrect.
+					Your email password combination is incorrect!
 				</LoginInput>
 
 				<input 

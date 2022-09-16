@@ -7,12 +7,12 @@ import { get_item_local_storage } from '../../../helper_functions/local_storage'
 import './EmailInput.scss';
 
 
-function EmailInput({ set_email_info }) {
+function EmailInput({ set_email_info, initial_email }) {
 
     const navigate = useNavigate();
 
     const [email_validity, set_email_validity] = useState({
-        valid_email: false,
+        valid_email: (initial_email === undefined ? false : true),
         unique_email: true
     });  
 
@@ -31,6 +31,10 @@ function EmailInput({ set_email_info }) {
                 unique_email = false
                 break;
             }
+        }
+
+        if ((initial_email !== undefined) && (new_email === initial_email)) {
+            unique_email = true
         }
 
         set_email_validity({
@@ -55,6 +59,7 @@ function EmailInput({ set_email_info }) {
                     type="text"
                     onChange={(e) => validate_email(e.target.value)} 
                     name="email"
+                    defaultValue={initial_email}
                 />
             </div>
 

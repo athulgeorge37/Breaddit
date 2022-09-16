@@ -7,6 +7,7 @@ import EditPost from './EditPost';
 import { get_item_local_storage } from '../helper_functions/local_storage';
 import { useEditPost } from './useEditPost';
 import { useNavigate } from 'react-router-dom';
+import { get_user_details } from '../helper_functions/get_user_details';
 
 
 const MAX_POST_TEXT_CHARACTERS = 250
@@ -116,7 +117,9 @@ function CreatePost() {
                 :
 
                 <div className="collapsed_post_view">
-                    <ProfilePicture/>
+                    <ProfilePicture
+                        profile_picture_url={get_user_details(get_item_local_storage("Current_User")).profile_picture_url}
+                    />
                     <input 
                         type="text" 
                         placeholder="Create Post"

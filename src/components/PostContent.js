@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useEditPost } from './useEditPost';
 import './PostContent.scss';
 
-import parse from 'html-react-parser';
 import { v4 as uuid } from 'uuid';
 
 import { get_user_details } from '../helper_functions/get_user_details';
@@ -18,10 +17,14 @@ import AdjustableButton from './AdjustableButton';
 import EditPost from './EditPost';
 import { Image } from 'cloudinary-react';
 import Comment from './Comment';
-
+import Button from './Button';
+import Votes from './Votes';
+import ParsedText from './ParsedText';
 
 
 function PostContent({ post_details }) {
+
+    const user_details = get_user_details(post_details.post_author)
 
     const [all_comments, set_all_comments] = useState(post_details.post_comments);
 
@@ -49,14 +52,15 @@ function PostContent({ post_details }) {
 
         valid_title,
        
-        post_up_votes,
-        handle_post_up_vote,
+        // post_up_votes,
+        // handle_post_up_vote,
 
-        post_down_votes,
-        handle_post_down_vote,
+        // post_down_votes,
+        // handle_post_down_vote,
 
         handle_edit_post,
         handle_delete_post,
+        handle_cancel_edit_post,
 
         image_stuff
     } = useEditPost(post_details); 
@@ -125,6 +129,11 @@ function PostContent({ post_details }) {
 
     }
 
+    const submit_cancel_edit_post = () => {
+        handle_cancel_edit_post()
+        set_edit_btn_active(false)
+    }
+
 
     const submit_delete_post = () => {
 
@@ -171,9 +180,13 @@ function PostContent({ post_details }) {
                 </div>
             }
 
+
+
             <div className="post_user_and_awards">
                 <div className="post_user">
-                    <ProfilePicture/>
+                    <ProfilePicture
+                        profile_picture_url={user_details.profile_picture_url}
+                    />
 
                     {post_content_for_user()}
                 </div>
@@ -181,52 +194,87 @@ function PostContent({ post_details }) {
                 <div className="btns">
 
                     {
-                        edit_btn_active &&
-
-                        <button 
-                            className="save_btn"
-                            onClick={submit_edit_post}
-                        >
-                            Save
-                        </button>
+                        edit_btn_active 
+                        &&
+                        <Button 
+                            handle_btn_click={submit_edit_post}
+                            type="save"
+                            span_text="Save"
+                            img_name="confirm"
+                            margin_right={true}
+                        />
                     }
 
                     {
                         post_details.post_author === get_item_local_storage("Current_User") 
                         &&
                         <>
-                            <AdjustableButton
-                                boolean_check={edit_btn_active}
-                                execute_onclick={() =>  set_edit_btn_active(!edit_btn_active)}
-                                original_class_name="edit_btn"
-                                active_name="Cancel"
-                                inactive_name="Edit"
+                            {
+                                edit_btn_active 
+                                ?
+                                <Button 
+                                    handle_btn_click={submit_cancel_edit_post}
+                                    type="cancel"
+                                    span_text="Cancel"
+                                    img_name="cancel"
+                                    margin_right={true}
+                                />
+                                :
+                                <Button 
+                                    handle_btn_click={() => set_edit_btn_active(true)}
+                                    type="edit"
+                                    span_text="Edit"
+                                    img_name="edit"
+                                    margin_right={true}
+                                />
+                            }
+
+                            <Button 
+                                handle_btn_click={() => set_delete_btn_active(true)}
+                                type="delete"
+                                span_text="Delete"
+                                img_name="delete"
+                                margin_right={true}
                             />
-                            <button 
-                                className="delete_btn"
-                                onClick={() => set_delete_btn_active(true)}
-                            >
-                                Delete
-                            </button>
                         </>
                     }
 
-                    <button className="awards">
-                        Give Award
-                    </button>
-
+                    {
+                        post_details.post_author !== get_item_local_storage("Current_User") 
+                        &&
+                        <Button 
+                            // might need to include on click
+                            // handle_btn_click={() => set_delete_btn_active(true)}
+                            type="award"
+                            span_text="Award"
+                            img_name="award"
+                            margin_right={true}
+                        />
+                    }
                 </div>
             </div>
 
 
             <div className="main_content_and_votes">
 
+                {
+                    allow_show_more_btn &&
+                    <div className="show_more_btn">
+                        <AdjustableButton
+                            boolean_check={show_more_content}
+                            execute_onclick={() => set_show_more_content(!show_more_content)}
+                            original_class_name="show_more_less_btn"
+                            active_name="Read Less"
+                            inactive_name="Read More"
+                            btn_type_txt={true}
+                        />
+                    </div>
+                }
+
                 <div className="text_content">
                     {
                         edit_btn_active 
-
                         ?
-
                         <EditPost
                             post_title={post_title}
                             set_post_title={set_post_title}
@@ -235,9 +283,7 @@ function PostContent({ post_details }) {
                             valid_title={valid_title}
                             image_stuff={image_stuff}
                         />
-
                         :
-
                         <div 
                             className={
                                 "display_text " + 
@@ -256,80 +302,55 @@ function PostContent({ post_details }) {
                                     />
                                 </div>
                             }
-                            <div className="parsed_text">
-                                {parse(post_text)}
-                            </div>
+                            <ParsedText>
+                                {post_text}
+                            </ParsedText>
                         </div>
                     }
                 </div>
 
-                <div className="votes">
-
-                    <div className="up_votes">
-                        {post_up_votes}
-                    </div>
-                    <button 
-                        className="up_arrow"
-                        onClick={handle_post_up_vote}
-                    >
-                        <img 
-                            src="./images/up_arrow_v2.png" 
-                            alt="up_vote" 
-                            className="vote_img up_vote"
-                        />
-                    </button>
-
-                    <button 
-                        className="down_arrow"
-                        onClick={handle_post_down_vote}
-                    >
-                        <img 
-                            src="./images/up_arrow_v2.png" 
-                            alt="up_vote" 
-                            className="vote_img down down_vote"
-                        />
-                    </button>
-                    <div className="down_votes">
-                        {post_down_votes}
-                    </div>
-
-                </div>
             </div>
 
             <div className="post_btns">
-
-                <div>               
-                    {
-                        allow_show_more_btn &&
-
-                        <AdjustableButton
-                            boolean_check={show_more_content}
-                            execute_onclick={() => set_show_more_content(!show_more_content)}
-                            original_class_name="show_more_less_btn"
-                            active_name="Read Less"
-                            inactive_name="Read More"
-                        />
-
-                    }
+                <Votes 
+                    initial_up_votes={post_details.post_up_votes}
+                    initial_down_votes={post_details.post_down_votes}
+                    vote_type="post"
+                    prop_post_id={post_details.post_id}
+                /> 
+                <div>       
+                           
                 </div>
 
                 <div className="both_comments_btns">
-                    <AdjustableButton
-                        boolean_check={show_add_comment}
-                        execute_onclick={() => {
+                    
+                    <Button 
+                        handle_btn_click={() => {
                             set_show_add_comment(!show_add_comment)
                             show_add_comment_error_msg(false)
                         }}
-                        active_name="Cancel"
-                        inactive_name="Add Comment"
+                        type="add_comment"
+                        span_text={show_add_comment ? "Cancel Comment" : "Add Comment"}
+                        span_class_name={show_add_comment ? "cancel_comment_span" : "add_comment_span"}
+                        img_name="add_comment"
+                        margin_right={true}
+                        active={show_add_comment}
                     />
-                    <AdjustableButton
-                        boolean_check={show_comments_section}
-                        execute_onclick={() => set_show_comments_section(!show_comments_section)}
-                        original_class_name="comments_btn"
-                        active_name="Hide Comments"
-                        inactive_name="Show Comments"
-                    />
+
+                    {
+                        all_comments.length > 0 
+                        &&
+                        <Button 
+                            handle_btn_click={() => set_show_comments_section(!show_comments_section)}
+                            type="comments_section"
+                            span_text={show_comments_section ? "Hide Comments" : "Show Comments"}
+                            img_name="comments"
+                            margin_right={true}
+                            active={show_comments_section}
+                        />
+                    }
+
+
                 </div>
                 
             </div>
@@ -355,17 +376,12 @@ function PostContent({ post_details }) {
             </div>
 
             <div className="expanded_comments_section">
-
                 {
                     show_comments_section
                     &&
                     <div className="Comment_Section">
                         {
-                            all_comments.length > 0 
-                
-                            ?
-                
-                            all_comments.map((comment, map_id) => {
+                            all_comments.map((comment) => {
                                 return (
                                     <Comment 
                                         post_id={post_details.post_id}
@@ -376,19 +392,9 @@ function PostContent({ post_details }) {
                                     />
                                 )
                             })
-                
-                            :
-                
-                            <div className="No_Comments">
-                                No Comments
-                            </div>
                         }
                     </div>
                 }
-
-
-
-
             </div>
 
         </div>

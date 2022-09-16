@@ -1,6 +1,6 @@
 import './ExpandableInput.scss';
 
-function ExpandableInput({set_input_content, max_height_px, placeholder}) {
+function ExpandableInput({set_input_content, max_height_px, placeholder, initial_content}) {
 
     // ExpandableInput simply increases an input field height based
     // on the text within it
@@ -23,13 +23,39 @@ function ExpandableInput({set_input_content, max_height_px, placeholder}) {
     }
 
     return (
-        <textarea 
-            autoFocus
-            className="expandable_input" 
-            placeholder={placeholder}
-            rows={1}
-            onChange={handle_resize}
-        />
+        <>
+        {
+            initial_content === undefined
+            ?
+            <textarea 
+                autoFocus
+                className="expandable_input" 
+                placeholder={placeholder}
+                rows={1}
+                onChange={handle_resize}
+            />
+            :
+            <>
+                {
+                    initial_content === ""
+                    ?
+                    <textarea 
+                        className="expandable_input" 
+                        rows={1}
+                        onChange={handle_resize}
+                        placeholder={placeholder}
+                    />
+                    :
+                    <textarea 
+                        className="expandable_input" 
+                        rows={1}
+                        onChange={handle_resize}
+                        defaultValue={initial_content}
+                    />
+                }
+            </>
+        }
+        </>
     )
 }
 

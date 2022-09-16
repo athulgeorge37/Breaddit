@@ -16,9 +16,14 @@ function LoginInput(props) {
 				onChange={(e) => props.update_on_change(e.target.value)}
 			/>
 			
-			<div className="error_msg">
-				{props.boolean_check ? "" : props.children}
-			</div>
+			{
+				props.boolean_check === false 
+				&& 
+				<div className="error_msg">
+					{props.children}
+				</div>
+			}
+			
 		</div>
 	)
 }

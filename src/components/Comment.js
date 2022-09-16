@@ -9,6 +9,7 @@ import { get_item_local_storage, set_item_local_storage } from '../helper_functi
 
 import AddComment from './AddComment';
 import ProfilePicture from './ProfilePicture';
+import Votes from './Votes';
 
 import AdjustableButton from './AdjustableButton';
 
@@ -225,7 +226,9 @@ function Comment(props) {
         <div className={"comment_or_reply " + (props.indented ? "Reply" : "Comment")}>
 
             <div className="profile_picture">
-                <ProfilePicture/>
+                <ProfilePicture
+                    profile_picture_url={get_user_details(props.comment.comment_author).profile_picture_url}
+                />
             </div>
 
             <div className="comment_content_container">
@@ -243,40 +246,16 @@ function Comment(props) {
 
                 </div>
 
-                <div className="votes_and_reply_btns">
-                    <div className="votes">
-
-                        <div className="up_votes">
-                            
-                            <button 
-                                className="up_arrow"
-                                onClick={handle_comment_up_vote}
-                            >
-                                <img 
-                                    src="./images/up_arrow_v2.png" 
-                                    alt="up_vote" 
-                                    className="vote_img up_vote"
-                                />
-                            </button>
-
-                            {comment_up_votes}
-                        </div>
-
-                        <div className="down_votes">
-
-                            <button 
-                                className="down_arrow"
-                                onClick={handle_comment_down_vote}
-                            >
-                                <img 
-                                    src="./images/up_arrow_v2.png" 
-                                    alt="down_vote" 
-                                    className="vote_img down down_vote"
-                                />
-                            </button>
-
-                            {comment_down_votes}
-                        </div>
+                <div className="comment_btns">
+                    <div className="votes_and_read_more_btns">
+                        <Votes 
+                            initial_up_votes={props.comment.comment_up_votes}
+                            initial_down_votes={props.comment.comment_down_votes}
+                            vote_type={props.indented ? "reply" : "comment"}
+                            prop_indented={props.indented}
+                            prop_post_id={props.post_id}
+                            prop_comment_id={props.comment.comment_id}
+                        />
 
                         <div className="read_more_less_div">               
                             {
@@ -293,9 +272,8 @@ function Comment(props) {
 
                             }
                         </div>
-
                     </div>
-                
+
 
                     <div className="reply_btns">
 

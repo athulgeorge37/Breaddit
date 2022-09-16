@@ -1,5 +1,5 @@
 
-Stuff I have used:
+Stuff We have used:
 - react with npx create react app
 - scss for styling
 
@@ -15,9 +15,13 @@ Stuff I have used:
 
 - npm install axios             
     - to send a post request to cloudninary
+
 - npm installl cloudinary-react
     - so we can add images from a url
     - cloudinary stores all our images for free
+
+- npm install --save react-avatar-editor
+    - so we can crop images for profile pictures
 
 - npm install emailjs-com --save
     - required for MFA
@@ -30,3 +34,10 @@ Stuff I have used:
     service ID: Breaddit_Service_69420
     User ID / Public Key: VHjgLz-ZTg3h0Y_xh
     TemplateID: template_9wj4cqc
+
+
+- sql database
+    username: s3918048
+    password: breaddit123
+
+    

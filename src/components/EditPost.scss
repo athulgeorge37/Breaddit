@@ -8,28 +8,28 @@
     
     .post_title {
         width: calc(100% - (2 * $inner_padding));
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .login_input {
+            margin-bottom: 0;
+            width: 100%;
+            margin-right: 10px;
+        }
+
+        .img_btns {
+            display: flex;
+            margin-top: 18px;
+        }
     } 
     
     .error_msg {
         margin-top: 10px;
     }
 
-    .image_upload {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 16px;
-        label {
-            @include btn-styles($green);
-            margin-right: 5px;
-
-            input[type="file"] {
-                display: none;
-            }
-        }
-
-
-    }
-
+   
     .image_display {
         width: calc(100% - (2 * $inner_padding));
         display: flex;

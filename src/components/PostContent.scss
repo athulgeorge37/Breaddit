@@ -39,24 +39,8 @@
         }
 
         .btns {
-            
-            .save_btn {
-                @include btn-styles($green)
-            }
-
-            .edit_btn {
-                margin: 0px 10px;
-            }
-
-            .delete_btn {
-                @include btn-styles($red);
-                margin-right: 10px;
-            }
-
-            .awards {
-                @include btn-styles($green);
-                height: 32px;
-            }
+            display: flex;
+            justify-content: center;
         }
 
         
@@ -64,7 +48,15 @@
 
     .main_content_and_votes {
         display: flex;
-        justify-content: space-between;
+        padding: 16px;
+
+        position: relative;
+
+        .show_more_btn {
+            position: absolute;
+            bottom: 1em;
+            right: 1em;
+        }
 
         .text_content {
             background-color: $dark-grey;
@@ -72,14 +64,13 @@
 
             // calculate the entire value including padding , margin, border
             // that this div, and the votes div take
-            width: calc(100% - 3em);
+            width: calc(100%);
             box-sizing: border-box;
         
             display: flex;
             align-items: center;
             justify-content: center;
 
-            padding: 0.5em 0.5em 0.5em 1em;
 
             .editable_content {
                 width: 100%;
@@ -100,8 +91,10 @@
                 width: 100%;
                 overflow-wrap: break-word;
 
-                // height: 100%;
-                // gotta make the title be at the top of the post content
+
+                .Title {
+                    margin-bottom: 10px;
+                }
 
                 .image_display {
                     img {
@@ -110,186 +103,6 @@
                     }
                 }
 
-                
-                .parsed_text {
-        
-                    // font styles
-                    $font_sizes: (
-                        text-tiny: 0.7em,
-                        text-small: 0.85em,
-                        text-big: 1.4em,
-                        text-huge: 1.8em
-                    );
-        
-                    @each $font_type, $font_size in $font_sizes {
-                        .#{$font_type} {
-                            font-size: $font_size;
-                        }
-                    }
-        
-                    p {
-                        font-size: 1em;
-                    }
-        
-                    // highlighting styles
-                    $highlight_colors: (
-                        marker-yellow: #fdfd77,
-                        marker-green: #62f962,
-                        marker-pink: #fc7899,
-                        marker-blue: #72ccfd
-                    );
-        
-                    @each $highlight_name, $highlight_color in $highlight_colors {
-                        .#{$highlight_name} {
-                            background-color: $highlight_color;
-                        }
-                    }
-        
-                    .pen-red {
-                        background-color: transparent;
-                        color: #e71313;
-                    }
-        
-                    .pen-green {
-                        background-color: transparent;
-                        color: #128a00;
-                    }
-        
-        
-                    ul, ol {
-                        margin-left: calc(2 * $text_margin_left);
-                    }
-        
-                    pre {
-                        position: relative;
-                        padding: 1em;
-                        // color: hsl(0, 0%, 20.8%);
-                        // background-color: #eeeeee;
-                        background-color: $black;
-                        color: $white;
-                        border: 1px solid $light-grey;
-                        // border: 1px solid hsl(0, 0%, 77%);
-                        border-radius: 2px;
-                        text-align: left;
-                        direction: ltr;
-                        tab-size: 4;
-                        white-space: pre-wrap;
-                        font-style: normal;
-                    }
-        
-                    code {
-                        // background-color: #eeeeee;
-                        border-radius: 2px;
-                        padding: 0.15em;
-                    }
-        
-        
-                    $code_languages: (
-                        language-plaintext: "Plain Text",
-                        language-c: "C",
-                        language-cs: "C#",
-                        language-cpp: "C++",
-                        language-css: "CSS",
-                        language-diff: "Diff",
-                        language-html: "HTML",
-                        language-java: "Java",
-                        language-javascript: "JavaScript",
-                        language-php: "PHP",
-                        language-python: "Python",
-                        language-ruby: "Ruby",
-                        language-typescript: "Typescript",
-                        language-xml: "XML",
-                    );
-        
-                    @each $language_class, $language_name in $code_languages {
-                        .#{$language_class}::after {
-                            content: $language_name;
-        
-                            position: absolute;
-                            // background-color: #757575;
-                            // color: white;
-                            background-color: $light-grey;
-                            font-family: Helvetica,Arial,Tahoma,Verdana,Sans-Serif;
-                            font-size: 10px;
-                            line-height: 16px;
-                            padding: calc(0.6em * 0.3) calc(0.6em * 0.8);
-                            right: 10px;
-                            top: -1px;
-                            white-space: nowrap;
-                        }
-                    }
-        
-                    hr {
-                        background-color: #dedede;
-                        border: 0;
-                        height: 4px;
-                        margin: 15px 0;
-                    }
-        
-                    
-        
-                    table {
-                       border-spacing: 0;
-                       border-collapse: collapse;
-                       width: 100%;
-        
-                        th {
-                            background-color: rgb(0 0 0 / 5%);
-                        }
-        
-                        td, th {
-                            // border:  1px solid #bfbfbf;
-                            border: 1px solid #343536;
-                            min-width: 2em;
-                            padding: 0.4em;
-                        }
-                    }
-                }
-            }
-        }
-
-        .votes {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding-right: 0.5em;
-            margin: 0.5em 0;
-
-            .up_arrow, 
-            .down_arrow {
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                background: none;
-                border: none;
-                padding: 0.5em;
-                border-radius: 6px;
-                color: inherit;
-                cursor: pointer;   
-                
-                &:hover {
-                    background-color: $light-grey;
-                }
-            }
-
-            .vote_img {
-                width: 25px;
-                @include light-grey-filter_color;
-            }
-
-            .down {
-                transform: rotate(180deg);
-            }
-
-            .up_vote {
-                @include blue-filter_color;
-            }
-
-            .down_vote {
-                @include red-filter_color;
             }
         }
     }
@@ -298,13 +111,14 @@
         padding: 0.5em;
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $light-grey;      
+        border-top: 1px solid $light-grey;   
+
+        .votes {
+            margin-left: 10px;
+        }
 
         .both_comments_btns {    
-            .comments_btn {
-                margin-left: 10px;
-            }
-    
+            display: flex;   
         }
     }
 
@@ -314,20 +128,6 @@
             color: $red;
             margin-left: calc(10px + 1em + 30px + 12px);
             margin-bottom: 0.5em;
-        }
-
-        .Comment_Section {
-            display: flex;
-            flex-direction: column;
-        
-            .No_Comments {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 0.5em;
-        
-                border-top: 1px solid $light-grey;
-            }
         }
     }
 }

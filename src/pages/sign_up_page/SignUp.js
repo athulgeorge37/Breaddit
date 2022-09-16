@@ -67,7 +67,9 @@ function SignUp() {
 			username: username_info.username,
 			email: email_info.email,
 			password: password_info.password,
-			date_joined: get_current_date()
+			date_joined: get_current_date(),
+			profile_picture_url: "",
+			about_me: ""
 		}
 
 		// verify verification_code here

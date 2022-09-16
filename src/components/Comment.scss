@@ -36,82 +36,33 @@
             
         }
 
-        .votes_and_reply_btns {
+        .comment_btns {
             display: flex;
             justify-content: space-between;
             align-items: center;
 
-           
-
-            .votes {
+            .votes_and_read_more_btns {
                 display: flex;
                 align-items: center;
-                
-                .up_votes,
-                .down_votes {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-    
-                .down_votes {
-                    margin-left: 0.2em;
-                }
-    
-                .up_arrow,
-                .down_arrow {
-                    margin-right: 0.2em;
-                }
-    
-    
-                .up_arrow, 
-                .down_arrow {
-    
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-    
-                    background: none;
-                    border: none;
-                    padding: 0.5em;
-                    border-radius: 6px;
-                    color: inherit;
-                    cursor: pointer;   
-                    
-                    &:hover {
-                        background-color: $light-grey;
+
+                .votes {
+                    margin-left: 5px;
+
+                    .vote_img {
+                        width: 15px;
                     }
                 }
-    
-                .vote_img {
-                    width: 15px;
-                    @include light-grey-filter_color;
-                }
-    
-                .down {
-                    transform: rotate(180deg);
-                }
-    
-                .up_vote {
-                    @include blue-filter_color;
-                }
-    
-                .down_vote {
-                    @include red-filter_color;
-                }
-
+                
                 .read_more_less_div {
 
                     .read_more_less_btn {
                         margin-left: 10px;
                     }
-    
 
                 }
-                
             }
 
-
+        
             .reply_btns {
 
                 .view_replies_btn {

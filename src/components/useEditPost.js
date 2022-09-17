@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
-// importing the All_Posts_Context from app.js
-import { ALL_POSTS_CONTEXT } from '../App';
+import { useState } from "react";
+
 
 import { v4 as uuid } from 'uuid';
 import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
@@ -10,19 +9,15 @@ import Axios from 'axios';
 const UPLOAD_PRESET = "yqbnco9l"
 const CLOUD_NAME = "dhnxodaho";
 
-export const useEditPost = (initial_post_details) => {
+export const useEditPost = (set_all_posts, initial_post_details) => {
 
-    const { set_all_posts } = useContext(ALL_POSTS_CONTEXT);
 
     const [post_title, set_post_title] = useState(initial_post_details === undefined ? "" : initial_post_details.post_title);
     const [post_text, set_post_text] = useState(initial_post_details === undefined ? "" : initial_post_details.post_text);
 
-    // const [post_up_votes, update_post_up_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_up_votes);
-    // const [post_down_votes, update_post_down_votes] = useState(initial_post_details === undefined ? 0 : initial_post_details.post_down_votes);
 
     const [valid_title, set_valid_title] = useState(true);
 
-    // const [selected_image, set_selected_image] = useState("");
     const [image_url, set_image_url] = useState(initial_post_details === undefined ? "" : initial_post_details.post_img_url)
 
     const [loading_img, set_loading_img] = useState(false);
@@ -31,7 +26,6 @@ export const useEditPost = (initial_post_details) => {
 
         const formData = new FormData()
 
-        // console.log("new_img", new_img)
         
         formData.append("file", new_img)
         formData.append("upload_preset", UPLOAD_PRESET)
@@ -136,39 +130,7 @@ export const useEditPost = (initial_post_details) => {
         set_all_posts(all_posts)
     }
 
-    // const handle_post_votes = (new_up_vote, new_down_vote) => {
-    //     // finds the appropriate post in localstorage, and
-    //     // updates localstorage to contain each post's up and down votes
-
-    //     let all_posts = get_item_local_storage("Available_Posts")
-
-    //     for (const post of all_posts) {
-    //         if (post.post_id === initial_post_details.post_id) {
-
-    //             post.post_up_votes = new_up_vote
-    //             post.post_down_votes = new_down_vote
-    //             break;
-    //         }
-    //     }
-
-    //     set_item_local_storage("Available_Posts", all_posts)
-    // }
-
-    // const handle_post_up_vote = () => {
-    //     // updates the UI of up votes
-    //     update_post_up_votes(post_up_votes + 1) 
-
-    //     // updates the local storage of up votes
-    //     handle_post_votes(post_up_votes + 1, post_down_votes) 
-    // }
-
-    // const handle_post_down_vote = () => {
-    //     // updates the UI of down votes
-    //     update_post_down_votes(post_down_votes - 1) 
-
-    //     // updates the local storage of down votes
-    //     handle_post_votes(post_up_votes, post_down_votes - 1) 
-    // }
+    
 
     return {
         post_title, 
@@ -187,13 +149,6 @@ export const useEditPost = (initial_post_details) => {
             CLOUD_NAME,
             loading_img
         },
-
-       
-        // post_up_votes,
-        // handle_post_up_vote,
-
-        // post_down_votes,
-        // handle_post_down_vote,
 
         handle_add_post,
         handle_edit_post,

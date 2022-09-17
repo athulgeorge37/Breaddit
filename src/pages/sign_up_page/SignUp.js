@@ -135,7 +135,10 @@ function SignUp() {
 
 					<UsernameInput set_username_info={set_username_info}/>
 
-					<PasswordInput set_password_info={set_password_info}/>
+					<PasswordInput 
+						set_password_info={set_password_info}
+						label_name="Password"
+					/>
 
 					<input 
 						id="verification_code"

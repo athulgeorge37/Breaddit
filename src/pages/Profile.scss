@@ -1,6 +1,5 @@
 @import "../variables.scss";
 
-
 .Profile_Page {
     display: flex;
     flex-direction: column;
@@ -8,100 +7,23 @@
     align-items: center;
     width: 100%;
 
-    .User_Info{
-        display: flex;
-        flex-direction: column;
-        width: 400px;
-        border: 1px solid $light-grey;
-        padding: $inner_padding;
-        border-radius: $default-border-radius;
-        background-color: $dark-grey;
-        margin-bottom: 32px;
-    
-        .profile_container {
+
+    .read_profile_div {
+        width: 50%;
+
+        .user_posts {
             display: flex;
-            justify-content: space-around;
-    
-            .img_date, .username_email, .profile_btns {
-                display: flex;
-                flex-direction: column;
-            }
-    
-            .profile_btns {
-    
-                .confirm_edit_btn {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-    
-                    background: none;
-                    border: none;
-                    padding: 0.5em;
-                    border-radius: 6px;
-                    color: inherit;
-                    cursor: pointer;   
-    
-                    background-color: $blue;
-                    
-                    &:hover {
-                        filter: brightness(1.2);
-                    }
-    
-                    .confirm_edit_img {
-                        width: 25px;
-                    }
-    
-                    .confirm_img {
-                        @include white-filter_color;
-                    }
-    
-                    .edit_img {
-                        @include white-filter_color;
-                    }
-                }
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         
-                .delete_btn {
-    
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-    
-                    background: none;
-                    border: none;
-                    padding: 0.5em;
-                    border-radius: 6px;
-                    color: inherit;
-                    cursor: pointer;   
-                    
-                   background-color: $red;
-    
-                   &:hover {
-                    filter: brightness(1.2);
-                   }
-    
-                    .delete_img {
-                        width: 25px;
-                        @include white-filter_color;
-                    }
-                }
-        
-                
-    
+            .All_Posts {
+                width: 100%;
             }
-    
+        
         }
     }
+
     
-    .user_posts {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    
-        .All_Posts {
-            width: 50%;
-        }
-    
-    }
 }

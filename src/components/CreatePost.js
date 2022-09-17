@@ -12,7 +12,7 @@ import { get_user_details } from '../helper_functions/get_user_details';
 
 const MAX_POST_TEXT_CHARACTERS = 250
 
-function CreatePost() {
+function CreatePost({ set_all_posts }) {
     const navigate = useNavigate();
 
     const [expanded_view, set_expanded_view] = useState(false);
@@ -27,7 +27,7 @@ function CreatePost() {
         handle_add_post,
 
         image_stuff
-    } = useEditPost(); 
+    } = useEditPost(set_all_posts); 
 
 
     const handle_post_submit = () => {

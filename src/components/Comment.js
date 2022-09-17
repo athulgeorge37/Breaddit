@@ -12,7 +12,7 @@ import ProfilePicture from './ProfilePicture';
 import Votes from './Votes';
 
 import AdjustableButton from './AdjustableButton';
-
+import PopUpMenu from './PopUpMenu';
 
 function Comment(props) {
 
@@ -29,6 +29,9 @@ function Comment(props) {
 
     const [allow_read_more_btn, set_allow_read_more_btn] = useState(false);
     const [read_more_content, set_read_more_content] = useState(false);
+
+    const [comment_edit_mode, set_comment_edit_mode] = useState(false);
+    const [delete_btn_active, set_delete_btn_active] = useState(false);
 
     // required for read_more/less button
     const comment_content_ref = useRef();
@@ -182,8 +185,6 @@ function Comment(props) {
 
         set_item_local_storage("Available_Posts", all_posts)
         
-        
-
         set_show_reply_to_comment(false)
         set_show_replies(true)
     }
@@ -200,13 +201,14 @@ function Comment(props) {
                 for (let n=0; n < post.post_comments.length; n++) {
                     if (post.post_comments[n].comment_id === props.comment.comment_id) {
                         return (
-                            post.post_comments[n].children_comments.map((reply, map_id) => {
+                            post.post_comments[n].children_comments.map((reply) => {
                                 return (
                                     <Comment 
                                         post_id={props.post_id}
                                         comment={reply} 
                                         indented={true}
                                         key={reply.comment_id}
+                                        set_all_comments={props.set_all_comments}
                                     />
                                 )
                             })
@@ -220,6 +222,86 @@ function Comment(props) {
 
     }
     
+    const handle_edit_comment_indented = (edited_comment) => {
+        let all_posts = get_item_local_storage("Available_Posts");
+
+        for (const post of all_posts) {
+            if (post.post_id === props.post_id) {
+                for (let n=0; n < post.post_comments.length; n++) {
+                    if (post.post_comments[n].comment_id === props.comment.parent_id) {
+                        for (let k=0; k < post.post_comments[n].children_comments.length; k++) {
+                            if (post.post_comments[n].children_comments[k].comment_id === props.comment.comment_id) {
+                                post.post_comments[n].children_comments[k].comment_content = edited_comment
+                                post.post_comments[n].children_comments[k].edited = true
+                                post.post_comments[n].children_comments[k].comment_date_time = new Date().getTime()
+                                props.set_all_comments(post.post_comments)
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        set_item_local_storage("Available_Posts", all_posts)
+
+        set_comment_edit_mode(false)
+    }
+
+    const handle_edit_comment = (edited_comment) => {
+        let all_posts = get_item_local_storage("Available_Posts");
+
+        for (const post of all_posts) {
+            if (post.post_id === props.post_id) {
+                for (let n=0; n < post.post_comments.length; n++) {
+                    if (post.post_comments[n].comment_id === props.comment.comment_id) {
+                        post.post_comments[n].comment_content = edited_comment
+                        post.post_comments[n].edited = true
+                        post.post_comments[n].comment_date_time = new Date().getTime()
+                        props.set_all_comments(post.post_comments)
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        set_item_local_storage("Available_Posts", all_posts)
+
+        set_comment_edit_mode(false)
+    }
+
+    const handle_delete_comment = () => {
+        let all_posts = get_item_local_storage("Available_Posts");
+
+        for (const post of all_posts) {
+            if (post.post_id === props.post_id) {
+                for (let n=0; n < post.post_comments.length; n++) {
+                    if (props.comment.indented) {
+                        for (let k=0; k < post.post_comments[n].children_comments.length; k++) {
+                            if (post.post_comments[n].children_comments[k].comment_id === props.comment.comment_id) {
+                                post.post_comments[n].children_comments.splice(k, 1);
+                                props.set_all_comments(post.post_comments)
+                                break;
+                            }
+                        }
+                    } else {
+                        if (post.post_comments[n].comment_id === props.comment.comment_id) {
+                            post.post_comments.splice(n, 1);
+                            props.set_all_comments(post.post_comments)
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        set_item_local_storage("Available_Posts", all_posts)
+    }
+
 
 
     return (
@@ -234,15 +316,91 @@ function Comment(props) {
             <div className="comment_content_container">
 
                 <div className="comment_content">
-                    <div className="comment_author">
-                        <b>{get_user_details(props.comment.comment_author).username} • </b>{calculate_time_passed(props.comment.comment_date_time)} ago
+                    <div className="comment_author_and_edit_delete_btns">
+                        <div className="comment_author">
+                            <b>{get_user_details(props.comment.comment_author).username} • </b>
+                            {props.comment.edited && "(edited) • "}
+                            {calculate_time_passed(props.comment.comment_date_time)} ago
+                        </div>
+                        {
+                            props.comment.comment_author === get_item_local_storage("Current_User")
+                            &&
+                            <div className="edit_and_delete_btns">
+                                <AdjustableButton
+                                    boolean_check={comment_edit_mode}
+                                    execute_onclick={() => set_comment_edit_mode(!comment_edit_mode)}
+                                    original_class_name="edit_cancel_btn"
+                                    active_name="Cancel"
+                                    inactive_name="Edit"
+                                    btn_type_txt={true}
+                                />
+
+                                <button 
+                                    className="delete_comment_btn"
+                                    onClick={() => set_delete_btn_active(true)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        }
                     </div>
-                    <div 
-                        className={"comment_content_text " + (allow_read_more_btn ? (read_more_content ? "" : "show_less") : "")}
-                        ref={comment_content_ref}
-                    >
-                        {props.comment.comment_content}
-                    </div>
+                    {
+                        comment_edit_mode
+                        ?
+                        <>
+                        {
+                            props.comment.comment_author === get_item_local_storage("Current_User")
+                            &&
+                            <div className='edit_comment'>
+                                {
+                                    props.indented
+                                    ?
+                                    <AddComment 
+                                        handle_add_comment={handle_edit_comment_indented}
+                                        initial_content={props.comment.comment_content}
+                                        show_profile_pic={false}
+                                        btn_text="Save"
+                                    />
+                                    :
+                                    <AddComment 
+                                        handle_add_comment={handle_edit_comment}
+                                        show_profile_pic={false}
+                                        initial_content={props.comment.comment_content}
+                                        btn_text="Save"
+                                    />
+                                }
+                            </div>
+                        }
+                        </>
+                        :
+                        <div 
+                            className={"comment_content_text " + (allow_read_more_btn ? (read_more_content ? "" : "show_less") : "")}
+                            ref={comment_content_ref}
+                        >
+                            {
+                                delete_btn_active &&
+
+                                <div className="delete_comment_pop_up_div">
+                                    <PopUpMenu
+                                        title="Delete Comment?"
+
+                                        btn_1_txt="Cancel"
+                                        btn_1_handler={() => set_delete_btn_active(false)}
+
+                                        btn_2_txt="Delete"
+                                        btn_2_handler={handle_delete_comment}
+                                    >
+                                        <p>
+                                            Are you sure you want to delete your Comment?
+                                            This action is not reversible.
+                                        </p>
+                                    </PopUpMenu>
+                                </div>
+                            }
+
+                            {props.comment.comment_content}
+                        </div>
+                    }
 
                 </div>
 
@@ -295,13 +453,13 @@ function Comment(props) {
                                     props.comment.children_comments.length > 0 
                                     &&
                                     <AdjustableButton
-                                    boolean_check={show_replies}
-                                    execute_onclick={() => set_show_replies(!show_replies)}
-                                    original_class_name="view_replies_btn"
-                                    active_name="Hide Replies"
-                                    inactive_name="Show Replies"
-                                    btn_type_txt={true}
-                                />
+                                        boolean_check={show_replies}
+                                        execute_onclick={() => set_show_replies(!show_replies)}
+                                        original_class_name="view_replies_btn"
+                                        active_name="Hide Replies"
+                                        inactive_name="Show Replies"
+                                        btn_type_txt={true}
+                                    />
                                 }
                             </div>
                         }
@@ -331,9 +489,7 @@ function Comment(props) {
                         <div className="comment_replies">
                             {
                                 show_replies 
-                                
                                 &&
-                                
                                 render_indented_comments()
                             }
                         </div>

@@ -5,23 +5,72 @@
     border-radius: $default-border-radius;
     background-color: $dark-grey;
     margin-bottom: 32px;
+    padding: 1em;
     display: flex; 
     flex-direction: column;
+    width: 50%;
+
+    position: relative;
+
+    .delete_acount_pop_up_div {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        left: 50%;
+        top: 50%;
+    }
 
     .picture_and_inputs {
         display: flex;
-        
+        justify-content: space-between;
+       
         .edit_profile_picture {
             display: flex;
             flex-direction: column;
-            margin: 1em;        
+     
         }
+
+        .email_and_password {
+            margin: 0 1em;
+
+            .current_password {
+                margin-bottom: 16px;
+                
+                .Password_Check {
+                    margin-bottom: 0;
+                }
+
+                .errors {
+                    margin-top: 4px;
+            
+                    ul {
+                        margin-left: 16px;
+            
+                        .valid{
+                            color: $green;
+                        }
+                
+                        .invalid {
+                            color: $red;
+                        }
+                    }
+                }
+            }
+        }
+
+        .username_and_about_me {
+            width: fit-content;
+        }
+  
     }
 
 
     .edit_profile_page_btns {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-evenly;
+        margin-top: 1em;
 
         .cancel_profile_edits_btn {
             @include btn-styles($red);
@@ -29,6 +78,10 @@
 
         .save_profile_btn {
             @include btn-styles($green);
+        }
+
+        .delete_account_btn {
+            @include btn-styles($red);
         }
     }
 }

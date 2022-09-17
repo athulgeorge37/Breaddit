@@ -13,17 +13,7 @@
     background-color: $dark-grey;
     border: 1px solid $light-grey;
     border-radius: $default-border-radius;
-    position: relative;
-
-    .delete_post_pop_up_div {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        left: 50%;
-        top: 50%;
-    }
+   
 
     .post_user_and_awards {
         display: flex;
@@ -51,6 +41,16 @@
         padding: 16px;
 
         position: relative;
+
+        .delete_post_pop_up_div {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            left: 50%;
+            top: calc(80px + 16px);
+        }
 
         .show_more_btn {
             position: absolute;
@@ -97,6 +97,7 @@
                 }
 
                 .image_display {
+                    margin-bottom: 10px;
                     img {
                         width: 100%;
                         border-radius: $default-border-radius;
@@ -105,6 +106,7 @@
 
             }
         }
+
     }
 
     .post_btns {
@@ -123,11 +125,4 @@
     }
 
 
-    .expanded_add_comment {
-        .add_comment_error_msg {
-            color: $red;
-            margin-left: calc(10px + 1em + 30px + 12px);
-            margin-bottom: 0.5em;
-        }
-    }
 }

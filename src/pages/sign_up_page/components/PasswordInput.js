@@ -5,7 +5,7 @@ import './PasswordInput.scss';
 
 const MIN_PASSWORD_LENGTH = 6
 
-function PasswordInput({ set_password_info, initial_password }) {
+function PasswordInput({ set_password_info, label_name, initial_password }) {
 
     const input_ref = useRef(null);
 
@@ -70,7 +70,7 @@ function PasswordInput({ set_password_info, initial_password }) {
 
     return (
         <div className="PasswordInput">
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="password">{label_name}:</label>
             <div className="password_input">
                 <input 
                     id="password"

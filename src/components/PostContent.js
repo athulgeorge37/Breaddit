@@ -22,7 +22,7 @@ import Votes from './Votes';
 import ParsedText from './ParsedText';
 
 
-function PostContent({ post_details }) {
+function PostContent({ post_details, set_all_posts }) {
 
     const user_details = get_user_details(post_details.post_author)
 
@@ -33,8 +33,6 @@ function PostContent({ post_details }) {
 
     const [allow_show_more_btn, set_allow_show_more_btn] = useState(false);
     const [show_more_content, set_show_more_content] = useState(false);
-
-    const [add_comment_error_msg, show_add_comment_error_msg] =useState(false);
 
     const [edit_btn_active, set_edit_btn_active] = useState(false);
     const [delete_btn_active, set_delete_btn_active] = useState(false);
@@ -51,52 +49,47 @@ function PostContent({ post_details }) {
         set_post_text,
 
         valid_title,
-       
-        // post_up_votes,
-        // handle_post_up_vote,
-
-        // post_down_votes,
-        // handle_post_down_vote,
 
         handle_edit_post,
         handle_delete_post,
         handle_cancel_edit_post,
 
         image_stuff
-    } = useEditPost(post_details); 
+    } = useEditPost(set_all_posts, post_details); 
 
 
 
 
     // for show more btn
     useEffect(() => {
-        const post_content_height = posted_content_ref.current.clientHeight
-
         // only allowing component to render show more/less btn
-        // if the content of the post takes up more than 200px
+        // if the content of the post takes up more than 500px
+        if (edit_btn_active === false) {
+            const post_content_height = posted_content_ref.current.clientHeight
 
-        //  if you want to change this value, u must also change in the css
-        // where the classname is .show_less
-        if (post_content_height > 500) {
-            set_allow_show_more_btn(true)
+            // if you want to change this value, u must also change in the css
+            // where the classname is .show_less in this component for it to work
+            if (post_content_height > 500) {
+                set_allow_show_more_btn(true)
+            }
         }
-    }, [])
+
+        // runs useEffect every rerender, 
+        // but only runs code when not in edit mode
+    })
    
 
     const handle_add_comment_surface_level = (comment_content) => {
 
         let all_posts = get_item_local_storage("Available_Posts")
 
-        if (comment_content.trim().length === 0) {
-            show_add_comment_error_msg(true)
-            return
-        }
 
         const new_comment = {
             comment_id: uuid(),
             parent_id: "none",
             children_comments: [],
             indented: false,
+            edited: false,
             comment_date_time: new Date().getTime(),
             comment_content: comment_content,
             comment_author: get_item_local_storage("Current_User"),
@@ -114,7 +107,6 @@ function PostContent({ post_details }) {
 
         set_item_local_storage("Available_Posts", all_posts)
 
-        show_add_comment_error_msg(false)
         set_show_add_comment(false)
         set_show_comments_section(true)
         set_all_comments([...all_comments, new_comment])
@@ -142,45 +134,11 @@ function PostContent({ post_details }) {
         set_delete_btn_active(false)
     }
 
-    const post_content_for_user = () => {
-
-        const updated_post_info = get_post_by_post_id(post_details.post_id)
-
-        return (
-            <div className="posted_by_user">
-                <b>{get_user_details(post_details.post_author).username} • </b>
-                {updated_post_info.edited === true && "(edited) • "}
-                {calculate_time_passed(updated_post_info.post_date_time)} ago
-            </div>
-        )
-    }
+ 
 
 
     return (
         <div className="PostContent">
-
-            {
-                delete_btn_active &&
-
-                <div className="delete_post_pop_up_div">
-                    <PopUpMenu
-                        title="Delete Post?"
-
-                        btn_1_txt="Cancel"
-                        btn_1_handler={() => set_delete_btn_active(false)}
-
-                        btn_2_txt="Delete"
-                        btn_2_handler={submit_delete_post}
-                    >
-                        <p>
-                            Are you sure you want to delete this Post?
-                            This action is not reversible.
-                        </p>
-                    </PopUpMenu>
-                </div>
-            }
-
-
 
             <div className="post_user_and_awards">
                 <div className="post_user">
@@ -188,7 +146,11 @@ function PostContent({ post_details }) {
                         profile_picture_url={user_details.profile_picture_url}
                     />
 
-                    {post_content_for_user()}
+                    <div className="posted_by_user">
+                        <b>{get_user_details(post_details.post_author).username} • </b>
+                        {get_post_by_post_id(post_details.post_id).edited === true && "(edited) • "}
+                        {calculate_time_passed(get_post_by_post_id(post_details.post_id).post_date_time)} ago
+                    </div>
                 </div>
 
                 <div className="btns">
@@ -258,7 +220,8 @@ function PostContent({ post_details }) {
             <div className="main_content_and_votes">
 
                 {
-                    allow_show_more_btn &&
+                    (allow_show_more_btn && edit_btn_active === false) 
+                    &&
                     <div className="show_more_btn">
                         <AdjustableButton
                             boolean_check={show_more_content}
@@ -307,6 +270,27 @@ function PostContent({ post_details }) {
                             </ParsedText>
                         </div>
                     }
+
+                    {
+                        delete_btn_active &&
+
+                        <div className="delete_post_pop_up_div">
+                            <PopUpMenu
+                                title="Delete Post?"
+
+                                btn_1_txt="Cancel"
+                                btn_1_handler={() => set_delete_btn_active(false)}
+
+                                btn_2_txt="Delete"
+                                btn_2_handler={submit_delete_post}
+                            >
+                                <p>
+                                    Are you sure you want to delete this Post?
+                                    This action is not reversible.
+                                </p>
+                            </PopUpMenu>
+                        </div>
+                    }
                 </div>
 
             </div>
@@ -318,17 +302,11 @@ function PostContent({ post_details }) {
                     vote_type="post"
                     prop_post_id={post_details.post_id}
                 /> 
-                <div>       
-                           
-                </div>
 
                 <div className="both_comments_btns">
                     
                     <Button 
-                        handle_btn_click={() => {
-                            set_show_add_comment(!show_add_comment)
-                            show_add_comment_error_msg(false)
-                        }}
+                        handle_btn_click={() => set_show_add_comment(!show_add_comment)}
                         type="add_comment"
                         span_text={show_add_comment ? "Cancel Comment" : "Add Comment"}
                         span_class_name={show_add_comment ? "cancel_comment_span" : "add_comment_span"}
@@ -363,15 +341,7 @@ function PostContent({ post_details }) {
                         handle_add_comment={handle_add_comment_surface_level}
                         placeholder="Add Comment"
                         btn_text="Comment"
-                        show_errors={add_comment_error_msg}
                     />
-                }
-
-                {
-                    add_comment_error_msg &&
-                    <div className="add_comment_error_msg">
-                        Comment cannot be empty!
-                    </div>
                 }
             </div>
 

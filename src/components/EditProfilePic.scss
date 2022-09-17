@@ -53,7 +53,7 @@
 
         .edit_profile_picture {
             @include btn-styles($blue);
-            
+            margin-top: 1em;
             display: flex;
             align-items: center;
         }

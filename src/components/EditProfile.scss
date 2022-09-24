@@ -1,0 +1,34 @@
+@import "../variables.scss";
+
+.edit_profile_page {
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+    background-color: $dark-grey;
+    margin-bottom: 32px;
+    display: flex; 
+    flex-direction: column;
+
+    .picture_and_inputs {
+        display: flex;
+        
+        .edit_profile_picture {
+            display: flex;
+            flex-direction: column;
+            margin: 1em;        
+        }
+    }
+
+
+    .edit_profile_page_btns {
+        display: flex;
+        justify-content: flex-end;
+
+        .cancel_profile_edits_btn {
+            @include btn-styles($red);
+        }
+
+        .save_profile_btn {
+            @include btn-styles($green);
+        }
+    }
+}

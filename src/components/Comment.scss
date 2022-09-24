@@ -1,0 +1,94 @@
+@import "../variables.scss";
+
+.comment_or_reply {
+    display: flex;
+    padding: 0.5em;
+    // padding-bottom: 0;
+    border-top: 1px solid $light-grey;
+
+    
+
+    .comment_content_container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: calc(100% - 30px - 10px - 0.5em - 0.5em);
+        box-sizing: border-box;
+
+        .comment_content {
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+
+            .show_less {
+                height: 100px;
+                overflow: hidden;
+            }
+            
+            .comment_author {
+                margin-bottom: 0.2em;
+            }
+
+            .comment_content_text {
+                white-space: pre-line;
+            }
+            
+        }
+
+        .comment_btns {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .votes_and_read_more_btns {
+                display: flex;
+                align-items: center;
+
+                .votes {
+                    margin-left: 5px;
+
+                    .vote_img {
+                        width: 15px;
+                    }
+                }
+                
+                .read_more_less_div {
+
+                    .read_more_less_btn {
+                        margin-left: 10px;
+                    }
+
+                }
+            }
+
+        
+            .reply_btns {
+
+                .view_replies_btn {
+                    margin-left: 10px;
+                }
+
+            }
+
+        }
+
+        .add_comments_and_show_replies {
+                
+            .Add_Comment {
+                padding: 0.5em 0;
+            }
+
+            // .add_comments {
+            //     // .default_profile_pic_div {
+            //     //     margin-right: 0;
+            //     // }
+            // }
+            
+        }
+
+        .comment_replies div.Reply:last-child {
+            padding-bottom: 0;
+        }
+    }
+}

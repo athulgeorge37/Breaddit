@@ -23,6 +23,6 @@
 # yarn-error.log*
 
 
-# to ignore all node_modules,  
+# to ignore all node_modules, 
 # no matter what folder node_modules is in
 **/node_modules

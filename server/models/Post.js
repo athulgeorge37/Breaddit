@@ -10,7 +10,13 @@ module.exports = (sequelize, DataTypes) => {
         }, 
         text: {
             type: DataTypes.STRING(600),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [0, 600],
+                    msg: "post text length must be betweeen [1, 500]"
+                }
+            }
         },
         image: {
             type: DataTypes.STRING(100),
@@ -26,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         timestamps: true,
+        createdAt: false
     })
 
 
@@ -38,8 +45,12 @@ module.exports = (sequelize, DataTypes) => {
         Post.belongsTo(models.User, {
             foreignKey: {
                 allowNull: false,
-                name: "author_id"
-            }
+                name: "author_id",
+                
+            },
+            as: "author_details"
+            // when using include when findAll, and we want an alias
+            // we use"as" here and there so sequelize knows what to use
         })
 
         Post.hasMany(models.Comment, {
@@ -47,7 +58,8 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 name: "parent_id"
             },
-            onDelete: "cascade"
+            onDelete: "cascade",
+            // hooks: true
         })
 
         Post.hasMany(models.Vote, {

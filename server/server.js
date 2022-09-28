@@ -14,20 +14,20 @@ const db = require("./models");
 
 // Routers:
 // each route gives the app access to the sequlize queries for that route
-const userRoute = require("./routes/User-route");
-app.use("/api/user", userRoute);
+const userRoutes = require("./routes/User-route");
+app.use("/api/user", userRoutes);
 // client can send an axios request to 
 // http://localhost:3001/api/user + (route endpoint) within userRoute
 // to get, post, delete data in db
 
-const postsRoute = require("./routes/Post-route");
-app.use("/api/post", postsRoute);
+const postRoutes = require("./routes/Post-route");
+app.use("/api/post", postRoutes);
 
-const commentsRoute = require("./routes/Comment-route");
-app.use("/api/comment", commentsRoute);
+const commentRoutes = require("./routes/Comment-route");
+app.use("/api/comment", commentRoutes);
 
-const votesRoute = require("./routes/Vote-route");
-app.use("/api/vote", votesRoute);
+const voteRoutes = require("./routes/Vote-route");
+app.use("/api/vote", voteRoutes);
 
 
 // when starting server, checks if tables in db

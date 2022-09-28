@@ -1,0 +1,68 @@
+@import "../variables.scss";
+
+
+.EditProfilePic {
+    display: flex;
+
+    .open_edit_mode {
+        display: flex;
+        flex-direction: column;
+
+        .sliders {
+            display: flex;
+            flex-direction: column;
+
+            .zoom_slider {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .closed_edit_mode {
+        display: flex;
+        flex-direction: column;
+
+        .loading_div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 200px;
+            height: 200px;
+        }
+
+        .profile_picture_div {
+            margin-right: 0;
+    
+            width: 200px;
+            height: 200px;
+    
+            img {
+                width: 200px;
+                height: 200px;
+            }
+    
+            .default_profile_pic {
+                img {
+                    width: 180px;
+                    height: 180px;
+                }
+            }
+        }
+       
+
+        .edit_profile_picture {
+            @include btn-styles($blue);
+            margin-top: 1em;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .img_btns {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 10px;
+        
+    }
+}

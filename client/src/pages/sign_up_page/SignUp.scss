@@ -1,0 +1,74 @@
+@import "../../variables.scss";
+
+.Sign_Up_Page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    h2 {
+        margin-bottom: $inner_padding;
+    }
+
+    .sign_up_card {
+        width: 340px;
+        background-color: $dark-grey;
+        padding: 16px;
+        border: 1px solid $light-grey;
+        border-radius: 6px;
+
+        form {
+
+    
+            .verification_code_input {
+                visibility: hidden;
+            }
+    
+            h2 {
+                margin-bottom: 16px
+            }
+    
+            .verify_btn_green {
+                @include btn-styles($green);
+                width: 100%;
+                margin-bottom: 4px;
+            }
+
+            .verify_btn_red {
+                @include btn-styles($red);
+                width: 100%;
+                margin-bottom: 4px;
+            }
+            .verfication_error {
+                color: $red;
+            }
+
+
+    
+        }
+
+
+        .verify_input {
+            @include input-styles;
+            border: 1px solid $blue;
+            margin: 16px 0;
+            width: calc(340px - 32px);
+        }
+
+        // prevents default sytling when autofilling
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: $white !important;
+        }
+
+        .submit_btn {
+            @include btn-styles($green);
+            width: 100%;
+        }
+
+    }
+
+   
+}

@@ -1,0 +1,29 @@
+@import "./variables.scss";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: $white;
+    background-color: $black;
+}
+
+.App {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+
+    .main_body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+}
+
+
+

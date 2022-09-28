@@ -8,9 +8,13 @@ const bcrypt = require("bcrypt");
 
 // required to use webtokens
 const { sign } = require("jsonwebtoken");
+const { validate_request } = require("../middlewares/AuthenticateRequests");
+const { request } = require("express");
+
+
 
 // sends a get request to "/user" from the client
-router.get("/get_all", async (request, response) => {
+router.get("/get_all", validate_request, async (request, response) => {
     // since getting the data takes some time
     // we must put async on the function,  
     // and await for the ORM query "findAll"
@@ -22,13 +26,73 @@ router.get("/get_all", async (request, response) => {
     
 })
 
-router.get("/get_by_user_id/:id", async (request, response) => {
+router.get("/get_curr_user_details", validate_request, async (request, response) => {
     // gets user details by user_id
     // when user does not exist, response is null
 
-    const user_details = await db.User.findByPk(request.params.id)
-    response.json(user_details)
+    try {
+        const user_details = await db.User.findByPk(request.user_id)
+
+        response.json({
+            user_details: {
+                username: user_details.username,
+                email: user_details.email,
+                profile_pic: user_details.profile_pic,
+                bio: user_details.bio,
+                createdAt: user_details.createdAt
+            }
+        })
+
+    } catch (e) {
+        response.json({
+            error: e
+        })
+    }
 })
+
+router.get("/check_is_unique_email/:new_email", async (request, response) => {
+    // checks if the entered email is unique
+
+    const users_with_new_email = await db.User.count({
+        where: {
+            email: request.params.new_email
+        }
+    })
+
+    response.json((users_with_new_email === 0 ? true : false))
+})
+
+router.get("/check_is_unique_username/:new_username", async (request, response) => {
+    // checks if the entered username is unique
+
+    const users_with_new_username = await db.User.count({
+        where: {
+            username: request.params.new_username
+        }
+    })
+
+    response.json((users_with_new_username === 0 ? true: false))
+})
+
+router.get("/check_is_valid_web_token", validate_request, async (request, response) => {
+    // checks if the token in local_storage is valid or not
+    try {
+        const user_id = request.user_id;
+
+        const user_details = await db.User.findByPk(user_id)
+        response.json({
+            username: user_details.username,
+            profile_pic: user_details.profile_pic
+        })
+
+    } catch (e) {
+        response.json({
+            error: e
+        })
+    }
+})
+
+
 
 
 // when a post request to "/user" from the client
@@ -46,6 +110,7 @@ router.post("/create_user", async (request, response) => {
     //     "bio": "This isfdsfsmy bio"
     // }
     
+    
     try {
         // getting the data from the request url
         const { email, username, password, profile_pic, bio } = request.body
@@ -61,12 +126,25 @@ router.post("/create_user", async (request, response) => {
             profile_pic: profile_pic,
             bio: bio
         })
+
+        // once user is created in db, we get the user id to create a web token
+        const web_access_token = sign({
+            user_id: user_details.id 
+        }, "secret_for_web_token")
         
-        response.json(user_details)
+        // giving the web token back to the client
+        response.json({
+            msg: "Succesfully Signed Up",
+            username: user_details.username,
+            profile_pic: user_details.profile_pic,
+            web_access_token: web_access_token
+        })
         
     } catch (e) {
         // we can get an error message when our query does not work
-        response.json(e.errors[0].message)
+        response.json({
+            error: e.errors[0].message
+        })
 
         // to see the whole error, replace below with "e"
         //response.json(e)
@@ -74,7 +152,7 @@ router.post("/create_user", async (request, response) => {
 })
 
 
-router.post("/login", async (request, response) => {
+router.post("/sign_in", async (request, response) => {
 
     const { email, password } = request.body;
 
@@ -118,6 +196,71 @@ router.post("/login", async (request, response) => {
         })
     }
 
+})
+
+router.delete("/delete_user", validate_request, async (request, response) => {
+    // doesnt work rn, cus the cascade part doesnt work, something to do with comments
+    try {
+
+        await db.User.destroy({
+            where: {
+                id: request.user_id
+            }
+        })
+
+        response.json("Succesfully removed user from db")
+
+    } catch (e) {
+        response.json({
+            error: e
+        })
+    }
+})
+
+
+router.put("/edit_user_details", validate_request, async (request, response) => {
+    
+    // where edited_post_details = {
+    //     "post_id": 2,
+    //     "post_text": "new_post_text",
+    //     "post_image": "new_img_url"
+    // }
+
+    
+    try {
+        const { email, username, profile_pic, bio } = request.body
+
+        const updated_user_details = await db.User.update({
+            email: email,
+            username: username,
+            profile_pic: profile_pic,
+            bio: bio
+        }, {
+            where: {
+                id: request.user_id
+            }
+        })
+
+        response.json({
+            msg: "Succesfully edited profile in db"
+            // updated_user_details: {
+            //     email: updated_user_details.email,
+            //     username: updated_user_details.username,
+            //     profile_pic: updated_user_details.profile_pic,
+            //     bio: updated_user_details.bio
+            // }
+        })
+
+    } catch (e) {
+        response.json({
+            error: e.errors[0].message
+        })
+
+        // response.json({
+        //     error: e
+        // })
+    }
+    
 })
 
 

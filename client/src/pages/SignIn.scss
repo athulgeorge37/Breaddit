@@ -1,0 +1,46 @@
+@import "../variables.scss";
+
+.Sign_In_Page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+    .sign_in_card {
+        width: 340px;
+        background-color: $dark-grey;
+        padding: 16px;
+        border: 1px solid $light-grey;
+        border-radius: 6px;
+        margin-top: $inner_padding;
+
+        .link {
+            color: $blue;
+            display: flex;
+            justify-content: space-between;
+
+            button {
+                all: unset;
+                cursor: pointer;
+                text-decoration: underline;
+                margin-right: 0.5em;
+            }
+        }
+
+        .submit_btn {
+            @include btn-styles($green);
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+    }
+
+    .errors {
+        margin-top: 4px;
+        color: $red;
+    }
+
+    
+  
+
+}

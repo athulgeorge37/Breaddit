@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         timestamps: true,
+        createdAt: false
     })
 
 
@@ -30,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: {
                 allowNull: false,
                 name: "author_id"
-            }
+            },
+            as: "author_details"
         })
 
         Comment.belongsTo(models.Post, {
@@ -38,6 +40,24 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 name: "parent_id"
             }
+        })
+
+        // Comment.hasMany(models.Comment, {
+        //     foreignKey: {
+        //         // can be null
+        //         name: "comment_parent_id"
+        //     },
+        //     as: "my_replies",
+        //     through: "replies",
+        //     onDelete: "cascade"
+        // })
+        Comment.belongsToMany(models.Comment, {
+            foreignKey: {
+                allowNull: false,
+                name: "comment_id"
+            },
+            as: "replies",
+            through: "Replies",
         })
 
         Comment.hasMany(models.Vote, {

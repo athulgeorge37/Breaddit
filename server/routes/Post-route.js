@@ -3,19 +3,29 @@ const router = express.Router();
 
 const db = require("../models");
 
-const { validate_request } = require("../middlewares/AuthenticateRequests")
+const { validate_request } = require("../middlewares/AuthenticateRequests");
 
-router.get("/get_all", async (request, response) => {
+router.get("/get_all/limit/:limit/offset/:offset", async (request, response) => {
     // when getting list of posts, we also get 
     // the user details who made that post
     try {
+        // response.json({
+        //     limit: request.params.limit,
+        //     offset: request.params.offset
+        // })
         const list_of_posts = await db.Post.findAll({
+            where: {
+                is_inappropriate: false
+            },
             include: [{
                 model: db.User,
                 as: "author_details",
                 attributes: ["username", "profile_pic"]
-            }]
+            }],
+            limit: parseInt(request.params.limit),
+            offset: parseInt(request.params.offset)
         })
+
         response.json({
             msg: "succesfully got list of posts",
             all_posts: list_of_posts
@@ -38,6 +48,39 @@ router.get("/get_all/by_curr_user", validate_request, async (request, response) 
             }],
             where: {
                 author_id: request.user_id
+            }
+        })
+        response.json({
+            all_posts: list_of_posts
+        })
+    } catch (e) {
+        response.json({
+            error: e
+        })
+    }
+})
+
+router.get("/get_all/by_username/:username", async (request, response) => {
+    // gets all the post made by an  author using author_id
+    try {
+
+        const user_details = await db.User.findOne({
+            where: {
+                username: request.params.username,
+            }
+        })
+
+
+
+        const list_of_posts = await db.Post.findAll({
+            include: [{
+                model: db.User,
+                as: "author_details",
+                attributes: ["username", "profile_pic"]
+            }],
+            where: {
+                author_id: user_details.id,
+                is_inappropriate: false
             }
         })
         response.json({

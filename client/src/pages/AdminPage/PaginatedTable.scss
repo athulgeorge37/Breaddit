@@ -1,0 +1,49 @@
+@import '../../variables.scss';
+
+.PaginatedTable {
+    width: 100%;
+    
+    
+    table {
+        width: 100%;
+        padding: $inner-padding;
+        border-collapse: collapse;
+        background-color: $dark-grey;
+        
+        border-radius: 12px 12px 0 0 ;
+        
+        thead {
+            background-color: $blue;
+            
+            th {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid $light-grey;
+            }
+        }
+
+    }
+
+    .change_pages {
+        display: flex;
+        margin-top: 16px;
+
+        button {
+            @include btn-styles($blue);
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .active {
+            @include btn-styles($green);
+        }
+
+        .page_counts {
+            display: flex;
+        }
+        
+    }
+    
+}

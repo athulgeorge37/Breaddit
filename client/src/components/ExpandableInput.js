@@ -23,7 +23,7 @@ function ExpandableInput({set_input_content, max_height_px, placeholder, initial
     }
 
     return (
-        <>
+        <div className='ExpandableInput'>
         {
             initial_content === undefined
             ?
@@ -55,7 +55,7 @@ function ExpandableInput({set_input_content, max_height_px, placeholder, initial
                 }
             </>
         }
-        </>
+        </div>
     )
 }
 

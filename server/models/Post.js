@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: true
+        },
+        is_inappropriate: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
         }
     }, {
         timestamps: true,
@@ -56,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         Post.hasMany(models.Comment, {
             foreignKey: {
                 allowNull: false,
-                name: "parent_id"
+                name: "post_id"
             },
             onDelete: "cascade",
             // hooks: true

@@ -4,6 +4,18 @@ module.exports = (sequelize, DataTypes) => {
     // it automatically generates an id, createdAt, updatedAt columns
 
     const User = sequelize.define("User", {
+        role: {
+            type: DataTypes.STRING(50),
+            allowNull: false,
+            defaultValue: "user",
+            validate: {
+                isIn: {
+                    // ensures that parent role is on of the following
+                    args: [["user", "admin"]],
+                    msg: "parent_type must be one of ['user', 'admin']"
+                }
+            }
+        },
         email: {
             type: DataTypes.STRING(50),
             allowNull: false,
@@ -43,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: true
             }
+        }, 
+        is_banned: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
         }
 
     }, {
@@ -62,20 +79,78 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         User.hasMany(models.Comment, {
-            // the foreign key when we create a post will be called "author_id"
             foreignKey: "author_id",
-            // when a row in User is deleted,
-            // any table that relates to this will also be deleted
             onDelete: "cascade"
         });
 
         User.hasMany(models.Vote, {
-            // the foreign key when we create a post will be called "author_id"
             foreignKey: "user_id",
-            // when a row in User is deleted,
-            // any table that relates to this will also be deleted
             onDelete: "cascade"
         });
+
+
+        // assoications for user login/logout activity
+        User.hasMany(models.UserActivity, {
+            foreignKey: "user_id",
+            onDelete: "cascade"
+        })
+
+        // association for profile visits
+        // User.hasMany(models.ProfileVisits, {
+        //     foreignKey: "user_id",
+        //     onDelete: "cascade"
+        // })
+
+        // User.belongsToMany(models.User, {
+        //     through: models.ProfileVisits,
+        //     as: "User_ids_profile_visits",
+        //     foreignKey: "user_id"
+        // })
+        // User.belongsToMany(models.User, { 
+        //     through: models.ProfileVisits,
+        //     as: "Visited_by",
+        //     foreignKey: "visited_by"
+        // })
+
+        // User.hasMany(models.ProfileVisits, {
+        //     foreignKey: "user_id",
+        //     // as: 'FollowerLinks',
+
+        //     onDelete: "cascade"
+        // })
+        // User.hasMany(models.ProfileVisits, {
+        //     foreignKey: "visited_by",
+        //     // as: 'FollowingLinks',
+
+        //     onDelete: "cascade"
+        // })
+
+
+        // associations for follower table
+        User.belongsToMany(models.User, {
+            through: models.Follower,
+            as: "User_ids",
+            foreignKey: "user_id"
+        })
+        User.belongsToMany(models.User, {
+            through: models.Follower,
+            as: "Followed_by",
+            foreignKey: "followed_by"
+        })
+
+        User.hasMany(models.Follower, {
+            foreignKey: "user_id",
+            // as: 'FollowerLinks',
+
+            onDelete: "cascade"
+        })
+        User.hasMany(models.Follower, {
+            foreignKey: "followed_by",
+            // as: 'FollowingLinks',
+
+            onDelete: "cascade"
+        })
+
 
     }
 

@@ -9,6 +9,27 @@ export const get_current_date = (date_ISO) => {
     return `${date}/${month}/${year}`
 }
 
+export const get_current_date_since_inception = (date_since) => {
+
+    console.log(new Date(date_since))
+
+    const date_since_epoch = new Date(date_since / 1000)
+    // console.log(date_since_epoch)
+    const curr_epoch = new Date().getTime()
+
+    // console.log(curr_epoch / 1000)
+    // console.log(date_since / 1000)
+
+    const newDate = new Date((curr_epoch / 1000) - (date_since / 1000));
+
+    const date = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    
+    return `${date}/${month}/${year}`
+}
+
+
 
 export const calculate_time_passed = (date_posted_in_ISO) => {
     // date_posted is in the ISO dateformat, from mySQL

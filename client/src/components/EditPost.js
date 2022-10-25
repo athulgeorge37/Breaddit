@@ -12,8 +12,13 @@ import LoginInput from './LoginInput';
 import Loading from './Loading';
 import CloudinaryImage from './CloudinaryImage';
 import Button from './Button';
+import { useNotification } from '../Contexts/Notifications/NotificationProvider';
+import { motion } from "framer-motion";
+
 
 function EditPost({ image_url, set_image_url, post_title, set_post_title, post_text, set_post_text, valid_title }) {
+
+    const add_notification = useNotification();
 
     const img_input_ref = useRef();
 
@@ -28,6 +33,7 @@ function EditPost({ image_url, set_image_url, post_title, set_post_title, post_t
             set_image_url(img_url)
 
             set_loading_img(false)
+            add_notification("Image Succesfully Uploaded")
 
         } catch(e) {
             console.log(e)
@@ -36,7 +42,10 @@ function EditPost({ image_url, set_image_url, post_title, set_post_title, post_t
     }
 
     return (
-        <div className="post_inputs">
+        <motion.div 
+            className="post_inputs"
+            layout
+        >
 
             <div className="post_title">
                 <LoginInput 
@@ -108,7 +117,7 @@ function EditPost({ image_url, set_image_url, post_title, set_post_title, post_t
                 post_text={post_text}
             />
 
-        </div>
+        </motion.div>
     )
 }
 

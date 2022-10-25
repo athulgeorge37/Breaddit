@@ -2,7 +2,7 @@
 import './SignUp.scss';
 
 // hook imports
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // component imports
@@ -10,17 +10,11 @@ import PasswordInput from './components/PasswordInput';
 import UsernameInput from './components/UsernameInput';
 import EmailInput from './components/EmailInput';
 
-// function imports
-import { get_item_local_storage, set_item_local_storage } from '../../helper_functions/local_storage';
-import { get_current_date } from "../../helper_functions/time";
-import { v4 as uuid } from 'uuid';
-
 // email js import for code verification
 import emailjs from "emailjs-com";
 
-import Axios from "axios";
 import { create_user } from '../../rest_api_requests/UserRequests';
-import { VALID_USER_CONTEXT } from '../../App';
+import { useCurrentUser } from '../../Contexts/CurrentUser/CurrentUserProvider';
 
 const SERVICE_ID = "Breaddit_Service_69420"
 const TEMPLATE_ID = "template_9wj4cqc"
@@ -33,7 +27,7 @@ const generate_random_code = () => {
 
 function SignUp() {
 
-	const { initialise_curr_user } = useContext(VALID_USER_CONTEXT);
+	const { initialise_curr_user } = useCurrentUser();
 
 	const navigate = useNavigate();
 
@@ -46,9 +40,6 @@ function SignUp() {
 	const [initial_verification_code, set_initial_verification_code] = useState(generate_random_code())
 
 	const [verification_code, set_verification_code] = useState(""); 	// what the user types in here
-
-
-
 
 
 
@@ -86,10 +77,8 @@ function SignUp() {
 		set_signed_up(true)
 
 
-
-
 		// navigating to profile page after short delay
-		setTimeout(() => navigate("/profile"), 1500)
+		setTimeout(() => navigate(`/profile/${response.username}`), 1500)
 	}
 
 
@@ -97,13 +86,6 @@ function SignUp() {
 	const handle_submit_form = (e) => {
 		// prevents default form submission actions
 		e.preventDefault();
-
-		// emailjs.sendForm('service_7y225ea', 'template_bwf9ien', e.target, 'Dem37imrKFPE7e_et')
-		// 	.then((result) => {
-        //   		console.log(result.text);
-      	// 	}, (error) => {
-        //   		console.log(error.text);
-      	// 	});
 
 		for(const sign_up_input of [email_info, username_info, password_info]) {
 			if (sign_up_input.valid === false) {
@@ -158,6 +140,7 @@ function SignUp() {
 						value="Send Email Verification Code"
 						className={(email_info.valid && username_info.valid && password_info.valid) ? "verify_btn_green" : "verify_btn_red"}
 					/>
+					
 					<div className="verfication_error">
 						{
 							(email_info.valid && username_info.valid && password_info.valid) 
@@ -170,22 +153,12 @@ function SignUp() {
 
 				</form>
 
-				{/* <input 
-					type="submit" 
-					value={signed_up ? "...Signing Up" : "Sign Up"}
-					className="submit_btn"
-				/> */}
-
 				<input 
 					className="verify_input"
 					type="text"
 					placeholder='enter your verification code'
 					onChange={(e) => set_verification_code(e.target.value)}
 				/>
-
-				{/* <button onClick={submit_sign_up} className="submit_btn">
-					{signed_up ? "...Signing Up" : "Sign Up"}
-				</button> */}
 
 				<button onClick={submit_sign_up_2} className="submit_btn">
 					{signed_up ? "...Signing Up" : "Sign Up"}

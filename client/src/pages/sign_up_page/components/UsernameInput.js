@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { get_item_local_storage } from '../../../helper_functions/local_storage';
 import { is_unique_username } from '../../../rest_api_requests/UserRequests';
 
 import './UsernameInput.scss';

@@ -1,91 +1,133 @@
 @import "../variables.scss";
 
-.read_only_profile_page {
-    border: 1px solid $light-grey;
-    border-radius: $default-border-radius;
-    background-color: $dark-grey;
-    margin-bottom: 32px;
-    display: flex; 
-
-    .section_one {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-
-        width: 20%;
-        margin: 16px;
-        margin-right: 0;
+.ReadProfile {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     
-        .profile_picture_div {
-            margin-bottom: 10px;
-            margin-right: 0;
 
-            width: 100px;
-            height: 100px;
 
-            img {
-                width: 100px;
-                height: 100px;
-            }
+    // .follower_following_cards {
+    //     // width: 200px;
+    //     // margin-right: 16px;
+    // }
 
-            .default_profile_pic {
-                img {
-                    width: 80px;
-                    height: 80px;
-                }
-            }
-            
-        }
 
-        .name_and_date_joined {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            .username {
-                margin-bottom: 5px;
-            }
-        }
-        
-    }
-
-    .section_two{
+    .profile_card_and_user_posts {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        width: 80%;
-        margin: 16px;
+        width: 50%;
 
-        .profile_stats {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+        margin-left: 2em;
 
-            .count_and_text {
+        .read_only_profile_card {
+            border: 1px solid $light-grey;
+            border-radius: $default-border-radius;
+            background-color: $dark-grey;
+            margin-bottom: 32px;
+            display: flex; 
+        
+        
+            .section_one {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-evenly;
+                justify-content: space-between;
                 align-items: center;
-                height: 100%;
-                font-size: large;
+        
+                width: 20%;
+                margin: 16px;
+                margin-right: 0;
             
+                .profile_picture_div {
+                    margin-bottom: 10px;
+                    margin-right: 0;
+        
+                    width: 100px;
+                    height: 100px;
+        
+                    img {
+                        width: 100px;
+                        height: 100px;
+                    }
+        
+                    .default_profile_pic {
+                        img {
+                            width: 80px;
+                            height: 80px;
+                        }
+                    }
+                    
+                }
+        
+                .name_and_date_joined {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+        
+                    .username {
+                        margin-bottom: 5px;
+                    }
+                }
+                
             }
+        
+            .section_two{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 80%;
+                margin: 16px;
+        
+                .profile_stats {
+                    margin-top: 10px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+        
+                    .count_and_text {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-evenly;
+                        align-items: center;
+                        height: 100%;
+                        font-size: large;
+        
+                        padding: 5px;
+                        border-radius: $default-border-radius;
+                    
+                        &:hover {
+                            background-color: $light-grey;
+                            cursor: pointer;
+                        }
+                    }
+                }
+        
+                .about_me {
+                    text-align: center;
+                    margin: 1em;
+                }
+        
+                .profile_btns {
+                    display: flex;
+                    justify-content: space-evenly;
+        
+                    button {
+                        @include btn-styles($blue);
+                    }
+                }
+            }    
         }
 
-        .about_me {
-            text-align: center;
-            margin: 1em;
-        }
+        .user_posts {
 
-        .profile_btns {
-            display: flex;
-            justify-content: space-evenly;
+            .not_following,
+            .no_posts {
 
-            button {
-                @include btn-styles($blue);
+                display: flex;
+                justify-content: center;
             }
+            
         }
-    }    
+    }
+
 }

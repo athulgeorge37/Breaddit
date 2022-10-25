@@ -1,215 +1,254 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useEditPost } from './useEditPost';
-import './PostContent.scss';
+// style import
+import "./PostContent.scss";
 
-import { v4 as uuid } from 'uuid';
+// hook imports
+import { useEffect, useRef, useState } from "react";
 
-import { get_user_details } from '../helper_functions/get_user_details';
-import { get_post_by_post_id } from '../helper_functions/get_post_by_post_id';
-import { get_item_local_storage, set_item_local_storage } from '../helper_functions/local_storage';
-import { calculate_time_passed } from '../helper_functions/time';
+// rest api request imports
+import { delete_post, edit_post } from "../rest_api_requests/PostRequests";
+import { get_all_comments_by_post_id } from "../rest_api_requests/CommentRequests";
 
-import AddComment from './AddComment';
+// component imports
+import AddComment from "./AddComment";
+import ProfilePicture from "./ProfilePicture";
+import EditPost from "./EditPost";
+import Button from "./Button";
+import Votes from "./Votes";
+import ParsedText from "./ParsedText";
+import CloudinaryImage from "./CloudinaryImage";
+import Comment from "./Comment";
 
-import PopUpMenu from './PopUpMenu';
-import ProfilePicture from './ProfilePicture';
-import AdjustableButton from './AdjustableButton';
-import EditPost from './EditPost';
-import { Image } from 'cloudinary-react';
-import Comment from './Comment';
-import Button from './Button';
-import Votes from './Votes';
-import ParsedText from './ParsedText';
-import { useContext } from 'react';
-import { VALID_USER_CONTEXT } from '../App';
+import Modal from "./Modal";
 
+import { calculate_time_passed } from "../helper_functions/time";
 
-function PostContent({ post_details, set_all_posts }) {
+import DOMPurify from "dompurify";
 
-    const { current_user } = useContext(VALID_USER_CONTEXT);
+import { check_if_comments_or_replies_exist } from "../rest_api_requests/CommentRequests";
+import { useNotification } from "../Contexts/Notifications/NotificationProvider";
+import { useCurrentUser } from "../Contexts/CurrentUser/CurrentUserProvider";
 
-    const user_details = get_user_details(post_details.post_author)
-    const user_details2 = post_details.User
+// import useMeasure from "react-use-measure";
+import ResizablePanel, {
+    ResizableComponent,
+    useResizablePanel,
+} from "./ResizablePanel";
+import Loading from "./Loading";
 
-    // const [all_comments, set_all_comments] = useState(post_details.post_comments);
+function PostContent({ post_details, remove_post_from_list }) {
+    const add_notification = useNotification();
 
-    const [show_add_comment, set_show_add_comment] = useState(false);
-    const [show_comments_section, set_show_comments_section] = useState(false);
-
-    const [allow_show_more_btn, set_allow_show_more_btn] = useState(false);
-    const [show_more_content, set_show_more_content] = useState(false);
-
-    const [edit_btn_active, set_edit_btn_active] = useState(false);
-    const [delete_btn_active, set_delete_btn_active] = useState(false);
+    const { current_user } = useCurrentUser();
 
     // required for read_more/less button
-    const posted_content_ref = useRef();
+    // const posted_content_ref = useRef();
+    const modal_ref = useRef();
 
+    const [show_add_comment, set_show_add_comment] = useState(false);
 
-    const {
-        post_title, 
-        set_post_title,
+    const [show_comments_section, set_show_comments_section] = useState(false);
+    const [allow_comments_section_btn, set_allow_comments_section_btn] =
+        useState(false);
 
-        post_text, 
-        set_post_text,
+    const [loading_comments, set_loading_comments] = useState(false);
 
-        valid_title,
+    const resizable_panel_states = useResizablePanel();
 
-        handle_edit_post,
-        handle_delete_post,
-        handle_cancel_edit_post,
+    const [edit_btn_active, set_edit_btn_active] = useState(false);
 
-        image_stuff
-    } = useEditPost(set_all_posts, post_details); 
+    const [valid_title, set_valid_title] = useState(true);
+    const [post_title, set_post_title] = useState(post_details.title);
+    const [post_text, set_post_text] = useState(post_details.text);
+    const [image_url, set_image_url] = useState(post_details.image);
 
+    const [all_comments, set_all_comments] = useState([]);
+    // const [posted_content_ref, { height }] = useMeasure();
 
+    const add_comment_to_list = (new_comment_details) => {
+        // when adding new_post_details, ensure that
+        // it has all the post details including updatedAt and
+        // author_details = { username, profile_pic }
 
+        set_all_comments([...all_comments, new_comment_details]);
+    };
 
-    // for show more btn
+    const remove_comment_from_list = (comment_to_remove_id) => {
+        const new_comment_list = all_comments.filter((my_comment) => {
+            return my_comment.id !== comment_to_remove_id;
+        });
+
+        set_all_comments(new_comment_list);
+
+        add_notification("Succesfully removed Comment");
+    };
+
+    // to get all_comments of post_id
     useEffect(() => {
-        // only allowing component to render show more/less btn
-        // if the content of the post takes up more than 500px
-        if (edit_btn_active === false) {
-            const post_content_height = posted_content_ref.current.clientHeight
+        initialse_allow_show_comment_section();
+    }, []);
 
-            // if you want to change this value, u must also change in the css
-            // where the classname is .show_less in this component for it to work
-            if (post_content_height > 500) {
-                set_allow_show_more_btn(true)
-            }
+    const initialse_all_comments = async () => {
+        if (allow_comments_section_btn === false) {
+            return;
         }
 
-        // runs useEffect every rerender, 
-        // but only runs code when not in edit mode
-    })
-   
+        set_loading_comments(true);
+        const response = await get_all_comments_by_post_id(post_details.id);
 
-    const handle_add_comment_surface_level = (comment_content) => {
-
-        let all_posts = get_item_local_storage("Available_Posts")
-
-
-        const new_comment = {
-            comment_id: uuid(),
-            parent_id: "none",
-            children_comments: [],
-            indented: false,
-            edited: false,
-            comment_date_time: new Date().getTime(),
-            comment_content: comment_content,
-            comment_author: get_item_local_storage("Current_User"),
-            comment_up_votes: 0,
-            comment_down_votes: 0
+        // console.log("initialising all comments")
+        if (response.error) {
+            console.log(response);
+            return;
         }
 
-        for (const post of all_posts) {
-            if (post.post_id === post_details.post_id) {
-                post.post_comments = [...post.post_comments,
-                    new_comment
-                ]
-            }
+        set_loading_comments(false);
+
+        set_all_comments(response.all_comments);
+    };
+
+    const initialse_allow_show_comment_section = async () => {
+        const response = await check_if_comments_or_replies_exist(
+            "comment",
+            post_details.id
+        );
+
+        if (response.error) {
+            console.log(response);
+            return;
         }
 
-        set_item_local_storage("Available_Posts", all_posts)
+        set_allow_comments_section_btn(response.is_any);
+    };
 
-        set_show_add_comment(false)
-        set_show_comments_section(true)
-        // set_all_comments([...all_comments, new_comment])
-    }
+    const handle_edit_post_save = async () => {
+        // only handling post if post title is not empty
+        if (post_title.trim().length === 0) {
+            set_valid_title(false);
+            return;
+        }
 
+        // editing post in db
+        const response = await edit_post(
+            post_details.id,
+            post_title,
+            post_text,
+            image_url
+        );
 
-    const submit_edit_post = () => {
-        // must execute when user clicks save
+        if (response.error) {
+            console.log(response);
+            return;
+        }
 
-        handle_edit_post(post_details.post_id)
-        set_edit_btn_active(false)
+        set_edit_btn_active(false);
+        add_notification("Succesfully Edited Post");
+    };
 
-    }
+    const handle_edit_post_cancel = () => {
+        set_post_title(post_details.title);
+        set_post_text(post_details.text);
+        set_image_url(post_details.image);
+        set_edit_btn_active(false);
+    };
 
-    const submit_cancel_edit_post = () => {
-        handle_cancel_edit_post()
-        set_edit_btn_active(false)
-    }
+    const handle_delete_post = async () => {
+        // removing post in db
+        const response = await delete_post(post_details.id);
 
+        if (response.error) {
+            console.log(response);
+            return;
+        }
 
-    const submit_delete_post = () => {
+        // removing post on client side when deleted from db
+        remove_post_from_list(post_details.id);
 
-        handle_delete_post(post_details.post_id)
-
-        set_delete_btn_active(false)
-    }
-
- 
-
+        add_notification("Succesfully Deleted Post");
+    };
 
     return (
         <div className="PostContent">
+            <Modal ref={modal_ref} btn_color="red" width="300">
+                <h2>Delete Post?</h2>
+                <p>
+                    Are you sure you want to delete this Post? This action is
+                    not reversible.
+                </p>
+
+                <button
+                    className="delete_post_btn"
+                    onClick={() => {
+                        handle_delete_post();
+                        modal_ref.current.close_modal();
+                    }}
+                >
+                    Delete Post
+                </button>
+            </Modal>
 
             <div className="post_user_and_awards">
                 <div className="post_user">
                     <ProfilePicture
-                        profile_picture_url={user_details.profile_pic}
+                        profile_picture_url={
+                            post_details.author_details.profile_pic
+                        }
+                        username={post_details.author_details.username}
                     />
 
                     <div className="posted_by_user">
-                        <b>{user_details.username} • </b>
-                        {get_post_by_post_id(post_details.post_id).edited === true && "(edited) • "}
-                        {calculate_time_passed(get_post_by_post_id(post_details.post_id).post_date_time)} ago
+                        <b>{post_details.author_details.username} • </b>
+                        {post_details.edited && "(edited) • "}
+                        {calculate_time_passed(post_details.updatedAt)} ago
                     </div>
                 </div>
 
                 <div className="btns">
-
-                    {
-                        edit_btn_active 
-                        &&
-                        <Button 
-                            handle_btn_click={submit_edit_post}
-                            type="save"
-                            span_text="Save"
-                            img_name="confirm"
-                            margin_right={true}
-                        />
-                    }
-
-                    {
-                        post_details.post_author === get_item_local_storage("Current_User") 
-                        &&
+                    {post_details.author_details.username ===
+                    current_user.username ? (
                         <>
-                            {
-                                edit_btn_active 
-                                ?
-                                <Button 
-                                    handle_btn_click={submit_cancel_edit_post}
-                                    type="cancel"
-                                    span_text="Cancel"
-                                    img_name="cancel"
-                                    margin_right={true}
-                                />
-                                :
-                                <Button 
-                                    handle_btn_click={() => set_edit_btn_active(true)}
+                            {edit_btn_active ? (
+                                <>
+                                    <Button
+                                        handle_btn_click={handle_edit_post_save}
+                                        type="save"
+                                        span_text="Save"
+                                        img_name="confirm"
+                                        margin_right={true}
+                                    />
+                                    <Button
+                                        handle_btn_click={
+                                            handle_edit_post_cancel
+                                        }
+                                        type="cancel"
+                                        span_text="Cancel"
+                                        img_name="cancel"
+                                        margin_right={true}
+                                    />
+                                </>
+                            ) : (
+                                <Button
+                                    handle_btn_click={() =>
+                                        set_edit_btn_active(true)
+                                    }
                                     type="edit"
                                     span_text="Edit"
                                     img_name="edit"
                                     margin_right={true}
                                 />
-                            }
+                            )}
 
-                            <Button 
-                                handle_btn_click={() => set_delete_btn_active(true)}
+                            <Button
+                                handle_btn_click={() =>
+                                    modal_ref.current.open_modal()
+                                }
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"
                                 margin_right={true}
                             />
                         </>
-                    }
-
-                    {
-                        post_details.post_author !== get_item_local_storage("Current_User") 
-                        &&
-                        <Button 
+                    ) : (
+                        <Button
                             // might need to include on click
                             // handle_btn_click={() => set_delete_btn_active(true)}
                             type="award"
@@ -217,163 +256,165 @@ function PostContent({ post_details, set_all_posts }) {
                             img_name="award"
                             margin_right={true}
                         />
-                    }
+                    )}
                 </div>
             </div>
 
-
             <div className="main_content_and_votes">
-
-                {
-                    (allow_show_more_btn && edit_btn_active === false) 
-                    &&
-                    <div className="show_more_btn">
-                        <AdjustableButton
-                            boolean_check={show_more_content}
-                            execute_onclick={() => set_show_more_content(!show_more_content)}
-                            original_class_name="show_more_less_btn"
-                            active_name="Read Less"
-                            inactive_name="Read More"
-                            btn_type_txt={true}
-                        />
-                    </div>
-                }
+                <div className="show_more_btn">
+                    {edit_btn_active === false && (
+                        <resizable_panel_states.ShowMoreBtn />
+                    )}
+                </div>
 
                 <div className="text_content">
-                    {
-                        edit_btn_active 
-                        ?
+                    {edit_btn_active ? (
                         <EditPost
+                            image_url={image_url}
+                            set_image_url={set_image_url}
                             post_title={post_title}
                             set_post_title={set_post_title}
                             post_text={post_text}
                             set_post_text={set_post_text}
                             valid_title={valid_title}
-                            image_stuff={image_stuff}
                         />
-                        :
-                        <div 
-                            className={
-                                "display_text " + 
-                                (allow_show_more_btn ? (show_more_content ? "" : "show_less") : "")
-                            }
-                            ref={posted_content_ref}
+                    ) : (
+                        <ResizablePanel
+                            min_height={500}
+                            {...resizable_panel_states}
                         >
-                            <h1 className="Title">{post_title}</h1>
-                            {
-                                image_stuff.image_url !== ""
-                                &&
-                                <div className="image_display">
-                                    <Image 
-                                        cloudName={image_stuff.CLOUD_NAME}
-                                        publicId={image_stuff.image_url}
-                                    />
-                                </div>
-                            }
-                            <ParsedText>
-                                {post_text}
-                            </ParsedText>
-                        </div>
-                    }
-
-                    {
-                        delete_btn_active &&
-
-                        <div className="delete_post_pop_up_div">
-                            <PopUpMenu
-                                title="Delete Post?"
-
-                                btn_1_txt="Cancel"
-                                btn_1_handler={() => set_delete_btn_active(false)}
-
-                                btn_2_txt="Delete"
-                                btn_2_handler={submit_delete_post}
-                            >
-                                <p>
-                                    Are you sure you want to delete this Post?
-                                    This action is not reversible.
-                                </p>
-                            </PopUpMenu>
-                        </div>
-                    }
+                            <div className="display_text">
+                                <h1
+                                    className="Title"
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(post_title),
+                                    }}
+                                />
+                                {image_url !== null && (
+                                    <div className="image_display">
+                                        <CloudinaryImage
+                                            image_url={image_url}
+                                            alt="post_image"
+                                        />
+                                    </div>
+                                )}
+                                <ParsedText>{post_text}</ParsedText>
+                            </div>
+                        </ResizablePanel>
+                    )}
                 </div>
-
             </div>
 
             <div className="post_btns">
-                <Votes 
-                    initial_up_votes={post_details.post_up_votes}
-                    initial_down_votes={post_details.post_down_votes}
-                    vote_type="post"
-                    prop_post_id={post_details.post_id}
-                /> 
+                <Votes vote_type="post" post_id={post_details.id} />
+
+                {post_details.is_inappropriate === true && (
+                    <div className="is_inappropriate_error">
+                        This post has been deemed inappropriate by Breaddit
+                        Moderators
+                    </div>
+                )}
 
                 <div className="both_comments_btns">
-                    
-                    <Button 
-                        handle_btn_click={() => set_show_add_comment(!show_add_comment)}
-                        type="add_comment"
-                        span_text={show_add_comment ? "Cancel Comment" : "Add Comment"}
-                        span_class_name={show_add_comment ? "cancel_comment_span" : "add_comment_span"}
-                        img_name="add_comment"
-                        margin_right={true}
-                        active={show_add_comment}
-                    />
+                    {current_user.role !== "admin" && (
+                        <Button
+                            handle_btn_click={() =>
+                                set_show_add_comment(!show_add_comment)
+                            }
+                            type="add_comment"
+                            span_text={
+                                show_add_comment
+                                    ? "Cancel Comment"
+                                    : "Add Comment"
+                            }
+                            span_class_name={
+                                show_add_comment
+                                    ? "cancel_comment_span"
+                                    : "add_comment_span"
+                            }
+                            img_name="add_comment"
+                            margin_right={true}
+                            active={show_add_comment}
+                        />
+                    )}
 
-                    {/* {
-                        all_comments.length > 0 
-                        &&
-                        <Button 
-                            handle_btn_click={() => set_show_comments_section(!show_comments_section)}
+                    {allow_comments_section_btn === true && (
+                        <Button
+                            handle_btn_click={() => {
+                                set_show_comments_section(
+                                    !show_comments_section
+                                );
+                                // when show_comments_section is true, we initialise all comments
+                                // however when we first click show_comments_section
+                                // will still be false even after setting state
+                                if (show_comments_section === false) {
+                                    initialse_all_comments();
+                                }
+                            }}
                             type="comments_section"
-                            span_text={show_comments_section ? "Hide Comments" : "Show Comments"}
+                            span_text={
+                                show_comments_section
+                                    ? "Hide Comments"
+                                    : "Show Comments"
+                            }
                             img_name="comments"
                             margin_right={true}
                             active={show_comments_section}
                         />
-                    } */}
-
-
+                    )}
                 </div>
-                
             </div>
 
             <div className="expanded_add_comment">
-                {
-                    show_add_comment &&
+                <ResizableComponent>
+                    {show_add_comment ? (
+                        <AddComment
+                            execute_after_add_comment={() => {
+                                set_show_add_comment(false);
+                                set_show_comments_section(true);
 
-                    <AddComment 
-                        handle_add_comment={handle_add_comment_surface_level}
-                        placeholder="Add Comment"
-                        btn_text="Comment"
-                    />
-                }
+                                if (all_comments.length === 0) {
+                                    set_allow_comments_section_btn(true);
+                                }
+                            }}
+                            placeholder="Add Comment"
+                            btn_text="Comment"
+                            comment_type="comment"
+                            post_id={post_details.id}
+                            add_comment_or_reply_to_list={add_comment_to_list}
+                        />
+                    ) : null}
+                </ResizableComponent>
             </div>
 
             <div className="expanded_comments_section">
-                {
-                    show_comments_section
-                    &&
-                    <div className="Comment_Section">
-                        {
-                            // all_comments.map((comment) => {
-                            //     return (
-                            //         <Comment 
-                            //             post_id={post_details.post_id}
-                            //             comment={comment} 
-                            //             indented={false}
-                            //             key={comment.comment_id}
-                            //             set_all_comments={set_all_comments}
-                            //         />
-                            //     )
-                            // })
-                        }
-                    </div>
-                }
+                <ResizableComponent>
+                    {show_comments_section ? (
+                        <>
+                            {loading_comments ? (
+                                <Loading />
+                            ) : (
+                                <div className="Comment_Section">
+                                    {all_comments.map((comment) => {
+                                        return (
+                                            <Comment
+                                                key={comment.id}
+                                                comment={comment}
+                                                remove_comment_or_reply_from_list={
+                                                    remove_comment_from_list
+                                                }
+                                                post_id={post_details.id}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </>
+                    ) : null}
+                </ResizableComponent>
             </div>
-
         </div>
-    )
+    );
 }
 
-export default PostContent
+export default PostContent;

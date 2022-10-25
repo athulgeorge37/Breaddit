@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { get_item_local_storage } from '../../../helper_functions/local_storage';
 import { is_unique_email } from '../../../rest_api_requests/UserRequests';
 
 import './EmailInput.scss';
@@ -63,7 +61,8 @@ function EmailInput({ set_email_info, initial_email }) {
                     type="text"
                     onChange={(e) => validate_email(e.target.value)} 
                     name="email"
-                    defaultValue={initial_email}
+                    defaultValue={initial_email}     
+                    data-testid="email_input"           
                 />
             </div>
 

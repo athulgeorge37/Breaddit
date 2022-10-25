@@ -1,0 +1,11 @@
+@import '../../variables.scss';
+
+.PostData {
+    display: flex;
+    flex-direction: column;
+
+    .curr_post_and_line_chart {
+        margin-top: 20px;
+        width: 900px;
+    }
+}

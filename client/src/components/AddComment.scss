@@ -39,4 +39,13 @@
         margin-left: 10px;
         margin-top: 3px;
     }
+
+    .not_signed_in {
+        display: flex;
+        align-items: center;
+
+        button {
+            @include btn-style-text($blue);
+        }
+    }
 }

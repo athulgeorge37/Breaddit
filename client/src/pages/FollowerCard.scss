@@ -1,0 +1,56 @@
+@import "../variables.scss";
+
+.FollowerCard {
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+    background-color: $dark-grey;
+    padding: 16px;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid $light-grey;
+
+        .heading {
+            font-size: 20px;
+        }
+    }
+
+    .all_followers {
+        display: flex;
+        flex-direction: column;
+
+        // ensuring that scrollbar only appears, 
+        // when the follower card goes beyond 200px
+        height: fit-content;
+        max-height: 200px;
+        overflow-y: auto;
+
+        .follower_card {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            justify-content: space-between;
+
+            .profile_pic_and_username {
+                display: flex;
+                align-items: center;
+            }
+
+            p {
+                margin-bottom: 5px;
+            }
+
+            button {
+                @include btn-styles($green);
+                font-size: 12px;
+                line-height: 12px;
+
+                margin-left: 16px;
+            }
+        }
+
+    }
+}

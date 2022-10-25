@@ -7,40 +7,68 @@ import UsernameInput from '../pages/sign_up_page/components/UsernameInput';
 
 import EditProfilePic from './EditProfilePic';
 import ExpandableInput from './ExpandableInput';
-import PopUpMenu from './PopUpMenu';
+import Modal from './Modal';
 
 import { useState } from 'react';
 
 
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { VALID_USER_CONTEXT } from '../App';
 
-import { delete_user, edit_user_details } from '../rest_api_requests/UserRequests';
+import { get_curr_user_details, delete_user, edit_user_details } from '../rest_api_requests/UserRequests';
+import { useEffect } from 'react';
+import { useCurrentUser } from '../Contexts/CurrentUser/CurrentUserProvider';
+import { useRef } from 'react';
 
 
-function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_details }) {
+function EditProfile({ set_toggle_edit_page, }) {
 
     const navigate = useNavigate();
 
-    const { update_current_user, remove_current_user } = useContext(VALID_USER_CONTEXT);
+    const { update_current_user, remove_current_user } = useCurrentUser();
+    const modal_ref = useRef();
 
-    const [delete_confirmation, set_delete_confirmation] = useState(false);
-
-    const [profile_picture_url, set_profile_picture_url] = useState(curr_user_details.profile_pic)
-    const [bio, set_bio] = useState(curr_user_details.bio);
+    const [profile_picture_url, set_profile_picture_url] = useState(null)
+    const [bio, set_bio] = useState("");
     const [email_info, set_email_info] = useState({ 
-        email: curr_user_details.email,
+        email: "",
         valid: true 
         });
 	const [username_info, set_username_info] = useState({ 
-        username: curr_user_details.username,     
+        username: "",     
         valid: true 
     });
 	const [new_password_info, set_new_password_info] = useState({ 
-        password: "hello beta", 
+        password: "Pass1!", 
         valid: true 
     });
+
+
+    useEffect(() => {
+        initialise_user_details()
+    }, [])
+
+    const initialise_user_details = async () => {
+
+        const response = await get_curr_user_details();
+
+        if (response.error) {
+            console.log(response)
+            return
+        }
+
+        set_profile_picture_url(response.user_details.profile_pic)
+        set_bio(response.user_details.bio)
+        set_email_info({
+            ...email_info,
+            email: response.user_details.email
+        })
+        set_username_info({
+            ...username_info,
+            username: response.user_details.username
+        })
+
+        
+    }
 
     // const [current_password, set_current_password] = useState({
     //     password: "",
@@ -68,7 +96,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
     const handle_revert_changes = () => {
         // just going back to the read_only version
         // shows original profile details since we havent 
-        // updated curr_user_details yet
+        // updated user_profile_details yet
         set_toggle_edit_page(false)
     }
 
@@ -89,15 +117,15 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
         }
         //console.log(response)
 
-        // setting user details again on the client side
-        // to reflect the changes made in the DB
-        set_curr_user_details({
-            ...curr_user_details,
-            emai: email_info.email,
-            username: username_info.username,
-            profile_pic: profile_picture_url,
-            bio: bio
-        })
+        // // setting user details again on the client side
+        // // to reflect the changes made in the DB
+        // set_user_profile_details({
+        //     ...user_profile_details,
+        //     emai: email_info.email,
+        //     username: username_info.username,
+        //     profile_pic: profile_picture_url,
+        //     bio: bio
+        // })
 
         update_current_user(username_info.username, profile_picture_url)
 
@@ -107,7 +135,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
 
     const handle_delete_profile = async () => {
 
-        const response = await delete_user()
+        const response = await delete_user();
 
         console.log(response)
         if (response.error) {
@@ -126,6 +154,36 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
     return (
         <div className="edit_profile_page">
 
+
+            <Modal
+                ref={modal_ref}
+                btn_color="red"
+                width="500"
+            >
+                <h2>Are you sure you want to delete your Account?</h2>
+                    
+                <span>This action will delete:</span>
+                <div>
+                    <ul>
+                        <li>Your Profile</li>
+                        <li>Your Posts</li>
+                        <li>Your Comments</li>
+                    </ul>
+
+                </div>
+                <p>This action is not reversible.</p>
+
+                <button 
+                    className='Delete Account'
+                    onClick={() => {
+                        handle_delete_profile()
+                        modal_ref.current.close_modal()
+                    }}
+                >
+                    Delete Account
+                </button>
+            </Modal>
+{/* 
             <div className="delete_acount_pop_up_div">
                 {
                     delete_confirmation 
@@ -152,7 +210,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
                         </div>
                     </PopUpMenu>
                 }
-            </div>
+            </div> */}
 
             <div className="picture_and_inputs">
                 <div className="edit_profile_picture">
@@ -180,12 +238,12 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
                     </div> */}
                     <EmailInput 
                         set_email_info={set_email_info} 
-                        initial_email={curr_user_details.email}
+                        initial_email={email_info.email}
                     />
 
                     <PasswordInput
                         set_password_info={set_new_password_info}
-                        initial_password={curr_user_details.password}
+                        initial_password={new_password_info.password}
                         label_name="New Password"
                     />
 
@@ -195,7 +253,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
 
                     <UsernameInput
                         set_username_info={set_username_info}
-                        initial_username={curr_user_details.username}
+                        initial_username={username_info.username}
                     />
 
                     <label htmlFor="about_me">Bio:</label>
@@ -204,7 +262,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
                         set_input_content={set_bio}
                         max_height_px={150}
                         placeholder={"About Me"} 
-                        initial_content={curr_user_details.bio}
+                        initial_content={bio}
                     />
                 </div>
             </div>
@@ -212,7 +270,7 @@ function EditProfile({ set_toggle_edit_page, curr_user_details, set_curr_user_de
             <div className="edit_profile_page_btns">
                 <button 
                     className="delete_account_btn"
-                    onClick={() => set_delete_confirmation(true)}
+                    onClick={() =>  modal_ref.current.open_modal()}
                 >
                     Delete Account
                 </button>

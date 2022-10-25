@@ -1,0 +1,22 @@
+@import "../../variables.scss";
+
+.NotificationProvider {
+    position: relative;
+
+    .notification_list{
+        position: absolute;
+        // position: fixed;
+        top: 20px;
+        right: 30px;
+
+        width: 250px;
+
+        .all_notifications {
+            position: fixed;
+            
+        }
+    }
+
+
+
+}

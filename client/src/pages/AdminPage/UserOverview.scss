@@ -1,0 +1,76 @@
+@import '../../variables.scss';
+
+.UserOverview {
+    width: 100%;
+    display: flex;
+
+
+    .user_details {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        margin-right: 16px;
+
+        .is_online {
+            margin-top: 10px;
+            color: $red;
+        }
+
+        .online {
+            color: $green;
+        }
+
+        .profile_picture_div {
+            width: 150px;
+            height: 150px;
+    
+            img {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+
+        button {
+            @include btn-styles($green);
+            margin-top: 16px;
+        }
+
+        .banned {
+            @include btn-styles($red);
+        }
+    }
+
+
+    .selection_cards_and_content {
+        display: flex;
+        flex-direction: column;
+
+        .selection_cards {
+            display: flex;
+            text-align: center;
+            margin-bottom: 16px;
+            
+            .selection_card {
+                margin-right: 16px;
+                padding: 10px $inner-padding;
+                background-color: $light-grey;
+                border-radius: $default-border-radius;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .active {
+                background-color: $blue;
+            }
+        }
+    }
+
+
+}

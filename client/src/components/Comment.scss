@@ -51,10 +51,10 @@
                 }
             }
 
-            .show_less {
-                height: 100px;
-                overflow: hidden;
-            }
+            // .show_less {
+            //     height: 100px;
+            //     overflow: hidden;
+            // }
             
             .comment_content_text {
                 white-space: pre-line;
@@ -90,12 +90,8 @@
                     }
                 }
                 
-                .read_more_less_div {
-
-                    .read_more_less_btn {
-                        margin-left: 10px;
-                    }
-
+                .show_more_btn {
+                    margin-left: 10px;
                 }
             }
 

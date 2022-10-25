@@ -1,5 +1,30 @@
 @import "./variables.scss";
 
+::-webkit-scrollbar {
+    width: 1vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $light-grey;
+    border-radius: 100vw;
+
+    &:hover {
+        background-color: #262b34;
+    }
+} 
+
+::-webkit-scrollbar-track {
+    background-color: $dark-grey;
+}
+
+@supports (scrollbar-color: $light-grey $dark-grey) {
+    // so it looks somewhat similar of firfox
+    * {
+        scrollbar-color: $light-grey $dark-grey;
+        scrollbar-width: thin;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;

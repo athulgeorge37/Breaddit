@@ -1,0 +1,34 @@
+What to say at demo: Shrey
+
+For my contribution I mainly helped on the client side where I got the data that Athul made
+through the rest api's and some of the graphql queries and display them on them on the front end.
+So I am just gonna show the PostContent.js file which was one of the bigger components that showed 
+all the relevant information related to a specific post.
+
+Athul can u go to the post content file.
+
+So here we have many states that contain the information for a specifc post.
+THe main data is coming through props from the Post.js file that maps through all the posts
+and renders 1 PostContent component for each post. However each post that comes from the backend
+does not actually contain information about the comments or the likes. So we request that data
+whenever a PostContent is rendered.
+
+We also have a many more usestates to track
+whether any specifc button is clicked, and this will conditionally render different things based on 
+those changes.
+
+In terms of getting the actual data, if we go to the rest_api_requests folder and go 
+into PostRequests.js, we can see that when we call this asynchronous function, that fetches the data 
+using an axios get request to our rest api, and we pass in our limit and offset for our infinte scroll
+we implemented, so we dont get all the posts at once, since that would not be efficient.
+
+Back to the front end, once we get that data, in the Post.js file, from the 
+initialise_all_posts asynchronous function, we set it to the state, and that displays all the data.
+
+Using similar apprach, I implemented this method with slight variations to all other aspects
+of the website for comments, comment replies, likes editing posts and also
+the Profile page and all its related components. 
+
+Now to Athul
+
+

@@ -6,10 +6,11 @@ const validate_request = (request, response, next) => {
     // passing the web_access_token through the request header
     const web_access_token = request.header("web_access_token");
 
-    // if not access token was passed, user is not logged in
+    // if no access token was passed, user is not logged in
     if (!web_access_token) {
         response.json({
-            error: "User is not logged in"
+            error: "User is not logged in",
+            web_access_token: web_access_token
         })
     }
 
@@ -21,6 +22,10 @@ const validate_request = (request, response, next) => {
             // ensuring the that user_id is now past throught the request
             request.user_id = valid_web_access_token.user_id
             // to use the user_id at an endpoint, write: const user_id = request.user_id
+            request.role = valid_web_access_token.role
+
+            // when trying to sign_out we need to know the login id to update the correct field
+            request.login_id = valid_web_access_token.login_id
 
             // if web token is valid, 
             // execute the next function, 

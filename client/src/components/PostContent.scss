@@ -13,6 +13,19 @@
     background-color: $dark-grey;
     border: 1px solid $light-grey;
     border-radius: $default-border-radius;
+
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+
+
+    .delete_modal_div {
+        .cancel {
+            @include btn-styles($blue);
+        }
+
+        .delete_post_btn {
+            @include btn-styles($green);
+        }
+    }
    
 
     .post_user_and_awards {
@@ -41,16 +54,6 @@
         padding: 16px;
 
         position: relative;
-
-        .delete_post_pop_up_div {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            left: 50%;
-            top: calc(80px + 16px);
-        }
 
         .show_more_btn {
             position: absolute;
@@ -81,11 +84,7 @@
                     width: 100%;
                 }
             }
-
-            .show_less {
-                height: 500px;
-                overflow: hidden;
-            }
+           
 
             .display_text {
                 width: 100%;
@@ -100,6 +99,9 @@
                     margin-bottom: 10px;
                     img {
                         width: 100%;
+                        height: auto;
+                        // aspect-ratio: 16/9;
+                        // object-fit: cover;
                         border-radius: $default-border-radius;
                     }
                 }
@@ -117,6 +119,12 @@
 
         .votes {
             margin-left: 10px;
+        }
+
+        .is_inappropriate_error {
+            display: flex;
+            align-items: center;
+            color: red;
         }
 
         .both_comments_btns {    

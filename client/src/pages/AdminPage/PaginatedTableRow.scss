@@ -1,0 +1,41 @@
+@import '../../variables.scss';
+
+
+.PaginatedTableRow {
+
+    &:hover {
+        cursor: pointer;
+        background-color: $light-grey;
+    }
+
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid $light-grey;
+    }
+    
+    
+    .profile_pic {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    
+    .is_banned{
+        button {
+            @include btn-styles($green);
+        }
+    
+        .banned {
+            @include btn-styles($red)
+        }
+    }
+
+    .is_online {
+        color: $red;
+    }
+
+    .active {
+        color: $green;
+    }
+}

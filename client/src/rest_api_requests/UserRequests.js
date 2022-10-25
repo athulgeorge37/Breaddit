@@ -45,6 +45,18 @@ const sign_in = async (email, password) => {
     return response.data
 }
 
+const sign_out = async () => {
+    const response = await axios.put(`${CUSTOM_ENDPOINT}/sign_out`, {
+        // put requests need a body, sending empty one
+    }, {
+        headers: {
+            web_access_token: get_item_local_storage("web_access_token")
+        }
+    })
+
+    return response.data
+}
+
 const delete_user = async () => {
     const response = await axios.delete(`${CUSTOM_ENDPOINT}/delete_user`, {
         headers: {
@@ -77,6 +89,23 @@ const get_curr_user_details = async () => {
         }
     })
 
+    // returns an object with a property called user_details
+    // user_details is also an object that contains 
+    // {
+    //     username,
+    //     email,
+    //     role,
+    //     bio,
+    //     createAt,
+    //     password,
+    //     profile_pic
+    // }
+    return response.data
+}
+
+const get_user_profile_details = async (username) => {
+    const response = await axios.get(`${CUSTOM_ENDPOINT}/get_user_profile_details/by_username/${username}`)
+
     return response.data
 }
 
@@ -100,9 +129,11 @@ export {
     is_valid_web_token,
     create_user,
     sign_in, 
+    sign_out,
     delete_user,
     edit_user_details,
     get_curr_user_details,
+    get_user_profile_details,
     is_unique_email,
     is_unique_username,
 }

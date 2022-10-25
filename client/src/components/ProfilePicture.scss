@@ -4,8 +4,13 @@
 .profile_picture_div {
     margin-right: 10px;
 
+    &:hover {
+        cursor: pointer;
+    }
+
     .default_profile_pic {
-        padding: 0.5em;
+        // padding: 0.5em;
+        padding: 4px;
         border-radius: 6px;
         background-color: $light-grey;
     
@@ -13,9 +18,7 @@
         justify-content: center;
         align-items: center;
     
-        &:hover {
-            cursor: pointer;
-        }
+       
     
         .default_profile_pic_img {
             width: 30px;

@@ -1,0 +1,22 @@
+@import "../../variables.scss";
+
+
+.AdminPage {
+    width: 100%;
+
+    .AdminDashBoard {
+        display: flex;
+        width: 100%;
+
+        .AdminNavBar {
+            width: 200px;
+        }
+
+        .dashboard {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}

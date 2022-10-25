@@ -78,9 +78,10 @@ function PasswordInput({ set_password_info, label_name, initial_password }) {
                     onChange={(e) => validate_password(e.target.value)} 
                     ref={input_ref}
                     defaultValue={initial_password}
+                    data-testid="password_input"
                 />
                 <img 
-                    src={show_password ? "./images/visible.png" : "./images/not_visible.png"} 
+                    src={show_password ? "../images/visible.png" : "../images/not_visible.png"} 
                     alt={show_password ? "show password" : "show password"}
                     onClick={() => {
                         set_show_password(!show_password)

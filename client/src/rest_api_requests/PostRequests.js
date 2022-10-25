@@ -44,8 +44,8 @@ const edit_post = async (post_id, post_title, post_text, post_image) => {
     return response.data
 }
 
-const get_all_posts = async () => {
-    const response = await axios.get(`${CUSTOM_ENDPOINT}/get_all`);
+const get_all_posts = async (limit, offset) => {
+    const response = await axios.get(`${CUSTOM_ENDPOINT}/get_all/limit/${limit}/offset/${offset}`);
     
     return response.data
 }
@@ -61,10 +61,17 @@ const get_all_posts_by_curr_user = async () => {
 }
 
 
+const get_all_posts_by_username = async (username) => {
+    const response = await axios.get(`${CUSTOM_ENDPOINT}/get_all/by_username/${username}`);
+    
+    return response.data
+}
+
 export {
     create_post,
     delete_post,
     edit_post,
     get_all_posts,
-    get_all_posts_by_curr_user
+    get_all_posts_by_curr_user,
+    get_all_posts_by_username
 }

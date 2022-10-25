@@ -1,0 +1,29 @@
+@import '../../variables.scss';
+
+.LineChart {
+    
+    .date_btns {
+        margin-top: 16px;
+        button {
+            @include btn-style-text($blue);
+            margin-right: 10px;
+        }
+
+        .active {
+            @include btn-style-text($green);
+        }
+    }
+
+    .line_chart {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: white;
+        padding: 16px;
+        border-radius: $default-border-radius;
+        margin-top: 10px;
+    }
+
+
+}

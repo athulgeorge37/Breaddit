@@ -3,37 +3,55 @@ import './AddComment.scss'
 
 import ProfilePicture from './ProfilePicture';
 import ExpandableInput from './ExpandableInput';
-import { get_user_details } from '../helper_functions/get_user_details';
-import { get_item_local_storage } from '../helper_functions/local_storage';
-import { useContext } from 'react';
-import { VALID_USER_CONTEXT } from '../App';
 
+import { create_comment_or_reply, edit_comment_or_reply } from '../rest_api_requests/CommentRequests';
+import { useNavigate } from 'react-router-dom';
+import { useNotification } from '../Contexts/Notifications/NotificationProvider';
+import { useCurrentUser } from '../Contexts/CurrentUser/CurrentUserProvider';
 
-import { create_comment, edit_comment } from '../rest_api_requests/CommentRequests';
+function AddComment({ 
+        comment_type, execute_after_add_comment, add_comment_or_reply_to_list,
+        placeholder, btn_text, initial_content, post_id, 
+        parent_comment_id=null, is_editing=false, show_profile_pic=true
+    }) {
 
-function AddComment({ is_reply, parent_id, execute_after_add_comment, placeholder, btn_text, initial_content, is_editing=false, show_profile_pic=true}) {
+    const add_notification = useNotification();
 
-    const { current_user } = useContext(VALID_USER_CONTEXT);
-    // gotta handle add_comment errors here
+    const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
 
     const [comment_content, set_comment_content] = useState("");
     const [error_msg, show_error_msg] =useState(false);
 
-    // const current_user_profile_pic = get_user_details(get_item_local_storage("Current_User")).profile_picture_url
 
     const submit_add_comment = async () => {
         if (validate_comment_content() === false) {
             return
         }
 
-        console.log(parent_id, comment_content, is_reply)
-        const response = await create_comment(parent_id, comment_content, is_reply);
+        const response = await create_comment_or_reply(post_id, comment_content, comment_type, parent_comment_id);
 
         console.log(response)
-        if (!response.error) {
-            show_error_msg(false)
-            execute_after_add_comment()
+        if (response.error) {
+            return
         }
+
+        show_error_msg(false)
+
+        const new_comment_or_reply_details = {
+            ...response.new_comment_or_reply_details,
+            author_details: {
+                username: current_user.username,
+                profile_pic: current_user.profile_pic
+            }
+        }
+
+        add_comment_or_reply_to_list(new_comment_or_reply_details)
+
+        execute_after_add_comment()
+
+        add_notification(`Succesfully Added ${btn_text}`)
+
     }
 
     const submit_edit_comment = async () => {
@@ -41,18 +59,22 @@ function AddComment({ is_reply, parent_id, execute_after_add_comment, placeholde
             return
         }
 
-        const response = await edit_comment(parent_id, comment_content);
+        const response = await edit_comment_or_reply(parent_comment_id, comment_content);
+        
         console.log(response)
-        if (!response.error) {
-            show_error_msg(false)
-            execute_after_add_comment()
+        if (response.error) {
+            return
         }
+        show_error_msg(false)
+        execute_after_add_comment()
 
+        add_notification(`Succesfully Edited ${comment_type}`)
     }
 
     const validate_comment_content = () => {
         if (comment_content.trim().length === 0) {
             show_error_msg(true)
+            add_notification(`${comment_type} cannot be empty`, "ERROR")
             return false
         }
         return true
@@ -61,50 +83,64 @@ function AddComment({ is_reply, parent_id, execute_after_add_comment, placeholde
     return (
         <div className="Add_Comment">
 
-            <div className="add_comment_pic_and_input">
-                {                    
-                    show_profile_pic 
-                    &&
-                    <ProfilePicture 
-                        profile_picture_url={current_user.profile_pic}
-                    />
-                }
+            {
+                current_user.role === "user"
+                ?
+                <>
+                    <div className="add_comment_pic_and_input">
+                        {                    
+                            show_profile_pic 
+                            &&
+                            <ProfilePicture 
+                                profile_picture_url={current_user.profile_pic}
+                                username={current_user.username}
+                            />
+                        }
 
-                <div className="input_and_errors">
-                    <ExpandableInput
-                        set_input_content={set_comment_content}
-                        max_height_px={150}
-                        placeholder={placeholder} 
-                        initial_content={initial_content}
-                    />
+                        <div className="input_and_errors">
+                            <ExpandableInput
+                                set_input_content={set_comment_content}
+                                max_height_px={150}
+                                placeholder={placeholder} 
+                                initial_content={initial_content}
+                            />
+
+                            {
+                                error_msg 
+                                &&
+                                <div className="error_msg">
+                                    Comment cannot be empty!
+                                </div>
+                            }
+                        </div>
+                    </div>
+
 
                     {
-                        error_msg 
-                        &&
-                        <div className="error_msg">
-                            Comment cannot be empty!
-                        </div>
+                        is_editing 
+                        ?
+                        <button
+                            className="comment_btn"
+                            onClick={submit_edit_comment}
+                        >
+                            {btn_text}
+                        </button>
+                        :
+                        <button
+                            className="comment_btn"
+                            onClick={submit_add_comment}
+                        >
+                            {btn_text}
+                        </button>
                     }
-                </div>
-            </div>
-
-
-            {
-                is_editing 
-                ?
-                <button
-                    className="comment_btn"
-                    onClick={submit_edit_comment}
-                >
-                    {btn_text}
-                </button>
+                </>
                 :
-                <button
-                    className="comment_btn"
-                    onClick={submit_add_comment}
-                >
-                    {btn_text}
-                </button>
+                <div className='not_signed_in'>
+                    <button onClick={() => setTimeout(() => navigate("/signin"), 1000)}>
+                        Sign In
+                    </button> 
+                    to Add A Comment
+                </div>
             }
 
         </div>

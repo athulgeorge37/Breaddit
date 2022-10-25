@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         }, 
 
     }, {
-        timestamps: false,
+        timestamps: true,
+        createdAt: false,
         validate: {
             // validates any entry into Vote table
             // ensuring that all fields are entered corectly

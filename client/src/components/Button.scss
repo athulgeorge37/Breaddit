@@ -21,6 +21,7 @@
 
     .save_img {
         width: 30px;
+        height: 30px;
         @include green-filter_color;
     }
 
@@ -66,6 +67,7 @@
 
     .cancel_img {
         width: 25px;
+        height: 25px;
         @include red-filter_color;
     }
 
@@ -111,6 +113,7 @@
 
     .delete_img {
         width: 25px;
+        height: 25px;
         @include red-filter_color;                    
     }
 
@@ -157,6 +160,7 @@
 
     .edit_img {
         width: 25px;
+        height: 25px;
         @include blue-filter_color;
     }
 
@@ -202,6 +206,7 @@
 
     .award_img {
         width: 30px;
+        height: 30px;
         @include green-filter_color;
     }
 
@@ -247,6 +252,7 @@
 
     .add_comment_img {
         width: 35px;
+        height: 35px;
         @include blue-filter_color;
     }
 
@@ -304,6 +310,7 @@
 
     .comments_section_img {
         width: 30px;
+        height: 30px;
         @include blue-filter_color;
     }
 
@@ -353,6 +360,7 @@
 
     .add_img_img {
         width: 30px;
+        height: 30px;
         @include green-filter_color;
     }
 
@@ -399,6 +407,7 @@
 
     .remove_img_img {
         width: 30px;
+        height: 30px;
         @include red-filter_color;
     }
 

@@ -1,0 +1,25 @@
+@import '../../variables.scss';
+
+
+.PaginatedTableRowPosts {
+
+    &:hover {
+        cursor: pointer;
+        background-color: $light-grey;
+    }
+
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid $light-grey;
+    }
+    
+    
+    .is_inappropriate_item {
+        color: $green;
+    }
+
+    .inappropriate {
+        color: $red;
+    }
+}

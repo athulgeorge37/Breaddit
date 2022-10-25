@@ -1,29 +1,34 @@
 import "./App.scss";
 
+import { lazy, Suspense } from "react";
+
+// loading import
+import Loading from "./components/Loading";
+
 // routing imports
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// common components on every page
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
-// page imports
-import Home from "./pages/Home";
-import SignUp from "./pages/sign_up_page/SignUp";
-import SignIn from "./pages/SignIn";
-import Profile from "./pages/Profile";
-import Posts from "./pages/Posts";
-import AdminPage from "./pages/AdminPage/AdminPage";
-import Error from "./pages/Error";
-import Summary from "./pages/AdminPage/Summary";
-import AllUsers from "./pages/AdminPage/AllUsers";
-import UserOverview from "./pages/AdminPage/UserOverview";
 
 // Context Provider imports
 import NotificationProvider from "./Contexts/Notifications/NotificationProvider";
 import CurrentUserProvider from "./Contexts/CurrentUser/CurrentUserProvider";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// common components on every page
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+// page imports, via lazy loading
+const Home = lazy(() => import("./pages/Home"));
+const SignUp = lazy(() => import("./pages/sign_up_page/SignUp"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Posts = lazy(() => import("./pages/Posts"));
+const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
+const Error = lazy(() => import("./pages/Error"));
+const Summary = lazy(() => import("./pages/AdminPage/Summary"));
+const AllUsers = lazy(() => import("./pages/AdminPage/AllUsers"));
+const UserOverview = lazy(() => import("./pages/AdminPage/UserOverview"));
 
 function App() {
     const client = new QueryClient();
@@ -37,40 +42,45 @@ function App() {
 
                         <NotificationProvider>
                             <div className="main_body">
-                                <Routes>
-                                    <Route path="/" element={<Home />} />
-                                    <Route
-                                        path="/signup"
-                                        element={<SignUp />}
-                                    />
-                                    <Route
-                                        path="/signin"
-                                        element={<SignIn />}
-                                    />
-                                    <Route
-                                        path="/profile/:username_route"
-                                        element={<Profile />}
-                                    />
-                                    <Route path="/posts" element={<Posts />} />
-                                    <Route
-                                        path="/admin_dashboard"
-                                        element={<AdminPage />}
-                                    >
+                                <Suspense fallback={<Loading />}>
+                                    <Routes>
+                                        <Route path="/" element={<Home />} />
                                         <Route
-                                            path="summary"
-                                            element={<Summary />}
+                                            path="/signup"
+                                            element={<SignUp />}
                                         />
                                         <Route
-                                            path="all_users"
-                                            element={<AllUsers />}
+                                            path="/signin"
+                                            element={<SignIn />}
                                         />
                                         <Route
-                                            path="user_overview/:user_id"
-                                            element={<UserOverview />}
+                                            path="/profile/:username_route"
+                                            element={<Profile />}
                                         />
-                                    </Route>
-                                    <Route path="*" element={<Error />} />
-                                </Routes>
+                                        <Route
+                                            path="/posts"
+                                            element={<Posts />}
+                                        />
+                                        <Route
+                                            path="/admin_dashboard"
+                                            element={<AdminPage />}
+                                        >
+                                            <Route
+                                                path="summary"
+                                                element={<Summary />}
+                                            />
+                                            <Route
+                                                path="all_users"
+                                                element={<AllUsers />}
+                                            />
+                                            <Route
+                                                path="user_overview/:user_id"
+                                                element={<UserOverview />}
+                                            />
+                                        </Route>
+                                        <Route path="*" element={<Error />} />
+                                    </Routes>
+                                </Suspense>
                             </div>
                         </NotificationProvider>
 

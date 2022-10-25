@@ -9,7 +9,7 @@ Stack:
 -   Sequelize
 -   Graphql
 
-Other Tools:
+Areas Covered:
 
 -   Rest APIs
 -   Subscriptions
@@ -36,6 +36,7 @@ npm start
     -   react
     -   axios
     -   react-query
+    -   react-router-dom
     -   jest testing library
     -   dompurify
     -   moment

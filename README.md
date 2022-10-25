@@ -1,11 +1,58 @@
-# fwp-s3918048-s3916734-Assignment-2
+# Breaddit
 
-Breaddit: A FullStack Reddit Clone
+A FullStack Reddit Clone:
 
-To install client node modules, cd into /client and run npm install
-For now ignore any high severity vulnerability issues
+Stack:
 
-To install server node_modules, cd into /server and run npm install
+-   React
+-   Nodejs
+-   Express
+-   MySql
+-   Sequelize
+-   Graphql
 
-To start client, cd into /client and run npm start.
-To start server, cd into /server and run npm start
+Other Tools:
+
+-   Rest APIs
+-   Subscriptions
+-   JSON Web Tokens
+-   Authentication
+
+## Installation
+
+cd into server and client folder and run:
+
+```
+npm intall
+```
+
+Followed by:
+
+```
+npm start
+```
+
+## Contents
+
+-   client
+    -   react
+    -   axios
+    -   react-query
+    -   jest testing library
+    -   dompurify
+    -   moment
+    -   chartjs
+    -   cloudinary-react
+    -   react-avatar-editor
+    -   ckeditor5
+    -   framer-motion
+-   server
+    -   apollo server
+    -   express
+    -   nodemon
+    -   sequelize
+    -   mysql2
+    -   graphql
+    -   jsonwebtoken
+    -   nodemailer
+    -   bcrypt

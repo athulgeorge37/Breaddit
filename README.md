@@ -1,6 +1,4 @@
-# Breaddit
-
-A FullStack Reddit Clone:
+# Breaddit A FullStack Reddit Clone:
 
 Stack:
 
@@ -23,10 +21,10 @@ Other Tools:
 cd into server and client folder and run:
 
 ```
-npm intall
+npm install
 ```
 
-Followed by:
+followed by:
 
 ```
 npm start

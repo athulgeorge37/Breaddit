@@ -14,7 +14,7 @@ import EmailInput from "../features/authentication/EmailInput/EmailInput";
 import emailjs from "emailjs-com";
 
 import { create_user } from "../rest_api_requests/UserRequests";
-import { useCurrentUser } from "../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 const SERVICE_ID = "Breaddit_Service_69420";
 const TEMPLATE_ID = "template_9wj4cqc";

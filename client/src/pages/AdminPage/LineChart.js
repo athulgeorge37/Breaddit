@@ -8,7 +8,7 @@ import {
     get_dates_for_week,
     get_dates_for_month,
     get_dates_for_year,
-} from "../../helper_functions/get_list_of_dates";
+} from "../../helper/get_list_of_dates";
 
 import { Line } from "react-chartjs-2";
 import {

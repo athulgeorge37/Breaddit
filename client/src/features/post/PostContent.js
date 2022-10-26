@@ -20,13 +20,13 @@ import Comment from "../comment/Comment";
 
 import Modal from "../../components/ui/Modal";
 
-import { calculate_time_passed } from "../../helper_functions/time";
+import { calculate_time_passed } from "../../helper/time";
 
 import DOMPurify from "dompurify";
 
 import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
-import { useNotification } from "../../Contexts/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // import useMeasure from "react-use-measure";
 import ResizablePanel, {

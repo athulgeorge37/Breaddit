@@ -1,7 +1,7 @@
 import "./Comment.scss";
 import { useState, useEffect, useRef } from "react";
 
-import { calculate_time_passed } from "../../helper_functions/time";
+import { calculate_time_passed } from "../../helper/time";
 
 import DOMPurify from "dompurify";
 
@@ -20,8 +20,8 @@ import {
     delete_comment,
     delete_comment_or_reply,
 } from "../../rest_api_requests/CommentRequests";
-import { useNotification } from "../../Contexts/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
     // the comment component renders both surface level comments and

@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import { create_post } from "../../rest_api_requests/PostRequests";
 
-import { useNotification } from "../../Contexts/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 import {
     motion,

@@ -15,11 +15,11 @@ import ParsedText from "../../components/form/ParsedText";
 import CloudinaryImage from "../../components/CloudinaryImage";
 import StaticComment from "./StaticComment";
 
-import { calculate_time_passed } from "../../helper_functions/time";
+import { calculate_time_passed } from "../../helper/time";
 
 import DOMPurify from "dompurify";
 
-import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../GraphQL/Queries";
+import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../graphql/Queries";
 import StaticVotes from "./StaticVotes";
 import { useMutation } from "@apollo/client";
 

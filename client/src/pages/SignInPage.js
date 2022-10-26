@@ -10,7 +10,7 @@ import LoginInput from "../components/form/LoginInput";
 
 // rest api request imports
 import { is_unique_email, sign_in } from "../rest_api_requests/UserRequests";
-import { useCurrentUser } from "../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 function SignIn() {
     const navigate = useNavigate();

@@ -18,7 +18,7 @@ import {
     edit_user_details,
 } from "../../rest_api_requests/UserRequests";
 import { useEffect } from "react";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useRef } from "react";
 
 function EditProfile({ set_toggle_edit_page }) {

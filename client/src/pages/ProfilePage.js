@@ -11,10 +11,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { make_profile_visit } from "../rest_api_requests/ProfileVisitRequests";
 
-import { get_last_minute } from "../helper_functions/get_list_of_dates";
+import { get_last_minute } from "../helper/get_list_of_dates";
 
 import { useQuery } from "@tanstack/react-query";
-import { useCurrentUser } from "../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 function Profile() {
     const navigate = useNavigate();

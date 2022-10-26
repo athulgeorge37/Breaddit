@@ -9,8 +9,8 @@ import {
     edit_comment_or_reply,
 } from "../../rest_api_requests/CommentRequests";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../../Contexts/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 function AddComment({
     comment_type,

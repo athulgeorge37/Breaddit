@@ -7,7 +7,7 @@ import {
     get_vote_count,
     make_vote,
 } from "../../rest_api_requests/VoteRequests";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 function Votes({
     vote_type,

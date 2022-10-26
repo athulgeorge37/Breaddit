@@ -16,7 +16,7 @@ import {
     get_all_posts_by_username,
     get_all_posts_by_curr_user,
 } from "../../rest_api_requests/PostRequests";
-import { get_current_date } from "../../helper_functions/time";
+import { get_current_date } from "../../helper/time";
 import {
     get_accounts_of_type_by_username,
     get_count_of_type_by_username,
@@ -33,7 +33,7 @@ import {
 } from "../../rest_api_requests/UserRequests";
 
 import DOMPurify from "dompurify";
-import { useCurrentUser } from "../../Contexts/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 function ReadProfile({ set_toggle_edit_page }) {
     const navigate = useNavigate();

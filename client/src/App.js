@@ -2,8 +2,8 @@
 import "./App.scss";
 
 // Context Provider imports
-import NotificationProvider from "./Contexts/Notifications/NotificationProvider";
-import CurrentUserProvider from "./Contexts/CurrentUser/CurrentUserProvider";
+import NotificationProvider from "./context/Notifications/NotificationProvider";
+import CurrentUserProvider from "./context/CurrentUser/CurrentUserProvider";
 
 // react query import
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,13 +22,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading
-const Home = lazy(() => import("./pages/Home"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const SignIn = lazy(() => import("./pages/SignIn"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Posts = lazy(() => import("./pages/Posts"));
+const Home = lazy(() => import("./pages/HomePage"));
+const SignUp = lazy(() => import("./pages/SignUpPage"));
+const SignIn = lazy(() => import("./pages/SignInPage"));
+const Profile = lazy(() => import("./pages/ProfilePage"));
+const Posts = lazy(() => import("./pages/PostsPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
-const Error = lazy(() => import("./pages/Error"));
+const Error = lazy(() => import("./pages/ErrorPage"));
 const Summary = lazy(() => import("./pages/AdminPage/Summary"));
 const AllUsers = lazy(() => import("./pages/AdminPage/AllUsers"));
 const UserOverview = lazy(() => import("./pages/AdminPage/UserOverview"));

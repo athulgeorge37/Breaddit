@@ -12,7 +12,7 @@ import LoginInput from "../../components/form/LoginInput";
 import Loading from "../../components/ui/Loading";
 import CloudinaryImage from "../../components/CloudinaryImage";
 import Button from "../../components/ui/Button";
-import { useNotification } from "../../Contexts/Notifications/NotificationProvider";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { motion } from "framer-motion";
 
 function EditPost({

@@ -1,7 +1,7 @@
 import "../../features/comment/Comment.scss";
 import { useState, useEffect, useRef } from "react";
 
-import { calculate_time_passed } from "../../helper_functions/time";
+import { calculate_time_passed } from "../../helper/time";
 
 // might need to npm uninstall from package.json
 // import { v4 as uuid } from 'uuid';

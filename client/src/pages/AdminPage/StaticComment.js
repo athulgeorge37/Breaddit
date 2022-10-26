@@ -7,7 +7,7 @@ import { calculate_time_passed } from "../../helper/time";
 // import { v4 as uuid } from 'uuid';
 
 import DOMPurify from "dompurify";
-import ProfilePicture from "../../features/profile_picture/ProfilePicture";
+import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
 import Votes from "../../features/vote/Votes";
 
 import AdjustableButton from "../../components/ui/AdjustableButton";

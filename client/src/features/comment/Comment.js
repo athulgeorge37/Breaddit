@@ -6,7 +6,7 @@ import { calculate_time_passed } from "../../helper/time";
 import DOMPurify from "dompurify";
 
 import AddComment from "./AddComment";
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
 import Modal from "../../components/ui/Modal";
 

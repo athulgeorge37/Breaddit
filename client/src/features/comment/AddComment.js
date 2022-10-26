@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./AddComment.scss";
 
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import ExpandableInput from "../../components/form/ExpandableInput";
 
 import {

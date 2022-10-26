@@ -3,11 +3,13 @@ import { useState } from "react";
 import PaginatedTable from "./PaginatedTable";
 import LineChart from "./LineChart";
 
-import { GET_ALL_FOLLOWER_DATA } from "../../graphql/Queries";
+import {
+    GET_ALL_FOLLOWER_DATA,
+    GET_FOLLOWER_DATE_DATA,
+} from "../../graphql/FollowerQueries";
 
 import { useLazyQuery } from "@apollo/client";
 
-import { GET_FOLLOWER_DATE_DATA } from "../../graphql/Queries";
 import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
 
 function FollowerData({ user_id, username }) {

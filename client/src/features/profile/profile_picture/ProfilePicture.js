@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-import CloudinaryImage from "../../components/CloudinaryImage";
+import { useCurrentUser } from "../../../context/CurrentUser/CurrentUserProvider";
+import CloudinaryImage from "../../../components/CloudinaryImage";
 
 import "./ProfilePicture.scss";
 

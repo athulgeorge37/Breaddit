@@ -4,7 +4,7 @@ import PaginatedTable from "./PaginatedTable";
 
 import { useLazyQuery } from "@apollo/client";
 
-import { GET_ALL_USER_DATA } from "../../graphql/Queries";
+import { GET_ALL_USER_DATA } from "../../graphql/UserQueries";
 
 import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
 

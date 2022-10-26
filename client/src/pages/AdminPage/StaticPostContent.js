@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
 
 // component imports
-import ProfilePicture from "../../features/profile_picture/ProfilePicture";
+import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
 import AdjustableButton from "../../components/ui/AdjustableButton";
 import Button from "../../components/ui/Button";
 import ParsedText from "../../components/form/ParsedText";
@@ -19,7 +19,7 @@ import { calculate_time_passed } from "../../helper/time";
 
 import DOMPurify from "dompurify";
 
-import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../graphql/Queries";
+import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../graphql/PostQueries";
 import StaticVotes from "./StaticVotes";
 import { useMutation } from "@apollo/client";
 

@@ -4,7 +4,7 @@ import UsernameInput from "../authentication/UsernameInput/UsernameInput";
 import EmailInput from "../authentication/EmailInput/EmailInput";
 import PasswordInput from "../authentication/PasswordInput/PasswordInput";
 
-import EditProfilePic from "../profile_picture/EditProfilePic";
+import EditProfilePic from "./profile_picture/EditProfilePic";
 import ExpandableInput from "../../components/form/ExpandableInput";
 import Modal from "../../components/ui/Modal";
 

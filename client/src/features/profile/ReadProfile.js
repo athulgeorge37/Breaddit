@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // component imports
 import FollowerCard from "../follower/FollowerCard";
 import PostContent from "../post/PostContent";
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Loading from "../../components/ui/Loading";
 
 // rest api requests imports

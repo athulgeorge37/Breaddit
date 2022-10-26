@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 
 import { useLazyQuery, useMutation } from "@apollo/client";
 
-import { GET_USER_DATA, UPDATE_BAN_STATUS } from "../../graphql/Queries";
+import { GET_USER_DATA, UPDATE_BAN_STATUS } from "../../graphql/UserQueries";
 
-import ProfilePicture from "../../features/profile_picture/ProfilePicture";
+import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
 import { get_current_date } from "../../helper/time";
 
 import FollowerData from "./FollowerData";

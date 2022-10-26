@@ -6,7 +6,8 @@ import PaginatedTableRowPosts, {
 import PaginatedTable from "./PaginatedTable";
 
 import { useLazyQuery } from "@apollo/client";
-import { POSTS_BY_USER, GET_VOTE_DATE_DATA } from "../../graphql/Queries";
+import { POSTS_BY_USER } from "../../graphql/PostQueries";
+import { GET_VOTE_DATE_DATA } from "../../graphql/VoteQueries";
 import StaticPostContent from "./StaticPostContent";
 import { useState } from "react";
 import LineChart from "./LineChart";

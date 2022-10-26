@@ -3,11 +3,12 @@ import { useState } from "react";
 import PaginatedTable from "./PaginatedTable";
 import LineChart from "./LineChart";
 
-import { GET_ALL_FOLLOWING_DATA } from "../../graphql/Queries";
+import {
+    GET_ALL_FOLLOWING_DATA,
+    GET_FOLLOWING_DATE_DATA,
+} from "../../graphql/FollowingQueries";
 
 import { useLazyQuery } from "@apollo/client";
-
-import { GET_FOLLOWING_DATE_DATA } from "../../graphql/Queries";
 
 import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
 

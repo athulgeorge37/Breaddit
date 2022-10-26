@@ -10,7 +10,7 @@ import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequ
 
 // component imports
 import AddComment from "../comment/AddComment";
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import EditPost from "./EditPost";
 import Button from "../../components/ui/Button";
 import Votes from "../vote/Votes";

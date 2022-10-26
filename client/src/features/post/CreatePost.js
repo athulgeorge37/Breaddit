@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./CreatePost.scss";
 
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import EditPost from "./EditPost";
 
 import { useNavigate } from "react-router-dom";

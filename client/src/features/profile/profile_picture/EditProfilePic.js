@@ -4,9 +4,9 @@ import { useState, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 
 import ProfilePicture from "./ProfilePicture";
-import Loading from "../../components/ui/Loading";
-import Button from "../../components/ui/Button";
-import { upload_image } from "../../rest_api_requests/ImageRequests";
+import Loading from "../../../components/ui/Loading";
+import Button from "../../../components/ui/Button";
+import { upload_image } from "../../../rest_api_requests/ImageRequests";
 
 function EditProfilePic({ profile_picture_url, set_profile_picture_url }) {
     const [loading_img, set_loading_img] = useState(false);

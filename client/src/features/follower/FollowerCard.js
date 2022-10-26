@@ -1,6 +1,6 @@
 import "./FollowerCard.scss";
 
-import ProfilePicture from "../profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Button from "../../components/ui/Button";
 
 function FollowerCard({

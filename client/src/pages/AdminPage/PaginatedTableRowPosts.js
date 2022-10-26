@@ -2,7 +2,7 @@ import "./PaginatedTableRowPosts.scss";
 import { calculate_time_passed } from "../../helper/time";
 
 import { useQuery } from "@apollo/client";
-import { GET_POST_DATA } from "../../graphql/Queries";
+import { GET_POST_DATA } from "../../graphql/PostQueries";
 import { useState, useEffect } from "react";
 
 export const TABLE_HEADERS = [

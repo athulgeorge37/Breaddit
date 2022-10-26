@@ -1,4 +1,5 @@
 import "./UserOverview.scss";
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -9,10 +10,10 @@ import { GET_USER_DATA, UPDATE_BAN_STATUS } from "../../graphql/UserQueries";
 import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
 import { get_current_date } from "../../helper/time";
 
-import FollowerData from "./FollowerData";
-import FollowingData from "./FollowingData";
-import PostData from "./PostData";
-import ProfileVisitsData from "./ProfileVisitsData";
+import FollowerData from "../../features/line_chart/ChartData/FollowerData";
+import FollowingData from "../../features/line_chart/ChartData/FollowingData";
+import PostData from "../../features/line_chart/ChartData/PostData";
+import ProfileVisitsData from "../../features/line_chart/ChartData/ProfileVisitsData";
 
 function UserOverview() {
     const { user_id } = useParams();

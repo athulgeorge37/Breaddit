@@ -1,14 +1,16 @@
 import React from "react";
-import PaginatedTable from "./PaginatedTable";
-import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
+import PaginatedTable from "../../pagination/PaginatedTable";
+import PaginatedTableRow, {
+    TABLE_HEADERS,
+} from "../../pagination/UserTableRow/PaginatedTableRow";
 
 import {
     GET_PROFILE_VISITORS,
     GET_PROFILE_VISIT_DATE_DATA,
-} from "../../graphql/ProfileQueries";
+} from "../../../graphql/ProfileQueries";
 
 import { useLazyQuery } from "@apollo/client";
-import LineChart from "./LineChart";
+import LineChart from "../LineChart";
 
 import { useState } from "react";
 

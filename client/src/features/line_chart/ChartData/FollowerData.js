@@ -1,25 +1,27 @@
 import { useState } from "react";
 
-import PaginatedTable from "./PaginatedTable";
-import LineChart from "./LineChart";
+import PaginatedTable from "../../pagination/PaginatedTable";
+import LineChart from "../LineChart";
 
 import {
-    GET_ALL_FOLLOWING_DATA,
-    GET_FOLLOWING_DATE_DATA,
-} from "../../graphql/FollowingQueries";
+    GET_ALL_FOLLOWER_DATA,
+    GET_FOLLOWER_DATE_DATA,
+} from "../../../graphql/FollowerQueries";
 
 import { useLazyQuery } from "@apollo/client";
 
-import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
+import PaginatedTableRow, {
+    TABLE_HEADERS,
+} from "../../pagination/UserTableRow/PaginatedTableRow";
 
-function FollowingData({ user_id, username }) {
-    const [get_following] = useLazyQuery(GET_ALL_FOLLOWING_DATA);
+function FollowerData({ user_id, username }) {
+    const [get_followers] = useLazyQuery(GET_ALL_FOLLOWER_DATA);
 
     const [chart_data, set_chart_data] = useState({
         labels: [],
         datasets: [
             {
-                label: "Following",
+                label: "Followers",
                 data: [],
                 borderColor: "green",
                 backgroundColor: "green",
@@ -35,25 +37,25 @@ function FollowingData({ user_id, username }) {
             },
             title: {
                 display: true,
-                text: `Total count of who ${username} is following`,
+                text: `Total count of users following ${username}`,
             },
             maintainAspectRatio: false,
         },
     };
 
     // response of get_vote_data contains data, error, loading
-    const [get_following_data] = useLazyQuery(GET_FOLLOWING_DATE_DATA);
+    const [get_follower_data] = useLazyQuery(GET_FOLLOWER_DATE_DATA);
 
-    const get_all_following_data = async (dates_and_labels) => {
-        const following_response = await get_following_data({
+    const get_all_follower_data = async (dates_and_labels) => {
+        const follower_response = await get_follower_data({
             variables: {
                 dates: dates_and_labels.all_dates,
                 user_id: user_id,
             },
         });
 
-        if (following_response.error) {
-            console.log(following_response);
+        if (follower_response.error) {
+            console.log(follower_response);
             return;
         }
 
@@ -65,7 +67,7 @@ function FollowingData({ user_id, username }) {
 
         // setting the data for each vote
         chart_data_copy.datasets[0].data =
-            following_response.data.get_total_following_before_date;
+            follower_response.data.get_total_followers_before_date;
 
         // adding it to state to reflect in UI
         set_chart_data(chart_data_copy);
@@ -74,9 +76,9 @@ function FollowingData({ user_id, username }) {
     return (
         <div className="FollowerData">
             <PaginatedTable
-                get_data={get_following}
+                get_data={get_followers}
                 determine_data_path={(response) =>
-                    response.data.get_user_info.Following
+                    response.data.get_user_info.Followers
                 }
                 user_id={user_id}
                 table_headers={TABLE_HEADERS}
@@ -85,7 +87,7 @@ function FollowingData({ user_id, username }) {
                 }}
             />
             <LineChart
-                get_data={get_all_following_data}
+                get_data={get_all_follower_data}
                 chart_data={chart_data}
                 chart_options={chart_options}
             />
@@ -93,4 +95,4 @@ function FollowingData({ user_id, username }) {
     );
 }
 
-export default FollowingData;
+export default FollowerData;

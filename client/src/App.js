@@ -27,11 +27,11 @@ const SignUp = lazy(() => import("./pages/SignUpPage"));
 const SignIn = lazy(() => import("./pages/SignInPage"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
 const Posts = lazy(() => import("./pages/PostsPage"));
-const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
 const Error = lazy(() => import("./pages/ErrorPage"));
-const Summary = lazy(() => import("./pages/AdminPage/Summary"));
-const AllUsers = lazy(() => import("./pages/AdminPage/AllUsers"));
-const UserOverview = lazy(() => import("./pages/AdminPage/UserOverview"));
+const Summary = lazy(() => import("./features/admin/Summary"));
+const AllUsers = lazy(() => import("./features/admin/AllUsers"));
+const UserOverview = lazy(() => import("./features/admin/UserOverview"));
 
 function App() {
     const client = new QueryClient();

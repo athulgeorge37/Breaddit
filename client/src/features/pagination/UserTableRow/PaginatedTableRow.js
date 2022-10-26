@@ -1,9 +1,9 @@
 import "./PaginatedTableRow.scss";
-import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
-import { get_current_date } from "../../helper/time";
+import ProfilePicture from "../../profile/profile_picture/ProfilePicture";
+import { get_current_date } from "../../../helper/time";
 
 import { useQuery } from "@apollo/client";
-import { GET_PROFILE_STATS } from "../../graphql/ProfileQueries";
+import { GET_PROFILE_STATS } from "../../../graphql/ProfileQueries";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -2,15 +2,15 @@ import React from "react";
 import "./PostData.scss";
 import PaginatedTableRowPosts, {
     TABLE_HEADERS,
-} from "./PaginatedTableRowPosts";
-import PaginatedTable from "./PaginatedTable";
+} from "../../pagination/PostTableRow/PaginatedTableRowPosts";
+import PaginatedTable from "../../pagination/PaginatedTable";
 
 import { useLazyQuery } from "@apollo/client";
-import { POSTS_BY_USER } from "../../graphql/PostQueries";
-import { GET_VOTE_DATE_DATA } from "../../graphql/VoteQueries";
-import StaticPostContent from "./StaticPostContent";
+import { POSTS_BY_USER } from "../../../graphql/PostQueries";
+import { GET_VOTE_DATE_DATA } from "../../../graphql/VoteQueries";
+import StaticPostContent from "../../post/StaticPostContent";
 import { useState } from "react";
-import LineChart from "./LineChart";
+import LineChart from "../LineChart";
 
 function PostData({ user_id, username, profile_pic }) {
     const [curr_post, set_curr_post] = useState(null);

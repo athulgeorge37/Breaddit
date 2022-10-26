@@ -13,14 +13,14 @@ import AdjustableButton from "../../components/ui/AdjustableButton";
 import Button from "../../components/ui/Button";
 import ParsedText from "../../components/form/ParsedText";
 import CloudinaryImage from "../../components/CloudinaryImage";
-import StaticComment from "./StaticComment";
+import StaticComment from "../comment/StaticComment";
+import StaticVotes from "../vote/StaticVotes";
 
 import { calculate_time_passed } from "../../helper/time";
 
 import DOMPurify from "dompurify";
 
 import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../graphql/PostQueries";
-import StaticVotes from "./StaticVotes";
 import { useMutation } from "@apollo/client";
 
 function StaticPostContent({ post_details }) {

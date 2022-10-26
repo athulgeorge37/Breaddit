@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import AdminNavBar from "./AdminNavBar";
+import AdminNavBar from "../page_layout/Admin/AdminNavBar";
 
 import "./AdminPage.scss";
 
@@ -11,7 +11,7 @@ import {
     from,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
     if (graphqlErrors) {

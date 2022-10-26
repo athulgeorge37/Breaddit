@@ -1,12 +1,14 @@
 import "./AllUsers.scss";
 import React from "react";
-import PaginatedTable from "./PaginatedTable";
 
 import { useLazyQuery } from "@apollo/client";
 
 import { GET_ALL_USER_DATA } from "../../graphql/UserQueries";
 
-import PaginatedTableRow, { TABLE_HEADERS } from "./PaginatedTableRow";
+import PaginatedTable from "../pagination/PaginatedTable";
+import PaginatedTableRow, {
+    TABLE_HEADERS,
+} from "../pagination/UserTableRow/PaginatedTableRow";
 
 function AllUsers() {
     // data for the paginated table

@@ -1,0 +1,136 @@
+@import "../../variables.scss";
+
+.parsed_text {
+        
+    // font styles
+    $font_sizes: (
+        text-tiny: 0.7em,
+        text-small: 0.85em,
+        text-big: 1.4em,
+        text-huge: 1.8em
+    );
+
+    @each $font_type, $font_size in $font_sizes {
+        .#{$font_type} {
+            font-size: $font_size;
+        }
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    // highlighting styles
+    $highlight_colors: (
+        marker-yellow: #fdfd77,
+        marker-green: #62f962,
+        marker-pink: #fc7899,
+        marker-blue: #72ccfd
+    );
+
+    @each $highlight_name, $highlight_color in $highlight_colors {
+        .#{$highlight_name} {
+            background-color: $highlight_color;
+        }
+    }
+
+    .pen-red {
+        background-color: transparent;
+        color: #e71313;
+    }
+
+    .pen-green {
+        background-color: transparent;
+        color: #128a00;
+    }
+
+
+    ul, ol {
+        margin-left: calc(2 * $text_margin_left);
+    }
+
+    pre {
+        position: relative;
+        padding: 1em;
+        // color: hsl(0, 0%, 20.8%);
+        // background-color: #eeeeee;
+        background-color: $black;
+        color: $white;
+        border: 1px solid $light-grey;
+        // border: 1px solid hsl(0, 0%, 77%);
+        border-radius: 2px;
+        text-align: left;
+        direction: ltr;
+        tab-size: 4;
+        white-space: pre-wrap;
+        font-style: normal;
+    }
+
+    code {
+        // background-color: #eeeeee;
+        border-radius: 2px;
+        padding: 0.15em;
+    }
+
+
+    $code_languages: (
+        language-plaintext: "Plain Text",
+        language-c: "C",
+        language-cs: "C#",
+        language-cpp: "C++",
+        language-css: "CSS",
+        language-diff: "Diff",
+        language-html: "HTML",
+        language-java: "Java",
+        language-javascript: "JavaScript",
+        language-php: "PHP",
+        language-python: "Python",
+        language-ruby: "Ruby",
+        language-typescript: "Typescript",
+        language-xml: "XML",
+    );
+
+    @each $language_class, $language_name in $code_languages {
+        .#{$language_class}::after {
+            content: $language_name;
+
+            position: absolute;
+            // background-color: #757575;
+            // color: white;
+            background-color: $light-grey;
+            font-family: Helvetica,Arial,Tahoma,Verdana,Sans-Serif;
+            font-size: 10px;
+            line-height: 16px;
+            padding: calc(0.6em * 0.3) calc(0.6em * 0.8);
+            right: 10px;
+            top: -1px;
+            white-space: nowrap;
+        }
+    }
+
+    hr {
+        background-color: #dedede;
+        border: 0;
+        height: 4px;
+        margin: 15px 0;
+    }
+
+    
+
+    table {
+       border-spacing: 0;
+       border-collapse: collapse;
+       width: 100%;
+
+        th {
+            background-color: rgb(0 0 0 / 5%);
+        }
+
+        td, th {
+            // border:  1px solid #bfbfbf;
+            border: 1px solid #343536;
+            min-width: 2em;
+            padding: 0.4em;
+        }
+    }
+}

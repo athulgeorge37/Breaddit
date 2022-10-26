@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./Posts.scss";
 
-import CreatePost from "../components/CreatePost";
-import PostContent from "../components/PostContent";
-import Loading from "../components/Loading";
+import CreatePost from "../features/post/CreatePost";
+import PostContent from "../features/post/PostContent";
+import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
 import { useCurrentUser } from "../Contexts/CurrentUser/CurrentUserProvider";

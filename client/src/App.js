@@ -1,26 +1,29 @@
+// styling imports
 import "./App.scss";
-
-import { lazy, Suspense } from "react";
-
-// loading import
-import Loading from "./components/Loading";
-
-// routing imports
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Context Provider imports
 import NotificationProvider from "./Contexts/Notifications/NotificationProvider";
 import CurrentUserProvider from "./Contexts/CurrentUser/CurrentUserProvider";
 
+// react query import
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // common components on every page
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./page_layout/Navbar";
+import Footer from "./page_layout/Footer";
+
+// loading import, will be displayed while lazy loading a page
+import Loading from "./components/ui/Loading";
+
+// routing imports
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// lazy loading imports
+import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading
 const Home = lazy(() => import("./pages/Home"));
-const SignUp = lazy(() => import("./pages/sign_up_page/SignUp"));
+const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Posts = lazy(() => import("./pages/Posts"));

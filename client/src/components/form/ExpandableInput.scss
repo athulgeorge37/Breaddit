@@ -1,0 +1,16 @@
+@import "../../variables.scss";
+
+
+.ExpandableInput {
+    width: 100%;
+
+    .expandable_input {
+        @include input_styles;
+        width: 100%;
+        resize: none;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+}

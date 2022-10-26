@@ -1,0 +1,67 @@
+@import "../../variables.scss";
+
+.login_input {
+    display: flex;
+    flex-direction: column;
+    color: $white;
+    font-size: 14px;
+    margin-bottom: 16px;
+
+    label {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    input {
+        @include input_styles;
+    }
+
+    .password_input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 12px;
+        
+        border: 1px solid $blue;
+ 
+
+        background-color: $black;
+        color: $white;
+        border-radius: $default-border-radius;
+
+
+        input {
+            outline: none;
+            border: none;
+            background-color: $black;
+            color: $white;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 0;
+            width: 100%;
+        }
+
+
+        img {
+            height: 20px;
+            width: 20px;
+            @include white-filter_color;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    
+    
+    .error_msg {
+        color: $red;
+        margin-top: 4px;
+
+        ul {
+            margin-left: 16px;
+        }
+    }
+}
+

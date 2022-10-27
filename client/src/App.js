@@ -8,6 +8,8 @@ import CurrentUserProvider from "./context/CurrentUser/CurrentUserProvider";
 // react query import
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 // common components on every page
 import Navbar from "./page_layout/Navbar";
 import Footer from "./page_layout/Footer";
@@ -39,6 +41,7 @@ function App() {
     return (
         <div className="App">
             <QueryClientProvider client={client}>
+                <ReactQueryDevtools />
                 <Router>
                     <CurrentUserProvider>
                         <Navbar />

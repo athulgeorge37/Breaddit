@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { remove_item_local_storage } from "../../helper/local_storage";
 import { is_valid_web_token } from "../../rest_api_requests/UserRequests";
 
+import { useQuery } from "@tanstack/react-query";
+
 const CurrentUserContext = createContext();
 
 const DEFAULT_CURR_USER_STATE = {
@@ -19,37 +21,49 @@ export default function CurrentUserProvider({ children }) {
 
     const [current_user, set_current_user] = useState(DEFAULT_CURR_USER_STATE);
 
+    // allows us to only make one request when component mounts
+    const { data: valid_web_token } = useQuery(
+        ["valid_web_token"],
+        is_valid_web_token
+    );
+
     useEffect(() => {
-        // checks if user is logged in based on the web token and
-        // allows us to condtionnaly render UI
-        // console.log("validating user...")
-        initialise_curr_user();
-    }, []);
+        // only updates current user state, when there is data
+        if (valid_web_token) {
+            console.log("data", valid_web_token);
+            set_current_user_in_app(valid_web_token);
+        }
+    }, [valid_web_token]);
 
-    const initialise_curr_user = async () => {
-        const response = await is_valid_web_token();
-
-        if (response.error) {
-            set_current_user(DEFAULT_CURR_USER_STATE);
+    const set_current_user_in_app = (valid_web_token) => {
+        if (valid_web_token.error) {
             console.log("user is invalid");
+            set_current_user(DEFAULT_CURR_USER_STATE);
         } else {
             console.log({
-                msg: `SignedIn as ${response.username}`,
-                role: response.role,
+                msg: `SignedIn as ${valid_web_token.username}`,
+                role: valid_web_token.role,
             });
 
             set_current_user({
-                username: response.username,
-                profile_pic: response.profile_pic,
+                username: valid_web_token.username,
+                profile_pic: valid_web_token.profile_pic,
+                role: valid_web_token.role,
                 authenticated: true,
-                role: response.role,
             });
-            // console.log("user validated")
-            return {
-                username: response.username,
-                role: response.role,
-            };
         }
+    };
+
+    const initialise_curr_user = async () => {
+        console.log("initialising curr user");
+        const response = await is_valid_web_token();
+
+        set_current_user_in_app(response);
+
+        return {
+            username: response.username,
+            role: response.role,
+        };
     };
 
     const update_current_user = (new_username, new_profile_pic) => {

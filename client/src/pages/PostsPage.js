@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./Posts.scss";
 
 import CreatePost from "../features/post/CreatePost";
-import PostContent from "../features/post/PostContent";
+import Post from "../features/post/Post";
 import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
@@ -10,7 +10,7 @@ import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 const POSTS_PER_PAGE = 2;
 
-function Posts() {
+function PostsPage() {
     const { current_user } = useCurrentUser();
 
     const [all_posts2, set_all_posts2] = useState([]);
@@ -122,7 +122,7 @@ function Posts() {
                 <div className="All_Posts">
                     {all_posts2.map((post_details) => {
                         return (
-                            <PostContent
+                            <Post
                                 key={post_details.id}
                                 post_details={post_details}
                                 remove_post_from_list={remove_post_from_list}
@@ -141,4 +141,4 @@ function Posts() {
     );
 }
 
-export default Posts;
+export default PostsPage;

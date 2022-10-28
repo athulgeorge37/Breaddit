@@ -24,13 +24,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading
-const Home = lazy(() => import("./pages/HomePage"));
-const SignUp = lazy(() => import("./pages/SignUpPage"));
-const SignIn = lazy(() => import("./pages/SignInPage"));
-const Profile = lazy(() => import("./pages/ProfilePage"));
-const Posts = lazy(() => import("./pages/PostsPage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const SignInPage = lazy(() => import("./pages/SignInPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const PostsPage = lazy(() => import("./pages/PostsPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
-const Error = lazy(() => import("./pages/ErrorPage"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Summary = lazy(() => import("./features/admin/Summary"));
 const AllUsers = lazy(() => import("./features/admin/AllUsers"));
 const UserOverview = lazy(() => import("./features/admin/UserOverview"));
@@ -50,22 +50,25 @@ function App() {
                             <div className="main_body">
                                 <Suspense fallback={<Loading />}>
                                     <Routes>
-                                        <Route path="/" element={<Home />} />
+                                        <Route
+                                            path="/"
+                                            element={<HomePage />}
+                                        />
                                         <Route
                                             path="/signup"
-                                            element={<SignUp />}
+                                            element={<SignUpPage />}
                                         />
                                         <Route
                                             path="/signin"
-                                            element={<SignIn />}
+                                            element={<SignInPage />}
                                         />
                                         <Route
                                             path="/profile/:username_route"
-                                            element={<Profile />}
+                                            element={<ProfilePage />}
                                         />
                                         <Route
                                             path="/posts"
-                                            element={<Posts />}
+                                            element={<PostsPage />}
                                         />
                                         <Route
                                             path="/admin_dashboard"
@@ -84,7 +87,10 @@ function App() {
                                                 element={<UserOverview />}
                                             />
                                         </Route>
-                                        <Route path="*" element={<Error />} />
+                                        <Route
+                                            path="*"
+                                            element={<ErrorPage />}
+                                        />
                                     </Routes>
                                 </Suspense>
                             </div>

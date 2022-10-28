@@ -16,7 +16,7 @@ import { get_last_minute } from "../helper/get_list_of_dates";
 import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
-function Profile() {
+function ProfilePage() {
     const navigate = useNavigate();
 
     const { current_user } = useCurrentUser();
@@ -94,4 +94,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default ProfilePage;

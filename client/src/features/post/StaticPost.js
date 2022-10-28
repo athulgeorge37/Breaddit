@@ -1,5 +1,5 @@
 // style import
-import "./StaticPostContent.scss";
+import "./StaticPost.scss";
 
 // hook imports
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
 
 // component imports
-import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import AdjustableButton from "../../components/ui/AdjustableButton";
 import Button from "../../components/ui/Button";
 import ParsedText from "../../components/form/ParsedText";
@@ -23,7 +23,7 @@ import DOMPurify from "dompurify";
 import { UPDATE_IS_INAPPROPRIATE_STATUS } from "../../graphql/PostQueries";
 import { useMutation } from "@apollo/client";
 
-function StaticPostContent({ post_details }) {
+function StaticPost({ post_details }) {
     // required for read_more/less button
     const posted_content_ref = useRef();
 
@@ -225,4 +225,4 @@ function StaticPostContent({ post_details }) {
     );
 }
 
-export default StaticPostContent;
+export default StaticPost;

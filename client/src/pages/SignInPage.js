@@ -12,7 +12,7 @@ import LoginInput from "../components/form/LoginInput";
 import { is_unique_email, sign_in } from "../rest_api_requests/UserRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
-function SignIn() {
+function SignInPage() {
     const navigate = useNavigate();
     const { initialise_curr_user } = useCurrentUser();
 
@@ -137,4 +137,4 @@ function SignIn() {
     );
 }
 
-export default SignIn;
+export default SignInPage;

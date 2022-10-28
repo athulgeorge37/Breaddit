@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // component imports
 import FollowerCard from "../follower/FollowerCard";
-import PostContent from "../post/PostContent";
+import Post from "../post/Post";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Loading from "../../components/ui/Loading";
 
@@ -563,7 +563,7 @@ function ReadProfile({ set_toggle_edit_page }) {
                                             {all_user_posts.map(
                                                 (post_details) => {
                                                     return (
-                                                        <PostContent
+                                                        <Post
                                                             key={
                                                                 post_details.id
                                                             }
@@ -587,7 +587,7 @@ function ReadProfile({ set_toggle_edit_page }) {
                                             {all_user_posts.map(
                                                 (post_details) => {
                                                     return (
-                                                        <PostContent
+                                                        <Post
                                                             key={
                                                                 post_details.id
                                                             }

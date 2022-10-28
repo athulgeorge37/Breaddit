@@ -25,7 +25,7 @@ const generate_random_code = () => {
     return Math.floor(100000 + Math.random() * 900000);
 };
 
-function SignUp() {
+function SignUpPage() {
     const { initialise_curr_user } = useCurrentUser();
 
     const navigate = useNavigate();
@@ -79,11 +79,12 @@ function SignUp() {
             return;
         }
 
-        initialise_curr_user({
-            username: response.username,
-            profile_pic: response.profile_pic,
-            authenticated: true,
-        });
+        // initialise_curr_user({
+        //     username: response.username,
+        //     profile_pic: response.profile_pic,
+        //     authenticated: true,
+        // });
+        await initialise_curr_user();
 
         // visual cue for sign up
         set_signed_up(true);
@@ -177,4 +178,4 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+export default SignUpPage;

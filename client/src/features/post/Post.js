@@ -1,44 +1,42 @@
 // style import
-import "./PostContent.scss";
+import "./Post.scss";
 
 // hook imports
 import { useEffect, useRef, useState } from "react";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
 import { delete_post, edit_post } from "../../rest_api_requests/PostRequests";
 import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
+import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
 
-// component imports
-import AddComment from "../comment/AddComment";
-import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-import EditPost from "./EditPost";
+// ui component imports
 import Button from "../../components/ui/Button";
-import Votes from "../vote/Votes";
+import Modal from "../../components/ui/Modal";
+import Loading from "../../components/ui/Loading";
 import ParsedText from "../../components/form/ParsedText";
 import CloudinaryImage from "../../components/CloudinaryImage";
-import Comment from "../comment/Comment";
-
-import Modal from "../../components/ui/Modal";
-
-import { calculate_time_passed } from "../../helper/time";
-
-import DOMPurify from "dompurify";
-
-import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-
 // import useMeasure from "react-use-measure";
 import ResizablePanel, {
     ResizableComponent,
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
-import Loading from "../../components/ui/Loading";
 
-function PostContent({ post_details, remove_post_from_list }) {
+// feature  component imports
+import AddComment from "../comment/AddComment";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
+import EditPost from "./EditPost";
+import Votes from "../vote/Votes";
+import Comment from "../comment/Comment";
+
+import { calculate_time_passed } from "../../helper/time";
+import DOMPurify from "dompurify";
+
+function Post({ post_details, remove_post_from_list }) {
     const add_notification = useNotification();
-
     const { current_user } = useCurrentUser();
+    const resizable_panel_states = useResizablePanel();
 
     // required for read_more/less button
     // const posted_content_ref = useRef();
@@ -51,8 +49,6 @@ function PostContent({ post_details, remove_post_from_list }) {
         useState(false);
 
     const [loading_comments, set_loading_comments] = useState(false);
-
-    const resizable_panel_states = useResizablePanel();
 
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
@@ -417,4 +413,4 @@ function PostContent({ post_details, remove_post_from_list }) {
     );
 }
 
-export default PostContent;
+export default Post;

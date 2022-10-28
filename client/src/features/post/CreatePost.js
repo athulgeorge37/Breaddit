@@ -11,14 +11,14 @@ import { create_post } from "../../rest_api_requests/PostRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
-import {
-    motion,
-    AnimatePresence,
-    AnimateSharedLayout,
-    LayoutGroup,
-} from "framer-motion";
+// import {
+//     motion,
+//     AnimatePresence,
+//     AnimateSharedLayout,
+//     LayoutGroup,
+// } from "framer-motion";
 
-const MAX_POST_TEXT_CHARACTERS = 250;
+const MAX_POST_TEXT_CHARACTERS = 500;
 
 function CreatePost({ add_post_to_list }) {
     const add_notification = useNotification();
@@ -83,80 +83,72 @@ function CreatePost({ add_post_to_list }) {
 
     return (
         <div className="Create_Post">
-            <LayoutGroup>
-                <AnimatePresence>
-                    {expanded_view ? (
-                        <>
-                            {current_user.authenticated ? (
-                                <motion.div
-                                    className="expanded_post_view"
-                                    layout
-                                >
-                                    <h2>Create Post</h2>
+            {expanded_view ? (
+                <>
+                    {current_user.authenticated ? (
+                        <div className="expanded_post_view">
+                            <h2>Create Post</h2>
 
-                                    <EditPost
-                                        image_url={image_url}
-                                        set_image_url={set_image_url}
-                                        post_title={post_title}
-                                        set_post_title={set_post_title}
-                                        post_text={post_text}
-                                        set_post_text={set_post_text}
-                                        valid_title={valid_title}
-                                    />
+                            <EditPost
+                                image_url={image_url}
+                                set_image_url={set_image_url}
+                                post_title={post_title}
+                                set_post_title={set_post_title}
+                                post_text={post_text}
+                                set_post_text={set_post_text}
+                                valid_title={valid_title}
+                            />
 
-                                    <div className="characters_and_btns">
-                                        <span className="characters_left">
-                                            {MAX_POST_TEXT_CHARACTERS -
-                                                post_text.length}{" "}
-                                            characters left
-                                        </span>
+                            <div className="characters_and_btns">
+                                <span className="characters_left">
+                                    {MAX_POST_TEXT_CHARACTERS -
+                                        post_text.length}{" "}
+                                    characters left
+                                </span>
 
-                                        <div className="post_btns">
-                                            <button
-                                                className="cancel_btn"
-                                                onClick={handle_post_cancel}
-                                            >
-                                                Cancel
-                                            </button>
-
-                                            <button
-                                                className="post_btn"
-                                                onClick={handle_post_submit}
-                                            >
-                                                Post
-                                            </button>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ) : (
-                                <div className="redirect_from_posts">
-                                    Please{" "}
+                                <div className="post_btns">
                                     <button
-                                        className="sign_in_btn"
-                                        onClick={() => navigate("/signin")}
+                                        className="cancel_btn"
+                                        onClick={handle_post_cancel}
                                     >
-                                        Sign In
-                                    </button>{" "}
-                                    to Post
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        className="post_btn"
+                                        onClick={handle_post_submit}
+                                    >
+                                        Post
+                                    </button>
                                 </div>
-                            )}
-                        </>
+                            </div>
+                        </div>
                     ) : (
-                        <motion.div className="collapsed_post_view" layout>
-                            <ProfilePicture
-                                profile_picture_url={current_user.profile_pic}
-                                username={current_user.username}
-                            />
-                            <motion.input
-                                layout
-                                type="text"
-                                placeholder="Create Post"
-                                onFocus={() => set_expanded_view(true)}
-                            />
-                        </motion.div>
+                        <div className="redirect_from_posts">
+                            Please{" "}
+                            <button
+                                className="sign_in_btn"
+                                onClick={() => navigate("/signin")}
+                            >
+                                Sign In
+                            </button>{" "}
+                            to Post
+                        </div>
                     )}
-                </AnimatePresence>
-            </LayoutGroup>
+                </>
+            ) : (
+                <div className="collapsed_post_view">
+                    <ProfilePicture
+                        profile_picture_url={current_user.profile_pic}
+                        username={current_user.username}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Create Post"
+                        onFocus={() => set_expanded_view(true)}
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -8,7 +8,7 @@ import PaginatedTable from "../../pagination/PaginatedTable";
 import { useLazyQuery } from "@apollo/client";
 import { POSTS_BY_USER } from "../../../graphql/PostQueries";
 import { GET_VOTE_DATE_DATA } from "../../../graphql/VoteQueries";
-import StaticPostContent from "../../post/StaticPostContent";
+import StaticPost from "../../post/StaticPost";
 import { useState } from "react";
 import LineChart from "../LineChart";
 
@@ -133,7 +133,7 @@ function PostData({ user_id, username, profile_pic }) {
             <div className="curr_post_and_line_chart">
                 {curr_post !== null && (
                     <>
-                        <StaticPostContent post_details={curr_post} />
+                        <StaticPost post_details={curr_post} />
                         <LineChart
                             get_data={get_all_vote_data}
                             chart_data={chart_data}

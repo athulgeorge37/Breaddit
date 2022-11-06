@@ -2,7 +2,7 @@
 import "./Post.scss";
 
 // hook imports
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, forwardRef } from "react";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
@@ -33,7 +33,7 @@ import Comment from "../comment/Comment";
 import { calculate_time_passed } from "../../helper/time";
 import DOMPurify from "dompurify";
 
-function Post({ post_details, remove_post_from_list }) {
+function Post({ post_details, remove_post_from_list }, ref) {
     const add_notification = useNotification();
     const { current_user } = useCurrentUser();
     const resizable_panel_states = useResizablePanel();
@@ -162,7 +162,7 @@ function Post({ post_details, remove_post_from_list }) {
         add_notification("Succesfully Deleted Post");
     };
 
-    return (
+    const post_content = (
         <div className="PostContent">
             <Modal ref={modal_ref} btn_color="red" width="300">
                 <h2>Delete Post?</h2>
@@ -411,6 +411,14 @@ function Post({ post_details, remove_post_from_list }) {
             </div>
         </div>
     );
+
+    return ref ? (
+        <div ref={ref} className="ref">
+            {post_content}
+        </div>
+    ) : (
+        <div>{post_content}</div>
+    );
 }
 
-export default Post;
+export default forwardRef(Post);

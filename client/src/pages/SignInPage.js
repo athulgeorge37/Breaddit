@@ -1,5 +1,5 @@
 // style import
-import "./SignIn.scss";
+import "./SignInPage.scss";
 
 // hook imports
 import { useState } from "react";

@@ -1,5 +1,5 @@
 // styles
-import "./Profile.scss";
+import "./ProfilePage.scss";
 
 // components
 import EditProfile from "../features/profile/EditProfile";

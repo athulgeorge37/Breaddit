@@ -30,7 +30,7 @@ export default function CurrentUserProvider({ children }) {
     useEffect(() => {
         // only updates current user state, when there is data
         if (valid_web_token) {
-            console.log("data", valid_web_token);
+            // console.log("data", valid_web_token);
             set_current_user_in_app(valid_web_token);
         }
     }, [valid_web_token]);

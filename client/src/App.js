@@ -29,6 +29,7 @@ const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
+const PostPage = lazy(() => import("./pages/PostPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Summary = lazy(() => import("./features/admin/Summary"));
@@ -69,6 +70,10 @@ function App() {
                                         <Route
                                             path="/posts"
                                             element={<PostsPage />}
+                                        />
+                                        <Route
+                                            path="/post/:post_id_route"
+                                            element={<PostPage />}
                                         />
                                         <Route
                                             path="/admin_dashboard"

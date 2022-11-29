@@ -1,0 +1,132 @@
+@import "../variables.scss";
+
+.PostPage {
+    width: 50%;
+
+    .PostContent {
+        margin-bottom: calc(2 * $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        border-radius: $default-border-radius;
+    
+        box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+    
+    
+        .delete_modal_div {
+            .cancel {
+                @include btn-styles($blue);
+            }
+    
+            .delete_post_btn {
+                @include btn-styles($green);
+            }
+        }
+       
+    
+        .post_user_and_awards {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // padding: $inner_padding 0 10px $inner_padding;
+            padding: 0.5em;
+            border-bottom: 1px solid $light-grey;
+    
+            .post_user {
+                display: flex;
+                align-items: center;
+            }
+    
+            .btns {
+                display: flex;
+                justify-content: center;
+            }
+    
+            
+        }
+    
+        .main_content_and_votes {
+            display: flex;
+            padding: 16px;
+    
+            position: relative;
+    
+            .show_more_btn {
+                position: absolute;
+                bottom: 1em;
+                right: 1em;
+            }
+    
+            .text_content {
+                background-color: $dark-grey;
+                color: $white;
+    
+                // calculate the entire value including padding , margin, border
+                // that this div, and the votes div take
+                width: calc(100%);
+                box-sizing: border-box;
+            
+                display: flex;
+                align-items: center;
+                justify-content: center;
+    
+    
+                .editable_content {
+                    width: 100%;
+    
+    
+                    .text_editor {
+                        margin-bottom: 0;
+                        width: 100%;
+                    }
+                }
+               
+    
+                .display_text {
+                    width: 100%;
+                    overflow-wrap: break-word;
+    
+    
+                    .Title {
+                        margin-bottom: 10px;
+                    }
+    
+                    .image_display {
+                        margin-bottom: 10px;
+                        img {
+                            width: 100%;
+                            height: auto;
+                            // aspect-ratio: 16/9;
+                            // object-fit: cover;
+                            border-radius: $default-border-radius;
+                        }
+                    }
+    
+                }
+            }
+    
+        }
+    
+        .post_btns {
+            padding: 0.5em;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid $light-grey;   
+    
+            .votes {
+                margin-left: 10px;
+            }
+    
+            .is_inappropriate_error {
+                display: flex;
+                align-items: center;
+                color: red;
+            }
+    
+            .both_comments_btns {    
+                display: flex;   
+            }
+        }
+    
+    
+    }
+}

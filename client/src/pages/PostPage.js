@@ -1,42 +1,49 @@
-// This component is not currently being used
-
 // style import
-import "./Post.scss";
+import "./PostPage.scss";
 
 // hook imports
-import { useEffect, useRef, useState, forwardRef } from "react";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useRef, useState } from "react";
+import { useNotification } from "../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
-import { delete_post, edit_post } from "../../rest_api_requests/PostRequests";
-import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
-import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
+import { delete_post, edit_post } from "../rest_api_requests/PostRequests";
+import { get_all_comments_by_post_id } from "../rest_api_requests/CommentRequests";
+import { check_if_comments_or_replies_exist } from "../rest_api_requests/CommentRequests";
 
 // ui component imports
-import Button from "../../components/ui/Button";
-import Modal from "../../components/ui/Modal";
-import Loading from "../../components/ui/Loading";
-import ParsedText from "../../components/form/ParsedText";
-import CloudinaryImage from "../../components/CloudinaryImage";
-// import useMeasure from "react-use-measure";
+import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
+import Loading from "../components/ui/Loading";
+import ParsedText from "../components/form/ParsedText";
+import CloudinaryImage from "../components/CloudinaryImage";
+
 import ResizablePanel, {
     ResizableComponent,
     useResizablePanel,
-} from "../../components/ui/ResizablePanel";
+} from "../components/ui/ResizablePanel";
 
 // feature  component imports
-import AddComment from "../comment/AddComment";
-import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-import EditPost from "./EditPost";
-import Votes from "../vote/Votes";
-import Comment from "../comment/Comment";
+import AddComment from "../features/comment/AddComment";
+import ProfilePicture from "../features/profile/profile_picture/ProfilePicture";
+import EditPost from "../features/post/EditPost";
+import Votes from "../features/vote/Votes";
+import Comment from "../features/comment/Comment";
 
-import { calculate_time_passed } from "../../helper/time";
+import { calculate_time_passed } from "../helper/time";
 import DOMPurify from "dompurify";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { get_post_by_id } from "../rest_api_requests/PostRequests";
 
-function Post({ post_details, remove_post_from_list }, ref) {
+function PostPage() {
+    const { post_id_route } = useParams();
+
+    // use the params or the post_details to get the actual post details
+    // render out the post and the comments horizontally
+
+    const [post_details, set_post_details] = useState(null);
+
     const add_notification = useNotification();
     const { current_user } = useCurrentUser();
     const resizable_panel_states = useResizablePanel();
@@ -46,9 +53,9 @@ function Post({ post_details, remove_post_from_list }, ref) {
     const modal_ref = useRef();
 
     const [valid_title, set_valid_title] = useState(true);
-    const [post_title, set_post_title] = useState(post_details.title);
-    const [post_text, set_post_text] = useState(post_details.text);
-    const [image_url, set_image_url] = useState(post_details.image);
+    const [post_title, set_post_title] = useState("");
+    const [post_text, set_post_text] = useState("");
+    const [image_url, set_image_url] = useState("");
 
     const [show_add_comment, set_show_add_comment] = useState(false);
     const [allow_comments_section_btn, set_allow_comments_section_btn] =
@@ -57,8 +64,41 @@ function Post({ post_details, remove_post_from_list }, ref) {
     const [loading_comments, set_loading_comments] = useState(false);
     const [edit_btn_active, set_edit_btn_active] = useState(false);
     const [all_comments, set_all_comments] = useState([]);
-
     // const [posted_content_ref, { height }] = useMeasure();
+
+    const { loading: post_details_loading } = useQuery(
+        ["post_content", post_id_route],
+        () => {
+            return get_post_by_id(post_id_route);
+        },
+        {
+            onSuccess: (data) => {
+                const post_details_data = data.post_details;
+
+                set_post_details(post_details_data);
+
+                set_post_title(post_details_data.title);
+                set_post_text(post_details_data.text);
+                set_image_url(post_details_data.image);
+            },
+        }
+    );
+
+    useQuery(
+        ["post_has_comments", post_id_route],
+        () => {
+            return check_if_comments_or_replies_exist("comment", post_id_route);
+        },
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log({ error: data.error });
+                    return;
+                }
+                set_allow_comments_section_btn(data.is_any);
+            },
+        }
+    );
 
     const add_comment_to_list = (new_comment_details) => {
         // when adding new_post_details, ensure that
@@ -78,11 +118,6 @@ function Post({ post_details, remove_post_from_list }, ref) {
         add_notification("Succesfully removed Comment");
     };
 
-    // to get all_comments of post_id
-    useEffect(() => {
-        initialse_allow_show_comment_section();
-    }, []);
-
     const initialse_all_comments = async () => {
         if (allow_comments_section_btn === false) {
             return;
@@ -100,20 +135,6 @@ function Post({ post_details, remove_post_from_list }, ref) {
         set_loading_comments(false);
 
         set_all_comments(response.all_comments);
-    };
-
-    const initialse_allow_show_comment_section = async () => {
-        const response = await check_if_comments_or_replies_exist(
-            "comment",
-            post_details.id
-        );
-
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        set_allow_comments_section_btn(response.is_any);
     };
 
     const handle_edit_post_save = async () => {
@@ -149,7 +170,7 @@ function Post({ post_details, remove_post_from_list }, ref) {
 
     const handle_delete_post = async () => {
         // removing post in db
-        const response = await delete_post(post_details.id);
+        const response = await delete_post(post_id_route);
 
         if (response.error) {
             console.log(response);
@@ -157,10 +178,14 @@ function Post({ post_details, remove_post_from_list }, ref) {
         }
 
         // removing post on client side when deleted from db
-        remove_post_from_list(post_details.id);
+        // remove_post_from_list(post_details.id);
 
         add_notification("Succesfully Deleted Post");
     };
+
+    if (post_details_loading === true || post_details === null) {
+        return <Loading />;
+    }
 
     const post_content = (
         <div className="PostContent">
@@ -412,13 +437,7 @@ function Post({ post_details, remove_post_from_list }, ref) {
         </div>
     );
 
-    return ref ? (
-        <div ref={ref} className="ref">
-            {post_content}
-        </div>
-    ) : (
-        <div>{post_content}</div>
-    );
+    return <div className="PostPage">{post_content}</div>;
 }
 
-export default forwardRef(Post);
+export default PostPage;

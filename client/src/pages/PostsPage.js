@@ -3,14 +3,16 @@ import "./PostsPage.scss";
 
 import CreatePost from "../features/post/CreatePost";
 import Post from "../features/post/Post";
+import PostContent from "../features/post/PostContent";
 import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
-const POSTS_PER_PAGE = 3;
+const POSTS_PER_PAGE = 2;
 
 // function PostsPage() {
 //     const { current_user } = useCurrentUser();
@@ -144,6 +146,9 @@ const POSTS_PER_PAGE = 3;
 // }
 
 function PostsPage() {
+    const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
+
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -174,14 +179,17 @@ function PostsPage() {
     const intObserver = useRef();
     const lastPostRef = useCallback(
         (post) => {
+            // not requesting next page if current page is loading
             if (isFetchingNextPage) {
                 return;
             }
 
+            // disconnecting previous intersection observers
             if (intObserver.current) {
                 intObserver.current.disconnect();
             }
 
+            // fetching next intersection observer
             intObserver.current = new IntersectionObserver((posts) => {
                 // console.log({
                 //     isIntersecting: posts[0].isIntersecting,
@@ -204,8 +212,12 @@ function PostsPage() {
         return <p className="center">Error: {error}</p>;
     }
 
-    const remove_post_from_list = () => {
+    const add_post_to_list = (new_post_details) => {
+        // when adding new_post_details, ensure that
+        // it has all the post details including updatedAt and
+        // author_details = { username, profile_pic }
         return null;
+        // set_all_posts([...all_posts, new_post_details]);
     };
 
     const content = data?.pages.map((pg) => {
@@ -214,31 +226,28 @@ function PostsPage() {
         return pg.all_posts.map((post_details, i) => {
             if (i + 1 === length_of_posts) {
                 return (
-                    <Post
-                        ref={lastPostRef}
-                        key={post_details.id}
-                        post_details={post_details}
-                        remove_post_from_list={remove_post_from_list}
-                    />
+                    <div ref={lastPostRef} key={post_details.id}>
+                        <PostContent post_details={post_details} />
+                    </div>
                 );
             }
             return (
-                <Post
-                    key={post_details.id}
-                    post_details={post_details}
-                    remove_post_from_list={remove_post_from_list}
-                />
+                <div key={post_details.id}>
+                    <PostContent post_details={post_details} />
+                </div>
             );
         });
     });
 
     return (
         <div className="Posts_Page">
+            {current_user.role !== "admin" && (
+                <CreatePost add_post_to_list={add_post_to_list} />
+            )}
+
             <div className="All_Posts">
                 {content}
-                {isFetchingNextPage && (
-                    <p className="center">Loading More Posts...</p>
-                )}
+                {isFetchingNextPage && <Loading />}
 
                 {hasNextPage === false && <p>There are no more posts</p>}
             </div>

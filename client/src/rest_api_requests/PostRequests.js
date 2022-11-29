@@ -66,6 +66,14 @@ const get_all_posts = async (limit, page_num) => {
     return response.data;
 };
 
+const get_post_by_id = async (post_id) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_by_post_id/${post_id}`
+    );
+
+    return response.data;
+};
+
 const get_all_posts_by_curr_user = async () => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_all/by_curr_user`,
@@ -92,6 +100,7 @@ export {
     delete_post,
     edit_post,
     get_all_posts,
+    get_post_by_id,
     get_all_posts_by_curr_user,
     get_all_posts_by_username,
 };

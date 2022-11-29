@@ -62,6 +62,35 @@ router.get(
     }
 );
 
+router.get("/get_by_post_id/:post_id", async (request, response) => {
+    // the user details who made that post
+    try {
+        const post_id = parseInt(request.params.post_id);
+
+        const post_details = await db.Post.findOne({
+            where: {
+                id: post_id,
+            },
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+        });
+
+        response.json({
+            msg: "succesfully got post details",
+            post_details: post_details,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
 router.get(
     "/get_all/by_curr_user",
     validate_request,

@@ -22,6 +22,7 @@ import {
 } from "../../rest_api_requests/CommentRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useNavigate } from "react-router-dom";
 
 function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
     // the comment component renders both surface level comments and
@@ -31,6 +32,8 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
 
     const { current_user } = useCurrentUser();
     const add_notification = useNotification();
+
+    const navigate = useNavigate();
 
     const modal_ref = useRef();
 
@@ -181,8 +184,18 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
             <div className="comment_content_container">
                 <div className="comment_content">
                     <div className="comment_author_and_edit_delete_btns">
-                        <div className="comment_author">
-                            <b>{comment.author_details.username} • </b>
+                        <div
+                            className="comment_author"
+                            onClick={() =>
+                                navigate(
+                                    `/profile/${comment.author_details.username}`
+                                )
+                            }
+                        >
+                            <b className="username">
+                                {comment.author_details.username}
+                            </b>
+                            <b> • </b>
                             {comment.edited && "(edited) • "}
                             {calculate_time_passed(comment.updatedAt)} ago
                         </div>

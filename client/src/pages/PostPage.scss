@@ -4,7 +4,7 @@
     width: 50%;
 
     .PostContent {
-        margin-bottom: calc(2 * $inner_padding);
+        margin-bottom: calc(1.5 * $inner_padding);
         background-color: $dark-grey;
         border: 1px solid $light-grey;
         border-radius: $default-border-radius;
@@ -34,6 +34,21 @@
             .post_user {
                 display: flex;
                 align-items: center;
+
+
+                .posted_by_user {
+
+                    &:hover {
+                        cursor: pointer;
+    
+                        .username {
+                            color: $blue;
+                            text-decoration: underline;
+                            
+                        }
+                    }
+                }
+
             }
     
             .btns {
@@ -129,4 +144,15 @@
     
     
     }
+
+
+    .Add_Comment {
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        border-radius: $default-border-radius;
+        box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+        margin-bottom: calc(1.5 * $inner_padding);
+    }
+
+
 }

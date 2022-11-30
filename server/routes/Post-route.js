@@ -8,31 +8,13 @@ const { validate_request } = require("../middlewares/AuthenticateRequests");
 router.get(
     "/get_all/limit/:limit/page_num/:page_num",
     async (request, response) => {
-        // "/get_all/limit/:limit/offset/:offset"
-
         // when getting list of posts, we also get
         // the user details who made that post
         try {
-            // response.json({
-            //     limit: request.params.limit,
-            //     offset: request.params.offset
-            // })
             const limit = parseInt(request.params.limit);
             let page_num = parseInt(request.params.page_num);
 
-            // if (page_num !== 0) {
-            //     page_num = page_num - 1;
-            // }
-
             const offset = limit * page_num;
-
-            // console.log(" ");
-            // console.log({
-            //     limit,
-            //     page_num,
-            //     offset,
-            // });
-            // console.log(" ");
 
             const list_of_posts = await db.Post.findAll({
                 where: {

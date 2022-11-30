@@ -5,274 +5,281 @@ const router = express.Router();
 
 const db = require("../models");
 
-
 router.put("/edit_comment_or_reply", async (request, response) => {
-        
     try {
-        const { comment_id, updated_text } = request.body
+        const { comment_id, updated_text } = request.body;
 
-        await db.Comment.update({
-            text: updated_text,
-            edited: true
-        }, {
-            where: {
-                id: comment_id,
-                // author_id: request.user_id
-            }
-        })
-
-        response.json({
-            msg: "Succesfully edited comment/reply in db"
-        })
-
-    } catch (e) {
-        response.json({
-            error: e
-        })
-    }
-    
-})
-
-router.get("/is_any/of_type/:type/for_parent_id/:id", async (request, response) => {
-    // checks if there is any comments,
-    // required to quickly find if we should render the comment_section/show_replies btn
-
-    // when type === comment, in which case parent_id is for a post
-    // when type === reply, in which case parent_id is for a comment
-
-    try {
-        const type = request.params.type;
-        const parent_id = request.params.id;
-
-        let is_any
-        if (type === "comment") {
-            is_any = await db.Comment.findOne({
+        await db.Comment.update(
+            {
+                text: updated_text,
+                edited: true,
+            },
+            {
                 where: {
-                    post_id: parent_id,
-                    is_reply: false
-                }
-            })
-        } else if (type === "reply") {
-            is_any = await db.Reply.findOne({
-                where: {
-                    parent_comment_id: parent_id,
-                }
-            })
-        } else {
-            response.json({
-                error: `${type} is not a valid type`
-            })
-        }
-
-        if (is_any === null) {
-            response.json({
-                is_any: false
-            })
-        } else {
-            response.json({
-                is_any: true
-            })
-        }
-
-
-    } catch (e) {
-        response.json({
-            error: e
-        })
-    }
-})
-
-router.get("/get_all_comments/by_post_id/:id", async (request, response) => {
-    // gets all the comments of a post or the replies of a comment
-    // where the id is the post_id
-    // and the is_reply determines if the response is 
-    // a list of comments or a list of replies
-
-    try {
-        const list_of_comments = await db.Comment.findAll({
-            include: [{
-                model: db.User,
-                as: "author_details",
-                attributes: ["username", "profile_pic"]
-            }],
-            where: {
-                post_id: request.params.id,    // parent_id here is === post_id
-                is_reply: false
+                    id: comment_id,
+                    // author_id: request.user_id
+                },
             }
-        })
+        );
+
         response.json({
-            msg: "succesfully got comments of parent_id",
-            all_comments: list_of_comments
-        })
+            msg: "Succesfully edited comment/reply in db",
+        });
     } catch (e) {
         response.json({
-            error: e
-        })
+            error: e,
+        });
     }
-})
+});
+
+router.get(
+    "/is_any/of_type/:type/for_parent_id/:id",
+    async (request, response) => {
+        // checks if there is any comments,
+        // required to quickly find if we should render the comment_section/show_replies btn
+
+        // when type === comment, in which case parent_id is for a post
+        // when type === reply, in which case parent_id is for a comment
+
+        try {
+            const type = request.params.type;
+            const parent_id = request.params.id;
+
+            let is_any;
+            if (type === "comment") {
+                is_any = await db.Comment.findOne({
+                    where: {
+                        post_id: parent_id,
+                        is_reply: false,
+                    },
+                });
+            } else if (type === "reply") {
+                is_any = await db.Reply.findOne({
+                    where: {
+                        parent_comment_id: parent_id,
+                    },
+                });
+            } else {
+                response.json({
+                    error: `${type} is not a valid type`,
+                });
+            }
+
+            if (is_any === null) {
+                response.json({
+                    is_any: false,
+                });
+            } else {
+                response.json({
+                    is_any: true,
+                });
+            }
+        } catch (e) {
+            response.json({
+                error: e,
+            });
+        }
+    }
+);
+
+router.get(
+    "/get_all_comments/by_post_id/:id/limit/:limit/page_num/:page_num",
+    async (request, response) => {
+        // gets all the comments of a post or the replies of a comment
+        // where the id is the post_id
+        // and the is_reply determines if the response is
+        // a list of comments or a list of replies
+
+        try {
+            const post_id = request.params.id;
+            const limit = parseInt(request.params.limit);
+            let page_num = parseInt(request.params.page_num);
+
+            const offset = limit * page_num;
+
+            const list_of_comments = await db.Comment.findAll({
+                where: {
+                    post_id: post_id, // parent_id here is === post_id
+                    is_reply: false,
+                },
+                order: [["updatedAt", "DESC"]],
+                include: [
+                    {
+                        model: db.User,
+                        as: "author_details",
+                        attributes: ["username", "profile_pic"],
+                    },
+                ],
+                limit: limit,
+                offset: offset,
+            });
+
+            response.json({
+                msg: "succesfully got comments of post_id",
+                all_comments: list_of_comments,
+            });
+        } catch (e) {
+            response.json({
+                error: e,
+            });
+        }
+    }
+);
 
 router.get("/get_all_replies/by_comment_id/:id", async (request, response) => {
     // gets all the comments of a post or the replies of a comment
     // where the id is the post_id
-    // and the is_reply determines if the response is 
+    // and the is_reply determines if the response is
     // a list of comments or a list of replies
 
     try {
         const list_of_replies = await db.Reply.findAll({
-            include: [{
-                // model: db.User,
-                // as: "author_details",
-                // attributes: ["username", "profile_pic"]
-                model: db.Comment,
-                as: "reply_content",
-                include: [{
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"]
-                }]
-            }],
+            include: [
+                {
+                    // model: db.User,
+                    // as: "author_details",
+                    // attributes: ["username", "profile_pic"]
+                    model: db.Comment,
+                    as: "reply_content",
+                    include: [
+                        {
+                            model: db.User,
+                            as: "author_details",
+                            attributes: ["username", "profile_pic"],
+                        },
+                    ],
+                },
+            ],
             where: {
-                parent_comment_id: request.params.id,    // parent_id here is === parent_comment_id
-            }
-        })
+                parent_comment_id: request.params.id, // parent_id here is === parent_comment_id
+            },
+        });
 
         response.json({
             msg: "succesfully got replies of parent_comment_id",
-            all_replies: list_of_replies
-        })
+            all_replies: list_of_replies,
+        });
     } catch (e) {
         response.json({
-            error: e
-        })
+            error: e,
+        });
     }
-})
+});
 
-router.post("/create/of_type/:type", validate_request, async (request, response) => {
-    
+router.post(
+    "/create/of_type/:type",
+    validate_request,
+    async (request, response) => {
+        try {
+            const type = request.params.type;
+            // parent_comment_id is not required to be included in body when type === comment
+            const { post_id, text, parent_comment_id } = request.body;
+            const author_id = request.user_id;
 
-    try {
-        const type = request.params.type;
-        // parent_comment_id is not required to be included in body when type === comment
-        const { post_id, text, parent_comment_id } = request.body
-        const author_id = request.user_id
+            if (type === "comment") {
+                const new_comment_details = await db.Comment.create({
+                    author_id: author_id,
+                    post_id: post_id,
+                    text: text,
+                    edited: false,
+                    is_reply: false,
+                });
 
-        if (type === "comment") {
-            const new_comment_details = await db.Comment.create({
-                author_id: author_id,
-                post_id: post_id,       
-                text: text,
-                edited: false,
-                is_reply: false
-            })
-    
+                response.json({
+                    msg: `succesfully created comment`,
+                    new_comment_or_reply_details: new_comment_details,
+                });
+            } else if (type === "reply") {
+                const new_reply_details = await db.Comment.create({
+                    post_id: post_id,
+                    author_id: author_id,
+                    text: text,
+                    edited: false,
+                    is_reply: true,
+                });
+
+                await db.Reply.create({
+                    reply_id: new_reply_details.id,
+                    parent_comment_id: parent_comment_id,
+                });
+
+                response.json({
+                    msg: `succesfully created reply`,
+                    new_comment_or_reply_details: new_reply_details,
+                });
+            } else {
+                response.json({
+                    error: `${type} is not a valid type`,
+                });
+            }
+        } catch (e) {
             response.json({
-                msg: `succesfully created comment`,
-                new_comment_or_reply_details: new_comment_details
-            })
-
-        } else if (type === "reply") {
-            const new_reply_details = await db.Comment.create({
-                post_id: post_id,     
-                author_id: author_id,     
-                text: text,
-                edited: false,
-                is_reply: true
-            })
-    
-            await db.Reply.create({
-                reply_id: new_reply_details.id,
-                parent_comment_id: parent_comment_id
+                error: e,
             });
-
-            response.json({
-                msg: `succesfully created reply`,
-                new_comment_or_reply_details: new_reply_details
-            })
-
-        } else {
-            response.json({
-                error: `${type} is not a valid type`
-            })
         }
-
-    } catch (e) {
-
-        response.json({
-            error: e
-        })
     }
-    
-})
+);
 
 router.delete("/delete/of_type/:type/by_id/:id", async (request, response) => {
-        
     try {
-        const type_to_delete_id = request.params.id
-        const type = request.params.type
+        const type_to_delete_id = request.params.id;
+        const type = request.params.type;
 
         if (type === "comment") {
-
             // had to implement delete replies when deleting comment
             // cus onDelete: 'cascade' would not work
             const all_replies = await db.Reply.findAll({
                 where: {
-                    parent_comment_id: type_to_delete_id
+                    parent_comment_id: type_to_delete_id,
                 },
-                attributes: ["reply_id"]
-            })
-    
-            const reply_ids = []
+                attributes: ["reply_id"],
+            });
+
+            const reply_ids = [];
             for (const obj of all_replies) {
-                reply_ids.push(obj.reply_id)
+                reply_ids.push(obj.reply_id);
             }
 
             // destorying all replies of that comment in Comment table
             await db.Comment.destroy({
                 where: {
-                    id: reply_ids
-                }
-            })
-
+                    id: reply_ids,
+                },
+            });
         } else if (type === "reply") {
             // pass
         } else {
             response.json({
-                error: `${type} is not a valid type`
-            })
+                error: `${type} is not a valid type`,
+            });
         }
-
 
         // destroying original comment or reply
         await db.Comment.destroy({
             where: {
                 id: type_to_delete_id,
                 // author_id: request.user_id  // get from validate_request
-            }
-        })
+            },
+        });
 
         if (type === "comment") {
             response.json({
-                msg: "Succesfully removed comment and its replies from DB"
-            })
+                msg: "Succesfully removed comment and its replies from DB",
+            });
         } else {
             response.json({
-                msg: "Succesfully removed reply from DB"
-            })
+                msg: "Succesfully removed reply from DB",
+            });
         }
-
     } catch (e) {
         response.json({
-            error: e
-        })
+            error: e,
+        });
 
         // response.json({
         //     error: e
         // })
     }
-    
-})
+});
 
-
-
-
-module.exports = router
+module.exports = router;

@@ -5,9 +5,8 @@
     display: flex;
     padding: 0.5em;
     // padding-bottom: 0;
-    border-top: 1px solid $light-grey;
+    border-bottom: 1px solid $light-grey;
 
-    
 
     .comment_content_container {
         display: flex;
@@ -28,6 +27,16 @@
 
                 .comment_author {
                     margin-bottom: 0.2em;
+
+                    &:hover {
+                        cursor: pointer;
+    
+                        .username {
+                            color: $blue;
+                            text-decoration: underline;
+                            
+                        }
+                    }
                 }
 
                 .edit_and_delete_btns {

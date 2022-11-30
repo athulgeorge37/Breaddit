@@ -60,12 +60,20 @@ const edit_comment_or_reply = async (comment_id, updated_text) => {
     return response.data;
 };
 
-const get_all_comments_by_post_id = async (post_id) => {
+// const get_all_comments_by_post_id = async (post_id) => {
+//     const response = await axios.get(
+//         `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}`
+//     );
+
+//     // returns an object with a property called all_comments: list of comment objects
+//     return response.data;
+// };
+
+const get_all_comments_by_post_id = async (post_id, limit, page_num) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}`
+        `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}/limit/${limit}/page_num/${page_num}`
     );
 
-    // returns an object with a property called all_comments: list of comment objects
     return response.data;
 };
 

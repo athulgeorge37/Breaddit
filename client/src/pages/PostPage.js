@@ -33,11 +33,13 @@ import Comment from "../features/comment/Comment";
 import { calculate_time_passed } from "../helper/time";
 import DOMPurify from "dompurify";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { get_post_by_id } from "../rest_api_requests/PostRequests";
+import CommentSectionInfiniteScroll from "../features/comment/CommentSectionInfiniteScroll";
 
 function PostPage() {
     const { post_id_route } = useParams();
+    const navigate = useNavigate();
 
     // use the params or the post_details to get the actual post details
     // render out the post and the comments horizontally
@@ -216,8 +218,18 @@ function PostPage() {
                         username={post_details.author_details.username}
                     />
 
-                    <div className="posted_by_user">
-                        <b>{post_details.author_details.username} • </b>
+                    <div
+                        className="posted_by_user"
+                        onClick={() =>
+                            navigate(
+                                `/profile/${post_details.author_details.username}`
+                            )
+                        }
+                    >
+                        <b className="username">
+                            {post_details.author_details.username}
+                        </b>
+                        <b> • </b>
                         {post_details.edited && "(edited) • "}
                         {calculate_time_passed(post_details.updatedAt)} ago
                     </div>
@@ -335,109 +347,33 @@ function PostPage() {
                         Moderators
                     </div>
                 )}
-
-                <div className="both_comments_btns">
-                    {current_user.role !== "admin" && (
-                        <Button
-                            handle_btn_click={() =>
-                                set_show_add_comment(!show_add_comment)
-                            }
-                            type="add_comment"
-                            span_text={
-                                show_add_comment
-                                    ? "Cancel Comment"
-                                    : "Add Comment"
-                            }
-                            span_class_name={
-                                show_add_comment
-                                    ? "cancel_comment_span"
-                                    : "add_comment_span"
-                            }
-                            img_name="add_comment"
-                            margin_right={true}
-                            active={show_add_comment}
-                        />
-                    )}
-
-                    {allow_comments_section_btn === true && (
-                        <Button
-                            handle_btn_click={() => {
-                                set_show_comments_section(
-                                    !show_comments_section
-                                );
-                                // when show_comments_section is true, we initialise all comments
-                                // however when we first click show_comments_section
-                                // will still be false even after setting state
-                                if (show_comments_section === false) {
-                                    initialse_all_comments();
-                                }
-                            }}
-                            type="comments_section"
-                            span_text={
-                                show_comments_section
-                                    ? "Hide Comments"
-                                    : "Show Comments"
-                            }
-                            img_name="comments"
-                            margin_right={true}
-                            active={show_comments_section}
-                        />
-                    )}
-                </div>
-            </div>
-
-            <div className="expanded_add_comment">
-                <ResizableComponent>
-                    {show_add_comment ? (
-                        <AddComment
-                            execute_after_add_comment={() => {
-                                set_show_add_comment(false);
-                                set_show_comments_section(true);
-
-                                if (all_comments.length === 0) {
-                                    set_allow_comments_section_btn(true);
-                                }
-                            }}
-                            placeholder="Add Comment"
-                            btn_text="Comment"
-                            comment_type="comment"
-                            post_id={post_details.id}
-                            add_comment_or_reply_to_list={add_comment_to_list}
-                        />
-                    ) : null}
-                </ResizableComponent>
-            </div>
-
-            <div className="expanded_comments_section">
-                <ResizableComponent>
-                    {show_comments_section ? (
-                        <>
-                            {loading_comments ? (
-                                <Loading />
-                            ) : (
-                                <div className="Comment_Section">
-                                    {all_comments.map((comment) => {
-                                        return (
-                                            <Comment
-                                                key={comment.id}
-                                                comment={comment}
-                                                remove_comment_or_reply_from_list={
-                                                    remove_comment_from_list
-                                                }
-                                                post_id={post_details.id}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </>
-                    ) : null}
-                </ResizableComponent>
             </div>
         </div>
     );
 
-    return <div className="PostPage">{post_content}</div>;
+    return (
+        <div className="PostPage">
+            {post_content}
+
+            <AddComment
+                execute_after_add_comment={() => {
+                    set_show_add_comment(false);
+                    set_show_comments_section(true);
+
+                    if (all_comments.length === 0) {
+                        set_allow_comments_section_btn(true);
+                    }
+                }}
+                placeholder="Add Comment"
+                btn_text="Comment"
+                comment_type="comment"
+                post_id={post_details.id}
+                add_comment_or_reply_to_list={add_comment_to_list}
+            />
+
+            <CommentSectionInfiniteScroll post_id={parseInt(post_id_route)} />
+        </div>
+    );
 }
 
 export default PostPage;

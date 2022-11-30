@@ -83,10 +83,10 @@ function CommentSectionInfiniteScroll({ post_id }) {
     };
 
     const content = data?.pages.map((pg) => {
-        const length_of_commentss = pg.all_comments.length;
+        const length_of_comments = pg.all_comments.length;
 
         return pg.all_comments.map((comment_details, i) => {
-            if (i + 1 === length_of_commentss) {
+            if (i + 1 === length_of_comments) {
                 return (
                     <div ref={lastCommentRef} key={comment_details.id}>
                         <Comment
@@ -113,10 +113,13 @@ function CommentSectionInfiniteScroll({ post_id }) {
 
     return (
         <div className="CommentSectionInfiniteScroll">
+            <h2>Comments</h2>
             {content}
             {isFetchingNextPage && <Loading />}
 
-            {hasNextPage === false && <p>There are no more comments</p>}
+            <div className="end_of_comment_section">
+                {hasNextPage === false && <p>No more comments left</p>}
+            </div>
         </div>
     );
 }

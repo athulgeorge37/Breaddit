@@ -23,6 +23,7 @@ import {
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
+import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 
 function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
     // the comment component renders both surface level comments and
@@ -343,26 +344,11 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
                         )}
                     </div>
 
-                    {comment.is_reply === false && (
-                        <div className="comment_replies">
-                            {show_replies_section && (
-                                <>
-                                    {all_replies.map((reply_object) => {
-                                        const reply =
-                                            reply_object.reply_content;
-                                        return (
-                                            <Comment
-                                                comment={reply}
-                                                key={reply.id}
-                                                remove_comment_or_reply_from_list={
-                                                    remove_reply_from_list
-                                                }
-                                            />
-                                        );
-                                    })}
-                                </>
-                            )}
-                        </div>
+                    {comment.is_reply === false && show_replies_section && (
+                        <ReplySectionInfiniteScroll
+                            comment_id={comment.id}
+                            post_id={post_id}
+                        />
                     )}
                 </div>
             </div>

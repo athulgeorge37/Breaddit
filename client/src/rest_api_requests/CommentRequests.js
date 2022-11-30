@@ -77,9 +77,9 @@ const get_all_comments_by_post_id = async (post_id, limit, page_num) => {
     return response.data;
 };
 
-const get_all_replies_by_comment_id = async (comment_id) => {
+const get_all_replies_by_comment_id = async (comment_id, limit, page_num) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all_replies/by_comment_id/${comment_id}`
+        `${CUSTOM_ENDPOINT}/get_all_replies/by_comment_id/${comment_id}/limit/${limit}/page_num/${page_num}`
     );
 
     // returns an object with a property called all_replies: list of comment objects

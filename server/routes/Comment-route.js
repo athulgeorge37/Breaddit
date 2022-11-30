@@ -126,45 +126,61 @@ router.get(
     }
 );
 
-router.get("/get_all_replies/by_comment_id/:id", async (request, response) => {
-    // gets all the comments of a post or the replies of a comment
-    // where the id is the post_id
-    // and the is_reply determines if the response is
-    // a list of comments or a list of replies
+router.get(
+    "/get_all_replies/by_comment_id/:id/limit/:limit/page_num/:page_num",
+    async (request, response) => {
+        // gets all the comments of a post or the replies of a comment
+        // where the id is the post_id
+        // and the is_reply determines if the response is
+        // a list of comments or a list of replies
 
-    try {
-        const list_of_replies = await db.Reply.findAll({
-            include: [
-                {
-                    // model: db.User,
-                    // as: "author_details",
-                    // attributes: ["username", "profile_pic"]
-                    model: db.Comment,
-                    as: "reply_content",
-                    include: [
-                        {
-                            model: db.User,
-                            as: "author_details",
-                            attributes: ["username", "profile_pic"],
-                        },
-                    ],
+        try {
+            const comment_id = request.params.id;
+            const limit = parseInt(request.params.limit);
+            let page_num = parseInt(request.params.page_num);
+
+            const offset = limit * page_num;
+
+            // getting the list of reply ids
+            const list_of_reply_ids_data = await db.Reply.findAll({
+                where: {
+                    parent_comment_id: comment_id, // parent_id here is === parent_comment_id
                 },
-            ],
-            where: {
-                parent_comment_id: request.params.id, // parent_id here is === parent_comment_id
-            },
-        });
+                attributes: ["reply_id"],
+            });
 
-        response.json({
-            msg: "succesfully got replies of parent_comment_id",
-            all_replies: list_of_replies,
-        });
-    } catch (e) {
-        response.json({
-            error: e,
-        });
+            // only selecting the reply_id from the data
+            const list_of_reply_ids = list_of_reply_ids_data.map(
+                (row) => row.reply_id
+            );
+
+            const list_of_replies = await db.Comment.findAll({
+                where: {
+                    id: list_of_reply_ids, // getting all comment details using the reply ids
+                },
+                order: [["updatedAt", "DESC"]],
+                include: [
+                    {
+                        model: db.User,
+                        as: "author_details",
+                        attributes: ["username", "profile_pic"],
+                    },
+                ],
+                limit: limit,
+                offset: offset,
+            });
+
+            response.json({
+                msg: "succesfully got replies of parent_comment_id",
+                all_replies: list_of_replies,
+            });
+        } catch (e) {
+            response.json({
+                error: e,
+            });
+        }
     }
-});
+);
 
 router.post(
     "/create/of_type/:type",

@@ -6,4 +6,19 @@
     border-radius: $default-border-radius;
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
     margin-bottom: calc(1.5 * $inner_padding);
+
+    h2 {
+        padding: 0.5em;
+    }
+
+    
+    
+    .end_of_comment_section {
+        
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        border-top: 1px solid $light-grey;
+
+    }
 }

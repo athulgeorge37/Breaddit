@@ -1,0 +1,19 @@
+@import "../../variables.scss";
+
+.ReplySectionInfiniteScroll {
+
+    .end_of_replies_section {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5em;
+        border-top: 1px solid $light-grey;
+        padding-right: 0;
+
+
+        button {
+            @include btn-style-text($blue);
+        }
+    }
+}

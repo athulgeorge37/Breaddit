@@ -13,7 +13,6 @@ import Loading from "../../components/ui/Loading";
 import CloudinaryImage from "../../components/CloudinaryImage";
 import Button from "../../components/ui/Button";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
-import { motion } from "framer-motion";
 
 function EditPost({
     image_url,
@@ -45,7 +44,7 @@ function EditPost({
     };
 
     return (
-        <motion.div className="post_inputs" layout>
+        <div className="post_inputs" layout>
             <div className="post_title">
                 <LoginInput
                     htmlFor="title"
@@ -106,7 +105,7 @@ function EditPost({
             )}
 
             <TextEditor update_text={set_post_text} post_text={post_text} />
-        </motion.div>
+        </div>
     );
 }
 

@@ -5,32 +5,36 @@ const router = express.Router();
 
 const db = require("../models");
 
-router.put("/edit_comment_or_reply", async (request, response) => {
-    try {
-        const { comment_id, updated_text } = request.body;
+router.put(
+    "/edit_comment_or_reply",
+    validate_request,
+    async (request, response) => {
+        try {
+            const { comment_id, updated_text } = request.body;
 
-        await db.Comment.update(
-            {
-                text: updated_text,
-                edited: true,
-            },
-            {
-                where: {
-                    id: comment_id,
-                    // author_id: request.user_id
+            await db.Comment.update(
+                {
+                    text: updated_text,
+                    edited: true,
                 },
-            }
-        );
+                {
+                    where: {
+                        id: comment_id,
+                        // author_id: request.user_id
+                    },
+                }
+            );
 
-        response.json({
-            msg: "Succesfully edited comment/reply in db",
-        });
-    } catch (e) {
-        response.json({
-            error: e,
-        });
+            response.json({
+                msg: "Succesfully edited comment/reply in db",
+            });
+        } catch (e) {
+            response.json({
+                error: e,
+            });
+        }
     }
-});
+);
 
 router.get(
     "/is_any/of_type/:type/for_parent_id/:id",

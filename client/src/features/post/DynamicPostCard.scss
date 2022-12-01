@@ -1,15 +1,9 @@
 @import "../../variables.scss";
 
 
-// when displaying content from text editor, these
-// styles will ensure it is the same as the one seen in the text editor
-// all styles inside the .text_content nest
 
-// add this react component where u want so these styles are applied
-
-
-.PostContent {
-    margin-bottom: calc(2 * $inner_padding);
+.DynamicPostCard {
+    margin-bottom: calc(1.5 * $inner_padding);
     background-color: $dark-grey;
     border: 1px solid $light-grey;
     border-radius: $default-border-radius;
@@ -26,7 +20,7 @@
             @include btn-styles($green);
         }
     }
-   
+    
 
     .post_user_and_awards {
         display: flex;
@@ -39,6 +33,21 @@
         .post_user {
             display: flex;
             align-items: center;
+
+
+            .posted_by_user {
+
+                &:hover {
+                    cursor: pointer;
+
+                    .username {
+                        color: $blue;
+                        text-decoration: underline;
+                        
+                    }
+                }
+            }
+
         }
 
         .btns {
@@ -84,9 +93,9 @@
                     width: 100%;
                 }
             }
-           
-
             
+
+        
         }
 
     }
@@ -114,3 +123,4 @@
 
 
 }
+

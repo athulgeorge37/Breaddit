@@ -19,6 +19,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
         data,
         status,
         error,
+        refetch,
     } = useInfiniteQuery(
         ["comments_of_post_id", post_id],
         ({ pageParam = 0 }) =>
@@ -95,6 +96,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
                             remove_comment_or_reply_from_list={
                                 add_comment_to_list
                             }
+                            refetch={refetch}
                         />
                     </div>
                 );
@@ -105,6 +107,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
                         comment={comment_details}
                         post_id={post_id}
                         remove_comment_or_reply_from_list={add_comment_to_list}
+                        refetch={refetch}
                     />
                 </div>
             );
@@ -113,7 +116,10 @@ function CommentSectionInfiniteScroll({ post_id }) {
 
     return (
         <div className="CommentSectionInfiniteScroll">
-            <h2>Comments</h2>
+            <div className="header">
+                <h2>Comments</h2>
+                <span>Sort By: New</span>
+            </div>
             {content}
             {isFetchingNextPage && <Loading />}
 

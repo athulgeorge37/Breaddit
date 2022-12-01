@@ -25,11 +25,10 @@ function AddComment({
     show_profile_pic = true,
 }) {
     const add_notification = useNotification();
-
     const navigate = useNavigate();
     const { current_user } = useCurrentUser();
 
-    const [comment_content, set_comment_content] = useState("");
+    const [comment_content, set_comment_content] = useState(initial_content);
     const [error_msg, show_error_msg] = useState(false);
 
     const submit_add_comment = async () => {
@@ -59,6 +58,7 @@ function AddComment({
             },
         };
 
+        set_comment_content("");
         add_comment_or_reply_to_list(new_comment_or_reply_details);
 
         execute_after_add_comment();
@@ -112,7 +112,7 @@ function AddComment({
                                 set_input_content={set_comment_content}
                                 max_height_px={150}
                                 placeholder={placeholder}
-                                initial_content={initial_content}
+                                initial_content={comment_content}
                             />
 
                             {error_msg && (

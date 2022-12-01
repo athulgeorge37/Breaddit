@@ -2,7 +2,7 @@ import { useRef, useCallback } from "react";
 import "./PostsPage.scss";
 
 import CreatePost from "../features/post/CreatePost";
-import PostContent from "../features/post/PostContent";
+import StaticPostCard from "../features/post/StaticPostCard";
 import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
@@ -92,13 +92,13 @@ function PostsPage() {
             if (i + 1 === length_of_posts) {
                 return (
                     <div ref={lastPostRef} key={post_details.id}>
-                        <PostContent post_details={post_details} />
+                        <StaticPostCard post_details={post_details} />
                     </div>
                 );
             }
             return (
                 <div key={post_details.id}>
-                    <PostContent post_details={post_details} />
+                    <StaticPostCard post_details={post_details} />
                 </div>
             );
         });

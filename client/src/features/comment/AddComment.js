@@ -50,16 +50,8 @@ function AddComment({
 
         show_error_msg(false);
 
-        const new_comment_or_reply_details = {
-            ...response.new_comment_or_reply_details,
-            author_details: {
-                username: current_user.username,
-                profile_pic: current_user.profile_pic,
-            },
-        };
-
+        // TODO: comment content not being null when comment is succesfull
         set_comment_content("");
-        add_comment_or_reply_to_list(new_comment_or_reply_details);
 
         execute_after_add_comment();
 

@@ -24,116 +24,49 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 
-function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
+function Comment({
+    comment,
+    remove_comment_or_reply_from_list,
+    post_id,
+    parent_comment_id = null,
+}) {
     // the comment component renders both surface level comments and
     // replies of those comments, therfore this component actually serves
     // 2 purposes and behaves slightly differently depending on if
     // it is a comment or a reply
 
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const { current_user } = useCurrentUser();
+    const resizable_panel_states = useResizablePanel();
     const add_notification = useNotification();
 
-    const navigate = useNavigate();
-
     const modal_ref = useRef();
-
     // still need to implement infinite scroll for comments and replies
 
     const [show_replies_section, set_show_replies_section] = useState(false);
+    const [show_add_reply, set_show_add_reply] = useState(false);
+    const [comment_edit_mode, set_comment_edit_mode] = useState(false);
     const [allow_replies_section_btn, set_allow_replies_section_btn] =
         useState(false);
 
-    const [show_add_reply, set_show_add_reply] = useState(false);
-
-    // const [allow_read_more_btn, set_allow_read_more_btn] = useState(false);
-    // const [read_more_content, set_read_more_content] = useState(false);
-
-    const resizable_panel_states = useResizablePanel();
-
-    const [comment_edit_mode, set_comment_edit_mode] = useState(false);
-    // const [delete_btn_active, set_delete_btn_active] = useState(false);
-
-    const [all_replies, set_all_replies] = useState([]);
-
-    // required for read_more/less button
-    // const comment_content_ref = useRef();
-
-    const add_reply_to_list = (new_reply_details) => {
-        // when adding new_reply_details, ensure that
-        // it has all the reply details including updatedAt and
-        // author_details = { username, profile_pic }
-
-        set_all_replies([...all_replies, { reply_content: new_reply_details }]);
-    };
-
-    const remove_reply_from_list = (reply_to_remove_id) => {
-        const new_replies_list = all_replies.filter((my_reply) => {
-            return my_reply.reply_content.id !== reply_to_remove_id;
-        });
-
-        set_all_replies(new_replies_list);
-
-        add_notification("Succesfully Deleted Reply");
-    };
-
-    // // for read more btn
-    // useEffect(() => {
-    //     const comment_content_height = comment_content_ref.current.clientHeight
-
-    //     // only allowing component to render show more/less btn
-    //     // if the content of the post takes up more than 100px
-
-    //     //  if you want to change this value, u must also change in the css
-    //     // where the classname is .show_less
-    //     if (comment_content_height > 100) {
-    //         set_allow_read_more_btn(true)
-    //     }
-
-    // }, [])
-
-    useEffect(() => {
-        initialse_allow_show_replies_section();
-    }, []);
-
-    const initialse_allow_show_replies_section = async () => {
-        // there is no need to check if there are replies
-        // when the comment rendered already is a reply
-        if (comment.is_reply === true) {
-            // console.log("isreply is true, returning")
-            return;
+    useQuery(
+        ["comment_has_replies", comment.id],
+        () => {
+            return check_if_comments_or_replies_exist("reply", comment.id);
+        },
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log({ error: data.error });
+                    return;
+                }
+                set_allow_replies_section_btn(data.is_any);
+            },
         }
-
-        const response = await check_if_comments_or_replies_exist(
-            "reply",
-            comment.id
-        );
-
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        set_allow_replies_section_btn(response.is_any);
-    };
-
-    const initialise_all_replies = async () => {
-        if (allow_replies_section_btn === false) {
-            return;
-        }
-
-        const response = await get_all_replies_by_comment_id(comment.id);
-
-        // console.log("initialising all replies")
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        // response.all_replies is slightly differnt structure to all_comments
-        // actual comment content is in response.all_replies.reply_content
-        set_all_replies(response.all_replies);
-    };
+    );
 
     const handle_delete_comment = async () => {
         // const response = await delete_comment(comment.id);
@@ -145,9 +78,19 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
             return;
         }
 
-        remove_comment_or_reply_from_list(comment.id);
+        add_notification(`Succesfully deleted ${type}`);
 
-        // set_delete_btn_active(false)
+        if (comment.is_reply) {
+            if (parent_comment_id !== null) {
+                queryClient.invalidateQueries([
+                    "replies_of_comment_id_and_post_id",
+                    parent_comment_id,
+                    post_id,
+                ]);
+            }
+        } else {
+            queryClient.invalidateQueries(["comments_of_post_id", post_id]);
+        }
     };
 
     return (
@@ -308,12 +251,6 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
                                             set_show_replies_section(
                                                 !show_replies_section
                                             );
-
-                                            if (
-                                                show_replies_section === false
-                                            ) {
-                                                initialise_all_replies();
-                                            }
                                         }}
                                         original_class_name="view_replies_btn"
                                         active_name="Hide Replies"
@@ -333,13 +270,22 @@ function Comment({ comment, remove_comment_or_reply_from_list, post_id }) {
                                 execute_after_add_comment={() => {
                                     set_show_add_reply(false);
                                     set_show_replies_section(true);
+
+                                    if (allow_replies_section_btn === false) {
+                                        set_allow_replies_section_btn(true);
+                                    }
+
+                                    queryClient.invalidateQueries([
+                                        "replies_of_comment_id_and_post_id",
+                                        comment.id,
+                                        post_id,
+                                    ]);
                                 }}
                                 placeholder="Add Reply"
                                 btn_text="Reply"
                                 comment_type="reply"
                                 post_id={post_id}
                                 parent_comment_id={comment.id}
-                                add_comment_or_reply_to_list={add_reply_to_list}
                             />
                         )}
                     </div>

@@ -56,9 +56,6 @@ function ReplySectionInfiniteScroll({ comment_id, post_id }) {
                     parent_comment_id={comment_id}
                     comment={reply_details}
                     post_id={post_id}
-                    remove_comment_or_reply_from_list={() => {
-                        return null;
-                    }}
                 />
             );
         });

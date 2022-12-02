@@ -15,7 +15,6 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 function AddComment({
     comment_type,
     execute_after_add_comment,
-    add_comment_or_reply_to_list,
     placeholder,
     btn_text,
     initial_content,
@@ -88,7 +87,7 @@ function AddComment({
     };
 
     return (
-        <div className="Add_Comment">
+        <div className={`Add_Comment ${comment_type}_add_comment`}>
             {current_user.role === "user" ? (
                 <>
                     <div className="add_comment_pic_and_input">

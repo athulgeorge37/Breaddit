@@ -28,7 +28,6 @@ function PostPage() {
                         post_id,
                     ]);
                 }}
-                initial_content=""
                 placeholder="Add Comment"
                 btn_text="Comment"
                 comment_type="comment"

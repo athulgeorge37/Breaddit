@@ -24,7 +24,7 @@ import Votes from "../../features/vote/Votes";
 
 import { calculate_time_passed } from "../../helper/time";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { get_post_by_id } from "../../rest_api_requests/PostRequests";
 import PostContent from "../../features/post/PostContent";
@@ -34,6 +34,7 @@ function DynamicPostCard({ post_id }) {
     const add_notification = useNotification();
     const { current_user } = useCurrentUser();
     const resizable_panel_states = useResizablePanel();
+    const queryClient = useQueryClient();
 
     const modal_ref = useRef();
     const [post_details, set_post_details] = useState(null);
@@ -95,7 +96,7 @@ function DynamicPostCard({ post_id }) {
 
     const handle_delete_post = async () => {
         // removing post in db
-        const response = await delete_post(post_details.id);
+        const response = await delete_post(post_id);
 
         if (response.error) {
             console.log(response);
@@ -104,6 +105,7 @@ function DynamicPostCard({ post_id }) {
 
         // removing post on client side when deleted from db
         // remove_post_from_list(post_details.id);
+        queryClient.invalidateQueries(["posts"]);
 
         add_notification("Succesfully Deleted Post");
     };

@@ -15,9 +15,7 @@ import ResizablePanel, {
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
 import {
-    get_all_replies_by_comment_id,
     check_if_comments_or_replies_exist,
-    delete_comment,
     delete_comment_or_reply,
 } from "../../rest_api_requests/CommentRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
@@ -26,12 +24,7 @@ import { useNavigate } from "react-router-dom";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 
-function Comment({
-    comment,
-    remove_comment_or_reply_from_list,
-    post_id,
-    parent_comment_id = null,
-}) {
+function Comment({ comment, post_id, parent_comment_id = null }) {
     // the comment component renders both surface level comments and
     // replies of those comments, therfore this component actually serves
     // 2 purposes and behaves slightly differently depending on if

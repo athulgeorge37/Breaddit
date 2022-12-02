@@ -19,7 +19,6 @@ function CommentSectionInfiniteScroll({ post_id }) {
         data,
         status,
         error,
-        refetch,
     } = useInfiniteQuery(
         ["comments_of_post_id", post_id],
         ({ pageParam = 0 }) =>
@@ -75,14 +74,6 @@ function CommentSectionInfiniteScroll({ post_id }) {
         return <p>Error: {error}</p>;
     }
 
-    const add_comment_to_list = (new_post_details) => {
-        // when adding new_post_details, ensure that
-        // it has all the post details including updatedAt and
-        // author_details = { username, profile_pic }
-        return null;
-        // set_all_posts([...all_posts, new_post_details]);
-    };
-
     const content = data?.pages.map((pg) => {
         const length_of_comments = pg.all_comments.length;
 
@@ -90,25 +81,13 @@ function CommentSectionInfiniteScroll({ post_id }) {
             if (i + 1 === length_of_comments) {
                 return (
                     <div ref={lastCommentRef} key={comment_details.id}>
-                        <Comment
-                            comment={comment_details}
-                            post_id={post_id}
-                            remove_comment_or_reply_from_list={
-                                add_comment_to_list
-                            }
-                            refetch={refetch}
-                        />
+                        <Comment comment={comment_details} post_id={post_id} />
                     </div>
                 );
             }
             return (
                 <div key={comment_details.id}>
-                    <Comment
-                        comment={comment_details}
-                        post_id={post_id}
-                        remove_comment_or_reply_from_list={add_comment_to_list}
-                        refetch={refetch}
-                    />
+                    <Comment comment={comment_details} post_id={post_id} />
                 </div>
             );
         });

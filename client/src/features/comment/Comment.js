@@ -169,17 +169,19 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
                                 current_user.username && (
                                 <div className="edit_comment">
                                     <AddComment
-                                        parent_comment_id={comment.id}
+                                        parent_comment_id={parent_comment_id}
+                                        comment_id={comment.id}
                                         execute_after_add_comment={() => {
                                             set_comment_edit_mode(false);
                                         }}
+                                        post_id={post_id}
                                         is_editing={true}
                                         initial_content={comment.text}
                                         show_profile_pic={false}
                                         comment_type={
                                             comment.is_reply
-                                                ? "Reply"
-                                                : "Comment"
+                                                ? "reply"
+                                                : "comment"
                                         }
                                         btn_text="Save"
                                     />
@@ -267,12 +269,6 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
                                     if (allow_replies_section_btn === false) {
                                         set_allow_replies_section_btn(true);
                                     }
-
-                                    queryClient.invalidateQueries([
-                                        "replies_of_comment_id_and_post_id",
-                                        comment.id,
-                                        post_id,
-                                    ]);
                                 }}
                                 placeholder="Add Reply"
                                 btn_text="Reply"

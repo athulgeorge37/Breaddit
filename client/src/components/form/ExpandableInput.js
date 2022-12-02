@@ -26,8 +26,6 @@ function ExpandableInput({
         )}px`;
     };
 
-    console.log("rendering textarea", initial_content);
-
     return (
         <div className="ExpandableInput">
             {initial_content === undefined ? (

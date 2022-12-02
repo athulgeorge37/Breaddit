@@ -15,19 +15,11 @@ function PostPage() {
     const { post_id_route } = useParams();
     const post_id = parseInt(post_id_route);
 
-    const queryClient = useQueryClient();
-
     return (
         <div className="PostPage">
             <DynamicPostCard post_id={post_id} />
 
             <AddComment
-                execute_after_add_comment={() => {
-                    queryClient.invalidateQueries([
-                        "comments_of_post_id",
-                        post_id,
-                    ]);
-                }}
                 placeholder="Add Comment"
                 btn_text="Comment"
                 comment_type="comment"

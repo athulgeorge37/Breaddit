@@ -11,14 +11,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function AddComment({
     comment_type,
-    execute_after_add_comment,
     placeholder,
     btn_text,
     initial_content,
     post_id,
+    execute_after_add_comment = () => null,
+    comment_id = null,
     parent_comment_id = null,
     is_editing = false,
     show_profile_pic = true,
@@ -26,34 +28,78 @@ function AddComment({
     const add_notification = useNotification();
     const navigate = useNavigate();
     const { current_user } = useCurrentUser();
+    const queryClient = useQueryClient();
 
     const [comment_content, set_comment_content] = useState(initial_content);
     const [error_msg, show_error_msg] = useState(false);
 
-    const submit_add_comment = async () => {
+    const add_comment = useMutation(
+        () => {
+            return create_comment_or_reply(
+                post_id,
+                comment_content,
+                comment_type,
+                parent_comment_id
+            );
+        },
+        {
+            onSuccess: () => {
+                if (comment_type === "comment") {
+                    queryClient.invalidateQueries([
+                        "comments_of_post_id",
+                        post_id,
+                    ]);
+                } else if (comment_type === "reply") {
+                    queryClient.invalidateQueries([
+                        "replies_of_comment_id_and_post_id",
+                        parent_comment_id,
+                        post_id,
+                    ]);
+                }
+            },
+            onError: (error) => {
+                console.log({ error });
+            },
+        }
+    );
+
+    const edit_comment = useMutation(
+        () => {
+            return edit_comment_or_reply(comment_id, comment_content);
+        },
+        {
+            onSuccess: () => {
+                if (comment_type === "comment") {
+                    // console.log({ comment_type, post_id });
+                    queryClient.invalidateQueries([
+                        "comments_of_post_id",
+                        post_id,
+                    ]);
+                } else if (comment_type === "reply") {
+                    // console.log({ comment_type, post_id, parent_comment_id });
+                    queryClient.invalidateQueries([
+                        "replies_of_comment_id_and_post_id",
+                        parent_comment_id,
+                        post_id,
+                    ]);
+                }
+            },
+            onError: (error) => {
+                console.log({ error });
+            },
+        }
+    );
+
+    const submit_add_comment = () => {
         if (validate_comment_content() === false) {
             return;
         }
 
-        const response = await create_comment_or_reply(
-            post_id,
-            comment_content,
-            comment_type,
-            parent_comment_id
-        );
-
-        console.log(response);
-        if (response.error) {
-            return;
-        }
+        add_comment.mutate();
 
         show_error_msg(false);
-
-        // TODO: comment content not being null when comment is succesfull
         set_comment_content("");
-
         execute_after_add_comment();
-
         add_notification(`Succesfully Added ${btn_text}`);
     };
 
@@ -62,15 +108,8 @@ function AddComment({
             return;
         }
 
-        const response = await edit_comment_or_reply(
-            parent_comment_id,
-            comment_content
-        );
+        edit_comment.mutate();
 
-        console.log(response);
-        if (response.error) {
-            return;
-        }
         show_error_msg(false);
         execute_after_add_comment();
 
@@ -114,21 +153,16 @@ function AddComment({
                         </div>
                     </div>
 
-                    {is_editing ? (
-                        <button
-                            className="comment_btn"
-                            onClick={submit_edit_comment}
-                        >
-                            {btn_text}
-                        </button>
-                    ) : (
-                        <button
-                            className="comment_btn"
-                            onClick={submit_add_comment}
-                        >
-                            {btn_text}
-                        </button>
-                    )}
+                    <button
+                        className="comment_btn"
+                        onClick={
+                            is_editing
+                                ? submit_edit_comment
+                                : submit_add_comment
+                        }
+                    >
+                        {btn_text}
+                    </button>
                 </>
             ) : (
                 <div className="not_signed_in">

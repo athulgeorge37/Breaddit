@@ -4,13 +4,12 @@ import { get_item_local_storage } from "../helper/local_storage";
 const BACKEND_ROUTE = "http://localhost:3001";
 const CUSTOM_ENDPOINT = `${BACKEND_ROUTE}/api/vote`;
 
-const make_vote = async (post_id, comment_id, parent_type, up_vote) => {
+const make_vote = async (vote_id, vote_type, up_vote) => {
     const response = await axios.post(
         `${CUSTOM_ENDPOINT}/make_vote`,
         {
-            post_id: post_id,
-            comment_id: comment_id,
-            parent_type: parent_type,
+            vote_id: vote_id,
+            vote_type: vote_type,
             up_vote: up_vote,
         },
         {
@@ -23,11 +22,9 @@ const make_vote = async (post_id, comment_id, parent_type, up_vote) => {
     return response.data;
 };
 
-const get_vote_count = async (parent_id, parent_type, up_vote) => {
-    // up_vote parameter is a boolean
-
+const get_vote_count = async (vote_id, vote_type) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all/by_parent_id/${parent_id}/parent_type/${parent_type}/up_vote/${up_vote}`
+        `${CUSTOM_ENDPOINT}/get_vote_count/by_vote_id/${vote_id}/vote_type/${vote_type}`
     );
 
     return response.data;

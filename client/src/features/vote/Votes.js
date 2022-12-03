@@ -1,94 +1,64 @@
 import { useState } from "react";
 import "./Votes.scss";
 
-import { useEffect } from "react";
 import {
     get_curr_user_vote,
     get_vote_count,
     make_vote,
 } from "../../rest_api_requests/VoteRequests";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-function Votes({
-    vote_type,
-    post_id = null,
-    comment_id = null,
-    img_path = "..",
-}) {
+function Votes({ vote_type, vote_id, img_path = ".." }) {
     const { current_user } = useCurrentUser();
 
     const [up_vote_count, set_up_vote_count] = useState(0);
     const [down_vote_count, set_down_vote_count] = useState(0);
-
     const [curr_user_vote, set_curr_user_vote] = useState(null);
 
-    useEffect(() => {
-        initalise_vote_counts();
-        initialise_curr_user_vote();
-    }, []);
+    // vote count query
+    useQuery(
+        ["vote_counts", vote_type, vote_id],
+        () => get_vote_count(vote_id, vote_type),
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log(data);
+                }
 
-    const initalise_vote_counts = async () => {
-        // console.log("getting vote counts")
-
-        let parent_id_to_use;
-        if (vote_type === "post") {
-            parent_id_to_use = post_id;
-        } else if (vote_type === "comment" || vote_type === "reply") {
-            parent_id_to_use = comment_id;
-        } else {
-            console.log({
-                error: "invalid vote_type in Votes Component",
-            });
-            return;
+                set_up_vote_count(data.up_vote_count);
+                set_down_vote_count(data.down_vote_count);
+            },
         }
+    );
 
-        const up_vote_response = await get_vote_count(
-            parent_id_to_use,
-            vote_type,
-            true
-        );
-        const down_vote_response = await get_vote_count(
-            parent_id_to_use,
-            vote_type,
-            false
-        );
+    // curr user vote query
+    useQuery(
+        // using vote_id to distinguish vote count for comments,
+        // since all vote_id will be differenet
+        ["curr_user_vote", vote_type, vote_id],
+        () => get_curr_user_vote(vote_id, vote_type),
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log(data);
+                }
 
-        if (up_vote_response.error || down_vote_response.error) {
-            console.log("up_vote_response", up_vote_response);
-            console.log("down_vote_response", down_vote_response);
-            return;
+                set_curr_user_vote(data.curr_user_vote);
+            },
         }
-        set_up_vote_count(up_vote_response.vote_count);
-        set_down_vote_count(down_vote_response.vote_count);
-    };
+    );
 
-    const initialise_curr_user_vote = async () => {
-        let parent_id_to_use;
-        if (vote_type === "post") {
-            parent_id_to_use = post_id;
-        } else if (vote_type === "comment" || vote_type === "reply") {
-            parent_id_to_use = comment_id;
-        } else {
-            console.log({
-                error: "invalid vote_type in Votes Component",
-            });
-            return;
+    const update_vote = useMutation(
+        (new_vote) => {
+            return make_vote(vote_id, vote_type, new_vote);
+        },
+        {
+            onSuccess: (data) => {
+                console.log(data);
+            },
         }
-
-        const response = await get_curr_user_vote(parent_id_to_use, vote_type);
-        if (response.error) {
-            if (response.error.name === "JsonWebTokenError") {
-                console.log({
-                    msg: "User is not logged in, cannot get user vote",
-                });
-            } else {
-                console.log(response);
-            }
-            return;
-        }
-        // console.log("curr_user_vote", response.curr_user_vote)
-        set_curr_user_vote(response.curr_user_vote);
-    };
+    );
 
     const handle_vote_change = async (new_vote) => {
         if (current_user.role !== "user") {
@@ -98,34 +68,9 @@ function Votes({
             return;
         }
 
-        let vote_to_send;
-        if (new_vote === curr_user_vote) {
-            // if the new vote and current vote are the same
-            // we will remove the vote altogether
-            vote_to_send = null;
-        } else {
-            // otherwise
-            vote_to_send = new_vote;
-        }
+        const vote_to_send = new_vote === curr_user_vote ? null : new_vote;
 
-        const response = await make_vote(
-            post_id,
-            comment_id,
-            vote_type,
-            vote_to_send
-        );
-        if (response.error) {
-            if (response.error.name === "JsonWebTokenError") {
-                console.log({
-                    msg: "User is not logged in, cannot make vote",
-                });
-            } else {
-                console.log(response);
-            }
-            return;
-        }
-
-        console.log(response);
+        update_vote.mutate(vote_to_send);
 
         // updating the up and down vote counters in the UI to reflect changes in DB
         if (new_vote === true) {

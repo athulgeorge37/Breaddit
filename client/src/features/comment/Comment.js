@@ -1,5 +1,5 @@
 import "./Comment.scss";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 import { calculate_time_passed } from "../../helper/time";
 
@@ -22,7 +22,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
 function Comment({ comment, post_id, parent_comment_id = null }) {
     // the comment component renders both surface level comments and
@@ -61,29 +61,35 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
         }
     );
 
-    const handle_delete_comment = async () => {
+    const delete_comment = useMutation(
+        (type) => delete_comment_or_reply(type, comment.id),
+        {
+            onSuccess: () => {
+                if (comment.is_reply) {
+                    if (parent_comment_id !== null) {
+                        queryClient.invalidateQueries([
+                            "replies_of_comment_id_and_post_id",
+                            parent_comment_id,
+                            post_id,
+                        ]);
+                    }
+                } else {
+                    queryClient.invalidateQueries([
+                        "comments_of_post_id",
+                        post_id,
+                    ]);
+                }
+            },
+        }
+    );
+
+    const handle_delete_comment = () => {
         // const response = await delete_comment(comment.id);
         const type = comment.is_reply ? "reply" : "comment";
-        const response = await delete_comment_or_reply(type, comment.id);
 
-        if (response.error) {
-            console.log(response);
-            return;
-        }
+        delete_comment.mutate(type);
 
         add_notification(`Succesfully deleted ${type}`);
-
-        if (comment.is_reply) {
-            if (parent_comment_id !== null) {
-                queryClient.invalidateQueries([
-                    "replies_of_comment_id_and_post_id",
-                    parent_comment_id,
-                    post_id,
-                ]);
-            }
-        } else {
-            queryClient.invalidateQueries(["comments_of_post_id", post_id]);
-        }
     };
 
     return (
@@ -211,7 +217,7 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
                     <div className="votes_and_read_more_btns">
                         <Votes
                             vote_type={comment.is_reply ? "reply" : "comment"}
-                            comment_id={comment.id}
+                            vote_id={comment.id}
                         />
 
                         {comment_edit_mode === false && (

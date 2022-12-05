@@ -77,15 +77,7 @@ function PostsPage() {
         return <p className="center">Error: {error}</p>;
     }
 
-    const add_post_to_list = (new_post_details) => {
-        // when adding new_post_details, ensure that
-        // it has all the post details including updatedAt and
-        // author_details = { username, profile_pic }
-        return null;
-        // set_all_posts([...all_posts, new_post_details]);
-    };
-
-    const content = data?.pages.map((pg) => {
+    const list_of_posts = data?.pages.map((pg) => {
         const length_of_posts = pg.all_posts.length;
 
         return pg.all_posts.map((post_details, i) => {
@@ -106,12 +98,11 @@ function PostsPage() {
 
     return (
         <div className="Posts_Page">
-            {current_user.role !== "admin" && (
-                <CreatePost add_post_to_list={add_post_to_list} />
-            )}
+            {current_user.role !== "admin" && <CreatePost />}
 
             <div className="All_Posts">
-                {content}
+                {list_of_posts}
+
                 {isFetchingNextPage && <Loading />}
 
                 {hasNextPage === false && <p>There are no more posts</p>}

@@ -84,7 +84,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
         return <p>Error: {error}</p>;
     }
 
-    const content = data?.pages.map((pg) => {
+    const list_of_comments = data?.pages.map((pg) => {
         const length_of_comments = pg.all_comments.length;
 
         return pg.all_comments.map((comment_details, i) => {
@@ -110,16 +110,12 @@ function CommentSectionInfiniteScroll({ post_id }) {
 
                 <div className="sort_by_options">
                     <span>Sort By:</span>
-                    {SORT_BY_OPTIONS.map((option, index) => {
+                    {SORT_BY_OPTIONS.map((option) => {
                         return (
                             <button
                                 key={option}
-                                onClick={() =>
-                                    set_sort_by(SORT_BY_OPTIONS[index])
-                                }
-                                className={`${
-                                    sort_by === option ? "active" : ""
-                                }`}
+                                onClick={() => set_sort_by(option)}
+                                className={sort_by === option ? "active" : ""}
                             >
                                 {option}
                             </button>
@@ -128,11 +124,11 @@ function CommentSectionInfiniteScroll({ post_id }) {
                 </div>
             </div>
 
-            {content}
-
-            {isFetchingNextPage && <Loading />}
+            {list_of_comments}
 
             <div className="end_of_comment_section">
+                {isFetchingNextPage && <Loading />}
+
                 {hasNextPage === false && <p>No more comments left</p>}
             </div>
         </div>

@@ -10,6 +10,7 @@ import { create_post } from "../../rest_api_requests/PostRequests";
 
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // import {
 //     motion,
@@ -20,11 +21,11 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 const MAX_POST_TEXT_CHARACTERS = 500;
 
-function CreatePost({ add_post_to_list }) {
+function CreatePost() {
     const add_notification = useNotification();
     const { current_user } = useCurrentUser();
-
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const [expanded_view, set_expanded_view] = useState(false);
 
@@ -33,6 +34,19 @@ function CreatePost({ add_post_to_list }) {
     const [valid_title, set_valid_title] = useState(true);
     const [image_url, set_image_url] = useState(null);
 
+    const make_post = useMutation(
+        () => {
+            return create_post(post_title, post_text, image_url);
+        },
+        {
+            onSuccess: () => {
+                handle_post_cancel();
+                add_notification("Succesfully Created Post");
+                queryClient.invalidateQueries(["posts"]);
+            },
+        }
+    );
+
     const handle_post_submit = async () => {
         // only handling post if there is a post title
         if (post_title.trim().length === 0) {
@@ -40,37 +54,7 @@ function CreatePost({ add_post_to_list }) {
             return;
         }
 
-        // adding post to localstorage
-        // handle_add_post(post_title, post_text, image_url)
-
-        // adding post to db
-        const response = await create_post(post_title, post_text, image_url);
-
-        console.log(response);
-
-        if (response.error) {
-            return;
-        }
-
-        const new_post_details = {
-            ...response.new_post_details,
-            author_details: {
-                username: current_user.username,
-                profile_pic: current_user.profile_pic,
-            },
-        };
-
-        // setting all_posts to reflect the changes made in the db
-        add_post_to_list(new_post_details);
-
-        set_valid_title(true);
-        set_post_title("");
-        set_post_text("");
-        set_image_url(null);
-
-        set_expanded_view(false);
-
-        add_notification("Succesfully Created Post");
+        make_post.mutate();
     };
 
     const handle_post_cancel = () => {

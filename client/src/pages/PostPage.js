@@ -9,7 +9,6 @@ import AddComment from "../features/comment/AddComment";
 import CommentSectionInfiniteScroll from "../features/comment/CommentSectionInfiniteScroll";
 
 import DynamicPostCard from "../features/post/DynamicPostCard";
-import { useQueryClient } from "@tanstack/react-query";
 
 function PostPage() {
     const { post_id_route } = useParams();

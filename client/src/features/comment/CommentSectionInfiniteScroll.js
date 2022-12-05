@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Comment from "./Comment";
 import "./CommentSectionInfiniteScroll.scss";
 
@@ -10,8 +10,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
 
 const COMMENTS_PER_PAGE = 2;
+const SORT_BY_OPTIONS = ["NEW", "OLD"];
 
 function CommentSectionInfiniteScroll({ post_id }) {
+    const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);
+
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -20,9 +23,16 @@ function CommentSectionInfiniteScroll({ post_id }) {
         status,
         error,
     } = useInfiniteQuery(
-        ["comments_of_post_id", post_id],
+        // whenever sort_by changes, react query will refetch the comments
+        // with the new sort_by, because we have put sort_by in the queryName array
+        ["comments_of_post_id", post_id, sort_by],
         ({ pageParam = 0 }) =>
-            get_all_comments_by_post_id(post_id, COMMENTS_PER_PAGE, pageParam),
+            get_all_comments_by_post_id(
+                post_id,
+                COMMENTS_PER_PAGE,
+                pageParam,
+                sort_by
+            ),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it
@@ -97,9 +107,29 @@ function CommentSectionInfiniteScroll({ post_id }) {
         <div className="CommentSectionInfiniteScroll">
             <div className="header">
                 <h2>Comments</h2>
-                <span>Sort By: New</span>
+
+                <div className="sort_by_options">
+                    <span>Sort By:</span>
+                    {SORT_BY_OPTIONS.map((option, index) => {
+                        return (
+                            <button
+                                key={option}
+                                onClick={() =>
+                                    set_sort_by(SORT_BY_OPTIONS[index])
+                                }
+                                className={`${
+                                    sort_by === option ? "active" : ""
+                                }`}
+                            >
+                                {option}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
+
             {content}
+
             {isFetchingNextPage && <Loading />}
 
             <div className="end_of_comment_section">

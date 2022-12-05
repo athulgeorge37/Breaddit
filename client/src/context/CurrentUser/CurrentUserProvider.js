@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { remove_item_local_storage } from "../../helper/local_storage";
 import { is_valid_web_token } from "../../rest_api_requests/UserRequests";
 
@@ -22,18 +22,19 @@ export default function CurrentUserProvider({ children }) {
     const [current_user, set_current_user] = useState(DEFAULT_CURR_USER_STATE);
 
     // allows us to only make one request when component mounts
-    const { data: valid_web_token } = useQuery(
-        ["valid_web_token"],
-        is_valid_web_token
-    );
+    useQuery(["is_valid_web_token"], is_valid_web_token, {
+        onSuccess: (data) => {
+            set_current_user_in_app(data);
+        },
+    });
 
-    useEffect(() => {
-        // only updates current user state, when there is data
-        if (valid_web_token) {
-            // console.log("data", valid_web_token);
-            set_current_user_in_app(valid_web_token);
-        }
-    }, [valid_web_token]);
+    // useEffect(() => {
+    //     // only updates current user state, when there is data
+    //     if (valid_web_token) {
+    //         // console.log("data", valid_web_token);
+    //         set_current_user_in_app(valid_web_token);
+    //     }
+    // }, [valid_web_token]);
 
     const set_current_user_in_app = (valid_web_token) => {
         if (valid_web_token.error) {
@@ -54,17 +55,17 @@ export default function CurrentUserProvider({ children }) {
         }
     };
 
-    const initialise_curr_user = async () => {
-        console.log("initialising curr user");
-        const response = await is_valid_web_token();
+    // const initialise_curr_user = async () => {
+    //     console.log("initialising curr user");
+    //     const response = await is_valid_web_token();
 
-        set_current_user_in_app(response);
+    //     set_current_user_in_app(response);
 
-        return {
-            username: response.username,
-            role: response.role,
-        };
-    };
+    //     return {
+    //         username: response.username,
+    //         role: response.role,
+    //     };
+    // };
 
     const update_current_user = (new_username, new_profile_pic) => {
         set_current_user({
@@ -85,7 +86,7 @@ export default function CurrentUserProvider({ children }) {
             value={{
                 current_user,
                 remove_current_user,
-                initialise_curr_user,
+                // initialise_curr_user,
                 update_current_user,
             }}
         >
@@ -101,14 +102,14 @@ export const useCurrentUser = () => {
     const {
         current_user,
         remove_current_user,
-        initialise_curr_user,
+        // initialise_curr_user,
         update_current_user,
     } = useContext(CurrentUserContext);
 
     return {
         current_user,
         remove_current_user,
-        initialise_curr_user,
+        // initialise_curr_user,
         update_current_user,
     };
 };

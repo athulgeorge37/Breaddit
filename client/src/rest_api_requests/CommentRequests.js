@@ -69,9 +69,14 @@ const edit_comment_or_reply = async (comment_id, updated_text) => {
 //     return response.data;
 // };
 
-const get_all_comments_by_post_id = async (post_id, limit, page_num) => {
+const get_all_comments_by_post_id = async (
+    post_id,
+    limit,
+    page_num,
+    filter_by
+) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}/limit/${limit}/page_num/${page_num}`
+        `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}/limit/${limit}/page_num/${page_num}/filter_by/${filter_by}`
     );
 
     return response.data;

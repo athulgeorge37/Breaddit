@@ -13,6 +13,20 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        .sort_by_options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            button {
+                @include btn-styles($light-grey)
+            }
+
+            .active {
+                @include btn-styles($blue)
+            }
+        }
     }
 
     

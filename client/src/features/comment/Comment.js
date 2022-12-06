@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
-function Comment({ comment, post_id, parent_comment_id = null }) {
+function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     // the comment component renders both surface level comments and
     // replies of those comments, therfore this component actually serves
     // 2 purposes and behaves slightly differently depending on if
@@ -291,6 +291,7 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
                         <ReplySectionInfiniteScroll
                             comment_id={comment.id}
                             post_id={post_id}
+                            sort_by={sort_by}
                         />
                     )}
                 </div>

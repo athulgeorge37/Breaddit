@@ -86,6 +86,27 @@ router.get(
     }
 );
 
+const determine_order_by = (filter_by) => {
+    switch (filter_by) {
+        case "NEW":
+            return [["updatedAt", "DESC"]];
+        case "OLD":
+            return [["updatedAt", "ASC"]];
+        case "TOP":
+            return [
+                ["up_votes", "DESC"],
+                ["down_votes", "ASC"],
+            ];
+        case "BOTTOM":
+            return [
+                ["down_votes", "DESC"],
+                ["up_votes", "ASC"],
+            ];
+        default:
+            return [["updatedAt", "DESC"]];
+    }
+};
+
 router.get(
     "/get_all_comments/by_post_id/:id/limit/:limit/page_num/:page_num/filter_by/:filter_by",
     async (request, response) => {
@@ -100,31 +121,7 @@ router.get(
             let page_num = parseInt(request.params.page_num);
             const offset = limit * page_num;
 
-            const filter_by = request.params.filter_by;
-            let order_by;
-            switch (filter_by) {
-                case "NEW":
-                    order_by = [["updatedAt", "DESC"]];
-                    break;
-                case "OLD":
-                    order_by = [["updatedAt", "ASC"]];
-                    break;
-                case "TOP":
-                    order_by = [
-                        ["up_votes", "DESC"],
-                        ["down_votes", "ASC"],
-                    ];
-                    break;
-                case "BOTTOM":
-                    order_by = [
-                        ["down_votes", "DESC"],
-                        ["up_votes", "ASC"],
-                    ];
-                    break;
-                default:
-                    order_by = [["updatedAt", "DESC"]];
-                    break;
-            }
+            const order_by = determine_order_by(request.params.filter_by);
 
             const list_of_comments = await db.Comment.findAll({
                 where: {
@@ -156,7 +153,7 @@ router.get(
 );
 
 router.get(
-    "/get_all_replies/by_comment_id/:id/limit/:limit/page_num/:page_num",
+    "/get_all_replies/by_comment_id/:id/limit/:limit/page_num/:page_num/filter_by/:filter_by",
     async (request, response) => {
         // gets all the comments of a post or the replies of a comment
         // where the id is the post_id
@@ -169,6 +166,8 @@ router.get(
             let page_num = parseInt(request.params.page_num);
 
             const offset = limit * page_num;
+
+            const order_by = determine_order_by(request.params.filter_by);
 
             // getting the list of reply ids
             const list_of_reply_ids_data = await db.Reply.findAll({
@@ -187,7 +186,7 @@ router.get(
                 where: {
                     id: list_of_reply_ids, // getting all comment details using the reply ids
                 },
-                order: [["updatedAt", "DESC"]],
+                order: order_by,
                 include: [
                     {
                         model: db.User,

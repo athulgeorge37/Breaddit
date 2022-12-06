@@ -7,7 +7,7 @@ import Comment from "./Comment";
 
 const REPLIES_PER_PAGE = 2;
 
-function ReplySectionInfiniteScroll({ comment_id, post_id }) {
+function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -16,12 +16,13 @@ function ReplySectionInfiniteScroll({ comment_id, post_id }) {
         status,
         error,
     } = useInfiniteQuery(
-        ["replies_of_comment_id_and_post_id", comment_id, post_id],
+        ["replies_of_comment_id_and_post_id", comment_id, post_id, sort_by],
         ({ pageParam = 0 }) =>
             get_all_replies_by_comment_id(
                 comment_id,
                 REPLIES_PER_PAGE,
-                pageParam
+                pageParam,
+                sort_by
             ),
         {
             getNextPageParam: (lastPage, allPages) => {

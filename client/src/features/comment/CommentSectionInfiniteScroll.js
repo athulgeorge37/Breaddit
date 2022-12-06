@@ -91,13 +91,21 @@ function CommentSectionInfiniteScroll({ post_id }) {
             if (i + 1 === length_of_comments) {
                 return (
                     <div ref={lastCommentRef} key={comment_details.id}>
-                        <Comment comment={comment_details} post_id={post_id} />
+                        <Comment
+                            comment={comment_details}
+                            post_id={post_id}
+                            sort_by={sort_by}
+                        />
                     </div>
                 );
             }
             return (
                 <div key={comment_details.id}>
-                    <Comment comment={comment_details} post_id={post_id} />
+                    <Comment
+                        comment={comment_details}
+                        post_id={post_id}
+                        sort_by={sort_by}
+                    />
                 </div>
             );
         });

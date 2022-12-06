@@ -127,7 +127,12 @@ function StaticPostCard({ post_details }) {
             </div>
 
             <div className="post_btns">
-                <Votes vote_type="post" vote_id={post_details.id} />
+                <Votes
+                    vote_type="post"
+                    vote_id={post_details.id}
+                    up_votes={post_details.up_votes}
+                    down_votes={post_details.down_votes}
+                />
 
                 {post_details.is_inappropriate === true && (
                     <div className="is_inappropriate_error">

@@ -218,6 +218,8 @@ function Comment({ comment, post_id, parent_comment_id = null }) {
                         <Votes
                             vote_type={comment.is_reply ? "reply" : "comment"}
                             vote_id={comment.id}
+                            up_votes={comment.up_votes}
+                            down_votes={comment.down_votes}
                         />
 
                         {comment_edit_mode === false && (

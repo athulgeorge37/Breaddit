@@ -104,13 +104,25 @@ router.get(
             let order_by;
             switch (filter_by) {
                 case "NEW":
-                    order_by = "DESC";
+                    order_by = [["updatedAt", "DESC"]];
                     break;
                 case "OLD":
-                    order_by = "ASC";
+                    order_by = [["updatedAt", "ASC"]];
+                    break;
+                case "TOP":
+                    order_by = [
+                        ["up_votes", "DESC"],
+                        ["down_votes", "ASC"],
+                    ];
+                    break;
+                case "BOTTOM":
+                    order_by = [
+                        ["down_votes", "DESC"],
+                        ["up_votes", "ASC"],
+                    ];
                     break;
                 default:
-                    order_by = "DESC";
+                    order_by = [["updatedAt", "DESC"]];
                     break;
             }
 
@@ -119,7 +131,7 @@ router.get(
                     post_id: post_id, // parent_id here is === post_id
                     is_reply: false,
                 },
-                order: [["updatedAt", order_by]],
+                order: order_by,
                 include: [
                     {
                         model: db.User,

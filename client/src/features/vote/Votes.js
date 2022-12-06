@@ -3,7 +3,6 @@ import "./Votes.scss";
 
 import {
     get_curr_user_vote,
-    get_vote_count,
     make_vote,
 } from "../../rest_api_requests/VoteRequests";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
@@ -21,22 +20,6 @@ function Votes({
     const [up_vote_count, set_up_vote_count] = useState(up_votes);
     const [down_vote_count, set_down_vote_count] = useState(down_votes);
     const [curr_user_vote, set_curr_user_vote] = useState(null);
-
-    // // vote count query
-    // useQuery(
-    //     ["vote_counts", vote_type, vote_id],
-    //     () => get_vote_count(vote_id, vote_type),
-    //     {
-    //         onSuccess: (data) => {
-    //             if (data.error) {
-    //                 console.log(data);
-    //             }
-
-    //             set_up_vote_count(data.up_vote_count);
-    //             set_down_vote_count(data.down_vote_count);
-    //         },
-    //     }
-    // );
 
     // curr user vote query
     useQuery(

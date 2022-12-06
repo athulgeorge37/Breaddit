@@ -5,6 +5,7 @@ const router = express.Router();
 const db = require("../models");
 
 router.get(
+    // currently not being used
     "/get_vote_count/by_vote_id/:vote_id/vote_type/:vote_type",
     async (request, response) => {
         // gets the likes and dislikes of a vote based on its id and type

@@ -23,6 +23,7 @@ const make_vote = async (vote_id, vote_type, up_vote) => {
 };
 
 const get_vote_count = async (vote_id, vote_type) => {
+    // currently not being used
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_vote_count/by_vote_id/${vote_id}/vote_type/${vote_type}`
     );

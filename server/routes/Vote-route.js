@@ -108,16 +108,17 @@ router.post("/make_vote", validate_request, async (request, response) => {
     // also ensure a correct combination of inputs are made
 
     // where vote_details = {
-    // "comment_id": 1,
-    // "post_id": null,
-    // "parent_type": "reply",      // post, comment, reply | Vote table validates this
-    // "user_id": 1,
+    // "vote_id": 1,
+    // "vote_type": "reply",      // post, comment, reply | Vote table validates this
     // "up_vote": true
     // }
 
     // up_vote: true when up_vote, false when down_vote,
     // up_vote: null when remove_vote
     // however this means the existing vote in the db will be destoryed
+
+    // this will also increment, or decrement the count for a post or comment,
+    // in their respective tables
 
     try {
         const user_id = request.user_id;
@@ -158,6 +159,61 @@ router.post("/make_vote", validate_request, async (request, response) => {
 
         // response.json(user_vote_details)
 
+        const update_vote_counts = async (
+            vote_id, // the post_id or comment_id for the DB we want to update
+            vote_type, // do we want to affect the Post or Comment DB, "post", "comment", "reply"
+            up_vote, // which field in the db we want to update, up_votes or down_votes
+            direction, // if we want to increment a vote: "postive", or decrement: "negative"
+            update_other = false // if want to increment one field, and decrement the other
+        ) => {
+            // this function will ensure the vote count for the respective DB
+            // matches the
+
+            // console.log("");
+            // console.log({
+            //     vote_id,
+            //     vote_type,
+            //     up_vote,
+            //     direction,
+            //     update_other,
+            // });
+            // console.log("");
+
+            // does the user want to increment or decrement their vote counts
+            const increment_by =
+                direction === "postive" ? 1 : direction === "negative" ? -1 : 0;
+            if (increment_by === 0) return;
+
+            // so we dont have nested if statements depending on the DB we want to update
+            const db_to_update = vote_type === "post" ? db.Post : db.Comment;
+
+            // same as 1 comment above
+            const field_to_update = up_vote
+                ? { up_votes: increment_by }
+                : { down_votes: increment_by };
+
+            // will increment or decrement the respective field based on the vote_id
+            await db_to_update.increment(field_to_update, {
+                where: {
+                    id: vote_id,
+                },
+            });
+
+            // when a user is changing from up_vote to down_vote
+            // we need to update the other vote_count to reflect the changes
+            if (update_other) {
+                const other_field_to_update = up_vote
+                    ? { down_votes: increment_by * -1 }
+                    : { up_votes: increment_by * -1 };
+
+                await db_to_update.increment(other_field_to_update, {
+                    where: {
+                        id: vote_id,
+                    },
+                });
+            }
+        };
+
         // user_vote_details is null when they have not liked or disliked a post
         // as in their vote does not exist in the DB
         if (!user_vote_details) {
@@ -174,6 +230,15 @@ router.post("/make_vote", validate_request, async (request, response) => {
                     up_vote: up_vote,
                     user_id: user_id,
                 });
+
+                update_vote_counts(
+                    vote_id,
+                    vote_type,
+                    up_vote,
+                    "postive",
+                    false
+                );
+
                 response.json({
                     msg: `succesfully added new ${up_vote ? "Up" : "Down"}Vote`,
                 });
@@ -186,6 +251,15 @@ router.post("/make_vote", validate_request, async (request, response) => {
             if (up_vote === null) {
                 // user wants to remove their vote
                 await db.Vote.destroy({ where: search_to_use });
+
+                update_vote_counts(
+                    vote_id,
+                    vote_type,
+                    user_vote_details.up_vote,
+                    "negative",
+                    false
+                );
+
                 response.json({
                     msg: `succesfully removed your previous ${
                         user_vote_details.up_vote ? "Up" : "Down"
@@ -193,7 +267,7 @@ router.post("/make_vote", validate_request, async (request, response) => {
                 });
             } else if (up_vote === user_vote_details.up_vote) {
                 // when the user up_vote and user_vote_details.up_vote is the same value
-                // runs when they have arleady liked, or already disliked parent_type
+                // runs when they have arleady liked, or already disliked vote_type
                 response.json({
                     error: `user has already ${
                         up_vote ? "Up" : "Down"
@@ -201,12 +275,21 @@ router.post("/make_vote", validate_request, async (request, response) => {
                 });
             } else if (up_vote === !user_vote_details.up_vote) {
                 // when the new vote is the opposite of the exisitng vote
-                // response.json(`executing change, up_vote=${up_vote}, user_vote_details.up_vote=${user_vote_details.up_vote}, user_vote_details.id=${user_vote_details.id}`)
+
                 await db.Vote.update(
                     // comment_id remains the same
                     { up_vote: up_vote },
                     { where: search_to_use }
                 );
+
+                update_vote_counts(
+                    vote_id,
+                    vote_type,
+                    up_vote,
+                    "postive",
+                    true
+                );
+
                 response.json({
                     msg: `succesfully updated old ${
                         user_vote_details.up_vote ? "Up" : "Down"

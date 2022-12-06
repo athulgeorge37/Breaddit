@@ -56,6 +56,11 @@ function AddComment({
                         post_id,
                     ]);
                 }
+
+                show_error_msg(false);
+                set_comment_content("");
+                execute_after_add_comment();
+                add_notification(`Succesfully Added ${btn_text}`);
             },
             onError: (error) => {
                 console.log({ error });
@@ -83,6 +88,10 @@ function AddComment({
                         post_id,
                     ]);
                 }
+
+                show_error_msg(false);
+                execute_after_add_comment();
+                add_notification(`Succesfully Edited ${comment_type}`);
             },
             onError: (error) => {
                 console.log({ error });
@@ -96,11 +105,6 @@ function AddComment({
         }
 
         add_comment.mutate();
-
-        show_error_msg(false);
-        set_comment_content("");
-        execute_after_add_comment();
-        add_notification(`Succesfully Added ${btn_text}`);
     };
 
     const submit_edit_comment = async () => {
@@ -109,11 +113,6 @@ function AddComment({
         }
 
         edit_comment.mutate();
-
-        show_error_msg(false);
-        execute_after_add_comment();
-
-        add_notification(`Succesfully Edited ${comment_type}`);
     };
 
     const validate_comment_content = () => {

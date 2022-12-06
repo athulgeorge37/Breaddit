@@ -180,7 +180,7 @@ function StaticPost({ post_details }) {
                 <div className="both_comments_btns">
                     {post_details.post_data.total_comments > 0 && (
                         <Button
-                            handle_btn_click={() => {
+                            onClick={() => {
                                 set_show_comments_section(
                                     !show_comments_section
                                 );

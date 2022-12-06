@@ -9,6 +9,8 @@
     margin-left: 10px;
 }
 
+
+
 .save_btn {
     background-color: $dark-grey;
     border: none;
@@ -23,6 +25,16 @@
         width: 30px;
         height: 30px;
         @include green-filter_color;
+    }
+
+    .size_large {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .size_small {
+        width: 20px;
+        height: 20px;
     }
 
     span {
@@ -66,9 +78,17 @@
     position: relative;
 
     .cancel_img {
+        @include red-filter_color;
+    }
+
+    .size_large {
         width: 25px;
         height: 25px;
-        @include red-filter_color;
+    }
+    
+    .size_small {
+        width: 15px;
+        height: 15px;
     }
 
     span {
@@ -112,9 +132,17 @@
     position: relative;
 
     .delete_img {
+        @include red-filter_color;                    
+    }
+
+    .size_large {
         width: 25px;
         height: 25px;
-        @include red-filter_color;                    
+    }
+    
+    .size_small {
+        width: 15px;
+        height: 15px;
     }
 
     span {
@@ -159,9 +187,17 @@
     position: relative;
 
     .edit_img {
+        @include blue-filter_color;
+    }
+
+    .size_large {
         width: 25px;
         height: 25px;
-        @include blue-filter_color;
+    }
+    
+    .size_small {
+        width: 15px;
+        height: 15px;
     }
 
     span {
@@ -205,9 +241,17 @@
     position: relative;
 
     .award_img {
+        @include green-filter_color;
+    }
+
+    .size_large {
         width: 30px;
         height: 30px;
-        @include green-filter_color;
+    }
+    
+    .size_small {
+        width: 20px;
+        height: 20px;
     }
 
     span {
@@ -254,6 +298,16 @@
         width: 35px;
         height: 35px;
         @include blue-filter_color;
+    }
+
+    .size_large {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .size_small {
+        width: 20px;
+        height: 20px;
     }
 
     .active{
@@ -309,9 +363,17 @@
     position: relative;
 
     .comments_section_img {
+        @include blue-filter_color;
+    }
+
+    .size_large {
         width: 30px;
         height: 30px;
-        @include blue-filter_color;
+    }
+    
+    .size_small {
+        width: 17px;
+        height: 17px;
     }
 
     .active{
@@ -359,9 +421,17 @@
     position: relative;
 
     .add_img_img {
+        @include green-filter_color;
+    }
+
+    .size_large {
         width: 30px;
         height: 30px;
-        @include green-filter_color;
+    }
+    
+    .size_small {
+        width: 20px;
+        height: 20px;
     }
 
 
@@ -406,9 +476,17 @@
     position: relative;
 
     .remove_img_img {
+        @include red-filter_color;
+    }
+
+    .size_large {
         width: 30px;
         height: 30px;
-        @include red-filter_color;
+    }
+    
+    .size_small {
+        width: 20px;
+        height: 20px;
     }
 
     span {
@@ -440,3 +518,5 @@
         visibility: visible;
     }
 }
+
+

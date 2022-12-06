@@ -9,6 +9,7 @@ import AddComment from "./AddComment";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
 import Modal from "../../components/ui/Modal";
+import Button from "../../components/ui/Button";
 
 import AdjustableButton from "../../components/ui/AdjustableButton";
 import ResizablePanel, {
@@ -17,6 +18,7 @@ import ResizablePanel, {
 import {
     check_if_comments_or_replies_exist,
     delete_comment_or_reply,
+    edit_comment_or_reply,
 } from "../../rest_api_requests/CommentRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
@@ -37,7 +39,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     const add_notification = useNotification();
 
     const modal_ref = useRef();
-    // still need to implement infinite scroll for comments and replies
 
     const [show_replies_section, set_show_replies_section] = useState(false);
     const [show_add_reply, set_show_add_reply] = useState(false);
@@ -79,18 +80,14 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         post_id,
                     ]);
                 }
+                add_notification(
+                    `Succesfully deleted ${
+                        comment.is_reply ? "Reply" : "Comment"
+                    }`
+                );
             },
         }
     );
-
-    const handle_delete_comment = () => {
-        // const response = await delete_comment(comment.id);
-        const type = comment.is_reply ? "reply" : "comment";
-
-        delete_comment.mutate(type);
-
-        add_notification(`Succesfully deleted ${type}`);
-    };
 
     return (
         <div
@@ -109,7 +106,9 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 <button
                     className="delete_post_btn"
                     onClick={() => {
-                        handle_delete_comment();
+                        const type = comment.is_reply ? "reply" : "comment";
+
+                        delete_comment.mutate(type);
                         modal_ref.current.close_modal();
                     }}
                 >
@@ -145,7 +144,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         {comment.author_details.username ===
                             current_user.username && (
                             <div className="edit_and_delete_btns">
-                                <AdjustableButton
+                                {/* <AdjustableButton
                                     boolean_check={comment_edit_mode}
                                     execute_onclick={() =>
                                         set_comment_edit_mode(
@@ -156,16 +155,38 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                     active_name="Cancel"
                                     inactive_name="Edit"
                                     btn_type_txt={true}
-                                />
+                                /> */}
+                                {comment_edit_mode ? (
+                                    <Button
+                                        onClick={() =>
+                                            set_comment_edit_mode(false)
+                                        }
+                                        type="cancel"
+                                        img_name="cancel"
+                                        margin_right={true}
+                                        size="small"
+                                    />
+                                ) : (
+                                    <Button
+                                        onClick={() =>
+                                            set_comment_edit_mode(true)
+                                        }
+                                        type="edit"
+                                        img_name="edit"
+                                        margin_right={true}
+                                        size="small"
+                                    />
+                                )}
 
-                                <button
-                                    className="delete_comment_btn"
+                                <Button
                                     onClick={() =>
                                         modal_ref.current.open_modal()
                                     }
-                                >
-                                    Delete
-                                </button>
+                                    type="delete"
+                                    img_name="delete"
+                                    margin_right={true}
+                                    size="small"
+                                />
                             </div>
                         )}
                     </div>
@@ -233,32 +254,32 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         {comment.is_reply === false && (
                             <div className="reply_btns">
                                 {current_user.role !== "admin" && (
-                                    <AdjustableButton
-                                        boolean_check={show_add_reply}
-                                        execute_onclick={() =>
-                                            set_show_add_reply(!show_add_reply)
-                                        }
-                                        original_class_name="reply_btn"
-                                        active_name="Cancel"
-                                        inactive_name="Reply"
-                                        btn_type_txt={true}
+                                    <Button
+                                        onClick={() => {
+                                            set_show_add_reply(!show_add_reply);
+                                        }}
+                                        type="add_comment"
+                                        img_name="add_comment"
+                                        margin_right={true}
+                                        active={show_add_reply}
+                                        img_path="../.."
+                                        size="small"
                                     />
                                 )}
 
                                 {allow_replies_section_btn === true && (
-                                    <AdjustableButton
-                                        // boolean_check={show_replies}
-                                        boolean_check={show_replies_section}
-                                        execute_onclick={() => {
-                                            // set_show_replies(!show_replies)
+                                    <Button
+                                        onClick={() => {
                                             set_show_replies_section(
                                                 !show_replies_section
                                             );
                                         }}
-                                        original_class_name="view_replies_btn"
-                                        active_name="Hide Replies"
-                                        inactive_name="Show Replies"
-                                        btn_type_txt={true}
+                                        type="comments_section"
+                                        img_name="comments"
+                                        margin_right={true}
+                                        active={show_replies_section}
+                                        img_path="../.."
+                                        size="small"
                                     />
                                 )}
                             </div>

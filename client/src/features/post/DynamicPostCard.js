@@ -167,16 +167,14 @@ function DynamicPostCard({ post_id }) {
                             {edit_btn_active ? (
                                 <>
                                     <Button
-                                        handle_btn_click={handle_edit_post_save}
+                                        onClick={handle_edit_post_save}
                                         type="save"
                                         span_text="Save"
                                         img_name="confirm"
                                         margin_right={true}
                                     />
                                     <Button
-                                        handle_btn_click={
-                                            handle_edit_post_cancel
-                                        }
+                                        onClick={handle_edit_post_cancel}
                                         type="cancel"
                                         span_text="Cancel"
                                         img_name="cancel"
@@ -185,9 +183,7 @@ function DynamicPostCard({ post_id }) {
                                 </>
                             ) : (
                                 <Button
-                                    handle_btn_click={() =>
-                                        set_edit_btn_active(true)
-                                    }
+                                    onClick={() => set_edit_btn_active(true)}
                                     type="edit"
                                     span_text="Edit"
                                     img_name="edit"
@@ -196,9 +192,7 @@ function DynamicPostCard({ post_id }) {
                             )}
 
                             <Button
-                                handle_btn_click={() =>
-                                    modal_ref.current.open_modal()
-                                }
+                                onClick={() => modal_ref.current.open_modal()}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"
@@ -208,7 +202,7 @@ function DynamicPostCard({ post_id }) {
                     ) : (
                         <Button
                             // might need to include on click
-                            // handle_btn_click={() => set_delete_btn_active(true)}
+                            // onClick={() => set_delete_btn_active(true)}
                             type="award"
                             span_text="Award"
                             img_name="award"

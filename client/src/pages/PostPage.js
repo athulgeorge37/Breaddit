@@ -18,12 +18,14 @@ function PostPage() {
         <div className="PostPage">
             <DynamicPostCard post_id={post_id} />
 
-            <AddComment
-                placeholder="Add Comment"
-                btn_text="Comment"
-                comment_type="comment"
-                post_id={post_id}
-            />
+            <div className="add_new_comment">
+                <AddComment
+                    placeholder="Add Comment"
+                    btn_text="Comment"
+                    comment_type="comment"
+                    post_id={post_id}
+                />
+            </div>
 
             <CommentSectionInfiniteScroll post_id={post_id} />
         </div>

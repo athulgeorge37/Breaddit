@@ -6,12 +6,15 @@
     
 
 
-    .comment_add_comment {
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
-        border-radius: $default-border-radius;
-        box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
-        margin-bottom: calc(1.5 * $inner_padding);
+    .add_new_comment {
+
+        .comment_add_comment {
+            background-color: $dark-grey;
+            border: 1px solid $light-grey;
+            border-radius: $default-border-radius;
+            box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+            margin-bottom: calc(1.5 * $inner_padding);
+        }
     }
 
 

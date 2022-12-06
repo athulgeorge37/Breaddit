@@ -2,7 +2,7 @@
 import "./Button.scss";
 
 function Button({
-    handle_btn_click,
+    onClick,
     type,
     active,
     span_class_name,
@@ -11,6 +11,7 @@ function Button({
     img_path = "..",
     margin_right = false,
     margin_left = false,
+    size = "large",
 }) {
     // DESCRIPTION:
     // - Button takes in the above props to generate a reusable component
@@ -42,14 +43,14 @@ function Button({
             className={`${type}_btn ${margin_right ? "margin_right" : ""} ${
                 margin_left ? "margin_left" : ""
             }`}
-            onClick={handle_btn_click}
+            onClick={onClick}
         >
             {span_text !== null && (
                 <span className={span_class_name}>{span_text}</span>
             )}
 
             <img
-                className={`${type}_img ${active && "active"}`}
+                className={`${type}_img ${active && "active"} size_${size}`}
                 src={`${img_path}/images/${img_name}.png`}
                 alt={`${type}_btn`}
                 loading="lazy"

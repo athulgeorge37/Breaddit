@@ -41,6 +41,7 @@
                 }
 
                 .edit_and_delete_btns {
+                    display: flex;
 
                     .delete_comment_btn {
                         @include btn-style-text($red);
@@ -107,6 +108,8 @@
 
         
             .reply_btns {
+                display: flex;
+                align-items: center;
 
                 .view_replies_btn {
                     margin-left: 10px;

@@ -1,4 +1,4 @@
-const { text } = require("express");
+const determine_order_by = require("../helper/FilterBy");
 const express = require("express");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 const router = express.Router();
@@ -85,27 +85,6 @@ router.get(
         }
     }
 );
-
-const determine_order_by = (filter_by) => {
-    switch (filter_by) {
-        case "NEW":
-            return [["updatedAt", "DESC"]];
-        case "OLD":
-            return [["updatedAt", "ASC"]];
-        case "TOP":
-            return [
-                ["up_votes", "DESC"],
-                ["down_votes", "ASC"],
-            ];
-        case "BOTTOM":
-            return [
-                ["down_votes", "DESC"],
-                ["up_votes", "ASC"],
-            ];
-        default:
-            return [["updatedAt", "DESC"]];
-    }
-};
 
 router.get(
     "/get_all_comments/by_post_id/:id/limit/:limit/page_num/:page_num/filter_by/:filter_by",

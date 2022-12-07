@@ -79,7 +79,7 @@ function StaticPostCard({ post_details }) {
                     current_user.username ? (
                         <>
                             <Button
-                                handle_btn_click={navigate_to_post_page}
+                                onClick={navigate_to_post_page}
                                 type="edit"
                                 span_text="Edit"
                                 img_name="edit"
@@ -87,7 +87,7 @@ function StaticPostCard({ post_details }) {
                             />
 
                             <Button
-                                handle_btn_click={navigate_to_post_page}
+                                onClick={navigate_to_post_page}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"
@@ -97,7 +97,7 @@ function StaticPostCard({ post_details }) {
                     ) : (
                         <Button
                             // might need to include on click
-                            // handle_btn_click={() => set_delete_btn_active(true)}
+                            // onClick={() => set_delete_btn_active(true)}
                             type="award"
                             span_text="Award"
                             img_name="award"
@@ -143,7 +143,7 @@ function StaticPostCard({ post_details }) {
 
                 <div className="both_comments_btns">
                     <Button
-                        handle_btn_click={navigate_to_post_page}
+                        onClick={navigate_to_post_page}
                         type="add_comment"
                         span_text="Add Comment"
                         span_class_name="add_comment_span"
@@ -154,7 +154,7 @@ function StaticPostCard({ post_details }) {
 
                     {allow_comments_section_btn === true && (
                         <Button
-                            handle_btn_click={navigate_to_post_page}
+                            onClick={navigate_to_post_page}
                             type="comments_section"
                             span_text="Show Comments"
                             img_name="comments"

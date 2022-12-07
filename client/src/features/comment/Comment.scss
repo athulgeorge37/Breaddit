@@ -42,6 +42,7 @@
 
                 .edit_and_delete_btns {
                     display: flex;
+                    gap: 10px;
 
                     .delete_comment_btn {
                         @include btn-style-text($red);
@@ -109,7 +110,7 @@
         
             .reply_btns {
                 display: flex;
-                align-items: center;
+                gap: 10px;
 
                 .view_replies_btn {
                     margin-left: 10px;

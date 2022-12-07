@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import "./PostsPage.scss";
 
 import CreatePost from "../features/post/CreatePost";
@@ -10,9 +10,11 @@ import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 const POSTS_PER_PAGE = 2;
+const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
 
 function PostsPage() {
     const { current_user } = useCurrentUser();
+    const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);
 
     const {
         fetchNextPage, //function
@@ -22,8 +24,9 @@ function PostsPage() {
         status,
         error,
     } = useInfiniteQuery(
-        ["posts"],
-        ({ pageParam = 0 }) => get_all_posts(POSTS_PER_PAGE, pageParam),
+        ["posts", sort_by],
+        ({ pageParam = 0 }) =>
+            get_all_posts(POSTS_PER_PAGE, pageParam, sort_by),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it
@@ -98,6 +101,25 @@ function PostsPage() {
 
     return (
         <div className="Posts_Page">
+            <div className="header">
+                <h2>Posts</h2>
+
+                <div className="sort_by_options">
+                    <span>Sort By:</span>
+                    {SORT_BY_OPTIONS.map((option) => {
+                        return (
+                            <button
+                                key={option}
+                                onClick={() => set_sort_by(option)}
+                                className={sort_by === option ? "active" : ""}
+                            >
+                                {option}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             {current_user.role !== "admin" && <CreatePost />}
 
             <div className="All_Posts">

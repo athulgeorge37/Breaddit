@@ -1,3 +1,4 @@
+const determine_order_by = require("../helper/FilterBy");
 const express = require("express");
 const router = express.Router();
 
@@ -6,7 +7,7 @@ const db = require("../models");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 
 router.get(
-    "/get_all/limit/:limit/page_num/:page_num",
+    "/get_all/limit/:limit/page_num/:page_num/filter_by/:filter_by",
     async (request, response) => {
         // when getting list of posts, we also get
         // the user details who made that post
@@ -16,11 +17,13 @@ router.get(
 
             const offset = limit * page_num;
 
+            const order_by = determine_order_by(request.params.filter_by);
+
             const list_of_posts = await db.Post.findAll({
                 where: {
                     is_inappropriate: false,
                 },
-                order: [["updatedAt", "DESC"]],
+                order: order_by,
                 include: [
                     {
                         model: db.User,

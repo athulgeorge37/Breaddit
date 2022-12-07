@@ -47,9 +47,7 @@ function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
         return <p>Error: {error}</p>;
     }
 
-    const content = data?.pages.map((pg) => {
-        // const length_of_replies = pg.all_replies.length;
-
+    const list_of_replies = data?.pages.map((pg) => {
         return pg.all_replies.map((reply_details, i) => {
             return (
                 <Comment
@@ -64,11 +62,11 @@ function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
 
     return (
         <div className="ReplySectionInfiniteScroll">
-            {content}
-
-            {isFetchingNextPage && <Loading />}
+            {list_of_replies}
 
             <div className="end_of_replies_section">
+                {isFetchingNextPage && <Loading />}
+
                 {hasNextPage ? (
                     <button onClick={fetchNextPage}>Get more replies</button>
                 ) : (

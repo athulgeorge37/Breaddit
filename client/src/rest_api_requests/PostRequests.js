@@ -55,12 +55,9 @@ const edit_post = async (post_id, post_title, post_text, post_image) => {
     return response.data;
 };
 
-const get_all_posts = async (limit, page_num) => {
-    // const response = await axios.get(
-    //     `${CUSTOM_ENDPOINT}/get_all/limit/${limit}/offset/${offset}`
-    // );
+const get_all_posts = async (limit, page_num, filter_by) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all/limit/${limit}/page_num/${page_num}`
+        `${CUSTOM_ENDPOINT}/get_all/limit/${limit}/page_num/${page_num}/filter_by/${filter_by}`
     );
 
     return response.data;

@@ -144,18 +144,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         {comment.author_details.username ===
                             current_user.username && (
                             <div className="edit_and_delete_btns">
-                                {/* <AdjustableButton
-                                    boolean_check={comment_edit_mode}
-                                    execute_onclick={() =>
-                                        set_comment_edit_mode(
-                                            !comment_edit_mode
-                                        )
-                                    }
-                                    original_class_name="edit_cancel_btn"
-                                    active_name="Cancel"
-                                    inactive_name="Edit"
-                                    btn_type_txt={true}
-                                /> */}
                                 {comment_edit_mode ? (
                                     <Button
                                         onClick={() =>
@@ -163,7 +151,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         }
                                         type="cancel"
                                         img_name="cancel"
-                                        margin_right={true}
                                         size="small"
                                     />
                                 ) : (
@@ -173,7 +160,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         }
                                         type="edit"
                                         img_name="edit"
-                                        margin_right={true}
                                         size="small"
                                     />
                                 )}
@@ -184,7 +170,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                     }
                                     type="delete"
                                     img_name="delete"
-                                    margin_right={true}
                                     size="small"
                                 />
                             </div>
@@ -260,7 +245,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         }}
                                         type="add_comment"
                                         img_name="add_comment"
-                                        margin_right={true}
                                         active={show_add_reply}
                                         img_path="../.."
                                         size="small"
@@ -276,7 +260,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         }}
                                         type="comments_section"
                                         img_name="comments"
-                                        margin_right={true}
                                         active={show_replies_section}
                                         img_path="../.."
                                         size="small"

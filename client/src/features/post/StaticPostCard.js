@@ -115,11 +115,7 @@ function StaticPostCard({ post_details }) {
                         min_height={500}
                         {...resizable_panel_states}
                     >
-                        <PostContent
-                            post_image={post_details.image}
-                            post_text={post_details.text}
-                            post_title={post_details.title}
-                        />
+                        <PostContent post_details={post_details} />
                     </ResizablePanel>
                 </div>
             </div>

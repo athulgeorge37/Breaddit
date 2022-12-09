@@ -6,7 +6,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
-import { delete_post, edit_post } from "../../rest_api_requests/PostRequests";
+import { delete_post } from "../../rest_api_requests/PostRequests";
 
 // ui component imports
 import Button from "../../components/ui/Button";
@@ -19,12 +19,12 @@ import ResizablePanel, {
 
 // feature  component imports
 import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
-import EditPost from "../../features/post/EditPost";
+import EditPost from "./EditPost";
 import Votes from "../../features/vote/Votes";
 
 import { calculate_time_passed } from "../../helper/time";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { get_post_by_id } from "../../rest_api_requests/PostRequests";
 import PostContent from "../../features/post/PostContent";
@@ -40,11 +40,6 @@ function DynamicPostCard({ post_id }) {
     const [post_details, set_post_details] = useState(null);
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
-    const [valid_title, set_valid_title] = useState(true);
-    const [post_title, set_post_title] = useState("");
-    const [post_text, set_post_text] = useState("");
-    const [image_url, set_image_url] = useState(null);
-
     const { loading: post_details_loading } = useQuery(
         ["post_content", post_id],
         () => {
@@ -55,83 +50,75 @@ function DynamicPostCard({ post_id }) {
                 const post_details_data = data.post_details;
 
                 set_post_details(post_details_data);
-
-                set_post_title(post_details_data.title);
-                set_post_text(post_details_data.text);
-                set_image_url(post_details_data.image);
             },
         }
     );
 
-    const handle_edit_post_save = async (post_title, post_text) => {
-        // only handling post if post title is not empty
-        if (post_title.trim().length === 0) {
-            set_valid_title(false);
-            return;
-        }
+    const post_deletion = useMutation(() => delete_post(post_id), {
+        onSuccess: (data) => {
+            // removing post on client side when deleted from db
 
-        // editing post in db
-        const response = await edit_post(
-            post_details.id,
-            post_title,
-            post_text,
-            image_url
-        );
+            if (data.error) {
+                console.log(data);
+                return;
+            }
+            queryClient.invalidateQueries(["posts"]);
+            navigate("/posts");
+            add_notification("Succesfully Deleted Post");
+        },
+    });
 
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        set_edit_btn_active(false);
-        add_notification("Succesfully Edited Post");
-    };
-
-    const handle_edit_post_cancel = () => {
-        set_post_title(post_details.title);
-        set_post_text(post_details.text);
-        set_image_url(post_details.image);
-        set_edit_btn_active(false);
-    };
-
-    const handle_delete_post = async () => {
-        // removing post in db
-        const response = await delete_post(post_id);
-
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        // removing post on client side when deleted from db
-        // remove_post_from_list(post_details.id);
-        queryClient.invalidateQueries(["posts"]);
-
-        add_notification("Succesfully Deleted Post");
-    };
-
-    if (post_details_loading === true || post_details === null) {
+    if (post_details_loading === true) {
         return <Loading />;
+    }
+
+    if (post_details === null) {
+        return <div>This post does not exist</div>;
     }
 
     return (
         <div className="DynamicPostCard">
             <Modal ref={modal_ref} btn_color="red" width="300">
-                <h2>Delete Post?</h2>
-                <p>
-                    Are you sure you want to delete this Post? This action is
-                    not reversible.
-                </p>
-
-                <button
-                    className="delete_post_btn"
-                    onClick={() => {
-                        handle_delete_post();
-                        modal_ref.current.close_modal();
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
                     }}
                 >
-                    Delete Post
-                </button>
+                    <h2>Delete Post?</h2>
+                    <p>
+                        Are you sure you want to delete this Post? This action
+                        is not reversible.
+                    </p>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: "10px",
+                            marginTop: "10px",
+                        }}
+                    >
+                        <button
+                            onClick={() => {
+                                modal_ref.current.close_modal();
+                            }}
+                            style={{
+                                backgroundColor: "#21262d",
+                                border: "none",
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => {
+                                post_deletion.mutate();
+                                modal_ref.current.close_modal();
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </Modal>
 
             <div className="post_user_and_awards">
@@ -165,22 +152,13 @@ function DynamicPostCard({ post_id }) {
                     current_user.username ? (
                         <>
                             {edit_btn_active ? (
-                                <>
-                                    <Button
-                                        onClick={handle_edit_post_save}
-                                        type="save"
-                                        span_text="Save"
-                                        img_name="confirm"
-                                        margin_right={true}
-                                    />
-                                    <Button
-                                        onClick={handle_edit_post_cancel}
-                                        type="cancel"
-                                        span_text="Cancel"
-                                        img_name="cancel"
-                                        margin_right={true}
-                                    />
-                                </>
+                                <Button
+                                    onClick={() => set_edit_btn_active(false)}
+                                    type="cancel"
+                                    span_text="Cancel"
+                                    img_name="cancel"
+                                    margin_right={true}
+                                />
                             ) : (
                                 <Button
                                     onClick={() => set_edit_btn_active(true)}
@@ -226,20 +204,11 @@ function DynamicPostCard({ post_id }) {
                     >
                         {edit_btn_active ? (
                             <EditPost
-                                image_url={image_url}
-                                set_image_url={set_image_url}
-                                post_title={post_title}
-                                set_post_title={set_post_title}
-                                post_text={post_text}
-                                set_post_text={set_post_text}
-                                valid_title={valid_title}
+                                post_details={post_details}
+                                set_edit_btn_active={set_edit_btn_active}
                             />
                         ) : (
-                            <PostContent
-                                post_title={post_title}
-                                post_image={image_url}
-                                post_text={post_text}
-                            />
+                            <PostContent post_details={post_details} />
                         )}
                     </ResizablePanel>
                 </div>

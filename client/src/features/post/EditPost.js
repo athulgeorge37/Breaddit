@@ -13,21 +13,20 @@ import Loading from "../../components/ui/Loading";
 import CloudinaryImage from "../../components/CloudinaryImage";
 import Button from "../../components/ui/Button";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { edit_post } from "../../rest_api_requests/PostRequests";
 
-function EditPost({
-    image_url,
-    set_image_url,
-    post_title,
-    set_post_title,
-    post_text,
-    set_post_text,
-    valid_title,
-}) {
+function EditPost({ post_details, set_edit_btn_active }) {
     const add_notification = useNotification();
+    const queryClient = useQueryClient();
 
     const img_input_ref = useRef();
-
     const [loading_img, set_loading_img] = useState(false);
+
+    const [valid_title, set_valid_title] = useState(true);
+    const [post_title, set_post_title] = useState(post_details.title);
+    const [post_text, set_post_text] = useState(post_details.text);
+    const [image_url, set_image_url] = useState(post_details.image);
 
     const handle_img_upload = async (new_img) => {
         try {
@@ -41,6 +40,37 @@ function EditPost({
         } catch (e) {
             console.log(e);
         }
+    };
+
+    const post_edit = useMutation(
+        () => edit_post(post_details.id, post_title, post_text, image_url),
+        {
+            onSuccess: (data) => {
+                // removing post on client side when deleted from db
+
+                if (data.error) {
+                    console.log(data);
+                    return;
+                }
+                queryClient.invalidateQueries(["posts"]);
+                queryClient.invalidateQueries([
+                    "post_content",
+                    post_details.id,
+                ]);
+                set_edit_btn_active(false);
+                add_notification("Succesfully Edited Post");
+            },
+        }
+    );
+
+    const handle_edit_post_save = () => {
+        // only handling post if post title is not empty
+        if (post_title.trim().length === 0) {
+            set_valid_title(false);
+            return;
+        }
+
+        post_edit.mutate();
     };
 
     return (
@@ -105,6 +135,13 @@ function EditPost({
             )}
 
             <TextEditor update_text={set_post_text} post_text={post_text} />
+
+            <div className="edit_post_buttons">
+                <button onClick={() => set_edit_btn_active(false)}>
+                    Cancel
+                </button>
+                <button onClick={handle_edit_post_save}>Save</button>
+            </div>
         </div>
     );
 }

@@ -3,25 +3,22 @@ import CloudinaryImage from "../../components/CloudinaryImage";
 import ParsedText from "../../components/form/ParsedText";
 import DOMPurify from "dompurify";
 
-function PostContent({ post_title, post_image, post_text }) {
+function PostContent({ post_details }) {
+    const { title, image, text } = post_details;
     return (
         <div className="display_text">
             <h1
                 className="Title"
                 dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(post_title),
+                    __html: DOMPurify.sanitize(title),
                 }}
             />
-            {post_image !== null && (
+            {image !== null && (
                 <div className="image_display">
-                    <CloudinaryImage
-                        image_url={post_image}
-                        alt="post_image"
-                        t
-                    />
+                    <CloudinaryImage image_url={image} alt="post_image" t />
                 </div>
             )}
-            <ParsedText>{post_text}</ParsedText>
+            <ParsedText>{text}</ParsedText>
         </div>
     );
 }

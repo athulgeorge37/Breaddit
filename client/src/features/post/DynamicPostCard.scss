@@ -9,17 +9,6 @@
     border-radius: $default-border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
-
-
-    .delete_modal_div {
-        .cancel {
-            @include btn-styles($blue);
-        }
-
-        .delete_post_btn {
-            @include btn-styles($green);
-        }
-    }
     
 
     .post_user_and_awards {

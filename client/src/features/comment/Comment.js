@@ -96,24 +96,51 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
             }
         >
             <Modal ref={modal_ref} btn_color="red" width="300">
-                <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
-                <p>
-                    Are you sure you want to delete your{" "}
-                    {comment.is_reply ? "Reply" : "Comment"}? This action is not
-                    reversible.
-                </p>
-
-                <button
-                    className="delete_post_btn"
-                    onClick={() => {
-                        const type = comment.is_reply ? "reply" : "comment";
-
-                        delete_comment.mutate(type);
-                        modal_ref.current.close_modal();
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
                     }}
                 >
-                    Delete {comment.is_reply ? "Reply" : "Comment"}
-                </button>
+                    <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
+                    <p>
+                        Are you sure you want to delete your{" "}
+                        {comment.is_reply ? "Reply" : "Comment"}? This action is
+                        not reversible.
+                    </p>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: "10px",
+                            marginTop: "10px",
+                        }}
+                    >
+                        <button
+                            onClick={() => {
+                                modal_ref.current.close_modal();
+                            }}
+                            style={{
+                                backgroundColor: "#21262d",
+                                border: "none",
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => {
+                                const type = comment.is_reply
+                                    ? "reply"
+                                    : "comment";
+
+                                delete_comment.mutate(type);
+                                modal_ref.current.close_modal();
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </Modal>
 
             <div className="profile_picture">

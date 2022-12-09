@@ -198,19 +198,19 @@ function DynamicPostCard({ post_id }) {
                 </div>
 
                 <div className="text_content">
-                    <ResizablePanel
-                        min_height={500}
-                        {...resizable_panel_states}
-                    >
-                        {edit_btn_active ? (
-                            <EditPost
-                                post_details={post_details}
-                                set_edit_btn_active={set_edit_btn_active}
-                            />
-                        ) : (
+                    {edit_btn_active ? (
+                        <EditPost
+                            post_details={post_details}
+                            set_edit_btn_active={set_edit_btn_active}
+                        />
+                    ) : (
+                        <ResizablePanel
+                            min_height={500}
+                            {...resizable_panel_states}
+                        >
                             <PostContent post_details={post_details} />
-                        )}
-                    </ResizablePanel>
+                        </ResizablePanel>
+                    )}
                 </div>
             </div>
 

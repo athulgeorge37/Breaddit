@@ -137,10 +137,15 @@ function EditPost({ post_details, set_edit_btn_active }) {
             <TextEditor update_text={set_post_text} post_text={post_text} />
 
             <div className="edit_post_buttons">
-                <button onClick={() => set_edit_btn_active(false)}>
+                <button
+                    onClick={() => set_edit_btn_active(false)}
+                    className="cancel_btn"
+                >
                     Cancel
                 </button>
-                <button onClick={handle_edit_post_save}>Save</button>
+                <button onClick={handle_edit_post_save} className="save_btn">
+                    Save
+                </button>
             </div>
         </div>
     );

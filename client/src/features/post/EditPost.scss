@@ -47,5 +47,20 @@
         margin-bottom: 16px;
         @include input_styles;
         resize: vertical;
-    }       
+    }     
+    
+    .edit_post_buttons {
+        width: calc(100% - (2 * $inner_padding));
+        display: flex;
+        gap: 10px;
+        justify-content: end;
+
+        .cancel_btn {
+            @include btn-styles($light-grey);
+        }
+
+        .save_btn {
+            @include btn-styles($green);
+        }
+    }
 }

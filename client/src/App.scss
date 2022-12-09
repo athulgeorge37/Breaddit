@@ -36,17 +36,26 @@ body {
 }
 
 .App {
-    height: 100vh;
+    // height: 100vh;
     display: flex;
     flex-direction: column;
 
 
-    .main_body {
+    .app_content {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-between;
+        height: 100vh;
+        
+        .main_body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
     }
+
     
 }
 

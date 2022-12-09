@@ -109,13 +109,13 @@ function CreatePost() {
                         </div>
                     ) : (
                         <div className="redirect_from_posts">
-                            Please{" "}
+                            Please
                             <button
                                 className="sign_in_btn"
                                 onClick={() => navigate("/signin")}
                             >
                                 Sign In
-                            </button>{" "}
+                            </button>
                             to Post
                         </div>
                     )}

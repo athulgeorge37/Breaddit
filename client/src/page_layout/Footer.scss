@@ -4,4 +4,10 @@ footer {
     display: flex;
     justify-content: center;
     margin-top: auto;
+
+    a {
+        text-decoration: underline;
+        color: $blue;
+        
+    }
 }

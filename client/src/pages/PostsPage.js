@@ -7,14 +7,16 @@ import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
-
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
 const POSTS_PER_PAGE = 2;
 const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
 
 function PostsPage() {
     const { current_user } = useCurrentUser();
     const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);
+    const [search_thread, set_search_thread] = useState("");
 
     const {
         fetchNextPage, //function
@@ -24,9 +26,9 @@ function PostsPage() {
         status,
         error,
     } = useInfiniteQuery(
-        ["posts", sort_by],
+        ["posts", sort_by, search_thread],
         ({ pageParam = 0 }) =>
-            get_all_posts(POSTS_PER_PAGE, pageParam, sort_by),
+            get_all_posts(POSTS_PER_PAGE, pageParam, sort_by, search_thread),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it
@@ -101,33 +103,65 @@ function PostsPage() {
 
     return (
         <div className="Posts_Page">
-            <div className="header">
-                <h2>Posts</h2>
-
-                <div className="sort_by_options">
-                    <span>Sort By:</span>
-                    {SORT_BY_OPTIONS.map((option) => {
-                        return (
-                            <button
-                                key={option}
-                                onClick={() => set_sort_by(option)}
-                                className={sort_by === option ? "active" : ""}
-                            >
-                                {option}
-                            </button>
-                        );
-                    })}
-                </div>
+            <div className="search">
+                <SearchThreads
+                    sort_by={sort_by}
+                    set_sort_by={set_sort_by}
+                    set_search_thread={set_search_thread}
+                />
             </div>
 
-            {current_user.role !== "admin" && <CreatePost />}
+            <div className="create_post_and_list_of_posts">
+                {current_user.role !== "admin" && <CreatePost />}
 
-            <div className="All_Posts">
-                {list_of_posts}
+                <div className="list_of_posts">{list_of_posts}</div>
 
-                {isFetchingNextPage && <Loading />}
+                <div className="end_of_post_lists">
+                    {isFetchingNextPage && <Loading />}
 
-                {hasNextPage === false && <p>There are no more posts</p>}
+                    {hasNextPage === false && <p>No more posts left</p>}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function SearchThreads({ sort_by, set_sort_by, set_search_thread }) {
+    const navigate = useNavigate();
+    const [search_input, set_search_input] = useState("");
+    return (
+        <div className="SearchThreads">
+            <div className="sort_by_options">
+                {SORT_BY_OPTIONS.map((option) => {
+                    return (
+                        <button
+                            key={option}
+                            onClick={() => set_sort_by(option)}
+                            className={sort_by === option ? "active" : ""}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
+            </div>
+            <button
+                className="create_thread"
+                onClick={() => navigate("/create_thread")}
+            >
+                Create Thread
+            </button>
+            <div className="search_thread_input">
+                <input
+                    type="text"
+                    placeholder={search_input === "" ? "Search Thread" : ""}
+                    onChange={(e) => set_search_input(e.target.value)}
+                />
+                <button
+                    className="search_btn"
+                    onClick={() => set_search_thread(search_input)}
+                >
+                    Search
+                </button>
             </div>
         </div>
     );

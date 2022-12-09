@@ -1,6 +1,7 @@
 @import "../../variables.scss";
 
 .Modal {
+    z-index: 102;
     position: fixed;
     top: 0;
     bottom: 0;

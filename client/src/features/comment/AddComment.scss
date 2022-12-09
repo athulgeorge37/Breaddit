@@ -42,10 +42,14 @@
 
     .not_signed_in {
         display: flex;
-        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 5px;
+        width: 100%;
 
         button {
             @include btn-style-text($blue);
+            text-decoration: underline;
         }
     }
 }

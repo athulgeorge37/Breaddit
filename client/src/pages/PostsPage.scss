@@ -3,36 +3,87 @@
 
 .Posts_Page {
     width: 100%;
-
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    gap: 32px;
+    background-color: $black;
 
-    .header {
-        width: 50%;
-        padding: 0.75em;
+   
+    .search {
+        width: 20%;
+    }
+
+    .create_post_and_list_of_posts {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
+        width: 50%;
+        
+        .list_of_posts {
+            width: 100%;
+        
+        }
 
-        .sort_by_options {
+        .end_of_post_lists {
+            width: 100%;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            justify-content: center;
+            margin-bottom: 32px;
 
-            button {
-                @include btn-styles($light-grey)
-            }
-
-            .active {
-                @include btn-styles($blue)
+            p {
+                box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                background-color: $dark-grey;
+                padding: 10px;
+                border: 1px solid $light-grey;
+                border-radius: $default-border-radius;
             }
         }
     }
 
-    .All_Posts {
-        width: 50%;
+}
+
+
+.SearchThreads {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 60px;
+
+    .sort_by_options {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+
+        button {
+            @include btn-styles($light-grey)
+        }
+
+        .active {
+            @include btn-styles($blue)
+        }
     }
 
+    .create_thread {
+        @include btn-styles($blue);
+        margin-bottom: 16px;
+    }
+
+    .search_thread_input {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        input {
+            @include input_styles;
+            width: 100%
+        }
+    
+        .search_btn {
+            @include btn-styles($green);
+        }
+    }
 }

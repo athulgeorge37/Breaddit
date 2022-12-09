@@ -7,7 +7,7 @@ function HomePage() {
 
     return (
         <div className="Home_Page">
-            Home page
+            <h2>Home page</h2>
             <p>
                 This website is a basic front end implementation of a reddit
                 clone "Breaddit" that we created for the Further web programming

@@ -30,6 +30,7 @@ const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
+const CreateThreadPage = lazy(() => import("./pages/CreateThreadPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Summary = lazy(() => import("./features/admin/Summary"));
@@ -45,63 +46,74 @@ function App() {
                 <ReactQueryDevtools />
                 <Router>
                     <CurrentUserProvider>
-                        <Navbar />
-
                         <NotificationProvider>
-                            <div className="main_body">
-                                <Suspense fallback={<Loading />}>
-                                    <Routes>
-                                        <Route
-                                            path="/"
-                                            element={<HomePage />}
-                                        />
-                                        <Route
-                                            path="/signup"
-                                            element={<SignUpPage />}
-                                        />
-                                        <Route
-                                            path="/signin"
-                                            element={<SignInPage />}
-                                        />
-                                        <Route
-                                            path="/profile/:username_route"
-                                            element={<ProfilePage />}
-                                        />
-                                        <Route
-                                            path="/posts"
-                                            element={<PostsPage />}
-                                        />
-                                        <Route
-                                            path="/post/:post_id_route"
-                                            element={<PostPage />}
-                                        />
-                                        <Route
-                                            path="/admin_dashboard"
-                                            element={<AdminPage />}
-                                        >
-                                            <Route
-                                                path="summary"
-                                                element={<Summary />}
-                                            />
-                                            <Route
-                                                path="all_users"
-                                                element={<AllUsers />}
-                                            />
-                                            <Route
-                                                path="user_overview/:user_id"
-                                                element={<UserOverview />}
-                                            />
-                                        </Route>
-                                        <Route
-                                            path="*"
-                                            element={<ErrorPage />}
-                                        />
-                                    </Routes>
-                                </Suspense>
+                            <div className="app_content">
+                                <div className="nav_bar_and_body">
+                                    <Navbar />
+
+                                    <div className="main_body">
+                                        <Suspense fallback={<Loading />}>
+                                            <Routes>
+                                                <Route
+                                                    path="/"
+                                                    element={<HomePage />}
+                                                />
+                                                <Route
+                                                    path="/signup"
+                                                    element={<SignUpPage />}
+                                                />
+                                                <Route
+                                                    path="/signin"
+                                                    element={<SignInPage />}
+                                                />
+                                                <Route
+                                                    path="/profile/:username_route"
+                                                    element={<ProfilePage />}
+                                                />
+                                                <Route
+                                                    path="/create_thread"
+                                                    element={
+                                                        <CreateThreadPage />
+                                                    }
+                                                />
+                                                <Route
+                                                    path="/posts"
+                                                    element={<PostsPage />}
+                                                />
+                                                <Route
+                                                    path="/post/:post_id_route"
+                                                    element={<PostPage />}
+                                                />
+                                                <Route
+                                                    path="/admin_dashboard"
+                                                    element={<AdminPage />}
+                                                >
+                                                    <Route
+                                                        path="summary"
+                                                        element={<Summary />}
+                                                    />
+                                                    <Route
+                                                        path="all_users"
+                                                        element={<AllUsers />}
+                                                    />
+                                                    <Route
+                                                        path="user_overview/:user_id"
+                                                        element={
+                                                            <UserOverview />
+                                                        }
+                                                    />
+                                                </Route>
+                                                <Route
+                                                    path="*"
+                                                    element={<ErrorPage />}
+                                                />
+                                            </Routes>
+                                        </Suspense>
+                                    </div>
+                                </div>
+                                <Footer />
                             </div>
                         </NotificationProvider>
-
-                        <Footer />
                     </CurrentUserProvider>
                 </Router>
             </QueryClientProvider>

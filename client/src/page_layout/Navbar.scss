@@ -1,40 +1,50 @@
 @import "../variables.scss";
 
+
 nav {
-    display: flex;
-    justify-content: flex-end;
-    padding: 20px;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: $black;
 
-    .logo {
-        position: absolute;
-        left: 1em;
-        top: 5px;
+    .nav_content {
         display: flex;
-        align-items: center;
-        .logo_img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
+        justify-content: flex-end;
+        padding: 20px;
+        position: relative;
+        
+    
+        .logo {
+            position: absolute;
+            left: 1em;
+            top: 5px;
+            display: flex;
+            align-items: center;
+            .logo_img {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
         }
-    }
-
-    .links {
-        display: flex;
-
-        .page_link {
-            margin: 0 10px;
-            text-decoration: none;
-            color: $white;
-        }
-
-        .page_link:hover {
-            cursor: pointer;
-        }
-
-        .active {
-            border-bottom: 1px solid $blue;
+    
+        .links {
+            display: flex;
+    
+            .page_link {
+                margin: 0 10px;
+                text-decoration: none;
+                color: $white;
+            }
+    
+            .page_link:hover {
+                cursor: pointer;
+            }
+    
+            .active {
+                border-bottom: 1px solid $blue;
+            }
         }
     }
 }
+
 

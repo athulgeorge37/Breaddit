@@ -31,8 +31,6 @@ function StaticPostCard({ post_details }) {
     const [allow_comments_section_btn, set_allow_comments_section_btn] =
         useState(false);
 
-    // const [posted_content_ref, { height }] = useMeasure();
-
     const navigate_to_post_page = () => {
         navigate(`/post/${post_details.id}`);
     };

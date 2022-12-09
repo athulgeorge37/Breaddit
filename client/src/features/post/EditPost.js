@@ -68,7 +68,7 @@ function EditPost({
                     />
 
                     <Button
-                        handle_btn_click={() => img_input_ref.current.click()}
+                        onClick={() => img_input_ref.current.click()}
                         type="add_img"
                         span_text={
                             image_url === null
@@ -80,7 +80,7 @@ function EditPost({
 
                     {image_url !== null && (
                         <Button
-                            handle_btn_click={() => set_image_url(null)}
+                            onClick={() => set_image_url(null)}
                             type="remove_img"
                             span_text="Remove Image"
                             img_name="remove_img"

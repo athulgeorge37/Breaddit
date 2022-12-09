@@ -4,9 +4,10 @@
     position: relative;
 
     .notification_list{
+        z-index: 101;
         position: absolute;
         // position: fixed;
-        top: 20px;
+        top: 60px;
         right: 30px;
 
         width: 250px;

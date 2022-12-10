@@ -23,7 +23,6 @@ function PostsPage() {
         hasNextPage, // boolean
         isFetchingNextPage, // boolean
         data,
-        status,
         error,
     } = useInfiniteQuery(
         ["posts", sort_by, search_thread],
@@ -45,6 +44,8 @@ function PostsPage() {
             },
         }
     );
+
+    console.log({ data });
 
     const intObserver = useRef();
     const lastPostRef = useCallback(
@@ -78,10 +79,6 @@ function PostsPage() {
         [isFetchingNextPage, fetchNextPage, hasNextPage]
     );
 
-    if (status === "error") {
-        return <p className="center">Error: {error}</p>;
-    }
-
     const list_of_posts = data?.pages.map((pg) => {
         const length_of_posts = pg.all_posts.length;
 
@@ -113,6 +110,8 @@ function PostsPage() {
 
             <div className="create_post_and_list_of_posts">
                 {current_user.role !== "admin" && <CreatePost />}
+
+                {error && <span>Error: {JSON.stringify(error)}</span>}
 
                 <div className="list_of_posts">{list_of_posts}</div>
 
@@ -153,7 +152,9 @@ function SearchThreads({ sort_by, set_sort_by, set_search_thread }) {
             <div className="search_thread_input">
                 <input
                     type="text"
-                    placeholder={search_input === "" ? "Search Thread" : ""}
+                    placeholder={
+                        search_input === "" ? "Search within this thread" : ""
+                    }
                     onChange={(e) => set_search_input(e.target.value)}
                 />
                 <button

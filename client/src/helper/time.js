@@ -38,9 +38,9 @@ export const calculate_time_passed = (date_posted_in_ISO) => {
     var time_in_units_passed = {}; // eg: {year:0,month:0,week:1,day:2,hour:34,minute:56,second:7}
     var seconds_in_a_unit = {
         yr: 31536000,
-        mo: 2592000,
+        mnth: 2592000,
         wk: 604800,
-        dy: 86400,
+        day: 86400,
         hr: 3600,
         min: 60,
         sec: 1,

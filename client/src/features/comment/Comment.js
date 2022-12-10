@@ -11,14 +11,12 @@ import Votes from "../vote/Votes";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 
-import AdjustableButton from "../../components/ui/AdjustableButton";
 import ResizablePanel, {
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
 import {
     check_if_comments_or_replies_exist,
     delete_comment_or_reply,
-    edit_comment_or_reply,
 } from "../../rest_api_requests/CommentRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
@@ -164,9 +162,16 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                             <b className="username">
                                 {comment.author_details.username}
                             </b>
-                            <b> • </b>
-                            {comment.edited && "(edited) • "}
-                            {calculate_time_passed(comment.updatedAt)} ago
+                            <div className="updated_at_time">
+                                <b>•</b>
+                                {comment.edited && (
+                                    <>
+                                        <span>edited</span>
+                                        <b>•</b>
+                                    </>
+                                )}
+                                {calculate_time_passed(comment.updatedAt)} ago
+                            </div>
                         </div>
                         {comment.author_details.username ===
                             current_user.username && (

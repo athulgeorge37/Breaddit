@@ -1,51 +1,74 @@
 const determine_order_by = require("../helper/FilterBy");
 const express = require("express");
 const router = express.Router();
+const { Op } = require("sequelize");
 
 const db = require("../models");
 
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 
-router.get(
-    "/get_all/limit/:limit/page_num/:page_num/filter_by/:filter_by",
-    async (request, response) => {
-        // when getting list of posts, we also get
-        // the user details who made that post
-        try {
-            const limit = parseInt(request.params.limit);
-            let page_num = parseInt(request.params.page_num);
+router.get("/get_all", async (request, response) => {
+    // when getting list of posts, we also get
+    // the user details who made that post
+    try {
+        const limit = parseInt(request.query.limit);
+        let page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
 
-            const offset = limit * page_num;
+        const order_by = determine_order_by(request.query.filter_by);
+        const search_input = request.query.search_input;
 
-            const order_by = determine_order_by(request.params.filter_by);
+        // console.log("");
+        // console.log(request.query);
+        // console.log("");
 
-            const list_of_posts = await db.Post.findAll({
-                where: {
-                    is_inappropriate: false,
-                },
-                order: order_by,
-                include: [
+        let where_search = {
+            is_inappropriate: false,
+        };
+
+        if (search_input !== "") {
+            // searching all the posts where the title or text is equal to the search_input
+            where_search = {
+                is_inappropriate: false,
+                [Op.or]: [
                     {
-                        model: db.User,
-                        as: "author_details",
-                        attributes: ["username", "profile_pic"],
+                        title: {
+                            [Op.like]: `%${search_input}%`,
+                        },
+                    },
+                    {
+                        text: {
+                            [Op.like]: `%${search_input}%`,
+                        },
                     },
                 ],
-                limit: limit,
-                offset: offset,
-            });
-
-            response.json({
-                msg: "succesfully got list of posts",
-                all_posts: list_of_posts,
-            });
-        } catch (e) {
-            response.json({
-                error: e,
-            });
+            };
         }
+
+        const list_of_posts = await db.Post.findAll({
+            where: where_search,
+            order: order_by,
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        response.json({
+            msg: "succesfully got list of posts",
+            all_posts: list_of_posts,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
     }
-);
+});
 
 router.get("/get_by_post_id/:post_id", async (request, response) => {
     // the user details who made that post

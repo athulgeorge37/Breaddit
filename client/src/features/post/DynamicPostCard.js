@@ -141,9 +141,16 @@ function DynamicPostCard({ post_id }) {
                         <b className="username">
                             {post_details.author_details.username}
                         </b>
-                        <b> • </b>
-                        {post_details.edited && "(edited) • "}
-                        {calculate_time_passed(post_details.updatedAt)} ago
+                        <div className="updated_at_time">
+                            <b>•</b>
+                            {post_details.edited && (
+                                <>
+                                    <span>edited</span>
+                                    <b>•</b>
+                                </>
+                            )}
+                            {calculate_time_passed(post_details.updatedAt)} ago
+                        </div>
                     </div>
                 </div>
 

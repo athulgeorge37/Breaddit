@@ -65,10 +65,33 @@ function StaticPostCard({ post_details }) {
                         username={post_details.author_details.username}
                     />
 
-                    <div className="posted_by_user">
-                        <b>{post_details.author_details.username} • </b>
+                    <div
+                        className="posted_by_user"
+                        onClick={() =>
+                            navigate(
+                                `/profile/${post_details.author_details.username}`
+                            )
+                        }
+                    >
+                        <b className="username">
+                            {post_details.author_details.username}
+                        </b>
+                        <div className="updated_at_time">
+                            <b>•</b>
+                            {post_details.edited && (
+                                <>
+                                    <span>edited</span>
+                                    <b>•</b>
+                                </>
+                            )}
+                            {calculate_time_passed(post_details.updatedAt)} ago
+                        </div>
+                        {/* <b className="username">
+                            {post_details.author_details.username}
+                        </b>
+                        <b> • </b>
                         {post_details.edited && "(edited) • "}
-                        {calculate_time_passed(post_details.updatedAt)} ago
+                        {calculate_time_passed(post_details.updatedAt)} ago */}
                     </div>
                 </div>
 

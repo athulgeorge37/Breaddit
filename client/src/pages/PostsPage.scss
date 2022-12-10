@@ -58,6 +58,7 @@
         align-items: center;
         gap: 10px;
         margin-bottom: 16px;
+        margin-top: 5px;
 
         button {
             @include btn-styles($light-grey)

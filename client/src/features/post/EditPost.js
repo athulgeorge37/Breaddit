@@ -14,19 +14,27 @@ import CloudinaryImage from "../../components/CloudinaryImage";
 import Button from "../../components/ui/Button";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { edit_post } from "../../rest_api_requests/PostRequests";
+import { edit_post, create_post } from "../../rest_api_requests/PostRequests";
+import { useNavigate } from "react-router-dom";
 
-function EditPost({ post_details, set_edit_btn_active }) {
+function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const add_notification = useNotification();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const img_input_ref = useRef();
     const [loading_img, set_loading_img] = useState(false);
 
     const [valid_title, set_valid_title] = useState(true);
-    const [post_title, set_post_title] = useState(post_details.title);
-    const [post_text, set_post_text] = useState(post_details.text);
-    const [image_url, set_image_url] = useState(post_details.image);
+    const [post_title, set_post_title] = useState(
+        post_details === undefined ? "" : post_details.title
+    );
+    const [post_text, set_post_text] = useState(
+        post_details === undefined ? "" : post_details.text
+    );
+    const [image_url, set_image_url] = useState(
+        post_details === undefined ? null : post_details.image
+    );
 
     const handle_img_upload = async (new_img) => {
         try {
@@ -40,6 +48,37 @@ function EditPost({ post_details, set_edit_btn_active }) {
         } catch (e) {
             console.log(e);
         }
+    };
+
+    const make_post = useMutation(
+        () => {
+            return create_post(post_title, post_text, image_url);
+        },
+        {
+            onSuccess: (data) => {
+                handle_post_cancel();
+                add_notification("Succesfully Created Post");
+                queryClient.invalidateQueries(["posts"]);
+                navigate(`/post/${data.new_post_details.id}`);
+            },
+        }
+    );
+
+    const handle_post_submit = async () => {
+        // only handling post if there is a post title
+        if (post_title.trim().length === 0) {
+            set_valid_title(false);
+            return;
+        }
+
+        make_post.mutate();
+    };
+
+    const handle_post_cancel = () => {
+        set_valid_title(true);
+        set_image_url(null);
+        set_post_title("");
+        set_post_text("");
     };
 
     const post_edit = useMutation(
@@ -57,7 +96,8 @@ function EditPost({ post_details, set_edit_btn_active }) {
                     "post_content",
                     post_details.id,
                 ]);
-                set_edit_btn_active(false);
+
+                handle_cancel_edit_mode();
                 add_notification("Succesfully Edited Post");
             },
         }
@@ -73,8 +113,17 @@ function EditPost({ post_details, set_edit_btn_active }) {
         post_edit.mutate();
     };
 
+    const handle_cancel_edit_mode = () => {
+        if (set_edit_btn_active === undefined) {
+            navigate("/posts");
+        } else {
+            set_edit_btn_active(false);
+        }
+    };
+
     return (
         <div className="post_inputs" layout>
+            {mode === "create" && <h2>Create Post</h2>}
             <div className="post_title">
                 <LoginInput
                     htmlFor="title"
@@ -138,14 +187,27 @@ function EditPost({ post_details, set_edit_btn_active }) {
 
             <div className="edit_post_buttons">
                 <button
-                    onClick={() => set_edit_btn_active(false)}
+                    onClick={handle_cancel_edit_mode}
                     className="cancel_btn"
                 >
                     Cancel
                 </button>
-                <button onClick={handle_edit_post_save} className="save_btn">
-                    Save
-                </button>
+
+                {mode === "edit" ? (
+                    <button
+                        onClick={handle_edit_post_save}
+                        className="save_btn"
+                    >
+                        Save
+                    </button>
+                ) : mode === "create" ? (
+                    <button
+                        className="create_post_btn"
+                        onClick={handle_post_submit}
+                    >
+                        Create Post
+                    </button>
+                ) : null}
             </div>
         </div>
     );

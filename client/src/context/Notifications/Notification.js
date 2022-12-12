@@ -86,7 +86,7 @@ function Notification({ id, type, message, dispatch }) {
 
                 <div className="remove_notfication_btn">
                     <Button
-                        handle_btn_click={handle_close_notification}
+                        onClick={handle_close_notification}
                         type="cancel"
                         img_name="cancel"
                         margin_right={true}

@@ -2,9 +2,7 @@ const determine_order_by = require("../helper/FilterBy");
 const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
-
 const db = require("../models");
-
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 
 router.get("/get_all", async (request, response) => {
@@ -22,14 +20,11 @@ router.get("/get_all", async (request, response) => {
         // console.log(request.query);
         // console.log("");
 
-        let where_search = {
-            is_inappropriate: false,
-        };
+        let where_search = {};
 
         if (search_input !== "") {
             // searching all the posts where the title or text is equal to the search_input
             where_search = {
-                is_inappropriate: false,
                 [Op.or]: [
                     {
                         title: {
@@ -46,7 +41,7 @@ router.get("/get_all", async (request, response) => {
         }
 
         const list_of_posts = await db.Post.findAll({
-            where: where_search,
+            where: { ...where_search, is_inappropriate: false },
             order: order_by,
             include: [
                 {

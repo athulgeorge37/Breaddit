@@ -62,5 +62,9 @@
         .save_btn {
             @include btn-styles($green);
         }
+
+        .create_post_btn {
+            @include btn-styles($green);
+        }
     }
 }

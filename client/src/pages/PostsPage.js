@@ -1,12 +1,10 @@
 import { useRef, useCallback, useState } from "react";
 import "./PostsPage.scss";
 
-import CreatePost from "../features/post/CreatePost";
 import StaticPostCard from "../features/post/StaticPostCard";
 import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
-import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +12,6 @@ const POSTS_PER_PAGE = 2;
 const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
 
 function PostsPage() {
-    const { current_user } = useCurrentUser();
     const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);
     const [search_thread, set_search_thread] = useState("");
 
@@ -44,8 +41,6 @@ function PostsPage() {
             },
         }
     );
-
-    console.log({ data });
 
     const intObserver = useRef();
     const lastPostRef = useCallback(
@@ -101,16 +96,13 @@ function PostsPage() {
     return (
         <div className="Posts_Page">
             <div className="search">
-                <SearchThreads
-                    sort_by={sort_by}
-                    set_sort_by={set_sort_by}
-                    set_search_thread={set_search_thread}
-                />
+                <FilterOptions sort_by={sort_by} set_sort_by={set_sort_by} />
             </div>
 
             <div className="create_post_and_list_of_posts">
-                {current_user.role !== "admin" && <CreatePost />}
-
+                <SearchWithinCurrentThread
+                    set_search_thread={set_search_thread}
+                />
                 {error && <span>Error: {JSON.stringify(error)}</span>}
 
                 <div className="list_of_posts">{list_of_posts}</div>
@@ -125,9 +117,31 @@ function PostsPage() {
     );
 }
 
-function SearchThreads({ sort_by, set_sort_by, set_search_thread }) {
-    const navigate = useNavigate();
+function SearchWithinCurrentThread({ set_search_thread }) {
     const [search_input, set_search_input] = useState("");
+    return (
+        <div className="SearchWithinCurrentThread">
+            <div className="search_thread_input">
+                <input
+                    type="text"
+                    placeholder={
+                        search_input === "" ? "Search within this thread" : ""
+                    }
+                    onChange={(e) => set_search_input(e.target.value)}
+                />
+                <button
+                    className="search_btn"
+                    onClick={() => set_search_thread(search_input)}
+                >
+                    Search
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function FilterOptions({ sort_by, set_sort_by }) {
+    const navigate = useNavigate();
     return (
         <div className="SearchThreads">
             <div className="sort_by_options">
@@ -143,25 +157,19 @@ function SearchThreads({ sort_by, set_sort_by, set_search_thread }) {
                     );
                 })}
             </div>
-            <button
-                className="create_thread"
-                onClick={() => navigate("/create_thread")}
-            >
-                Create Thread
-            </button>
-            <div className="search_thread_input">
-                <input
-                    type="text"
-                    placeholder={
-                        search_input === "" ? "Search within this thread" : ""
-                    }
-                    onChange={(e) => set_search_input(e.target.value)}
-                />
+            <div className="create_btns">
                 <button
-                    className="search_btn"
-                    onClick={() => set_search_thread(search_input)}
+                    className="create_thread"
+                    onClick={() => navigate("/create_thread")}
                 >
-                    Search
+                    Create Thread
+                </button>
+
+                <button
+                    className="create_post"
+                    onClick={() => navigate("/create_post")}
+                >
+                    Create Post
                 </button>
             </div>
         </div>

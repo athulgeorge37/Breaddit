@@ -31,6 +31,7 @@ const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
 const CreateThreadPage = lazy(() => import("./pages/CreateThreadPage"));
+const CreatePostPage = lazy(() => import("./pages/CreatePostPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Summary = lazy(() => import("./features/admin/Summary"));
@@ -75,6 +76,10 @@ function App() {
                                                     element={
                                                         <CreateThreadPage />
                                                     }
+                                                />
+                                                <Route
+                                                    path="/create_post"
+                                                    element={<CreatePostPage />}
                                                 />
                                                 <Route
                                                     path="/posts"

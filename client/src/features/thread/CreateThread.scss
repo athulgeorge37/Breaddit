@@ -1,0 +1,23 @@
+@import "../../variables.scss";
+
+.CreateThread {
+
+    .cancel_btn {
+        @include btn-styles($dark-grey);
+    }
+
+    .save_btn {
+        @include btn-styles($green);
+    }
+    
+}
+
+.CreateTheme {
+    .image_display {
+        width: 500px;
+
+        img {
+            width: 100%;
+        }
+    }
+}

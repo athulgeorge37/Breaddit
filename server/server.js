@@ -22,6 +22,7 @@ const voteRoutes = require("./routes/Vote-route");
 const followerRoutes = require("./routes/Follower-route");
 const emailRoutes = require("./routes/Email-route");
 const profileVisitRoutes = require("./routes/ProfileVisits-route");
+const threadRoutes = require("./routes/Thread-route");
 
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
@@ -30,6 +31,7 @@ app.use("/api/vote", voteRoutes);
 app.use("/api/follower", followerRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/profile_visits", profileVisitRoutes);
+app.use("/api/thread", threadRoutes);
 
 // graphql typedefs and resolvers, required for our apollo server
 const { makeExecutableSchema } = require("@graphql-tools/schema");

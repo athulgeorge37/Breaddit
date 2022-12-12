@@ -15,6 +15,7 @@
     "ckeditor5-custom-build": "file:ckeditor5",
     "cloudinary-react": "^1.8.1",
     "dompurify": "^2.4.0",
+    "dotenv": "^16.0.3",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^7.6.1",
     "graphql": "^16.6.0",

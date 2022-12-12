@@ -4,8 +4,7 @@ import {
     set_item_local_storage,
 } from "../helper/local_storage";
 
-const BACKEND_ROUTE = "http://localhost:3001";
-const CUSTOM_ENDPOINT = `${BACKEND_ROUTE}/api/user`;
+const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/user`;
 
 const is_valid_web_token = async () => {
     const response = await axios.get(

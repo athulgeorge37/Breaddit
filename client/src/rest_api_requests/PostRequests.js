@@ -1,8 +1,7 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
 
-const BACKEND_ROUTE = "http://localhost:3001";
-const CUSTOM_ENDPOINT = `${BACKEND_ROUTE}/api/post`;
+const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/post`;
 
 const create_post = async (title, text, image) => {
     const response = await axios.post(

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
 
-const BACKEND_ROUTE = "http://localhost:3001";
-const CUSTOM_ENDPOINT = `${BACKEND_ROUTE}/api/vote`;
+const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/vote`;
 
 const make_vote = async (vote_id, vote_type, up_vote) => {
     const response = await axios.post(

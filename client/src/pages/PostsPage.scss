@@ -47,7 +47,7 @@
 }
 
 
-.SearchThreads {
+.FilterOptions {
     display: flex;
     flex-direction: column;
     position: sticky;
@@ -116,6 +116,10 @@
         input {
             @include input_styles;
             width: 100%
+        }
+
+        .clear_btn {
+            @include btn-styles($light-grey);
         }
     
         .search_btn {

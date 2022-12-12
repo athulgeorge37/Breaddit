@@ -119,16 +119,30 @@ function PostsPage() {
 
 function SearchWithinCurrentThread({ set_search_thread }) {
     const [search_input, set_search_input] = useState("");
+    const input_ref = useRef();
+
     return (
         <div className="SearchWithinCurrentThread">
             <div className="search_thread_input">
                 <input
+                    ref={input_ref}
                     type="text"
                     placeholder={
                         search_input === "" ? "Search within this thread" : ""
                     }
+                    value={search_input}
                     onChange={(e) => set_search_input(e.target.value)}
                 />
+                <button
+                    className="clear_btn"
+                    onClick={() => {
+                        set_search_input("");
+                        set_search_thread("");
+                        input_ref.current.focus();
+                    }}
+                >
+                    Clear
+                </button>
                 <button
                     className="search_btn"
                     onClick={() => set_search_thread(search_input)}
@@ -143,7 +157,7 @@ function SearchWithinCurrentThread({ set_search_thread }) {
 function FilterOptions({ sort_by, set_sort_by }) {
     const navigate = useNavigate();
     return (
-        <div className="SearchThreads">
+        <div className="FilterOptions">
             <div className="sort_by_options">
                 {SORT_BY_OPTIONS.map((option) => {
                     return (

@@ -23,7 +23,6 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const queryClient = useQueryClient();
 
     const img_input_ref = useRef();
-    const [loading_img, set_loading_img] = useState(false);
 
     const [valid_title, set_valid_title] = useState(true);
     const [post_title, set_post_title] = useState(
@@ -36,19 +35,17 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
         post_details === undefined ? null : post_details.image
     );
 
-    const handle_img_upload = async (new_img) => {
-        try {
-            set_loading_img(true);
-
-            const img_url = await upload_image(new_img);
-            set_image_url(img_url);
-
-            set_loading_img(false);
-            add_notification("Image Succesfully Uploaded");
-        } catch (e) {
-            console.log(e);
+    const upload_img_to_cloud = useMutation(
+        (new_img) => {
+            return upload_image(new_img);
+        },
+        {
+            onSuccess: (data) => {
+                set_image_url(data);
+                add_notification("Image Succesfully Uploaded");
+            },
         }
-    };
+    );
 
     const make_post = useMutation(
         () => {
@@ -64,7 +61,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
         }
     );
 
-    const handle_post_submit = async () => {
+    const handle_post_submit = () => {
         // only handling post if there is a post title
         if (post_title.trim().length === 0) {
             set_valid_title(false);
@@ -142,7 +139,9 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                         id="upload_img"
                         type="file"
                         ref={img_input_ref}
-                        onChange={(e) => handle_img_upload(e.target.files[0])}
+                        onChange={(e) =>
+                            upload_img_to_cloud.mutate(e.target.files[0])
+                        }
                         hidden={true}
                     />
 
@@ -169,7 +168,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 </div>
             </div>
 
-            {loading_img ? (
+            {upload_img_to_cloud.isLoading ? (
                 <div className="image_display">
                     <Loading />
                 </div>

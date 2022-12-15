@@ -1,0 +1,41 @@
+@import "../variables.scss";
+
+.ThreadPage {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+    .theme {
+        display: flex;
+        justify-content: center;
+        
+        img {
+            width: 100%;
+            filter: blur(6px);
+            -webkit-filter: blur(6px);
+
+             /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+    }
+
+    .main_content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+
+        .title_and_logo {
+            display: flex;
+            justify-content: center;
+            background-color: $black;
+            color: red;
+            padding: $inner-padding;
+        }
+    }
+}

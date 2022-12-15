@@ -22,13 +22,22 @@ function CreateThread() {
     const [description, set_description] = useState("");
     const [logo_url, set_logo_url] = useState(null);
     const [theme_url, set_theme_url] = useState(null);
+    const [list_of_rules, set_list_of_rules] = useState([]);
 
     const make_thread = useMutation(
-        () => create_thread(title, description, logo_url, theme_url),
+        () =>
+            create_thread(
+                title,
+                description,
+                logo_url,
+                theme_url,
+                list_of_rules
+            ),
         {
             onSuccess: (data) => {
                 console.log({ data });
                 add_notification("Succesfully created Thread");
+                navigate(`/thread/${data.new_thread_details.id}`);
             },
         }
     );
@@ -36,41 +45,170 @@ function CreateThread() {
     return (
         <div className="CreateThread">
             <h2>Create Thread</h2>
-            <LoginInput
-                htmlFor="title"
-                input_type="text"
-                label_name="Title"
-                value={title}
-                update_on_change={set_title}
-                boolean_check={true}
-                autoFocus={true}
-            >
-                Title cannot be empty!
-            </LoginInput>
+            <div className="thread_title_and_description">
+                <LoginInput
+                    htmlFor="title"
+                    input_type="text"
+                    label_name="Title"
+                    value={title}
+                    update_on_change={set_title}
+                    boolean_check={true}
+                    autoFocus={true}
+                >
+                    Title cannot be empty!
+                </LoginInput>
 
-            <span>Thread Description:</span>
-            <ExpandableInput
-                set_input_content={set_description}
-                max_height_px={150}
-                initial_content={description}
+                <label className="description">Description:</label>
+                <ExpandableInput
+                    set_input_content={set_description}
+                    max_height_px={150}
+                    initial_content={description}
+                />
+            </div>
+
+            <div className="edit_logo_and_theme">
+                <div className="edit_logo">
+                    <label htmlFor="">Logo:</label>
+                    <EditProfilePic
+                        profile_picture_url={logo_url}
+                        set_profile_picture_url={set_logo_url}
+                    />
+                </div>
+
+                <div className="edit_theme">
+                    <label htmlFor="">Theme:</label>
+                    <CreateTheme
+                        theme_url={theme_url}
+                        set_theme_url={set_theme_url}
+                    />
+                </div>
+            </div>
+
+            <EditRules
+                set_list_of_rules={set_list_of_rules}
+                list_of_rules={list_of_rules}
             />
 
-            <EditProfilePic
-                profile_picture_url={logo_url}
-                set_profile_picture_url={set_logo_url}
-            />
-
-            <CreateTheme theme_url={theme_url} set_theme_url={set_theme_url} />
-
-            <button className="cancel_btn" onClick={() => navigate("/posts")}>
-                Cancel
-            </button>
-            <button className="save_btn" onClick={() => make_thread.mutate()}>
-                Save
-            </button>
+            <div className="thread_btns">
+                <button
+                    className="cancel_btn"
+                    onClick={() => navigate("/posts")}
+                >
+                    Cancel
+                </button>
+                <button
+                    className="save_btn"
+                    onClick={() => make_thread.mutate()}
+                >
+                    Create Thread
+                </button>
+            </div>
 
             {make_thread.isLoading && <Loading />}
         </div>
+    );
+}
+
+function EditRules({ set_list_of_rules, list_of_rules }) {
+    const [add_rule_is_open, set_add_rule_is_open] = useState(false);
+
+    return (
+        <div className="EditRules">
+            <h3>Rules:</h3>
+            <div className="list_of_rules">
+                <ol>
+                    {list_of_rules.map((rule, index) => {
+                        return (
+                            <Rule
+                                key={index}
+                                title={rule.title}
+                                description={rule.description}
+                            />
+                        );
+                    })}
+                </ol>
+            </div>
+
+            {add_rule_is_open ? (
+                <CreateRule
+                    set_list_of_rules={set_list_of_rules}
+                    set_add_rule_is_open={set_add_rule_is_open}
+                />
+            ) : (
+                <button
+                    className="create_rule_btn"
+                    onClick={() => set_add_rule_is_open(true)}
+                >
+                    Create Rule
+                </button>
+            )}
+        </div>
+    );
+}
+
+function CreateRule({ set_list_of_rules, set_add_rule_is_open }) {
+    const [title, set_title] = useState("");
+    const [description, set_description] = useState("");
+
+    return (
+        <div className="CreateRule">
+            <div className="create">
+                <LoginInput
+                    htmlFor="create_rule_title"
+                    input_type="text"
+                    label_name="Rule Title"
+                    value={title}
+                    update_on_change={set_title}
+                    boolean_check={true}
+                    autoFocus={true}
+                >
+                    Rule Title cannot be empty!
+                </LoginInput>
+
+                <label className="description">Rule Description:</label>
+                <ExpandableInput
+                    set_input_content={set_description}
+                    max_height_px={150}
+                    initial_content={description}
+                />
+                <div className="create_rule_btns">
+                    <button
+                        className="cancel"
+                        onClick={() => set_add_rule_is_open(false)}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        className="add_rule"
+                        onClick={() => {
+                            set_list_of_rules((prev_rules) => [
+                                ...prev_rules,
+                                {
+                                    title: title,
+                                    description: description,
+                                },
+                            ]);
+                            set_add_rule_is_open(false);
+                        }}
+                    >
+                        Add Rule
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function Rule({ title, description }) {
+    const [is_open, set_is_open] = useState(false);
+    return (
+        <li className="Rule" onClick={() => set_is_open(!is_open)}>
+            <div className="title_and_btn">
+                {title}
+                <span>V</span>
+            </div>
+            {is_open && <p className="description">{description}</p>}
+        </li>
     );
 }
 
@@ -93,6 +231,22 @@ function CreateTheme({ theme_url, set_theme_url }) {
 
     return (
         <div className="CreateTheme">
+            {upload_img_to_cloud.isLoading ? (
+                <div className="image_display">
+                    <Loading />
+                </div>
+            ) : (
+                <>
+                    {theme_url === null ? (
+                        <div className="place_holder_img"></div>
+                    ) : (
+                        <div className="image_display">
+                            <CloudinaryImage image_url={theme_url} />
+                        </div>
+                    )}
+                </>
+            )}
+
             <div className="img_btns">
                 <input
                     id="upload_img"
@@ -123,20 +277,6 @@ function CreateTheme({ theme_url, set_theme_url }) {
                     />
                 )}
             </div>
-
-            {upload_img_to_cloud.isLoading ? (
-                <div className="image_display">
-                    <Loading />
-                </div>
-            ) : (
-                <>
-                    {theme_url !== null && (
-                        <div className="image_display">
-                            <CloudinaryImage image_url={theme_url} />
-                        </div>
-                    )}
-                </>
-            )}
         </div>
     );
 }

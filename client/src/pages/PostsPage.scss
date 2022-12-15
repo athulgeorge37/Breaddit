@@ -3,10 +3,12 @@
 
 .Posts_Page {
     width: 100%;
+    max-width: 1500px;
     display: flex;
     justify-content: center;
     gap: 32px;
     background-color: $black;
+
 
    
     .search {

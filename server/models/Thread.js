@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             title: {
                 type: DataTypes.STRING(100),
+                unique: true,
                 allowNull: false,
             },
             description: {
@@ -64,6 +65,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             onDelete: "cascade",
             // hooks: true
+            as: "thread_rules",
         });
     };
 

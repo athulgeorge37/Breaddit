@@ -1,0 +1,33 @@
+@import "../../variables.scss";
+
+.ThreadLogo {
+    margin-right: 10px;
+    &:hover {
+        cursor: pointer;
+    }
+
+    .default_profile_pic {
+        // padding: 0.5em;
+        padding: 4px;
+        border-radius: 6px;
+        background-color: $light-grey;
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+       
+    
+        .default_profile_pic_img {
+            width: 30px;
+            height: 30px;
+            @include white-filter_color;
+        }
+    }
+
+    img {
+        width: 70px;
+        height: 70px;
+        border-radius: 6px;
+    }
+}

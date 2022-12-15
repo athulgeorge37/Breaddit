@@ -2,22 +2,177 @@
 
 .CreateThread {
 
-    .cancel_btn {
-        @include btn-styles($dark-grey);
+    width: 50%;
+    background-color: $dark-grey;
+    padding: calc(2* $inner_padding);
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+
+    h2 {
+        margin-bottom: $inner_padding;
     }
 
-    .save_btn {
-        @include btn-styles($green);
+    .thread_title_and_description {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+
+        .description {
+            margin-bottom: 4px;
+        }
+
+        .ExpandableInput {
+            margin-bottom: 16px;
+            
+        }
+    }
+
+    .edit_logo_and_theme {
+        display: flex;
+        gap: calc(2* $inner_padding);
+        margin-bottom: $inner_padding;
+
+        .edit_logo, .edit_theme {
+            display: flex;
+            flex-direction: column;
+
+            label {
+                margin-bottom: 4px;
+            }
+        }
+
+        
+            .EditProfilePic {
+                margin-bottom: $inner_padding;
+            }
+    }
+
+    .thread_btns {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        
+        .cancel_btn {
+            @include btn-styles($light-grey);
+        }
+        
+        .save_btn {
+            @include btn-styles($green);
+        }
     }
     
 }
 
 .CreateTheme {
+
+
+    .img_btns {
+        display: flex;
+
+        label {
+            margin-bottom: 4px;
+        }
+    }
+
+
     .image_display {
         width: 500px;
+        height: 200px;
+        margin-bottom: $inner_padding;
 
         img {
-            width: 100%;
+            border-radius: $default-border-radius;
+            height: 200px;
+            
+            overflow: hidden;
+        }
+        
+    }
+
+    .place_holder_img {
+        width: 500px;
+        height: 200px;
+        background-color: $light-grey;
+        border-radius: $default-border-radius;
+        
+        margin-bottom: $inner_padding;
+    }
+}
+
+
+
+.EditRules {
+    display: flex;
+    flex-direction: column;
+
+    .list_of_rules {
+        
+        margin-top: 5px;
+        
+        ol {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: calc(2*$inner_padding);
+        }
+
+    }
+
+    .create_rule_btn {
+        margin-top: $inner_padding;
+        margin-bottom: $inner_padding;
+        width: calc(500px + 2 * 10px);
+        @include btn-styles($blue);
+        margin-left: calc(2*$inner_padding);
+
+    }
+
+
+}
+
+.CreateRule{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    
+    .create_rule_btns {
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        .cancel {
+            @include btn-styles($light-grey);
+        }
+
+        .add_rule {
+            @include btn-styles($blue);
         }
     }
 }
+
+.Rule {
+    color: $white;
+        
+    width: 500px;
+    background-color: $light-grey;
+    padding: $inner_padding 10px;
+    border-radius: $default-border-radius;
+    
+
+    .title_and_btn {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .description {
+        margin-top: 10px;
+        color: hsl(0, 0%, 62%);
+        overflow-wrap: break-word;
+    }
+}
+

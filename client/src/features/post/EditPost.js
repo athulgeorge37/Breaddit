@@ -53,6 +53,10 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
         },
         {
             onSuccess: (data) => {
+                if (data.error) {
+                    console.log(data);
+                    return;
+                }
                 handle_post_cancel();
                 add_notification("Succesfully Created Post");
                 queryClient.invalidateQueries(["posts"]);

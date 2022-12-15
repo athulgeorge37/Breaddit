@@ -30,6 +30,7 @@ const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
+const ThreadPage = lazy(() => import("./pages/ThreadPage"));
 const CreateThreadPage = lazy(() => import("./pages/CreateThreadPage"));
 const CreatePostPage = lazy(() => import("./pages/CreatePostPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
@@ -76,6 +77,10 @@ function App() {
                                                     element={
                                                         <CreateThreadPage />
                                                     }
+                                                />
+                                                <Route
+                                                    path="/thread/:thread_id_route"
+                                                    element={<ThreadPage />}
                                                 />
                                                 <Route
                                                     path="/create_post"

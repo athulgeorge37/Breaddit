@@ -9,6 +9,20 @@
     border-radius: $default-border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+
+    .sign_in_div {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        
+         button {
+            @include btn-style-text($blue);
+
+            &:hover {
+                text-decoration: underline;
+            }
+         }
+    }
 }
 
 

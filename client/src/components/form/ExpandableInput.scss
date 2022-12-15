@@ -3,9 +3,10 @@
 
 .ExpandableInput {
     width: 100%;
-
+    
     .expandable_input {
         @include input_styles;
+        box-sizing: border-box;
         width: 100%;
         resize: none;
     }

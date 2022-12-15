@@ -221,7 +221,7 @@ function EditProfilePic({ profile_picture_url, set_profile_picture_url }) {
                         className="edit_profile_picture"
                         onClick={() => set_editing_img(true)}
                     >
-                        Change Profile Picture
+                        Edit Image
                     </button>
                 </div>
             )}

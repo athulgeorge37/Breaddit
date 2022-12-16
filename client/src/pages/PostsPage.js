@@ -1,19 +1,53 @@
-import { useRef, useCallback, useState } from "react";
+import {
+    useRef,
+    useCallback,
+    useState,
+    createContext,
+    useContext,
+} from "react";
 import "./PostsPage.scss";
 
 import StaticPostCard from "../features/post/StaticPostCard";
 import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+
+import { get_thread_names } from "../rest_api_requests/ThreadRequests";
+import { useEffect } from "react";
+import useDebounce from "../hooks/useDebounce";
+
+const PostsPageContext = createContext();
 
 const POSTS_PER_PAGE = 2;
 const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
 
+const usePostsPage = () => {
+    // this is a custom hook that provides
+    // access to the below methods
+
+    const {
+        sort_by,
+        set_sort_by,
+        current_thread,
+        set_current_thread,
+        set_search_within_thread,
+    } = useContext(PostsPageContext);
+
+    return {
+        sort_by,
+        set_sort_by,
+        current_thread,
+        set_current_thread,
+        set_search_within_thread,
+    };
+};
+
 function PostsPage() {
     const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);
-    const [search_thread, set_search_thread] = useState("");
+    const [search_within_thread, set_search_within_thread] = useState(null);
+    const [current_thread, set_current_thread] = useState(null);
 
     const {
         fetchNextPage, //function
@@ -22,9 +56,23 @@ function PostsPage() {
         data,
         error,
     } = useInfiniteQuery(
-        ["posts", sort_by, search_thread],
+        [
+            "posts",
+            {
+                sort_by,
+                search_within_thread,
+                current_thread:
+                    current_thread === null ? null : current_thread.title,
+            },
+        ],
         ({ pageParam = 0 }) =>
-            get_all_posts(POSTS_PER_PAGE, pageParam, sort_by, search_thread),
+            get_all_posts(
+                POSTS_PER_PAGE,
+                pageParam,
+                sort_by,
+                search_within_thread,
+                current_thread === null ? null : current_thread.id
+            ),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it
@@ -38,6 +86,9 @@ function PostsPage() {
                 // 0 and go up
 
                 return lastPage.all_posts.length ? allPages.length : undefined;
+            },
+            onError: (data) => {
+                console.log({ data });
             },
         }
     );
@@ -95,31 +146,41 @@ function PostsPage() {
 
     return (
         <div className="Posts_Page">
-            <div className="search">
-                <FilterOptions sort_by={sort_by} set_sort_by={set_sort_by} />
-            </div>
-
-            <div className="create_post_and_list_of_posts">
-                <SearchWithinCurrentThread
-                    set_search_thread={set_search_thread}
-                />
-                {error && <span>Error: {JSON.stringify(error)}</span>}
-
-                <div className="list_of_posts">{list_of_posts}</div>
-
-                <div className="end_of_post_lists">
-                    {isFetchingNextPage && <Loading />}
-
-                    {hasNextPage === false && <p>No more posts left</p>}
+            <PostsPageContext.Provider
+                value={{
+                    sort_by,
+                    set_sort_by,
+                    current_thread,
+                    set_current_thread,
+                    set_search_within_thread,
+                }}
+            >
+                <div className="search">
+                    <FilterOptions />
                 </div>
-            </div>
+
+                <div className="create_post_and_list_of_posts">
+                    <SearchWithinCurrentThread />
+                    {error && <span>Error: {JSON.stringify(error)}</span>}
+
+                    <div className="list_of_posts">{list_of_posts}</div>
+
+                    <div className="end_of_post_lists">
+                        {isFetchingNextPage && <Loading />}
+
+                        {hasNextPage === false && <p>No more posts left</p>}
+                    </div>
+                </div>
+            </PostsPageContext.Provider>
         </div>
     );
 }
 
-function SearchWithinCurrentThread({ set_search_thread }) {
+function SearchWithinCurrentThread() {
     const [search_input, set_search_input] = useState("");
     const input_ref = useRef();
+
+    const { set_search_within_thread } = usePostsPage();
 
     return (
         <div className="SearchWithinCurrentThread">
@@ -137,7 +198,7 @@ function SearchWithinCurrentThread({ set_search_thread }) {
                     className="clear_btn"
                     onClick={() => {
                         set_search_input("");
-                        set_search_thread("");
+                        set_search_within_thread(null);
                         input_ref.current.focus();
                     }}
                 >
@@ -145,7 +206,7 @@ function SearchWithinCurrentThread({ set_search_thread }) {
                 </button>
                 <button
                     className="search_btn"
-                    onClick={() => set_search_thread(search_input)}
+                    onClick={() => set_search_within_thread(search_input)}
                 >
                     Search
                 </button>
@@ -154,8 +215,10 @@ function SearchWithinCurrentThread({ set_search_thread }) {
     );
 }
 
-function FilterOptions({ sort_by, set_sort_by }) {
+function FilterOptions() {
     const navigate = useNavigate();
+    const { sort_by, set_sort_by, current_thread } = usePostsPage();
+
     return (
         <div className="FilterOptions">
             <div className="sort_by_options">
@@ -186,6 +249,88 @@ function FilterOptions({ sort_by, set_sort_by }) {
                     Create Post
                 </button>
             </div>
+
+            <div className="search_thread_names">
+                <SearchThreadNames />
+            </div>
+
+            {current_thread !== null && (
+                <div className="thread_details">
+                    <h2 className="thread_name">{current_thread.title}</h2>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function SearchThreadNames() {
+    const [threads_list, set_threads_list] = useState([]);
+    const [search_term, set_search_term] = useState("");
+    const [is_loading, set_is_loading] = useState(false);
+
+    const { set_current_thread } = usePostsPage();
+    const debounced_search = useDebounce(search_term, 500);
+
+    useEffect(() => {
+        if (search_term === "") {
+            set_threads_list([]);
+            set_current_thread(null);
+        }
+    }, [search_term]);
+
+    useEffect(() => {
+        // searching the api for thread names
+        const search_api_for_thread_names = async () => {
+            set_is_loading(true);
+
+            const data = await get_thread_names(debounced_search);
+            if (data.error) {
+                console.log({ data });
+                return;
+            }
+            set_threads_list(data.threads);
+            set_is_loading(false);
+        };
+
+        if (debounced_search) {
+            search_api_for_thread_names();
+        }
+    }, [debounced_search]);
+
+    return (
+        <div className="SearchThreadNames">
+            <input
+                className="search_thread_names_input"
+                type="search"
+                placeholder="Find A Thread"
+                onChange={(e) => set_search_term(e.target.value)}
+            />
+
+            {is_loading ? (
+                <div className="loader">
+                    <Loading />
+                </div>
+            ) : (
+                <>
+                    {threads_list.length > 0 ? (
+                        <div className="thread_name_list">
+                            {threads_list.map((thread) => {
+                                return (
+                                    <button
+                                        key={thread.id}
+                                        className="thread"
+                                        onClick={() => {
+                                            set_current_thread(thread);
+                                        }}
+                                    >
+                                        {thread.title}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    ) : null}
+                </>
+            )}
         </div>
     );
 }

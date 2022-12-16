@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require("../models");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 const { Op } = require("sequelize");
+const { request, response } = require("express");
 
 router.post("/create_thread", validate_request, async (request, response) => {
     try {
@@ -72,5 +73,29 @@ router.get(
         }
     }
 );
+
+router.get("/get_thread_names", async (request, response) => {
+    try {
+        const search_input = request.query.search_input;
+
+        const threads = await db.Thread.findAll({
+            where: {
+                title: {
+                    [Op.like]: `%${search_input}%`,
+                },
+            },
+            limit: 10,
+        });
+
+        response.json({
+            msg: "succesfully got thread names",
+            threads: threads,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
 
 module.exports = router;

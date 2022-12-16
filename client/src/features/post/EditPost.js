@@ -123,7 +123,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     };
 
     return (
-        <div className="post_inputs" layout>
+        <div className="post_inputs">
             {mode === "create" && <h2>Create Post</h2>}
             <div className="post_title">
                 <LoginInput

@@ -94,3 +94,7 @@ $text_editor_max_width: 100%;
         border: 1px solid $blue;
     }
 }
+
+@mixin shadow {
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+}

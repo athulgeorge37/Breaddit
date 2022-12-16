@@ -75,6 +75,14 @@ module.exports = (sequelize, DataTypes) => {
             // we use"as" here and there so sequelize knows what to use
         });
 
+        Post.belongsTo(models.Thread, {
+            foreignKey: {
+                allowNull: true,
+                name: "thread_id",
+            },
+            as: "thread_posts",
+        });
+
         Post.hasMany(models.Comment, {
             foreignKey: {
                 allowNull: false,

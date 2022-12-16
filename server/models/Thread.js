@@ -67,6 +67,16 @@ module.exports = (sequelize, DataTypes) => {
             // hooks: true
             as: "thread_rules",
         });
+
+        Thread.hasMany(models.Post, {
+            foreignKey: {
+                allowNull: false,
+                name: "thread_id",
+            },
+            onDelete: "cascade",
+            // hooks: true
+            as: "thread_posts",
+        });
     };
 
     return Thread;

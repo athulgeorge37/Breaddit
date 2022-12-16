@@ -16,15 +16,24 @@ router.get("/get_all", async (request, response) => {
         const order_by = determine_order_by(request.query.filter_by);
         const search_input = request.query.search_input;
 
-        // console.log("");
-        // console.log(request.query);
-        // console.log("");
+        const thread_id = request.query.thread_id;
+
+        console.log("");
+        console.log(request.query);
+        console.log("");
 
         let where_search = {};
 
-        if (search_input !== "") {
+        if (thread_id !== "null") {
+            where_search = {
+                thread_id: parseInt(thread_id),
+            };
+        }
+
+        if (search_input !== "null") {
             // searching all the posts where the title or text is equal to the search_input
             where_search = {
+                ...where_search,
                 [Op.or]: [
                     {
                         title: {
@@ -40,6 +49,10 @@ router.get("/get_all", async (request, response) => {
             };
         }
 
+        console.log("");
+        console.log({ where_search });
+        console.log("");
+
         const list_of_posts = await db.Post.findAll({
             where: { ...where_search, is_inappropriate: false },
             order: order_by,
@@ -53,6 +66,10 @@ router.get("/get_all", async (request, response) => {
             limit: limit,
             offset: offset,
         });
+
+        console.log("");
+        console.log({ list_of_posts });
+        console.log("");
 
         response.json({
             msg: "succesfully got list of posts",

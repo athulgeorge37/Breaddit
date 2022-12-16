@@ -8,6 +8,9 @@ import {
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+// TODO: making a vote, updates the post table, which affects the edited time
+// fix that boii
+
 function Votes({
     vote_type,
     vote_id,

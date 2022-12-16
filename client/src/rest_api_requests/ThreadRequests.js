@@ -37,4 +37,12 @@ const get_thread_details = async (thread_id) => {
     return response.data;
 };
 
-export { create_thread, get_thread_details };
+const get_thread_names = async (search_input) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_thread_names?search_input=${search_input}`
+    );
+
+    return response.data;
+};
+
+export { create_thread, get_thread_details, get_thread_names };

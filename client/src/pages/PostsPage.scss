@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     gap: 32px;
-    background-color: $black;
+    // background-color: $black;
 
 
    
@@ -126,6 +126,45 @@
     
         .search_btn {
             @include btn-styles($green);
+        }
+    }
+}
+
+
+.SearchThreadNames {
+    .search_thread_names_input {
+        @include input_styles;
+        width: 100%;
+    }
+
+    .loader {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .thread_name_list {
+        margin-top: 10px;
+        border: 1px solid $light-grey;
+        border-radius: $default-border-radius;
+        @include shadow;
+        display: flex;
+        flex-direction: column;
+        
+        
+        .thread {
+            padding: 10px 12px;
+            background-color: $dark-grey;
+            color: white;
+            border: none;
+            display: flex;
+
+
+            &:hover {
+                background-color: $light-grey;
+                cursor: pointer;
+            }
         }
     }
 }

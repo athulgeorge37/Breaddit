@@ -1,16 +1,15 @@
 import "./Modal.scss";
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useBackgroundImage } from "../../context/BackgroundImage/BackgroundImageProvider";
 
 function Modal({ children, btn_color, width }, ref) {
     // this component require a ref to be attached to it
     // we can use this ref to call methods that were before
     // only available in the scope of this component
-    const { set_disable_scroll } = useBackgroundImage();
 
     const [show_modal, set_show_modal] = useState(false);
+    const [disable_scroll, set_disable_scroll] = useState(false);
 
     // this allows us to call these methods from a parent component
     // to open a modal write:
@@ -32,9 +31,16 @@ function Modal({ children, btn_color, width }, ref) {
         set_disable_scroll(false);
     };
 
-    // if (show_modal === false) {
-    //     return null
-    // }
+    // whenever disable_scroll state changes
+    // we make the body have a hidden style
+    // so we can disable scroll
+    useEffect(() => {
+        if (disable_scroll) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+    }, [disable_scroll]);
 
     // when show_modal is true
     // we attach this component to

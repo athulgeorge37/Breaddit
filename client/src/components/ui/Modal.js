@@ -2,11 +2,13 @@ import "./Modal.scss";
 import { useState, forwardRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useBackgroundImage } from "../../context/BackgroundImage/BackgroundImageProvider";
 
 function Modal({ children, btn_color, width }, ref) {
     // this component require a ref to be attached to it
     // we can use this ref to call methods that were before
     // only available in the scope of this component
+    const { set_disable_scroll } = useBackgroundImage();
 
     const [show_modal, set_show_modal] = useState(false);
 
@@ -22,10 +24,12 @@ function Modal({ children, btn_color, width }, ref) {
 
     const open_modal = () => {
         set_show_modal(true);
+        set_disable_scroll(true);
     };
 
     const close_modal = () => {
         set_show_modal(false);
+        set_disable_scroll(false);
     };
 
     // if (show_modal === false) {
@@ -40,7 +44,7 @@ function Modal({ children, btn_color, width }, ref) {
     return createPortal(
         <AnimatePresence>
             {show_modal ? (
-                <div className="Modal" x>
+                <div className="Modal">
                     <motion.div
                         className="modal_backdrop"
                         initial={{

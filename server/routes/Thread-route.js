@@ -1,10 +1,8 @@
-const determine_order_by = require("../helper/FilterBy");
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 const { Op } = require("sequelize");
-const { request, response } = require("express");
 
 router.post("/create_thread", validate_request, async (request, response) => {
     try {
@@ -74,9 +72,9 @@ router.get(
                 ],
             });
 
-            // console.log("");
-            // console.log({ thread_details, thread_title });
-            // console.log("");
+            console.log("");
+            console.log({ thread_details, thread_title });
+            console.log("");
 
             response.json({
                 msg: "successfully found thread details",

@@ -4,6 +4,7 @@ import {
     useState,
     createContext,
     useContext,
+    useEffect,
 } from "react";
 import "./PostsPage.scss";
 
@@ -12,15 +13,13 @@ import Loading from "../components/ui/Loading";
 
 import { get_all_posts } from "../rest_api_requests/PostRequests";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
     get_thread_details,
     get_thread_names,
 } from "../rest_api_requests/ThreadRequests";
-import { useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
-import { useSearchParams } from "react-router-dom";
 
 const PostsPageContext = createContext();
 
@@ -77,8 +76,6 @@ function PostsPage() {
         searchParams.delete(param);
         setSearchParams(searchParams);
     };
-
-    // const [current_thread, set_current_thread] = useState(null);
 
     // useEffect(() => {
     //     if (current_thread === null) {
@@ -209,14 +206,7 @@ function PostsPage() {
                 <div className="search">
                     <FilterOptions />
 
-                    {/* {current_thread !== null && (
-                        <div className="thread_details">
-                            <div className="title">{current_thread.title}</div>
-                            <div className="description">
-                                {current_thread.description}
-                            </div>
-                        </div>
-                    )} */}
+                    <ThreadDetails />
                 </div>
 
                 <div className="create_post_and_list_of_posts">
@@ -343,12 +333,8 @@ function FilterOptions() {
 }
 
 function SearchThreadNames() {
-    const {
-        thread_title,
-        set_thread_title,
-        update_search_param,
-        delete_search_param,
-    } = usePostsPage();
+    const { set_thread_title, update_search_param, delete_search_param } =
+        usePostsPage();
 
     const [search_term, set_search_term] = useState("");
     const [is_loading, set_is_loading] = useState(false);
@@ -375,22 +361,6 @@ function SearchThreadNames() {
         }
     }, [debounced_search]);
 
-    const thread_data = useQuery(
-        ["thread_details", thread_title],
-        () => {
-            return get_thread_details(thread_title);
-        },
-        {
-            onSuccess: (data) => {
-                console.log({ thread_data: data });
-                // set_current_thread(data.thread_details);
-            },
-            onError: (data) => {
-                console.log({ thread_data_error: data });
-            },
-        }
-    );
-
     const handle_search_term_change = (new_value) => {
         if (new_value === "") {
             set_threads_list([]);
@@ -399,8 +369,6 @@ function SearchThreadNames() {
         }
         set_search_term(new_value);
     };
-
-    const thread_details = thread_data.data?.thread_details;
 
     return (
         <div className="SearchThreadNames">
@@ -443,7 +411,33 @@ function SearchThreadNames() {
                     ) : null}
                 </>
             )}
+        </div>
+    );
+}
 
+function ThreadDetails() {
+    const { thread_title, set_thread_title, delete_search_param } =
+        usePostsPage();
+
+    const thread_data = useQuery(
+        ["thread_details", thread_title],
+        () => {
+            return get_thread_details(thread_title);
+        },
+        {
+            onSuccess: (data) => {
+                //console.log({ thread_data: data });
+            },
+            onError: (data) => {
+                console.log({ thread_data_error: data });
+            },
+        }
+    );
+
+    const thread_details = thread_data.data?.thread_details;
+
+    return (
+        <div className="ThreadDetails">
             {thread_data.isLoading && <Loading />}
 
             {thread_data.error && (
@@ -467,6 +461,7 @@ function SearchThreadNames() {
                     <div className="thread_description">
                         {thread_details?.description}
                     </div>
+                    <div className="createdAt">{thread_details?.createdAt}</div>
                 </div>
             )}
         </div>

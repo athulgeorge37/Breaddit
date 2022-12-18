@@ -55,17 +55,17 @@ export default function CurrentUserProvider({ children }) {
         }
     };
 
-    // const initialise_curr_user = async () => {
-    //     console.log("initialising curr user");
-    //     const response = await is_valid_web_token();
+    const initialise_curr_user = async () => {
+        console.log("initialising curr user");
+        const response = await is_valid_web_token();
 
-    //     set_current_user_in_app(response);
+        set_current_user_in_app(response);
 
-    //     return {
-    //         username: response.username,
-    //         role: response.role,
-    //     };
-    // };
+        return {
+            username: response.username,
+            role: response.role,
+        };
+    };
 
     const update_current_user = (new_username, new_profile_pic) => {
         set_current_user({
@@ -86,7 +86,7 @@ export default function CurrentUserProvider({ children }) {
             value={{
                 current_user,
                 remove_current_user,
-                // initialise_curr_user,
+                initialise_curr_user,
                 update_current_user,
             }}
         >
@@ -102,14 +102,14 @@ export const useCurrentUser = () => {
     const {
         current_user,
         remove_current_user,
-        // initialise_curr_user,
+        initialise_curr_user,
         update_current_user,
     } = useContext(CurrentUserContext);
 
     return {
         current_user,
         remove_current_user,
-        // initialise_curr_user,
+        initialise_curr_user,
         update_current_user,
     };
 };

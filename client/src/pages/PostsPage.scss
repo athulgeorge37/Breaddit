@@ -1,6 +1,8 @@
 @import "../variables.scss";
 
 
+
+
 .Posts_Page {
     width: 100%;
     max-width: 1500px;
@@ -9,11 +11,26 @@
     gap: 32px;
     // background-color: $black;
 
+    @media screen and (max-width: 1100px) {
+        flex-direction: column;
+        align-items: center;
+    }
 
    
     .search {
-        width: 20%;
+        min-width: 300px;
+
+        @media screen and (max-width: 1100px) {
+            width: 80%;
+        }
+
+        @media screen and (max-width: 800px) {
+            width: 90%;
+        }
     }
+
+
+
 
     .create_post_and_list_of_posts {
         display: flex;
@@ -21,6 +38,15 @@
         justify-content: center;
         align-items: center;
         width: 50%;
+
+        @media screen and (max-width: 1100px) {
+            width: 80%;
+        }
+
+        @media screen and (max-width: 800px) {
+            width: 90%;
+        }
+
         
         .list_of_posts {
             width: 100%;
@@ -34,7 +60,7 @@
             margin-bottom: 32px;
 
             p {
-                box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+                @include shadow;
                 display: flex;
                 justify-content: center;
                 width: 100%;
@@ -52,18 +78,26 @@
 .FilterOptions {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 60px;
+
+    padding: $inner_padding;
+    background-color: $dark-grey;
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+    @include shadow;
+
+    // for sticky filter options panel
+    // position: sticky;
+    // top: 60px;
 
     .sort_by_options {
         display: flex;
         align-items: center;
         gap: 10px;
         margin-bottom: 16px;
-        margin-top: 5px;
 
         button {
-            @include btn-styles($light-grey)
+            @include btn-styles($light-grey);
+            width: 25%;
         }
 
         .active {
@@ -93,12 +127,17 @@
 
 
 .SearchWithinCurrentThread {
-    width: calc(100% + 10px);
-    padding-top: 5px;
+    // for sticky filter options panel
+    // width: calc(100% + 10px);
+    // padding-top: 5px;
+    // padding-bottom: calc(2 * $inner_padding);
+    // position: sticky;
+    // z-index: 95;
+    // top: 59.5px;
+    // background-color: $black;
+
+    width: 100%;
     padding-bottom: calc(2 * $inner_padding);
-    position: sticky;
-    z-index: 95;
-    top: 59.5px;
     background-color: $black;
 
 
@@ -111,9 +150,9 @@
         background-color: $dark-grey;
         border: 1px solid $light-grey;
         border-radius: $default-border-radius;
-        box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
-    
-        
+        @include shadow;
+
+
     
         input {
             @include input_styles;

@@ -13,6 +13,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
+
+        
+        // @media screen and (max-width: 1100px) {
+        //     flex-direction: column;
+        // }
+
+        @media screen and (max-width: 800px) {
+            flex-direction: column;
+        }
 
         .sort_by_options {
             display: flex;

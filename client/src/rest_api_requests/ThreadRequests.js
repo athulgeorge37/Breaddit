@@ -29,9 +29,9 @@ const create_thread = async (
     return response.data;
 };
 
-const get_thread_details = async (thread_id) => {
+const get_thread_details = async (thread_title) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_thread_details/by_thread_id/${thread_id}`
+        `${CUSTOM_ENDPOINT}/get_thread_details/by_thread_title/${thread_title}`
     );
 
     return response.data;

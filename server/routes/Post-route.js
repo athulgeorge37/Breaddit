@@ -16,18 +16,27 @@ router.get("/get_all", async (request, response) => {
         const order_by = determine_order_by(request.query.filter_by);
         const search_input = request.query.search_input;
 
-        const thread_id = request.query.thread_id;
+        const thread_title = request.query.thread_title;
 
         console.log("");
-        console.log({ quer: request.query }, "in post route /get_all");
+        console.log({ query: request.query }, "in post route /get_all");
         console.log("");
 
         let where_search = {};
 
-        if (thread_id !== "null") {
+        if (thread_title !== "null") {
+            const thread_details = await db.Thread.findOne({
+                where: {
+                    title: thread_title,
+                },
+            });
+
+            // console.log("");
+            // console.log({ thread_details }, "in post route /get_all");
+            // console.log("");
+
             where_search = {
-                ...where_search,
-                thread_id: parseInt(thread_id),
+                thread_id: thread_details.id,
             };
         }
 

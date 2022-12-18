@@ -59,10 +59,10 @@ const get_all_posts = async (
     page_num,
     filter_by,
     search_input,
-    thread_id
+    thread_title
 ) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all?limit=${limit}&page_num=${page_num}&filter_by=${filter_by}&search_input=${search_input}&thread_id=${thread_id}`
+        `${CUSTOM_ENDPOINT}/get_all?limit=${limit}&page_num=${page_num}&filter_by=${filter_by}&search_input=${search_input}&thread_title=${thread_title}`
     );
 
     return response.data;

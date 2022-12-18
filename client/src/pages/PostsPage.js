@@ -34,8 +34,8 @@ const usePostsPage = () => {
     const {
         sort_by,
         set_sort_by,
-        thread_id,
-        set_thread_id,
+        thread_title,
+        set_thread_title,
         search_within_thread,
         set_search_within_thread,
         update_search_param,
@@ -45,8 +45,8 @@ const usePostsPage = () => {
     return {
         sort_by,
         set_sort_by,
-        thread_id,
-        set_thread_id,
+        thread_title,
+        set_thread_title,
         search_within_thread,
         set_search_within_thread,
         update_search_param,
@@ -58,7 +58,7 @@ function PostsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     // const navigate = useNavigate();
 
-    const [thread_id, set_thread_id] = useState(
+    const [thread_title, set_thread_title] = useState(
         searchParams.get("thread") ?? null
     );
     const [sort_by, set_sort_by] = useState(
@@ -109,7 +109,7 @@ function PostsPage() {
             {
                 sort_by,
                 search_within_thread,
-                thread_id,
+                thread_title,
             },
         ],
         ({ pageParam = 0 }) =>
@@ -118,7 +118,7 @@ function PostsPage() {
                 pageParam,
                 sort_by,
                 search_within_thread,
-                thread_id
+                thread_title
             ),
         {
             getNextPageParam: (lastPage, allPages) => {
@@ -135,7 +135,7 @@ function PostsPage() {
                 return lastPage.all_posts.length ? allPages.length : undefined;
             },
             onError: (data) => {
-                console.log({ data });
+                console.log({ infinite_posts: data });
             },
         }
     );
@@ -197,10 +197,11 @@ function PostsPage() {
                 value={{
                     sort_by,
                     set_sort_by,
-                    thread_id,
-                    set_thread_id,
+                    thread_title,
+                    set_thread_title,
                     search_within_thread,
                     set_search_within_thread,
+
                     update_search_param,
                     delete_search_param,
                 }}
@@ -343,8 +344,8 @@ function FilterOptions() {
 
 function SearchThreadNames() {
     const {
-        thread_id,
-        set_thread_id,
+        thread_title,
+        set_thread_title,
         update_search_param,
         delete_search_param,
     } = usePostsPage();
@@ -354,14 +355,6 @@ function SearchThreadNames() {
     const [threads_list, set_threads_list] = useState([]);
 
     const debounced_search = useDebounce(search_term, 500);
-
-    // useEffect(() => {
-    //     if (search_term === "") {
-    //         set_threads_list([]);
-    //         // set_thread_id(null);
-    //         // delete_search_param("thread");
-    //     }
-    // }, [search_term]);
 
     useEffect(() => {
         // searching the api for thread names
@@ -383,9 +376,9 @@ function SearchThreadNames() {
     }, [debounced_search]);
 
     const thread_data = useQuery(
-        ["thread_details", thread_id],
+        ["thread_details", thread_title],
         () => {
-            return get_thread_details(thread_id);
+            return get_thread_details(thread_title);
         },
         {
             onSuccess: (data) => {
@@ -401,11 +394,13 @@ function SearchThreadNames() {
     const handle_search_term_change = (new_value) => {
         if (new_value === "") {
             set_threads_list([]);
-            set_thread_id(null);
+            set_thread_title(null);
             delete_search_param("thread");
         }
         set_search_term(new_value);
     };
+
+    const thread_details = thread_data.data?.thread_details;
 
     return (
         <div className="SearchThreadNames">
@@ -431,10 +426,12 @@ function SearchThreadNames() {
                                         key={thread.id}
                                         className="thread"
                                         onClick={() => {
-                                            set_thread_id(thread.id);
+                                            set_threads_list([]);
+                                            set_thread_title(thread.title);
+                                            set_search_term("");
                                             update_search_param(
                                                 "thread",
-                                                thread.id
+                                                thread.title
                                             );
                                         }}
                                     >
@@ -447,18 +444,30 @@ function SearchThreadNames() {
                 </>
             )}
 
-            {thread_data.isLoading ? (
-                <Loading />
-            ) : (
-                <>
-                    {thread_data.data.thread_details === null ? (
-                        <div>No thread selected</div>
-                    ) : (
-                        <div className="thread_details">
-                            {thread_data.data.thread_details?.title}
-                        </div>
-                    )}
-                </>
+            {thread_data.isLoading && <Loading />}
+
+            {thread_data.error && (
+                <div className="error">
+                    Error: {JSON.stringify(thread_data.error)}
+                </div>
+            )}
+
+            {thread_details !== null && (
+                <div className="thread_details">
+                    <div className="thread_title">{thread_details?.title}</div>
+                    <button
+                        className="remove_thread"
+                        onClick={() => {
+                            set_thread_title(null);
+                            delete_search_param("thread");
+                        }}
+                    >
+                        X
+                    </button>
+                    <div className="thread_description">
+                        {thread_details?.description}
+                    </div>
+                </div>
             )}
         </div>
     );

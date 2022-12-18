@@ -40,27 +40,26 @@ router.post("/create_thread", validate_request, async (request, response) => {
 });
 
 router.get(
-    "/get_thread_details/by_thread_id/:thread_id",
+    "/get_thread_details/by_thread_title/:thread_title",
     async (request, response) => {
         try {
-            const thread_id = request.params.thread_id;
+            const thread_title = request.params.thread_title;
 
             console.log("");
-            console.log({ thread_id });
+            console.log({ thread_title }, "from thread_route get by title");
             console.log("");
 
-            if (thread_id === "null") {
+            if (thread_title === "null") {
                 response.json({
                     msg: "no thread selected",
                     thread_details: null,
-                    thread_id_passed: thread_id,
                 });
                 return;
             }
 
             const thread_details = await db.Thread.findOne({
                 where: {
-                    id: parseInt(thread_id),
+                    title: thread_title,
                 },
                 include: [
                     {
@@ -75,9 +74,9 @@ router.get(
                 ],
             });
 
-            console.log("");
-            console.log({ thread_details, thread_id });
-            console.log("");
+            // console.log("");
+            // console.log({ thread_details, thread_title });
+            // console.log("");
 
             response.json({
                 msg: "successfully found thread details",

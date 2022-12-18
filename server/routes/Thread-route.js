@@ -43,11 +43,24 @@ router.get(
     "/get_thread_details/by_thread_id/:thread_id",
     async (request, response) => {
         try {
-            const thread_id = parseInt(request.params.thread_id);
+            const thread_id = request.params.thread_id;
+
+            console.log("");
+            console.log({ thread_id });
+            console.log("");
+
+            if (thread_id === "null") {
+                response.json({
+                    msg: "no thread selected",
+                    thread_details: null,
+                    thread_id_passed: thread_id,
+                });
+                return;
+            }
 
             const thread_details = await db.Thread.findOne({
                 where: {
-                    id: thread_id,
+                    id: parseInt(thread_id),
                 },
                 include: [
                     {
@@ -61,6 +74,10 @@ router.get(
                     },
                 ],
             });
+
+            console.log("");
+            console.log({ thread_details, thread_id });
+            console.log("");
 
             response.json({
                 msg: "successfully found thread details",

@@ -8,19 +8,20 @@ export default function BackgroundImageProvider({ children }) {
 
     return (
         <BackgroundImageContext.Provider value={{ set_background_img_url }}>
-            {background_img_url === null ? (
+            {/* {background_img_url === null ? (
                 <>{children}</>
-            ) : (
-                <div className="background_image_parent">
-                    <div
-                        className="background_image"
-                        style={{
-                            backgroundImage: `url(${background_img_url})`,
-                        }}
-                    />
-                    <div>{children}</div>
-                </div>
-            )}
+            ) : ( */}
+            <div className="background_image_parent">
+                <div
+                    id="background_image"
+                    className="background_image"
+                    style={{
+                        backgroundImage: `url(${background_img_url})`,
+                    }}
+                />
+                <div>{children}</div>
+            </div>
+            {/* )} */}
         </BackgroundImageContext.Provider>
     );
 }

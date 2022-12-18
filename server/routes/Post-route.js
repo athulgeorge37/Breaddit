@@ -19,13 +19,14 @@ router.get("/get_all", async (request, response) => {
         const thread_id = request.query.thread_id;
 
         console.log("");
-        console.log(request.query);
+        console.log({ quer: request.query }, "in post route /get_all");
         console.log("");
 
         let where_search = {};
 
         if (thread_id !== "null") {
             where_search = {
+                ...where_search,
                 thread_id: parseInt(thread_id),
             };
         }
@@ -50,10 +51,10 @@ router.get("/get_all", async (request, response) => {
         }
 
         console.log("");
-        console.log({ where_search });
+        console.log({ where_search }, "in post route");
         console.log("");
 
-        const list_of_posts = await db.Post.findAll({
+        const all_posts = await db.Post.findAll({
             where: { ...where_search, is_inappropriate: false },
             order: order_by,
             include: [
@@ -67,13 +68,15 @@ router.get("/get_all", async (request, response) => {
             offset: offset,
         });
 
-        console.log("");
-        console.log({ list_of_posts });
-        console.log("");
+        // console.log("");
+        // console.log({
+        //     all_posts,
+        // });
+        // console.log("");
 
         response.json({
             msg: "succesfully got list of posts",
-            all_posts: list_of_posts,
+            all_posts,
         });
     } catch (e) {
         response.json({

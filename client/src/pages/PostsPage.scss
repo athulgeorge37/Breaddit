@@ -174,9 +174,35 @@
 
 
 .SearchThreadNames {
-    .search_thread_names_input {
+
+    .search_thread_names_input_div {
+        display: flex;
+        justify-content: space-between;
         @include input_styles;
-        width: 100%;
+
+        .search_thread_names_input {
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: $black;
+            color: $white;
+            font-size: 14px;
+            line-height: 20px;
+            // box-sizing: border-box;
+
+     
+        }
+        .cancel_icon {
+            display: flex;
+            align-items: center;
+            color: $red;
+            cursor: pointer;
+
+            svg {
+                width: 25px;
+                height: 25px;
+            }
+        }
     }
 
     .loader {
@@ -300,8 +326,74 @@
         width: 100%;
         box-sizing: border-box;
 
-        .rule {
+
+        h3 {
             padding: $inner_padding;
         }
+
+    }
+
+    .creator_details {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+
+        h3 {
+            padding: $inner_padding;
+            border-bottom: 1px solid $light-grey;
+        }
+
+        .profile_pic_and_username {
+            display: flex;
+            align-items: center;
+            padding: 10px $inner_padding ;
+
+            &:hover {
+                .username {
+                    text-decoration: underline;
+                    color: $blue;
+                }
+                cursor: pointer;
+            }
+            
+        }
+    }
+}
+
+
+.Rule {
+
+    .title_and_chevron {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: $inner_padding;
+        border-top: 1px solid $light-grey;
+
+
+        svg {
+            width: 25px;
+            height: 25px;
+        }
+    }
+
+    .description {
+        padding: $inner_padding;
+        padding-top: 0;
+
+        color: rgb(135, 135, 135);
+    }
+
+    &:hover {
+        cursor: pointer;
     }
 }

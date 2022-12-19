@@ -23,6 +23,7 @@ import useDebounce from "../hooks/useDebounce";
 import CloudinaryImage from "../components/CloudinaryImage";
 import ThreadLogo from "../features/thread/ThreadLogo";
 import { human_readable_date } from "../helper/time";
+import ProfilePicture from "../features/profile/profile_picture/ProfilePicture";
 
 const PostsPageContext = createContext();
 
@@ -324,8 +325,12 @@ function FilterOptions() {
 }
 
 function SearchThreadNames() {
-    const { set_thread_title, update_search_param, delete_search_param } =
-        usePostsPage();
+    const {
+        thread_title,
+        set_thread_title,
+        update_search_param,
+        delete_search_param,
+    } = usePostsPage();
 
     const [search_term, set_search_term] = useState("");
     const [is_loading, set_is_loading] = useState(false);
@@ -363,23 +368,43 @@ function SearchThreadNames() {
 
     return (
         <div className="SearchThreadNames">
-            <input
-                className="search_thread_names_input"
-                type="search"
-                placeholder="Find A Thread"
-                value={search_term}
-                onChange={(e) => handle_search_term_change(e.target.value)}
-            />
+            <div className="search_thread_names_input_div">
+                <input
+                    className="search_thread_names_input"
+                    type="search"
+                    placeholder="Find A Thread"
+                    value={search_term}
+                    onChange={(e) => handle_search_term_change(e.target.value)}
+                />
+                {thread_title !== null && (
+                    <div
+                        className="cancel_icon"
+                        onClick={() => handle_search_term_change("")}
+                    >
+                        <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </div>
+                )}
+            </div>
 
-            <button onClick={() => handle_search_term_change("")}>Clear</button>
-
-            {is_loading ? (
+            {is_loading && thread_title === null ? (
                 <div className="loader">
                     <Loading />
                 </div>
             ) : (
                 <>
-                    {threads_list.length > 0 ? (
+                    {threads_list.length > 0 && thread_title === null ? (
                         <div className="thread_name_list">
                             {threads_list.map((thread) => {
                                 return (
@@ -410,8 +435,9 @@ function SearchThreadNames() {
 }
 
 function ThreadDetails() {
-    const { thread_title, set_thread_title, delete_search_param } =
-        usePostsPage();
+    const { thread_title } = usePostsPage();
+
+    const navigate = useNavigate();
 
     const thread_data = useQuery(
         ["thread_details", thread_title],
@@ -486,16 +512,85 @@ function ThreadDetails() {
                     </div>
 
                     <div className="thread_rules">
+                        <h3>Rules:</h3>
                         {thread_details?.thread_rules.map((rule) => {
-                            return (
-                                <div className="rule" key={rule.id}>
-                                    {rule.title}
-                                </div>
-                            );
+                            return <Rule key={rule.id} rule={rule} />;
                         })}
+                    </div>
+
+                    <div className="creator_details">
+                        <h3>Creator:</h3>
+
+                        <div
+                            className="profile_pic_and_username"
+                            onClick={() =>
+                                navigate(
+                                    `/profile/${thread_details?.creator_details.username}`
+                                )
+                            }
+                        >
+                            <ProfilePicture
+                                profile_picture_url={
+                                    thread_details?.creator_details.profile_pic
+                                }
+                                username={
+                                    thread_details?.creator_details.username
+                                }
+                            />
+
+                            <b className="username">
+                                {thread_details?.creator_details.username}
+                            </b>
+                        </div>
                     </div>
                 </>
             )}
+        </div>
+    );
+}
+
+function Rule({ rule }) {
+    const [is_open, set_is_open] = useState(false);
+
+    return (
+        <div className="Rule" onClick={() => set_is_open(!is_open)}>
+            <div className="title_and_chevron">
+                <div className="title">{rule.title}</div>
+
+                <div className="chevron">
+                    {is_open ? (
+                        <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    ) : (
+                        <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 15l7-7 7 7"
+                            />
+                        </svg>
+                    )}
+                </div>
+            </div>
+
+            {is_open && <div className="description">{rule.description}</div>}
         </div>
     );
 }

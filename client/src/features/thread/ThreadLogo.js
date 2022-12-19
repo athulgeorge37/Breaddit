@@ -3,7 +3,7 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
 import CloudinaryImage from "../../components/CloudinaryImage";
 
-function ThreadLogo({ thread_id, img_url, img_path = "../" }) {
+function ThreadLogo({ thread_title, img_url, img_path = "../" }) {
     const { current_user } = useCurrentUser();
     const navigate = useNavigate();
 
@@ -11,7 +11,11 @@ function ThreadLogo({ thread_id, img_url, img_path = "../" }) {
         if (current_user.role === "admin") {
             return;
         } else {
-            navigate(`/thread/${thread_id}`);
+            navigate(
+                `/posts?${new URLSearchParams({
+                    thread: thread_title,
+                }).toString()}`
+            );
         }
     };
 

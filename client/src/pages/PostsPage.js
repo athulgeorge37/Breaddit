@@ -20,6 +20,9 @@ import {
     get_thread_names,
 } from "../rest_api_requests/ThreadRequests";
 import useDebounce from "../hooks/useDebounce";
+import CloudinaryImage from "../components/CloudinaryImage";
+import ThreadLogo from "../features/thread/ThreadLogo";
+import { human_readable_date } from "../helper/time";
 
 const PostsPageContext = createContext();
 
@@ -76,23 +79,6 @@ function PostsPage() {
         searchParams.delete(param);
         setSearchParams(searchParams);
     };
-
-    // useEffect(() => {
-    //     if (current_thread === null) {
-    //         document.getElementById("background_image").style.backgroundImage =
-    //             "";
-    //     } else {
-    //         document.getElementById(
-    //             "background_image"
-    //         ).style.backgroundImage = `url(${current_thread.theme})`;
-    //     }
-
-    //     return () => {
-    //         // changes background image back to default when page unmounts
-    //         document.getElementById("background_image").style.backgroundImage =
-    //             "";
-    //     };
-    // }, [current_thread]);
 
     const {
         fetchNextPage, //function
@@ -228,6 +214,7 @@ function PostsPage() {
 
 function SearchWithinThread() {
     const {
+        thread_title,
         search_within_thread,
         set_search_within_thread,
         update_search_param,
@@ -254,7 +241,11 @@ function SearchWithinThread() {
                     ref={input_ref}
                     type="text"
                     placeholder={
-                        search_input === "" ? "Search within this thread" : ""
+                        thread_title !== null
+                            ? `Search within ${thread_title}`
+                            : search_input === ""
+                            ? "Search for a post"
+                            : ""
                     }
                     value={search_input}
                     onChange={(e) => handle_search_input(e.target.value)}
@@ -380,6 +371,8 @@ function SearchThreadNames() {
                 onChange={(e) => handle_search_term_change(e.target.value)}
             />
 
+            <button onClick={() => handle_search_term_change("")}>Clear</button>
+
             {is_loading ? (
                 <div className="loader">
                     <Loading />
@@ -392,17 +385,18 @@ function SearchThreadNames() {
                                 return (
                                     <button
                                         key={thread.id}
-                                        className="thread"
+                                        className="thread_name"
                                         onClick={() => {
-                                            set_threads_list([]);
                                             set_thread_title(thread.title);
-                                            set_search_term("");
+                                            set_search_term(thread.title);
+                                            set_threads_list([]);
                                             update_search_param(
                                                 "thread",
                                                 thread.title
                                             );
                                         }}
                                     >
+                                        <img src={thread.logo} alt="" />
                                         {thread.title}
                                     </button>
                                 );
@@ -447,9 +441,25 @@ function ThreadDetails() {
             )}
 
             {thread_details !== null && (
-                <div className="thread_details">
-                    <div className="thread_title">{thread_details?.title}</div>
-                    <button
+                <>
+                    <div className="thread_details">
+                        <div
+                            className="theme"
+                            style={{
+                                backgroundImage: `url(${thread_details?.theme})`,
+                            }}
+                        >
+                            <div className="title_and_logo">
+                                <ThreadLogo
+                                    img_url={thread_details?.logo}
+                                    thread_title={thread_details?.title}
+                                />
+                                <h2 className="title">
+                                    {thread_details?.title}
+                                </h2>
+                            </div>
+                        </div>
+                        {/* <button
                         className="remove_thread"
                         onClick={() => {
                             set_thread_title(null);
@@ -457,12 +467,34 @@ function ThreadDetails() {
                         }}
                     >
                         X
-                    </button>
-                    <div className="thread_description">
-                        {thread_details?.description}
+                    </button> */}
+
+                        <div className="content">
+                            <div className="description">
+                                <span>Description:</span>
+                                <p>{thread_details?.description}</p>
+                            </div>
+                            <div className="createdAt">
+                                <span>Created On:</span>
+                                <p>
+                                    {human_readable_date(
+                                        thread_details?.createdAt
+                                    )}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="createdAt">{thread_details?.createdAt}</div>
-                </div>
+
+                    <div className="thread_rules">
+                        {thread_details?.thread_rules.map((rule) => {
+                            return (
+                                <div className="rule" key={rule.id}>
+                                    {rule.title}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </>
             )}
         </div>
     );

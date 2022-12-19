@@ -25,7 +25,7 @@
         }
 
         @media screen and (max-width: 800px) {
-            width: 90%;
+            width: 95%;
         }
     }
 
@@ -35,7 +35,7 @@
     .create_post_and_list_of_posts {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        // justify-content: center;
         align-items: center;
         width: 50%;
 
@@ -44,7 +44,7 @@
         }
 
         @media screen and (max-width: 800px) {
-            width: 90%;
+            width: 95%;
         }
 
         
@@ -98,6 +98,8 @@
         button {
             @include btn-styles($light-grey);
             width: 25%;
+            display: flex;
+            justify-content: center;
         }
 
         .active {
@@ -137,8 +139,9 @@
     // background-color: $black;
 
     width: 100%;
-    padding-bottom: calc(2 * $inner_padding);
-    background-color: $black;
+    // padding-bottom: calc(2 * $inner_padding);
+    // background-color: $black;
+    margin-bottom: calc(2 * $inner_padding);
 
 
     .search_thread_input {
@@ -192,18 +195,113 @@
         flex-direction: column;
         
         
-        .thread {
+        .thread_name {
             padding: 10px 12px;
             background-color: $dark-grey;
             color: white;
             border: none;
             display: flex;
 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 16px;
+
+            img {
+                width: 40px;
+                border-radius: $default-border-radius;
+                border: 1px solid $light-grey;
+            }
 
             &:hover {
                 background-color: $light-grey;
                 cursor: pointer;
             }
+        }
+    }
+}
+
+
+.ThreadDetails {
+    width: 100%;
+    
+    .thread_details {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+        
+        
+        .theme {
+            position: relative;
+            height: 200px;
+            border-radius: $default-border-radius;
+            border-bottom-left-radius: 0%;
+            border-bottom-right-radius: 0%;
+            background-size: cover;
+
+            margin-bottom: calc(4 * $inner_padding);
+
+            .title_and_logo {
+                position: absolute;
+                bottom: -25%;
+                left: 0; 
+                right: 0; 
+                margin-left: auto; 
+                margin-right: auto; 
+    
+                display: flex;
+                align-items: center;
+                background-color: $light-grey;
+                border-radius: $default-border-radius;
+    
+                @include shadow;
+                width: calc(80%);
+                padding: 5px;
+                box-sizing: border-box;
+            }
+        }
+
+        .content {
+            padding: $inner_padding;
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .description, .createdAt {
+                
+                span {
+                    color: rgb(135, 135, 135);
+                }
+                
+            }
+        }
+
+    }
+
+    .thread_rules {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+        .rule {
+            padding: $inner_padding;
         }
     }
 }

@@ -26,6 +26,33 @@ export const get_current_date_since_inception = (date_since) => {
     return `${date}/${month}/${year}`;
 };
 
+export const human_readable_date = (ISO_date) => {
+    var readable = new Date(ISO_date);
+
+    var month_number = readable.getMonth(); // returns 6
+    var day = readable.getDay(); // returns 15
+    var year = readable.getFullYear(); // returns 2012
+
+    const all_months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ];
+
+    var month = all_months[month_number];
+
+    return `${month} ${day}, ${year}`;
+};
+
 export const calculate_time_passed = (date_posted_in_ISO) => {
     // date_posted is in the ISO dateformat, from mySQL
 

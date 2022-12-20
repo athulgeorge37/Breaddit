@@ -6,7 +6,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
-import { delete_post } from "../../rest_api_requests/PostRequests";
+import { delete_post } from "../../api/PostRequests";
 
 // ui component imports
 import Button from "../../components/ui/Button";
@@ -26,7 +26,7 @@ import { calculate_time_passed } from "../../helper/time";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { get_post_by_id } from "../../rest_api_requests/PostRequests";
+import { get_post_by_id } from "../../api/PostRequests";
 import PostContent from "../../features/post/PostContent";
 
 function DynamicPostCard({ post_id }) {

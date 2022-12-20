@@ -4,7 +4,7 @@ import "./EditPost.scss";
 // hook imports
 import { useRef, useState } from "react";
 
-import { upload_image } from "../../rest_api_requests/ImageRequests";
+import { upload_image } from "../../api/ImageRequests";
 
 // component imports
 import TextEditor from "../../components/form/TextEditor";
@@ -14,7 +14,7 @@ import CloudinaryImage from "../../components/CloudinaryImage";
 import Button from "../../components/ui/Button";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { edit_post, create_post } from "../../rest_api_requests/PostRequests";
+import { edit_post, create_post } from "../../api/PostRequests";
 import { useNavigate } from "react-router-dom";
 
 function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {

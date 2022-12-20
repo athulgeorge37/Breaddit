@@ -1,4 +1,7 @@
+// styles
 import "./Rule.scss";
+
+// hooks
 import { useState } from "react";
 
 function Rule({ rule }) {

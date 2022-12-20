@@ -1,7 +1,11 @@
+// styles
 import "./FilterOptions.scss";
+
+// hooks
 import { useNavigate } from "react-router-dom";
 import { usePostsPage } from "../../pages/PostsPage";
 
+// components
 import SearchThreadNames from "./SearchThreadNames";
 
 function FilterOptions({ SORT_BY_OPTIONS }) {

@@ -1,27 +1,28 @@
-// style import
+// styles
 import "./StaticPostCard.scss";
 
-// hook imports
+// hooks
 import { useState } from "react";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
-// rest api request imports
-import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
+// api
+import { check_if_comments_or_replies_exist } from "../../api/CommentRequests";
 
-// ui component imports
+// ui
 import Button from "../../components/ui/Button";
-// import useMeasure from "react-use-measure";
 import ResizablePanel, {
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
 
-// feature  component imports
+// components
+import PostContent from "./PostContent";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
+
+// helper
 import { calculate_time_passed } from "../../helper/time";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import PostContent from "./PostContent";
 
 function StaticPostCard({ post_details }) {
     const navigate = useNavigate();

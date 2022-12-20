@@ -1,6 +1,11 @@
+// styles
 import "./ThreadLogo.scss";
+
+// hooks
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
+
+// ui
 import CloudinaryImage from "../../components/CloudinaryImage";
 
 function ThreadLogo({ thread_title, img_url, img_path = "../" }) {

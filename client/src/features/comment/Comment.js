@@ -17,7 +17,7 @@ import ResizablePanel, {
 import {
     check_if_comments_or_replies_exist,
     delete_comment_or_reply,
-} from "../../rest_api_requests/CommentRequests";
+} from "../../api/CommentRequests";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";

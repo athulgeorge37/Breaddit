@@ -1,7 +1,7 @@
 import "./ReplySectionInfiniteScroll.scss";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { get_all_replies_by_comment_id } from "../../rest_api_requests/CommentRequests";
+import { get_all_replies_by_comment_id } from "../../api/CommentRequests";
 import Loading from "../../components/ui/Loading";
 import Comment from "./Comment";
 

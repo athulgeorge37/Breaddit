@@ -1,19 +1,26 @@
+// styles
 import "./CreateThread.scss";
+
+// hooks
 import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { upload_image } from "../../rest_api_requests/ImageRequests";
-import Button from "../../components/ui/Button";
-import Loading from "../../components/ui/Loading";
-import CloudinaryImage from "../../components/CloudinaryImage";
-
-import LoginInput from "../../components/form/LoginInput";
-import ExpandableInput from "../../components/form/ExpandableInput";
-import EditProfilePic from "../profile/profile_picture/EditProfilePic";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useNavigate } from "react-router-dom";
 
-import { create_thread } from "../../rest_api_requests/ThreadRequests";
+// components
+import EditProfilePic from "../profile/profile_picture/EditProfilePic";
 import Rule from "./Rule";
+
+// ui
+import CloudinaryImage from "../../components/CloudinaryImage";
+import ExpandableInput from "../../components/form/ExpandableInput";
+import LoginInput from "../../components/form/LoginInput";
+import Button from "../../components/ui/Button";
+import Loading from "../../components/ui/Loading";
+
+// api
+import { upload_image } from "../../api/ImageRequests";
+import { create_thread } from "../../api/ThreadRequests";
 
 function CreateThread() {
     const add_notification = useNotification();
@@ -193,19 +200,6 @@ function CreateRule({ set_list_of_rules, set_add_rule_is_open }) {
         </div>
     );
 }
-
-// function Rule({ title, description }) {
-//     const [is_open, set_is_open] = useState(false);
-//     return (
-//         <li className="Rule" onClick={() => set_is_open(!is_open)}>
-//             <div className="title_and_btn">
-//                 {title}
-//                 <span>V</span>
-//             </div>
-//             {is_open && <p className="description">{description}</p>}
-//         </li>
-//     );
-// }
 
 function CreateTheme({ theme_url, set_theme_url }) {
     const add_notification = useNotification();

@@ -15,7 +15,7 @@ import Loading from "../../components/ui/Loading";
 import {
     get_all_posts_by_username,
     get_all_posts_by_curr_user,
-} from "../../rest_api_requests/PostRequests";
+} from "../../api/PostRequests";
 import { get_current_date } from "../../helper/time";
 import {
     get_accounts_of_type_by_username,
@@ -23,14 +23,14 @@ import {
     check_is_following_username,
     follow_account,
     unfollow_account,
-} from "../../rest_api_requests/FollowerRequests";
+} from "../../api/FollowerRequests";
 
 // rest api requert imports
 import {
     get_curr_user_details,
     get_user_profile_details,
     sign_out,
-} from "../../rest_api_requests/UserRequests";
+} from "../../api/UserRequests";
 
 import DOMPurify from "dompurify";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";

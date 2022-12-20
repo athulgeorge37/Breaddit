@@ -1,13 +1,22 @@
+// styles
 import "./ThreadDetails.scss";
+
+// hooks
 import { usePostsPage } from "../../pages/PostsPage";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { get_thread_details } from "../../rest_api_requests/ThreadRequests";
+
+// api
+import { get_thread_details } from "../../api/ThreadRequests";
+
+// components
 import Loading from "../../components/ui/Loading";
 import ThreadLogo from "./ThreadLogo";
-import { human_readable_date } from "../../helper/time";
 import Rule from "./Rule";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
+
+// helper
+import { human_readable_date } from "../../helper/time";
 
 function ThreadDetails() {
     const { thread_title } = usePostsPage();

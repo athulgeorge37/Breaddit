@@ -1,4 +1,7 @@
+// styles
 import "./PostsPage.scss";
+
+// hooks
 import {
     useRef,
     useCallback,
@@ -6,17 +9,20 @@ import {
     createContext,
     useContext,
 } from "react";
-
-import StaticPostCard from "../features/post/StaticPostCard";
-import Loading from "../components/ui/Loading";
-
-import { get_all_posts } from "../rest_api_requests/PostRequests";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
+// components
+import StaticPostCard from "../features/post/StaticPostCard";
 import SearchWithinThread from "../features/thread/SearchWithinThread";
 import FilterOptions from "../features/thread/FilterOptions";
 import ThreadDetails from "../features/thread/ThreadDetails";
+
+// ui
+import Loading from "../components/ui/Loading";
+
+// api
+import { get_all_posts } from "../api/PostRequests";
 
 const PostsPageContext = createContext();
 

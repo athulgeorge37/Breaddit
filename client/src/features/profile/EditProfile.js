@@ -16,7 +16,7 @@ import {
     get_curr_user_details,
     delete_user,
     edit_user_details,
-} from "../../rest_api_requests/UserRequests";
+} from "../../api/UserRequests";
 import { useEffect } from "react";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useRef } from "react";

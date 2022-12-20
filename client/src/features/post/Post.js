@@ -9,9 +9,9 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
-import { delete_post, edit_post } from "../../rest_api_requests/PostRequests";
-import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
-import { check_if_comments_or_replies_exist } from "../../rest_api_requests/CommentRequests";
+import { delete_post, edit_post } from "../../api/PostRequests";
+import { get_all_comments_by_post_id } from "../../api/CommentRequests";
+import { check_if_comments_or_replies_exist } from "../../api/CommentRequests";
 
 // ui component imports
 import Button from "../../components/ui/Button";

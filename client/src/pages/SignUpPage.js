@@ -13,7 +13,7 @@ import EmailInput from "../features/authentication/EmailInput/EmailInput";
 // email js import for code verification
 import emailjs from "emailjs-com";
 
-import { create_user } from "../rest_api_requests/UserRequests";
+import { create_user } from "../api/UserRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 const SERVICE_ID = "Breaddit_Service_69420";

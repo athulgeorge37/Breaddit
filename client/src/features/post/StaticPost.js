@@ -5,7 +5,7 @@ import "./StaticPost.scss";
 import { useEffect, useRef, useState } from "react";
 
 // rest api request imports
-import { get_all_comments_by_post_id } from "../../rest_api_requests/CommentRequests";
+import { get_all_comments_by_post_id } from "../../api/CommentRequests";
 
 // component imports
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";

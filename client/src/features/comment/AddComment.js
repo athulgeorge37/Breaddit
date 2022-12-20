@@ -7,7 +7,7 @@ import ExpandableInput from "../../components/form/ExpandableInput";
 import {
     create_comment_or_reply,
     edit_comment_or_reply,
-} from "../../rest_api_requests/CommentRequests";
+} from "../../api/CommentRequests";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { is_unique_username } from "../../../rest_api_requests/UserRequests";
+import { is_unique_username } from "../../../api/UserRequests";
 
 import "./UsernameInput.scss";
 

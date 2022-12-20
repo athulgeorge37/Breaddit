@@ -6,7 +6,7 @@ import AvatarEditor from "react-avatar-editor";
 import ProfilePicture from "./ProfilePicture";
 import Loading from "../../../components/ui/Loading";
 import Button from "../../../components/ui/Button";
-import { upload_image } from "../../../rest_api_requests/ImageRequests";
+import { upload_image } from "../../../api/ImageRequests";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "../../../context/Notifications/NotificationProvider";
 

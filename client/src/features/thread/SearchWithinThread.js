@@ -1,4 +1,7 @@
+// styles
 import "./SearchWithinThread.scss";
+
+// hooks
 import { useState, useRef } from "react";
 import { usePostsPage } from "../../pages/PostsPage";
 

@@ -1,8 +1,15 @@
+// styles
 import "./SearchThreadNames.scss";
+
+// hooks
 import { useState, useRef, useEffect } from "react";
 import useDebounce from "../../hooks/useDebounce";
-import { get_thread_names } from "../../rest_api_requests/ThreadRequests";
 import { usePostsPage } from "../../pages/PostsPage";
+
+// api
+import { get_thread_names } from "../../api/ThreadRequests";
+
+// components
 import Loading from "../../components/ui/Loading";
 
 function SearchThreadNames() {

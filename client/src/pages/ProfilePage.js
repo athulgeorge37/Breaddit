@@ -9,7 +9,7 @@ import ReadProfile from "../features/profile/ReadProfile";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { make_profile_visit } from "../rest_api_requests/ProfileVisitRequests";
+import { make_profile_visit } from "../api/ProfileVisitRequests";
 
 import { get_last_minute } from "../helper/get_list_of_dates";
 

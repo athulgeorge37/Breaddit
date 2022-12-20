@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import LoginInput from "../components/form/LoginInput";
 
 // rest api request imports
-import { is_unique_email, sign_in } from "../rest_api_requests/UserRequests";
+import { is_unique_email, sign_in } from "../api/UserRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 function SignInPage() {

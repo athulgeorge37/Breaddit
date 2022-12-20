@@ -1,26 +1,25 @@
-// styling imports
+// styles
 import "./App.scss";
 
-// Context Provider imports
+// contexts
 import NotificationProvider from "./context/Notifications/NotificationProvider";
 import CurrentUserProvider from "./context/CurrentUser/CurrentUserProvider";
-
-// react query import
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// dev tools
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-// common components on every page
+// components
 import Navbar from "./page_layout/Navbar";
 import Footer from "./page_layout/Footer";
 
-// loading import, will be displayed while lazy loading a page
+// ui
 import Loading from "./components/ui/Loading";
 
-// routing imports
+// routers
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// lazy loading imports
+// helper
 import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading

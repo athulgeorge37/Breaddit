@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { remove_item_local_storage } from "../../helper/local_storage";
-import { is_valid_web_token } from "../../rest_api_requests/UserRequests";
+import { is_valid_web_token } from "../../api/UserRequests";
 
 import { useQuery } from "@tanstack/react-query";
 

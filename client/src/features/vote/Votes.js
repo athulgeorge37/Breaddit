@@ -1,12 +1,13 @@
-import { useState } from "react";
+// styles
 import "./Votes.scss";
 
-import {
-    get_curr_user_vote,
-    make_vote,
-} from "../../rest_api_requests/VoteRequests";
+// hooks
+import { useState } from "react";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
+
+// api
+import { get_curr_user_vote, make_vote } from "../../api/VoteRequests";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii

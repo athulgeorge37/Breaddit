@@ -15,7 +15,7 @@ import AdjustableButton from "../../components/ui/AdjustableButton";
 import {
     get_all_replies_by_comment_id,
     check_if_comments_or_replies_exist,
-} from "../../rest_api_requests/CommentRequests";
+} from "../../api/CommentRequests";
 
 function StaticComment({ comment }) {
     // the comment component renders both surface level comments and

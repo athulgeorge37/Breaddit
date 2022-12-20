@@ -1,7 +1,7 @@
 import "./ThreadPage.scss";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { get_thread_details } from "../rest_api_requests/ThreadRequests";
+import { get_thread_details } from "../api/ThreadRequests";
 import CloudinaryImage from "../components/CloudinaryImage";
 import Loading from "../components/ui/Loading";
 import ThreadLogo from "../features/thread/ThreadLogo";
@@ -9,7 +9,7 @@ import ThreadLogo from "../features/thread/ThreadLogo";
 import { useRef, useCallback, useState } from "react";
 
 import StaticPostCard from "../features/post/StaticPostCard";
-import { get_all_posts } from "../rest_api_requests/PostRequests";
+import { get_all_posts } from "../api/PostRequests";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 

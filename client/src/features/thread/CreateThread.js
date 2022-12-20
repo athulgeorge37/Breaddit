@@ -13,6 +13,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useNavigate } from "react-router-dom";
 
 import { create_thread } from "../../rest_api_requests/ThreadRequests";
+import Rule from "./Rule";
 
 function CreateThread() {
     const add_notification = useNotification();
@@ -118,13 +119,7 @@ function EditRules({ set_list_of_rules, list_of_rules }) {
             <div className="list_of_rules">
                 <ol>
                     {list_of_rules.map((rule, index) => {
-                        return (
-                            <Rule
-                                key={index}
-                                title={rule.title}
-                                description={rule.description}
-                            />
-                        );
+                        return <Rule key={index} rule={rule} />;
                     })}
                 </ol>
             </div>
@@ -199,18 +194,18 @@ function CreateRule({ set_list_of_rules, set_add_rule_is_open }) {
     );
 }
 
-function Rule({ title, description }) {
-    const [is_open, set_is_open] = useState(false);
-    return (
-        <li className="Rule" onClick={() => set_is_open(!is_open)}>
-            <div className="title_and_btn">
-                {title}
-                <span>V</span>
-            </div>
-            {is_open && <p className="description">{description}</p>}
-        </li>
-    );
-}
+// function Rule({ title, description }) {
+//     const [is_open, set_is_open] = useState(false);
+//     return (
+//         <li className="Rule" onClick={() => set_is_open(!is_open)}>
+//             <div className="title_and_btn">
+//                 {title}
+//                 <span>V</span>
+//             </div>
+//             {is_open && <p className="description">{description}</p>}
+//         </li>
+//     );
+// }
 
 function CreateTheme({ theme_url, set_theme_url }) {
     const add_notification = useNotification();

@@ -1,0 +1,78 @@
+@import "../../variables.scss";
+
+.SearchThreadNames {
+
+    .search_thread_names_input_div {
+        display: flex;
+        justify-content: space-between;
+        @include input_styles;
+
+        .search_thread_names_input {
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: $black;
+            color: $white;
+            font-size: 14px;
+            line-height: 20px;
+            // box-sizing: border-box;
+
+     
+        }
+        .cancel_icon {
+            display: flex;
+            align-items: center;
+            color: $red;
+            cursor: pointer;
+            background: none;
+            border: none;
+
+            svg {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    }
+
+    .loader {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .thread_name_list {
+        margin-top: 10px;
+        border: 1px solid $light-grey;
+        border-radius: $default-border-radius;
+        @include shadow;
+        display: flex;
+        flex-direction: column;
+        
+        
+        .thread_name {
+            padding: 10px 12px;
+            background-color: $dark-grey;
+            color: white;
+            border: none;
+            display: flex;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 16px;
+
+            img {
+                width: 40px;
+                border-radius: $default-border-radius;
+                border: 1px solid $light-grey;
+            }
+
+            &:hover {
+                background-color: $light-grey;
+                cursor: pointer;
+            }
+        }
+    }
+}

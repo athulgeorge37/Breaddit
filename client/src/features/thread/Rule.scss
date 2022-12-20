@@ -1,0 +1,36 @@
+@import "../../variables.scss";
+
+.Rule {
+    background: none;
+    border: none;
+    color: $white;
+    
+
+    .title_and_chevron {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: $inner_padding;
+        border-top: 1px solid $light-grey;
+
+
+        svg {
+            width: 25px;
+            height: 25px;
+        }
+    }
+
+    .description {
+        padding: $inner_padding;
+        padding-top: 0;
+        display: flex;
+        justify-content: start;
+        
+        color: rgb(135, 135, 135);
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}

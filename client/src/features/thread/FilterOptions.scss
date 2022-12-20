@@ -1,0 +1,53 @@
+@import "../../variables.scss";
+
+.FilterOptions {
+    display: flex;
+    flex-direction: column;
+
+    padding: $inner_padding;
+    background-color: $dark-grey;
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+    @include shadow;
+
+    // for sticky filter options panel
+    // position: sticky;
+    // top: 60px;
+
+    .sort_by_options {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+
+        button {
+            @include btn-styles($light-grey);
+            width: 25%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .active {
+            @include btn-styles($blue)
+        }
+    }
+
+    .create_btns {
+        display: flex;
+        margin-bottom: 16px;
+        justify-content: center;
+        gap: 10px;
+
+        .create_thread {
+            @include btn-styles($blue);
+            width: 50%;
+        }
+    
+        .create_post {
+            @include btn-styles($green);
+            width: 50%;
+        }
+    }
+
+   
+}

@@ -1,0 +1,45 @@
+@import "../../variables.scss";
+
+.SearchWithinThread {
+    // for sticky filter options panel
+    // width: calc(100% + 10px);
+    // padding-top: 5px;
+    // padding-bottom: calc(2 * $inner_padding);
+    // position: sticky;
+    // z-index: 95;
+    // top: 59.5px;
+    // background-color: $black;
+
+    width: 100%;
+    // padding-bottom: calc(2 * $inner_padding);
+    // background-color: $black;
+    margin-bottom: calc(2 * $inner_padding);
+
+
+    .search_thread_input {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        
+        padding: $inner_padding;
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        border-radius: $default-border-radius;
+        @include shadow;
+
+
+    
+        input {
+            @include input_styles;
+            width: 100%
+        }
+
+        .clear_btn {
+            @include btn-styles($light-grey);
+        }
+    
+        .search_btn {
+            @include btn-styles($green);
+        }
+    }
+}

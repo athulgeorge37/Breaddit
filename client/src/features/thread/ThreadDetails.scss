@@ -1,0 +1,123 @@
+@import "../../variables.scss";
+
+.ThreadDetails {
+    width: 100%;
+    
+    .thread_details {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+        
+        
+        .theme {
+            position: relative;
+            height: 200px;
+            border-radius: $default-border-radius;
+            border-bottom-left-radius: 0%;
+            border-bottom-right-radius: 0%;
+            background-size: cover;
+
+            margin-bottom: calc(4 * $inner_padding);
+
+            .title_and_logo {
+                position: absolute;
+                bottom: -25%;
+                left: 0; 
+                right: 0; 
+                margin-left: auto; 
+                margin-right: auto; 
+    
+                display: flex;
+                align-items: center;
+                background-color: $light-grey;
+                border-radius: $default-border-radius;
+    
+                @include shadow;
+                width: calc(80%);
+                padding: 5px;
+                box-sizing: border-box;
+            }
+        }
+
+        .content {
+            padding: $inner_padding;
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .description, .createdAt {
+                
+                span {
+                    color: rgb(135, 135, 135);
+                }
+                
+            }
+        }
+
+    }
+
+    .thread_rules {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+
+        h3 {
+            padding: $inner_padding;
+        }
+
+    }
+
+    .creator_details {
+        margin-top: calc(2* $inner_padding);
+        background-color: $dark-grey;
+        border: 1px solid $light-grey;
+        @include shadow;
+        // padding: $inner_padding;
+        border-radius: $default-border-radius;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+
+
+        h3 {
+            padding: $inner_padding;
+            border-bottom: 1px solid $light-grey;
+        }
+
+        .profile_pic_and_username {
+            display: flex;
+            align-items: center;
+            padding: 10px $inner_padding ;
+            background: none;
+            border: none;
+            color: $white;
+
+            &:hover {
+                .username {
+                    text-decoration: underline;
+                    color: $blue;
+                }
+                cursor: pointer;
+            }
+            
+        }
+    }
+}

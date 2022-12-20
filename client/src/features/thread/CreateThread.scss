@@ -155,24 +155,5 @@
     }
 }
 
-.Rule {
-    color: $white;
-        
-    width: 500px;
-    background-color: $light-grey;
-    padding: $inner_padding 10px;
-    border-radius: $default-border-radius;
-    
 
-    .title_and_btn {
-        display: flex;
-        justify-content: space-between;
-    }
-    
-    .description {
-        margin-top: 10px;
-        color: hsl(0, 0%, 62%);
-        overflow-wrap: break-word;
-    }
-}
 

@@ -16,6 +16,8 @@
     margin-bottom: calc(2 * $inner_padding);
 
 
+
+
     .search_thread_input {
         display: flex;
         justify-content: space-between;
@@ -28,15 +30,39 @@
         @include shadow;
 
 
-    
-        input {
+        .search_within_thread_input_div {
+            display: flex;
+            justify-content: space-between;
             @include input_styles;
-            width: 100%
+            width: 100%;
+
+            .search_within_thread_input {
+                width: 100%;
+                outline: none;
+                border: none;
+                background-color: $black;
+                color: $white;
+                font-size: 14px;    
+                line-height: 20px;
+                box-sizing: border-box;
+
+        
+            }
+            .cancel_icon {
+                display: flex;
+                align-items: center;
+                color: $red;
+                cursor: pointer;
+                background: none;
+                border: none;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
         }
 
-        .clear_btn {
-            @include btn-styles($light-grey);
-        }
     
         .search_btn {
             @include btn-styles($green);

@@ -1,11 +1,16 @@
+// styles
 import "./CreatePostPage.scss";
-import EditPost from "../features/post/EditPost";
-import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
+
+// hooks
 import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
+
+// components
+import EditPost from "../features/post/EditPost";
 
 function CreatePostPage() {
-    const { current_user } = useCurrentUser();
     const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
 
     return (
         <div className="CreatePostPage">

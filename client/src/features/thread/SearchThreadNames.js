@@ -56,6 +56,17 @@ function SearchThreadNames() {
         set_search_term(new_value);
     };
 
+    useEffect(() => {
+        // used to ensure the input's value correctly matches the search param
+
+        if (thread_title === null) {
+            set_threads_list([]);
+            set_search_term("");
+        } else {
+            set_search_term(thread_title);
+        }
+    }, [thread_title]);
+
     return (
         <div className="SearchThreadNames">
             <div className="search_thread_names_input_div">

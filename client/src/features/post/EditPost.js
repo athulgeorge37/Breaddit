@@ -16,6 +16,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { edit_post, create_post } from "../../api/PostRequests";
 import { useNavigate } from "react-router-dom";
+import SearchThreadNames from "../thread/SearchThreadNames";
 
 function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const add_notification = useNotification();
@@ -116,7 +117,8 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
 
     const handle_cancel_edit_mode = () => {
         if (set_edit_btn_active === undefined) {
-            navigate("/posts");
+            // negative 1 is like clicking the back button
+            navigate(-1);
         } else {
             set_edit_btn_active(false);
         }
@@ -125,6 +127,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     return (
         <div className="post_inputs">
             {mode === "create" && <h2>Create Post</h2>}
+
             <div className="post_title">
                 <LoginInput
                     htmlFor="title"

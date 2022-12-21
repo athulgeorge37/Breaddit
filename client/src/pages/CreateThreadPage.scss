@@ -1,8 +1,28 @@
 @import "../variables.scss";
 
+
 .CreateThreadPage {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 50%;
+
+    background-color: $dark-grey;
+    padding: $inner_padding;
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+
+    .sign_in_div {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        
+         button {
+            @include btn-style-text($blue);
+
+            &:hover {
+                text-decoration: underline;
+            }
+         }
+    }
 }
+

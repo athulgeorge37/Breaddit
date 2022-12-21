@@ -69,15 +69,6 @@ function ThreadDetails() {
                                 </h2>
                             </div>
                         </div>
-                        {/* <button
-                        className="remove_thread"
-                        onClick={() => {
-                            set_thread_title(null);
-                            delete_search_param("thread");
-                        }}
-                    >
-                        X
-                    </button> */}
 
                         <div className="content">
                             <div className="description">

@@ -98,10 +98,7 @@ function CreateThread() {
             />
 
             <div className="thread_btns">
-                <button
-                    className="cancel_btn"
-                    onClick={() => navigate("/posts")}
-                >
+                <button className="cancel_btn" onClick={() => navigate(-1)}>
                     Cancel
                 </button>
                 <button

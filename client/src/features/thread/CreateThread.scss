@@ -1,14 +1,7 @@
 @import "../../variables.scss";
 
 .CreateThread {
-
-    width: 50%;
-    background-color: $dark-grey;
-    padding: calc(2* $inner_padding);
-    border: 1px solid $light-grey;
-    border-radius: $default-border-radius;
-
-    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+    width: 100%;
 
     h2 {
         margin-bottom: $inner_padding;

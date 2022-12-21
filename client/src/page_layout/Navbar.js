@@ -1,7 +1,11 @@
+// styles
 import "./Navbar.scss";
 
-import { NavLink } from "react-router-dom";
+// hooks
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
+
+// components
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
     const { current_user } = useCurrentUser();

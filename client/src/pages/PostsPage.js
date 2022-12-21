@@ -9,7 +9,7 @@ import {
     createContext,
     useContext,
 } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 // components
@@ -23,6 +23,7 @@ import Loading from "../components/ui/Loading";
 
 // api
 import { get_all_posts } from "../api/PostRequests";
+import { useEffect } from "react";
 
 const PostsPageContext = createContext();
 
@@ -31,6 +32,7 @@ const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function PostsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const queryClient = useQueryClient();
 
     const [thread_title, set_thread_title] = useState(
         searchParams.get("thread") ?? null
@@ -144,6 +146,35 @@ function PostsPage() {
                 </div>
             );
         });
+    });
+
+    useEffect(() => {
+        // this useffect is to handle when user clicks back or forward button
+        // so the correct data is rendered based on the search param
+
+        // by updating the states defined in PostsPage, it will
+        // automatically reftech the required data
+        // no need to invalidate queries
+
+        const search_param_thread = searchParams.get("thread");
+        if (search_param_thread !== thread_title) {
+            set_thread_title(search_param_thread);
+        }
+
+        const search_param_search_within = searchParams.get("search");
+        if (search_param_search_within !== search_within_thread) {
+            set_search_within_thread(search_param_search_within);
+        }
+
+        const search_param_sort_by = searchParams.get("sort_by");
+        if (search_param_sort_by !== sort_by) {
+            if (search_param_sort_by === null) {
+                // defaulting to default option when param is null
+                set_sort_by(SORT_BY_OPTIONS[0]);
+            } else {
+                set_sort_by(search_param_sort_by);
+            }
+        }
     });
 
     return (

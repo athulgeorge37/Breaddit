@@ -169,7 +169,7 @@ function PostsPage() {
         const search_param_sort_by = searchParams.get("sort_by");
         if (search_param_sort_by !== sort_by) {
             if (search_param_sort_by === null) {
-                // defaulting to default option when param is null
+                // defaulting to default option when sort_by param is null
                 set_sort_by(SORT_BY_OPTIONS[0]);
             } else {
                 set_sort_by(search_param_sort_by);

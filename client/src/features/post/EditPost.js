@@ -2,7 +2,7 @@
 import "./EditPost.scss";
 
 // hook imports
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { upload_image } from "../../api/ImageRequests";
 
@@ -17,6 +17,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { edit_post, create_post } from "../../api/PostRequests";
 import { useNavigate } from "react-router-dom";
 import SearchThreadNames from "../thread/SearchThreadNames";
+import useDebounce from "../../hooks/useDebounce";
+import { get_thread_names } from "../../api/ThreadRequests";
 
 function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const add_notification = useNotification();
@@ -26,15 +28,11 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const img_input_ref = useRef();
 
     const [valid_title, set_valid_title] = useState(true);
-    const [post_title, set_post_title] = useState(
-        post_details === undefined ? "" : post_details.title
-    );
-    const [post_text, set_post_text] = useState(
-        post_details === undefined ? "" : post_details.text
-    );
-    const [image_url, set_image_url] = useState(
-        post_details === undefined ? null : post_details.image
-    );
+    const [post_title, set_post_title] = useState(post_details?.title ?? "");
+    const [post_text, set_post_text] = useState(post_details?.text ?? "");
+    const [image_url, set_image_url] = useState(post_details?.image ?? null);
+
+    const [thread_id, set_thread_id] = useState(null);
 
     const upload_img_to_cloud = useMutation(
         (new_img) => {
@@ -50,7 +48,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
 
     const make_post = useMutation(
         () => {
-            return create_post(post_title, post_text, image_url);
+            return create_post(post_title, post_text, image_url, thread_id);
         },
         {
             onSuccess: (data) => {
@@ -127,6 +125,8 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     return (
         <div className="post_inputs">
             {mode === "create" && <h2>Create Post</h2>}
+
+            {mode === "create" && <AddThread set_thread_id={set_thread_id} />}
 
             <div className="post_title">
                 <LoginInput
@@ -215,6 +215,137 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                     </button>
                 ) : null}
             </div>
+        </div>
+    );
+}
+
+function AddThread({ set_thread_id }) {
+    const [search_term, set_search_term] = useState("");
+    const [is_loading, set_is_loading] = useState(false);
+    const [threads_list, set_threads_list] = useState([]);
+
+    const [current_thread, set_current_thread] = useState(null);
+
+    const input_ref = useRef();
+
+    const debounced_search = useDebounce(search_term, 500);
+
+    useEffect(() => {
+        // searching the api for thread names
+        const search_api_for_thread_names = async () => {
+            set_is_loading(true);
+
+            const data = await get_thread_names(debounced_search);
+            if (data.error) {
+                console.log({ data });
+                return;
+            }
+            set_threads_list(data.threads);
+            set_is_loading(false);
+        };
+
+        if (debounced_search) {
+            search_api_for_thread_names();
+        }
+    }, [debounced_search]);
+
+    return (
+        <div className="AddThread">
+            {current_thread === null ? (
+                <div className="find_a_thread">
+                    <label htmlFor="for_thread">Add A Thread:</label>
+                    <div className="search_thread_names_input_div">
+                        <input
+                            className="search_thread_names_input"
+                            ref={input_ref}
+                            id="for_thread"
+                            type="search"
+                            placeholder="Find A Thread"
+                            value={search_term}
+                            onChange={(e) => {
+                                set_search_term(e.target.value);
+                            }}
+                        />
+                        {search_term !== "" && (
+                            <button
+                                className="cancel_icon"
+                                onClick={() => {
+                                    input_ref.current.focus();
+                                    set_search_term("");
+                                    set_threads_list([]);
+                                }}
+                            >
+                                <svg
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+
+                    {is_loading ? (
+                        <div className="loader">
+                            <Loading />
+                        </div>
+                    ) : (
+                        <>
+                            {threads_list.length > 0 ? (
+                                <div className="thread_name_list">
+                                    {threads_list.map((thread) => {
+                                        return (
+                                            <button
+                                                key={thread.id}
+                                                className="thread_name"
+                                                onClick={() => {
+                                                    set_search_term(
+                                                        thread.title
+                                                    );
+                                                    set_threads_list([]);
+                                                    set_current_thread(thread);
+                                                    set_thread_id(thread.id);
+                                                }}
+                                            >
+                                                <img src={thread.logo} alt="" />
+                                                {thread.title}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : null}
+                        </>
+                    )}
+                </div>
+            ) : (
+                <div className="current_thread">
+                    <div className="logo_and_title">
+                        <img
+                            src={current_thread.logo}
+                            alt="thread logo"
+                            className="logo"
+                        />
+                        <span className="title">{current_thread.title}</span>
+                    </div>
+                    <button
+                        className="remove_thread"
+                        onClick={() => {
+                            set_current_thread(null);
+                            set_search_term("");
+                            set_threads_list([]);
+                        }}
+                    >
+                        Remove Thread
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

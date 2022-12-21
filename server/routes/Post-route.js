@@ -198,9 +198,18 @@ router.post("/create_post", validate_request, async (request, response) => {
         const user_id = request.user_id;
 
         const post_details = request.body;
-        post_details.author_id = user_id;
 
-        const new_post_details = await db.Post.create(post_details);
+        const updated_post_details = {
+            title: post_details.title,
+            text: post_details.text,
+            image: post_details.image,
+            thread_id: post_details.thread_id,
+            author_id: user_id,
+        };
+        // post_details.author_id = user_id;
+
+        const new_post_details = await db.Post.create(updated_post_details);
+
         response.json({
             msg: "successfully created post",
             new_post_details: new_post_details,

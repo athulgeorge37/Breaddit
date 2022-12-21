@@ -3,13 +3,14 @@ import { get_item_local_storage } from "../helper/local_storage";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/post`;
 
-const create_post = async (title, text, image) => {
+const create_post = async (title, text, image, thread_id) => {
     const response = await axios.post(
         `${CUSTOM_ENDPOINT}/create_post`,
         {
             title: title,
             text: text,
             image: image,
+            thread_id: thread_id,
             edited: false,
         },
         {

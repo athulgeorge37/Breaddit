@@ -85,38 +85,24 @@ function DynamicPostCard({ post_id, location }) {
 
     return (
         <div className="DynamicPostCard">
-            <Modal ref={modal_ref} btn_color="red" width="300">
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
+            <Modal ref={modal_ref}>
+                <div className="delete_post_modal">
                     <h2>Delete Post?</h2>
                     <p>
                         Are you sure you want to delete this Post? This action
                         is not reversible.
                     </p>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px",
-                            marginTop: "10px",
-                        }}
-                    >
+                    <div className="btns">
                         <button
+                            className="cancel_btn"
                             onClick={() => {
                                 modal_ref.current.close_modal();
-                            }}
-                            style={{
-                                backgroundColor: "#21262d",
-                                border: "none",
                             }}
                         >
                             Cancel
                         </button>
                         <button
+                            className="delete_btn"
                             onClick={() => {
                                 post_deletion.mutate();
                                 modal_ref.current.close_modal();

@@ -1,6 +1,40 @@
 @import "../../variables.scss";
 
 
+.delete_post_modal {
+    background-color: $dark-grey;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    //z-index: 102;
+
+    padding: calc(2*$inner-padding);
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 400px;
+    
+    h2, p {
+        margin-bottom: 10px;
+    }
+
+    .btns {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        .cancel_btn {
+            @include btn-styles($light-grey);
+        }
+
+        .delete_btn {
+            @include btn-styles($red);
+        }
+    }
+    
+}
+
 
 .DynamicPostCard {
     margin-bottom: calc(1.5 * $inner_padding);

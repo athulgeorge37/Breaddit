@@ -93,39 +93,25 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 "comment_or_reply " + (comment.is_reply ? "Reply" : "Comment")
             }
         >
-            <Modal ref={modal_ref} btn_color="red" width="300">
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
+            <Modal ref={modal_ref}>
+                <div className="delete_comment_modal">
                     <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
                     <p>
                         Are you sure you want to delete your{" "}
                         {comment.is_reply ? "Reply" : "Comment"}? This action is
                         not reversible.
                     </p>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px",
-                            marginTop: "10px",
-                        }}
-                    >
+                    <div className="btns">
                         <button
+                            className="cancel_btn"
                             onClick={() => {
                                 modal_ref.current.close_modal();
-                            }}
-                            style={{
-                                backgroundColor: "#21262d",
-                                border: "none",
                             }}
                         >
                             Cancel
                         </button>
                         <button
+                            className="delete_btn"
                             onClick={() => {
                                 const type = comment.is_reply
                                     ? "reply"

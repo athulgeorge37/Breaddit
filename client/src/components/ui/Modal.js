@@ -3,7 +3,7 @@ import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-function Modal({ children, btn_color, width }, ref) {
+function Modal({ children }, ref) {
     // this component require a ref to be attached to it
     // we can use this ref to call methods that were before
     // only available in the scope of this component
@@ -89,12 +89,7 @@ function Modal({ children, btn_color, width }, ref) {
                             },
                         }}
                     >
-                        <motion.div
-                            className={`modal_content ${btn_color}_btn`}
-                            style={{
-                                width: `${width}px`,
-                            }}
-                        >
+                        <motion.div className="modal_content">
                             {children}
                         </motion.div>
                     </motion.div>
@@ -102,7 +97,13 @@ function Modal({ children, btn_color, width }, ref) {
             ) : null}
         </AnimatePresence>,
 
-        document.getElementById("modal_root")
+        // attaching to modal_root will require you to use inline styles for the modal's children
+        // if u want to use this method you have to uncomment modal_root div in index.html
+        // document.getElementById("modal_root")
+
+        // using "root" allows styles to be used from the component itself
+        // and works just like the above method
+        document.getElementById("root")
     );
 }
 

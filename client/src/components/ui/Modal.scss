@@ -1,12 +1,13 @@
 @import "../../variables.scss";
 
 .Modal {
-    z-index: 102;
+    z-index: 101;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    
 
     .modal_backdrop {
         position: fixed;
@@ -15,13 +16,15 @@
         top: 0;
         left: 0;
 
-        z-index: 100;
+        z-index: 102;
         background-color: rgba(0, 0, 0, 0.4);
+        
+        backdrop-filter: blur(6px);
+        
     }
 
     .modal_wrapper {
         position: fixed;
-        z-index: 101;
         margin: auto;
         top: 0;
         bottom: 0;
@@ -29,53 +32,43 @@
         right: 0;
 
         cursor: pointer;
+        z-index: 103;
 
         display: flex;
         justify-content: center;
         align-items: center;
 
+        
+
 
         .modal_content {
-            max-height: 50%;
-            max-width: 60%;
-
+            // max-height: 50%;
+            // max-width: 60%;
             cursor: default;
 
             overflow-y: auto;
+            z-index: 104;
     
-            background-color: $dark-grey;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-            z-index: 102;
+            // background-color: $dark-grey;
+            // box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     
-            padding: calc(2*$inner-padding);
-            border: 1px solid $light-grey;
-            border-radius: $default-border-radius;
+            // padding: calc(2*$inner-padding);
+            // border: 1px solid $light-grey;
+            // border-radius: $default-border-radius;
     
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            // display: flex;
+            // flex-direction: column;
+            // align-items: center;
     
-            h2, p, ul, span {
-                margin-bottom: 10px;
-            }
+            // h2, p, ul, span {
+            //     margin-bottom: 10px;
+            // }
 
-            li {
-                margin-left: 20px
-            }
+            // li {
+            //     margin-left: 20px
+            // }
 
     
-        }
-    
-        .red_btn button {
-            @include btn-styles($red);
-        }
-    
-        .blue_btn button {
-            @include btn-styles($blue);
-        }
-    
-        .green_btn button {
-            @include btn-styles($green);
         }
 
 

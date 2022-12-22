@@ -30,7 +30,7 @@ export const human_readable_date = (ISO_date) => {
     var readable = new Date(ISO_date);
 
     var month_number = readable.getMonth(); // returns 6
-    var day = readable.getDay(); // returns 15
+    var day = readable.getDate(); // returns 15
     var year = readable.getFullYear(); // returns 2012
 
     const all_months = [

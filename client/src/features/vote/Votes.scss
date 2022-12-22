@@ -1,5 +1,20 @@
 @import "../../variables.scss";
 
+// .up_arrow_div {
+
+
+//     svg {
+//         width: 25px;
+//         height: 25px;
+//         // background-color: $blue;
+   
+
+//         // .s0 {
+//         //     fill: $green;
+//         // }
+//     }
+// }
+
 .votes {
     display: flex;
     justify-content: center;
@@ -72,9 +87,6 @@
             @include green-filter_color;
         }
 
-        .active{
-            @include green-filter_color;
-        }
 
         span {
             width: 50px;
@@ -94,9 +106,6 @@
             @include red-filter_color;
         }
 
-        .active{
-            @include red-filter_color;
-        }
 
         span {
             width: 65px;

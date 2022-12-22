@@ -41,9 +41,13 @@
                 border-radius: $default-border-radius;
     
                 @include shadow;
-                width: calc(80%);
+                width: fit-content;
                 padding: 5px;
                 box-sizing: border-box;
+
+                .title {
+                    margin-right: $inner_padding;
+                }
             }
         }
 
@@ -110,13 +114,11 @@
             border: none;
             color: $white;
 
-            &:hover {
-                .username {
-                    text-decoration: underline;
-                    color: $blue;
-                }
-                cursor: pointer;
+            .username {
+                text-decoration: underline;
+                color: $blue;
             }
+            cursor: pointer;
             
         }
     }

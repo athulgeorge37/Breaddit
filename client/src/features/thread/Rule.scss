@@ -14,6 +14,10 @@
         padding: $inner_padding;
         border-top: 1px solid $light-grey;
 
+        .title {
+            text-align: start;
+        }
+
 
         svg {
             width: 25px;
@@ -24,8 +28,7 @@
     .description {
         padding: $inner_padding;
         padding-top: 0;
-        display: flex;
-        justify-content: start;
+        text-align: start;
         
         color: rgb(135, 135, 135);
     }

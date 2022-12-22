@@ -2,7 +2,7 @@
 import "./DynamicPostCard.scss";
 
 // hooks
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import ResizablePanel, {
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
+import { useModal } from "../../components/ui/Modal";
 
 // api
 import { delete_post } from "../../api/PostRequests";
@@ -17,7 +18,6 @@ import { get_post_by_id } from "../../api/PostRequests";
 
 // ui
 import Button from "../../components/ui/Button";
-import Modal from "../../components/ui/Modal";
 import Loading from "../../components/ui/Loading";
 
 // components
@@ -36,8 +36,7 @@ function DynamicPostCard({ post_id, location }) {
     const resizable_panel_states = useResizablePanel();
     const queryClient = useQueryClient();
 
-    // const modal_ref = useRef();
-    const [show_modal, set_show_modal] = useState(false);
+    const { open_modal, close_modal, Modal } = useModal();
 
     const [post_details, set_post_details] = useState(null);
     const [edit_btn_active, set_edit_btn_active] = useState(false);
@@ -72,7 +71,7 @@ function DynamicPostCard({ post_id, location }) {
 
     useEffect(() => {
         if (location.state?.open_modal === true) {
-            set_show_modal(true);
+            open_modal();
         }
     }, []);
 
@@ -86,7 +85,7 @@ function DynamicPostCard({ post_id, location }) {
 
     return (
         <div className="DynamicPostCard">
-            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
+            <Modal>
                 <div className="delete_post_modal">
                     <h2>Delete Post?</h2>
                     <p>
@@ -94,10 +93,7 @@ function DynamicPostCard({ post_id, location }) {
                         is not reversible.
                     </p>
                     <div className="btns">
-                        <button
-                            className="cancel_btn"
-                            onClick={() => set_show_modal(false)}
-                        >
+                        <button className="cancel_btn" onClick={close_modal}>
                             Cancel
                         </button>
                         <button
@@ -105,7 +101,7 @@ function DynamicPostCard({ post_id, location }) {
                             onClick={() => {
                                 post_deletion.mutate();
                                 // modal_ref.current.close_modal();
-                                set_show_modal(false);
+                                close_modal();
                             }}
                         >
                             Delete
@@ -170,7 +166,7 @@ function DynamicPostCard({ post_id, location }) {
                             )}
 
                             <Button
-                                onClick={() => set_show_modal(true)}
+                                onClick={open_modal}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"

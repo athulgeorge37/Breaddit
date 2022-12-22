@@ -6,7 +6,6 @@ import PasswordInput from "../authentication/PasswordInput/PasswordInput";
 
 import EditProfilePic from "./profile_picture/EditProfilePic";
 import ExpandableInput from "../../components/form/ExpandableInput";
-import Modal from "../../components/ui/Modal";
 
 import { useState } from "react";
 
@@ -25,7 +24,6 @@ function EditProfile({ set_toggle_edit_page }) {
     const navigate = useNavigate();
 
     const { update_current_user, remove_current_user } = useCurrentUser();
-    const modal_ref = useRef();
 
     const [profile_picture_url, set_profile_picture_url] = useState(null);
     const [bio, set_bio] = useState("");
@@ -150,7 +148,7 @@ function EditProfile({ set_toggle_edit_page }) {
 
     return (
         <div className="edit_profile_page">
-            <Modal ref={modal_ref} btn_color="red" width="500">
+            {/* <Modal ref={modal_ref} btn_color="red" width="500">
                 <h2>Are you sure you want to delete your Account?</h2>
 
                 <span>This action will delete:</span>
@@ -167,12 +165,12 @@ function EditProfile({ set_toggle_edit_page }) {
                     className="Delete Account"
                     onClick={() => {
                         handle_delete_profile();
-                        modal_ref.current.close_modal();
+                        // modal_ref.current.close_modal();
                     }}
                 >
                     Delete Account
                 </button>
-            </Modal>
+            </Modal> */}
             {/* 
             <div className="delete_acount_pop_up_div">
                 {
@@ -258,7 +256,7 @@ function EditProfile({ set_toggle_edit_page }) {
             <div className="edit_profile_page_btns">
                 <button
                     className="delete_account_btn"
-                    onClick={() => modal_ref.current.open_modal()}
+                    // onClick={() => modal_ref.current.open_modal()}
                 >
                     Delete Account
                 </button>

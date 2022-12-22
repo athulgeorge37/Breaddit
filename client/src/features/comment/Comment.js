@@ -8,7 +8,7 @@ import DOMPurify from "dompurify";
 import AddComment from "./AddComment";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
-import Modal from "../../components/ui/Modal";
+import { useModal } from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 
 import ResizablePanel, {
@@ -36,7 +36,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     const resizable_panel_states = useResizablePanel();
     const add_notification = useNotification();
 
-    const [show_modal, set_show_modal] = useState(false);
+    const { open_modal, close_modal, Modal } = useModal();
 
     const [show_replies_section, set_show_replies_section] = useState(false);
     const [show_add_reply, set_show_add_reply] = useState(false);
@@ -93,7 +93,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 "comment_or_reply " + (comment.is_reply ? "Reply" : "Comment")
             }
         >
-            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
+            <Modal>
                 <div className="delete_comment_modal">
                     <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
                     <p>
@@ -102,12 +102,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         not reversible.
                     </p>
                     <div className="btns">
-                        <button
-                            className="cancel_btn"
-                            onClick={() => {
-                                set_show_modal(false);
-                            }}
-                        >
+                        <button className="cancel_btn" onClick={close_modal}>
                             Cancel
                         </button>
                         <button
@@ -118,7 +113,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                     : "comment";
 
                                 delete_comment.mutate(type);
-                                set_show_modal(false);
+                                close_modal();
                             }}
                         >
                             Delete
@@ -183,7 +178,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                 )}
 
                                 <Button
-                                    onClick={() => set_show_modal(true)}
+                                    onClick={open_modal}
                                     type="delete"
                                     img_name="delete"
                                     size="small"

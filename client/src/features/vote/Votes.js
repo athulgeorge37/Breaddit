@@ -10,6 +10,8 @@ import {
     useQueryClient,
     useInfiniteQuery,
 } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useModal } from "../../components/ui/Modal";
 
 // api
 import {
@@ -18,9 +20,7 @@ import {
     make_vote,
 } from "../../api/VoteRequests";
 import Loading from "../../components/ui/Loading";
-import Modal from "../../components/ui/Modal";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-import { useNavigate } from "react-router-dom";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii
@@ -46,9 +46,7 @@ function Votes({
     const [down_vote_count, set_down_vote_count] = useState(down_votes);
     const [curr_user_vote, set_curr_user_vote] = useState(null);
 
-    const [show_modal, set_show_modal] = useState(false);
-
-    // const modal_ref = useRef();
+    const { open_modal, close_modal, Modal } = useModal();
 
     // curr user vote query
     useQuery(
@@ -128,12 +126,12 @@ function Votes({
 
     return (
         <div className="votes">
-            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
+            <Modal>
                 <div className="voter_list_modal">
                     <VoterListInfiniteScroll
                         vote_type={vote_type}
                         vote_id={vote_id}
-                        set_show_modal={set_show_modal}
+                        open_modal={open_modal}
                     />
                 </div>
             </Modal>
@@ -228,14 +226,12 @@ function Votes({
 
             <div className="down_votes">{down_vote_count}</div>
 
-            <button onClick={() => set_show_modal(true)}>
-                Open Voter Info
-            </button>
+            <button onClick={open_modal}>Open Voter Info</button>
         </div>
     );
 }
 
-function VoterListInfiniteScroll({ vote_type, vote_id, set_show_modal }) {
+function VoterListInfiniteScroll({ vote_type, vote_id, open_modal }) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -327,12 +323,7 @@ function VoterListInfiniteScroll({ vote_type, vote_id, set_show_modal }) {
         <div className="VoterListInfiniteScroll">
             <div className="header">
                 <h2>Voter List</h2>
-                <button
-                    className="close_modal_btn"
-                    onClick={() => {
-                        set_show_modal(false);
-                    }}
-                >
+                <button className="close_modal_btn" onClick={open_modal}>
                     <svg
                         fill="none"
                         stroke="currentColor"

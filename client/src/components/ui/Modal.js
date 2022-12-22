@@ -2,7 +2,7 @@
 import "./Modal.scss";
 
 // hooks
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // helper
 import { createPortal } from "react-dom";
@@ -10,7 +10,7 @@ import { createPortal } from "react-dom";
 // animations
 import { motion, AnimatePresence } from "framer-motion";
 
-function Modal({ children, show_modal, set_show_modal }) {
+function AnimatedModal({ children, show_modal, set_show_modal }) {
     // this component requires a
     // const [show_modal, set_show_modal] = useState(false);
     // to be defined where u want to call the modal
@@ -92,4 +92,42 @@ function Modal({ children, show_modal, set_show_modal }) {
     );
 }
 
-export default Modal;
+const useModal = () => {
+    // this hook not only provides the states for a modal
+    // but also to open and close it
+    // and a Modal component that already has the required props passed in
+
+    const [show_modal, set_show_modal] = useState(false);
+
+    const open_modal = () => {
+        set_show_modal(true);
+    };
+
+    const close_modal = () => {
+        set_show_modal(false);
+    };
+
+    const Modal = useMemo(() => {
+        // this function only reruns to genereate a new modal component
+        // when show_modal changes
+
+        return ({ children }) => {
+            return (
+                <AnimatedModal
+                    show_modal={show_modal}
+                    set_show_modal={set_show_modal}
+                >
+                    {children}
+                </AnimatedModal>
+            );
+        };
+    }, [show_modal]);
+
+    return {
+        open_modal,
+        close_modal,
+        Modal,
+    };
+};
+
+export { useModal };

@@ -41,10 +41,6 @@ function Post({ post_details, remove_post_from_list }, ref) {
     const { current_user } = useCurrentUser();
     const resizable_panel_states = useResizablePanel();
 
-    // required for read_more/less button
-    // const posted_content_ref = useRef();
-    const modal_ref = useRef();
-
     const [valid_title, set_valid_title] = useState(true);
     const [post_title, set_post_title] = useState(post_details.title);
     const [post_text, set_post_text] = useState(post_details.text);
@@ -164,24 +160,6 @@ function Post({ post_details, remove_post_from_list }, ref) {
 
     const post_content = (
         <div className="PostContent">
-            <Modal ref={modal_ref} btn_color="red" width="300">
-                <h2>Delete Post?</h2>
-                <p>
-                    Are you sure you want to delete this Post? This action is
-                    not reversible.
-                </p>
-
-                <button
-                    className="delete_post_btn"
-                    onClick={() => {
-                        handle_delete_post();
-                        modal_ref.current.close_modal();
-                    }}
-                >
-                    Delete Post
-                </button>
-            </Modal>
-
             <div className="post_user_and_awards">
                 <div className="post_user">
                     <ProfilePicture
@@ -234,9 +212,7 @@ function Post({ post_details, remove_post_from_list }, ref) {
                             )}
 
                             <Button
-                                handle_btn_click={() =>
-                                    modal_ref.current.open_modal()
-                                }
+                                // handle_btn_click={}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"

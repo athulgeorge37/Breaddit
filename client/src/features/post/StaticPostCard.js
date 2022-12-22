@@ -6,15 +6,14 @@ import { useState } from "react";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useResizablePanel } from "../../components/ui/ResizablePanel";
 
 // api
 import { check_if_comments_or_replies_exist } from "../../api/CommentRequests";
 
 // ui
 import Button from "../../components/ui/Button";
-import ResizablePanel, {
-    useResizablePanel,
-} from "../../components/ui/ResizablePanel";
+import ResizablePanel from "../../components/ui/ResizablePanel";
 
 // components
 import PostContent from "./PostContent";
@@ -87,12 +86,6 @@ function StaticPostCard({ post_details }) {
                             )}
                             {calculate_time_passed(post_details.updatedAt)} ago
                         </div>
-                        {/* <b className="username">
-                            {post_details.author_details.username}
-                        </b>
-                        <b> • </b>
-                        {post_details.edited && "(edited) • "}
-                        {calculate_time_passed(post_details.updatedAt)} ago */}
                     </div>
                 </div>
 
@@ -109,7 +102,13 @@ function StaticPostCard({ post_details }) {
                             />
 
                             <Button
-                                onClick={navigate_to_post_page}
+                                onClick={() => {
+                                    navigate(`/post/${post_details.id}`, {
+                                        state: {
+                                            open_modal: true,
+                                        },
+                                    });
+                                }}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"

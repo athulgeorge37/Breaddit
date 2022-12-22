@@ -1,7 +1,7 @@
 // style import
 import "./PostPage.scss";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 // feature  component imports
 import AddComment from "../features/comment/AddComment";
@@ -14,9 +14,11 @@ function PostPage() {
     const { post_id_route } = useParams();
     const post_id = parseInt(post_id_route);
 
+    const location = useLocation();
+
     return (
         <div className="PostPage">
-            <DynamicPostCard post_id={post_id} />
+            <DynamicPostCard post_id={post_id} location={location} />
 
             <div className="add_new_comment">
                 <AddComment

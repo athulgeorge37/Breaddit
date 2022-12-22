@@ -1,5 +1,6 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/vote`;
 
@@ -43,4 +44,29 @@ const get_curr_user_vote = async (parent_id, parent_type) => {
     return response.data;
 };
 
-export { make_vote, get_vote_count, get_curr_user_vote };
+const get_all_profile_who_voted = async (
+    parent_type,
+    parent_id,
+    up_vote,
+    limit,
+    page_num
+) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_profiles_who_voted?${query_string_generator({
+            parent_type,
+            parent_id,
+            up_vote,
+            limit,
+            page_num,
+        })}`
+    );
+
+    return response.data;
+};
+
+export {
+    make_vote,
+    get_vote_count,
+    get_curr_user_vote,
+    get_all_profile_who_voted,
+};

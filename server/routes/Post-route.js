@@ -10,7 +10,7 @@ router.get("/get_all", async (request, response) => {
     // the user details who made that post
     try {
         const limit = parseInt(request.query.limit);
-        let page_num = parseInt(request.query.page_num);
+        const page_num = parseInt(request.query.page_num);
         const offset = limit * page_num;
 
         const order_by = determine_order_by(request.query.filter_by);

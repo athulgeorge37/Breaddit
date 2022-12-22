@@ -1,5 +1,6 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/post`;
 
@@ -63,7 +64,13 @@ const get_all_posts = async (
     thread_title
 ) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all?limit=${limit}&page_num=${page_num}&filter_by=${filter_by}&search_input=${search_input}&thread_title=${thread_title}`
+        `${CUSTOM_ENDPOINT}/get_all?${query_string_generator({
+            limit,
+            page_num,
+            filter_by,
+            search_input,
+            thread_title,
+        })}`
     );
 
     return response.data;

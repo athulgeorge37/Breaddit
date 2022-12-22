@@ -1,35 +1,35 @@
+// styles
 import "./DynamicPostCard.scss";
 
-// hook imports
-import { useRef, useState } from "react";
+// hooks
+import { useRef, useState, useEffect } from "react";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-
-// rest api request imports
-import { delete_post } from "../../api/PostRequests";
-
-// ui component imports
-import Button from "../../components/ui/Button";
-import Modal from "../../components/ui/Modal";
-import Loading from "../../components/ui/Loading";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import ResizablePanel, {
     useResizablePanel,
 } from "../../components/ui/ResizablePanel";
 
-// feature  component imports
+// api
+import { delete_post } from "../../api/PostRequests";
+import { get_post_by_id } from "../../api/PostRequests";
+
+// ui
+import Button from "../../components/ui/Button";
+import Modal from "../../components/ui/Modal";
+import Loading from "../../components/ui/Loading";
+
+// components
 import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
 import EditPost from "./EditPost";
 import Votes from "../../features/vote/Votes";
-
-import { calculate_time_passed } from "../../helper/time";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { get_post_by_id } from "../../api/PostRequests";
 import PostContent from "../../features/post/PostContent";
 
-function DynamicPostCard({ post_id }) {
+// helper
+import { calculate_time_passed } from "../../helper/time";
+
+function DynamicPostCard({ post_id, location }) {
     const navigate = useNavigate();
     const add_notification = useNotification();
     const { current_user } = useCurrentUser();
@@ -67,6 +67,13 @@ function DynamicPostCard({ post_id }) {
             add_notification("Succesfully Deleted Post");
         },
     });
+
+    useEffect(() => {
+        if (location.state?.open_modal === true) {
+            // gotta timeout cus modal_ref isnt rendered yet to acces the method
+            setTimeout(() => modal_ref.current.open_modal(), 200);
+        }
+    }, []);
 
     if (post_details_loading === true) {
         return <Loading />;

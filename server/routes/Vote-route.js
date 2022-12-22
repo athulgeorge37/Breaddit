@@ -308,4 +308,118 @@ router.post("/make_vote", validate_request, async (request, response) => {
     }
 });
 
+router.get("/get_profiles_who_voted", async (request, response) => {
+    try {
+        const parent_type = request.query.parent_type;
+        const parent_id = parseInt(request.query.parent_id);
+        let up_vote = request.query.up_vote; // true or false only
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        // console.log("");
+        // console.log({ query: request.query });
+        // console.log({
+        //     route: "vote",
+        //     method: "/get_profiles_who_voted",
+        //     print_no: 1,
+        // });
+        // console.log("");
+
+        let can_continue = false;
+        const allowed_up_votes = ["true", "false"];
+        for (const each_up_vote_type of allowed_up_votes) {
+            if (each_up_vote_type === up_vote) {
+                can_continue = true;
+            }
+        }
+        if (can_continue === false) {
+            response.json({
+                error: `${up_vote} is an invalid up_vote`,
+                allowed: allowed_up_votes,
+            });
+            return;
+        }
+        up_vote = up_vote === "true" ? true : false;
+
+        let parent_id_to_use = {};
+        can_continue = false;
+        const allowed_parent_type = ["post", "comment", "reply"];
+        for (const each_parent_type of allowed_parent_type) {
+            if (each_parent_type === parent_type) {
+                can_continue = true;
+            }
+        }
+        if (can_continue === false) {
+            response.json({
+                error: `${parent_type} is an invalid parent_type`,
+                allowed: allowed_parent_type,
+            });
+            return;
+        }
+
+        if (parent_type === "post") {
+            parent_id_to_use = {
+                post_id: parent_id,
+            };
+        } else {
+            parent_id_to_use = {
+                comment_id: parent_id,
+            };
+        }
+
+        // console.log("");
+        // console.log({
+        //     ...parent_id_to_use,
+        //     parent_type: parent_type,
+        //     up_vote: up_vote,
+        //     limit,
+        //     offset,
+        // });
+        // console.log({
+        //     route: "vote",
+        //     method: "/get_profiles_who_voted",
+        //     print_no: 2,
+        // });
+        // console.log("");
+
+        const all_voters = await db.Vote.findAll({
+            where: {
+                ...parent_id_to_use,
+                parent_type: parent_type,
+                up_vote: up_vote,
+            },
+            include: [
+                {
+                    model: db.User,
+                    as: "voter_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        // console.log("");
+        // console.log({
+        //     all_voters,
+        // });
+        // console.log({
+        //     route: "vote",
+        //     method: "/get_profiles_who_voted",
+        //     print_no: 3,
+        // });
+        // console.log("");
+
+        response.json({
+            msg: "got all profiles for all_voters",
+            all_voters: all_voters,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
 module.exports = router;

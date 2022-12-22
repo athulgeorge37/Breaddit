@@ -1,46 +1,31 @@
+// styles
 import "./Modal.scss";
-import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
+
+// hooks
+import { useEffect } from "react";
+
+// helper
 import { createPortal } from "react-dom";
+
+// animations
 import { motion, AnimatePresence } from "framer-motion";
 
-function Modal({ children }, ref) {
-    // this component require a ref to be attached to it
-    // we can use this ref to call methods that were before
-    // only available in the scope of this component
+function Modal({ children, show_modal, set_show_modal }) {
+    // this component requires a
+    // const [show_modal, set_show_modal] = useState(false);
+    // to be defined where u want to call the modal
+    // amd both show_modal and set_show_modal to be passed down via refs
 
-    const [show_modal, set_show_modal] = useState(false);
-    const [disable_scroll, set_disable_scroll] = useState(false);
-
-    // this allows us to call these methods from a parent component
-    // to open a modal write:
-    // modal_ref.current.open_modal()
-    useImperativeHandle(ref, () => {
-        return {
-            open_modal: open_modal,
-            close_modal: close_modal,
-        };
-    });
-
-    const open_modal = () => {
-        set_show_modal(true);
-        set_disable_scroll(true);
-    };
-
-    const close_modal = () => {
-        set_show_modal(false);
-        set_disable_scroll(false);
-    };
-
-    // whenever disable_scroll state changes
-    // we make the body have a hidden style
-    // so we can disable scroll
     useEffect(() => {
-        if (disable_scroll) {
+        // whenever disable_scroll state changes
+        // we make the body have a hidden style
+        // so we can disable scroll
+        if (show_modal) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
         }
-    }, [disable_scroll]);
+    }, [show_modal]);
 
     // when show_modal is true
     // we attach this component to
@@ -72,7 +57,7 @@ function Modal({ children }, ref) {
 
                     <motion.div
                         className="modal_wrapper"
-                        onClick={close_modal}
+                        onClick={() => set_show_modal(false)}
                         initial={{
                             scale: 0,
                         }}
@@ -107,4 +92,4 @@ function Modal({ children }, ref) {
     );
 }
 
-export default forwardRef(Modal);
+export default Modal;

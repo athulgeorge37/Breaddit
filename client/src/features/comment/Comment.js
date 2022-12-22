@@ -36,7 +36,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     const resizable_panel_states = useResizablePanel();
     const add_notification = useNotification();
 
-    const modal_ref = useRef();
+    const [show_modal, set_show_modal] = useState(false);
 
     const [show_replies_section, set_show_replies_section] = useState(false);
     const [show_add_reply, set_show_add_reply] = useState(false);
@@ -93,7 +93,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 "comment_or_reply " + (comment.is_reply ? "Reply" : "Comment")
             }
         >
-            <Modal ref={modal_ref}>
+            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
                 <div className="delete_comment_modal">
                     <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
                     <p>
@@ -105,7 +105,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         <button
                             className="cancel_btn"
                             onClick={() => {
-                                modal_ref.current.close_modal();
+                                set_show_modal(false);
                             }}
                         >
                             Cancel
@@ -118,7 +118,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                     : "comment";
 
                                 delete_comment.mutate(type);
-                                modal_ref.current.close_modal();
+                                set_show_modal(false);
                             }}
                         >
                             Delete
@@ -183,9 +183,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                 )}
 
                                 <Button
-                                    onClick={() =>
-                                        modal_ref.current.open_modal()
-                                    }
+                                    onClick={() => set_show_modal(true)}
                                     type="delete"
                                     img_name="delete"
                                     size="small"

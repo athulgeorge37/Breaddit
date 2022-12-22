@@ -19,6 +19,8 @@ import {
 } from "../../api/VoteRequests";
 import Loading from "../../components/ui/Loading";
 import Modal from "../../components/ui/Modal";
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
+import { useNavigate } from "react-router-dom";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii
@@ -44,7 +46,9 @@ function Votes({
     const [down_vote_count, set_down_vote_count] = useState(down_votes);
     const [curr_user_vote, set_curr_user_vote] = useState(null);
 
-    const modal_ref = useRef();
+    const [show_modal, set_show_modal] = useState(false);
+
+    // const modal_ref = useRef();
 
     // curr user vote query
     useQuery(
@@ -124,11 +128,14 @@ function Votes({
 
     return (
         <div className="votes">
-            <Modal ref={modal_ref} width="300">
-                <VoterListInfiniteScroll
-                    vote_type={vote_type}
-                    vote_id={vote_id}
-                />
+            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
+                <div className="voter_list_modal">
+                    <VoterListInfiniteScroll
+                        vote_type={vote_type}
+                        vote_id={vote_id}
+                        set_show_modal={set_show_modal}
+                    />
+                </div>
             </Modal>
 
             <div className="up_votes">{up_vote_count}</div>
@@ -221,18 +228,14 @@ function Votes({
 
             <div className="down_votes">{down_vote_count}</div>
 
-            <button onClick={() => modal_ref.current.open_modal()}>
+            <button onClick={() => set_show_modal(true)}>
                 Open Voter Info
             </button>
         </div>
     );
 }
 
-function VoterCard({ voter_details }) {
-    return <div className="VoterCard">VoterCard: {voter_details.username}</div>;
-}
-
-function VoterListInfiniteScroll({ vote_type, vote_id }) {
+function VoterListInfiniteScroll({ vote_type, vote_id, set_show_modal }) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -322,6 +325,29 @@ function VoterListInfiniteScroll({ vote_type, vote_id }) {
 
     return (
         <div className="VoterListInfiniteScroll">
+            <div className="header">
+                <h2>Voter List</h2>
+                <button
+                    className="close_modal_btn"
+                    onClick={() => {
+                        set_show_modal(false);
+                    }}
+                >
+                    <svg
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+            </div>
             {error && <span>Error: {JSON.stringify(error)}</span>}
 
             <div className="list_of_voters">{list_of_voters}</div>
@@ -331,6 +357,24 @@ function VoterListInfiniteScroll({ vote_type, vote_id }) {
 
                 {hasNextPage === false && <p>No more voters left</p>}
             </div>
+        </div>
+    );
+}
+
+function VoterCard({ voter_details }) {
+    const navigate = useNavigate();
+    return (
+        <div className="VoterCard">
+            <ProfilePicture
+                username={voter_details.username}
+                profile_picture_url={voter_details.profile_pic}
+            />
+            <button
+                className="username"
+                onClick={() => navigate(`/profile/${voter_details.username}`)}
+            >
+                {voter_details.username}
+            </button>
         </div>
     );
 }

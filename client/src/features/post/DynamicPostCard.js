@@ -36,7 +36,9 @@ function DynamicPostCard({ post_id, location }) {
     const resizable_panel_states = useResizablePanel();
     const queryClient = useQueryClient();
 
-    const modal_ref = useRef();
+    // const modal_ref = useRef();
+    const [show_modal, set_show_modal] = useState(false);
+
     const [post_details, set_post_details] = useState(null);
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
@@ -70,8 +72,7 @@ function DynamicPostCard({ post_id, location }) {
 
     useEffect(() => {
         if (location.state?.open_modal === true) {
-            // gotta timeout cus modal_ref isnt rendered yet to acces the method
-            setTimeout(() => modal_ref.current.open_modal(), 200);
+            set_show_modal(true);
         }
     }, []);
 
@@ -85,7 +86,7 @@ function DynamicPostCard({ post_id, location }) {
 
     return (
         <div className="DynamicPostCard">
-            <Modal ref={modal_ref}>
+            <Modal show_modal={show_modal} set_show_modal={set_show_modal}>
                 <div className="delete_post_modal">
                     <h2>Delete Post?</h2>
                     <p>
@@ -95,9 +96,7 @@ function DynamicPostCard({ post_id, location }) {
                     <div className="btns">
                         <button
                             className="cancel_btn"
-                            onClick={() => {
-                                modal_ref.current.close_modal();
-                            }}
+                            onClick={() => set_show_modal(false)}
                         >
                             Cancel
                         </button>
@@ -105,7 +104,8 @@ function DynamicPostCard({ post_id, location }) {
                             className="delete_btn"
                             onClick={() => {
                                 post_deletion.mutate();
-                                modal_ref.current.close_modal();
+                                // modal_ref.current.close_modal();
+                                set_show_modal(false);
                             }}
                         >
                             Delete
@@ -170,7 +170,7 @@ function DynamicPostCard({ post_id, location }) {
                             )}
 
                             <Button
-                                onClick={() => modal_ref.current.open_modal()}
+                                onClick={() => set_show_modal(true)}
                                 type="delete"
                                 span_text="Delete"
                                 img_name="delete"

@@ -116,8 +116,58 @@
    
 }
 
+.voter_list_modal {
+    background-color: $dark-grey;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+    padding: calc(2*$inner-padding);
+    border: 1px solid $light-grey;
+    border-radius: $default-border-radius;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 400px;
+    
+    
+
+    
+}
+
+.VoterListInfiniteScroll {
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .header {
+        h2 {
+            margin-bottom: 10px;
+        }
+    }
+
+    .end_of_voters_lists {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background-color: $light-grey;
+    border-radius: $default-border-radius;
+    }
+}
+
 
 .VoterCard {
-    background-color: red;
-    width: 500px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: $light-grey;
+    border-radius: $default-border-radius;
+
+
+    .username {
+        @include btn-style-text($blue);
+        text-decoration: underline;
+    }
+
 }

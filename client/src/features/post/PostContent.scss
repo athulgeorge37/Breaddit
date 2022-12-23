@@ -11,12 +11,32 @@
 
     .image_display {
         margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
         img {
-            width: 100%;
-            height: auto;
+            // width: 100%;
+            // height: auto;
+           
             // aspect-ratio: 16/9;
             // object-fit: cover;
             border-radius: $default-border-radius;
+
+        
+            @media screen and (min-width: 1300px) {
+                // if screen width is greater than or equal to px
+                max-height: 400px;
+                width: auto;
+            }
+
+            @media screen and (max-width: 1300px) {
+                // if screen width is smaller than or equal to px
+                max-width: 100%;
+                height: auto;
+            }
+
+            // @media screen and (max-width: 800px) {
+            //     width: 95%;
+            // }
         }
     }
 

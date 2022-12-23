@@ -25,6 +25,7 @@ import ProfilePicture from "../../features/profile/profile_picture/ProfilePictur
 import EditPost from "./EditPost";
 import Votes from "../../features/vote/Votes";
 import PostContent from "../../features/post/PostContent";
+import Modal from "../../components/ui/Modal";
 
 // helper
 import { calculate_time_passed } from "../../helper/time";
@@ -36,7 +37,7 @@ function DynamicPostCard({ post_id, location }) {
     const resizable_panel_states = useResizablePanel();
     const queryClient = useQueryClient();
 
-    const { open_modal, close_modal, Modal } = useModal();
+    const { open_modal, close_modal, show_modal } = useModal();
 
     const [post_details, set_post_details] = useState(null);
     const [edit_btn_active, set_edit_btn_active] = useState(false);
@@ -85,7 +86,7 @@ function DynamicPostCard({ post_id, location }) {
 
     return (
         <div className="DynamicPostCard">
-            <Modal>
+            <Modal show_modal={show_modal} close_modal={close_modal}>
                 <div className="delete_post_modal">
                     <h2>Delete Post?</h2>
                     <p>

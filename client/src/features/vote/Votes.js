@@ -21,6 +21,7 @@ import {
 } from "../../api/VoteRequests";
 import Loading from "../../components/ui/Loading";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
+import Modal from "../../components/ui/Modal";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii
@@ -46,7 +47,7 @@ function Votes({
     const [down_vote_count, set_down_vote_count] = useState(down_votes);
     const [curr_user_vote, set_curr_user_vote] = useState(null);
 
-    const { open_modal, close_modal, Modal } = useModal();
+    const { open_modal, close_modal, show_modal } = useModal();
 
     // curr user vote query
     useQuery(
@@ -126,12 +127,12 @@ function Votes({
 
     return (
         <div className="votes">
-            <Modal>
+            <Modal show_modal={show_modal} close_modal={close_modal}>
                 <div className="voter_list_modal">
                     <VoterListInfiniteScroll
                         vote_type={vote_type}
                         vote_id={vote_id}
-                        open_modal={open_modal}
+                        close_modal={close_modal}
                     />
                 </div>
             </Modal>
@@ -231,7 +232,7 @@ function Votes({
     );
 }
 
-function VoterListInfiniteScroll({ vote_type, vote_id, open_modal }) {
+function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -323,7 +324,10 @@ function VoterListInfiniteScroll({ vote_type, vote_id, open_modal }) {
         <div className="VoterListInfiniteScroll">
             <div className="header">
                 <h2>Voter List</h2>
-                <button className="close_modal_btn" onClick={open_modal}>
+                <button
+                    className="close_modal_btn"
+                    onClick={() => close_modal()}
+                >
                     <svg
                         fill="none"
                         stroke="currentColor"

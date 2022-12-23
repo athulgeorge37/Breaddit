@@ -1,5 +1,5 @@
 import "./Comment.scss";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 import { calculate_time_passed } from "../../helper/time";
 
@@ -23,6 +23,7 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useNavigate } from "react-router-dom";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import Modal from "../../components/ui/Modal";
 
 function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     // the comment component renders both surface level comments and
@@ -36,7 +37,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     const resizable_panel_states = useResizablePanel();
     const add_notification = useNotification();
 
-    const { open_modal, close_modal, Modal } = useModal();
+    const { open_modal, close_modal, show_modal } = useModal();
 
     const [show_replies_section, set_show_replies_section] = useState(false);
     const [show_add_reply, set_show_add_reply] = useState(false);
@@ -93,7 +94,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 "comment_or_reply " + (comment.is_reply ? "Reply" : "Comment")
             }
         >
-            <Modal>
+            <Modal show_modal={show_modal} close_modal={close_modal}>
                 <div className="delete_comment_modal">
                     <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
                     <p>

@@ -2,7 +2,7 @@
 import "./Modal.scss";
 
 // hooks
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 // helper
 import { createPortal } from "react-dom";
@@ -10,7 +10,7 @@ import { createPortal } from "react-dom";
 // animations
 import { motion, AnimatePresence } from "framer-motion";
 
-function AnimatedModal({ children, show_modal, set_show_modal }) {
+function Modal({ children, close_modal, show_modal }) {
     // this component requires a
     // const [show_modal, set_show_modal] = useState(false);
     // to be defined where u want to call the modal
@@ -57,7 +57,7 @@ function AnimatedModal({ children, show_modal, set_show_modal }) {
 
                     <motion.div
                         className="modal_wrapper"
-                        onClick={() => set_show_modal(false)}
+                        onClick={close_modal}
                         initial={{
                             scale: 0,
                         }}
@@ -104,30 +104,34 @@ const useModal = () => {
     };
 
     const close_modal = () => {
+        console.log("closing modal");
         set_show_modal(false);
     };
 
-    const Modal = useMemo(() => {
-        // this function only reruns to genereate a new modal component
-        // when show_modal changes
+    // closing animation is not working for somereason when using this approach
+    // const Modal = useMemo(() => {
+    //     // this function only reruns to genereate a new modal component
+    //     // when show_modal changes
 
-        return ({ children }) => {
-            return (
-                <AnimatedModal
-                    show_modal={show_modal}
-                    set_show_modal={set_show_modal}
-                >
-                    {children}
-                </AnimatedModal>
-            );
-        };
-    }, [show_modal]);
+    //     return ({ children }) => {
+    //         return (
+    //             <AnimatedModal
+    //                 show_modal={show_modal}
+    //                 set_show_modal={set_show_modal}
+    //             >
+    //                 {children}
+    //             </AnimatedModal>
+    //         );
+    //     };
+    // }, [show_modal]);
 
     return {
+        show_modal,
         open_modal,
         close_modal,
-        Modal,
+        // Modal,
     };
 };
 
 export { useModal };
+export default Modal;

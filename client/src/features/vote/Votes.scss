@@ -141,8 +141,24 @@
     gap: 10px;
 
     .header {
+        display: flex;
+        justify-content: space-between;
         h2 {
             margin-bottom: 10px;
+        }
+
+        .close_modal_btn {
+            display: flex;
+            align-items: center;
+            color: $red;
+            cursor: pointer;
+            background: none;
+            border: none;
+
+            svg {
+                width: 20px;
+                height: 20px;
+            }
         }
     }
 

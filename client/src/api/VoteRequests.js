@@ -52,13 +52,18 @@ const get_all_profile_who_voted = async (
     page_num
 ) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_profiles_who_voted?${query_string_generator({
+        `${CUSTOM_ENDPOINT}/get_all_voters?${query_string_generator({
             parent_type,
             parent_id,
             up_vote,
             limit,
             page_num,
-        })}`
+        })}`,
+        {
+            headers: {
+                web_access_token: get_item_local_storage("web_access_token"),
+            },
+        }
     );
 
     return response.data;

@@ -20,6 +20,19 @@
     justify-content: center;
     align-items: center;
 
+    .up_votes, .down_votes {
+        background: none;
+        border: none;
+        color: $white;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: $default-border-radius;
+        
+        &:hover {
+            background-color: $light-grey;
+        }
+    }
+
     .up_arrow, 
     .down_arrow {
 
@@ -143,9 +156,9 @@
     .header {
         display: flex;
         justify-content: space-between;
-        h2 {
-            margin-bottom: 10px;
-        }
+        align-items: center;
+        margin-bottom: 10px;
+
 
         .close_modal_btn {
             display: flex;
@@ -156,34 +169,81 @@
             border: none;
 
             svg {
-                width: 20px;
-                height: 20px;
+                width: 30px;
+                height: 30px;
             }
         }
     }
 
-    .end_of_voters_lists {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        background-color: $light-grey;
-    border-radius: $default-border-radius;
+    .voter_content {
+    
+
+        .list_of_voters {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            // this div only becomes scrollable
+            // when the height is greater than max-height
+            // otherwise the height will fit the content of this div
+            max-height: 200px;
+            // overflow auto means it only shows scrollbar when 
+            // this div can be scrolled
+            overflow-y: auto;
+            // puts the scrollbar slightly to the right
+            padding-right: 5px;
+            
+            
+            .end_of_voters_lists {
+                // margin-top: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+                background-color: $light-grey;
+                border-radius: $default-border-radius;
+            }
+        }
     }
+
 }
 
 
 .VoterCard {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 10px;
     background-color: $light-grey;
     border-radius: $default-border-radius;
+    padding: 10px;
+
+    .left_side {
+        display: flex;
+        align-items: center;
+        
+        
+        .username {
+            @include btn-style-text($white);
+        }
+    }
 
 
-    .username {
-        @include btn-style-text($blue);
-        text-decoration: underline;
+    .follower_following_btn {
+        width: 30%
+    }
+    .following_btn {
+        @include btn-styles($green);
+    }
+
+    .follower_btn {
+        @include btn-styles($blue);
+    }
+
+    &:hover {
+        .username {    
+            color: $blue;
+            text-decoration: underline;
+        }
     }
 
 }

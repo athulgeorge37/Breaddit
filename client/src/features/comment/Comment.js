@@ -1,29 +1,33 @@
+// styles
 import "./Comment.scss";
+
+// hooks
 import { useState } from "react";
+import { useModal } from "../../components/ui/Modal";
+import { useResizablePanel } from "../../components/ui/ResizablePanel";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
-import { calculate_time_passed } from "../../helper/time";
-
-import DOMPurify from "dompurify";
-
+// components
 import AddComment from "./AddComment";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
-import { useModal } from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
+import ResizablePanel from "../../components/ui/ResizablePanel";
+import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
+import Modal from "../../components/ui/Modal";
 
-import ResizablePanel, {
-    useResizablePanel,
-} from "../../components/ui/ResizablePanel";
+// api
 import {
     check_if_comments_or_replies_exist,
     delete_comment_or_reply,
 } from "../../api/CommentRequests";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-import { useNavigate } from "react-router-dom";
-import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
-import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import Modal from "../../components/ui/Modal";
+
+// helper
+import { calculate_time_passed } from "../../helper/time";
+import DOMPurify from "dompurify";
 
 function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     // the comment component renders both surface level comments and
@@ -36,7 +40,6 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
     const { current_user } = useCurrentUser();
     const resizable_panel_states = useResizablePanel();
     const add_notification = useNotification();
-
     const { open_modal, close_modal, show_modal } = useModal();
 
     const [show_replies_section, set_show_replies_section] = useState(false);

@@ -22,6 +22,7 @@ import {
 import Loading from "../../components/ui/Loading";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Modal from "../../components/ui/Modal";
+import { follow_or_unfollow_account } from "../../api/FollowerRequests";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii
@@ -48,6 +49,8 @@ function Votes({
     const [curr_user_vote, set_curr_user_vote] = useState(null);
 
     const { open_modal, close_modal, show_modal } = useModal();
+
+    const [modal_vote_type, set_modal_vote_type] = useState(true);
 
     // curr user vote query
     useQuery(
@@ -133,11 +136,22 @@ function Votes({
                         vote_type={vote_type}
                         vote_id={vote_id}
                         close_modal={close_modal}
+                        modal_vote_type={modal_vote_type}
+                        up_vote_count={up_vote_count}
+                        down_vote_count={down_vote_count}
                     />
                 </div>
             </Modal>
 
-            <div className="up_votes">{up_vote_count}</div>
+            <button
+                className="up_votes"
+                onClick={() => {
+                    open_modal();
+                    set_modal_vote_type(true);
+                }}
+            >
+                {up_vote_count}
+            </button>
 
             <button
                 className="up_arrow"
@@ -225,14 +239,27 @@ function Votes({
                 )}
             </button>
 
-            <div className="down_votes">{down_vote_count}</div>
-
-            <button onClick={open_modal}>Open Voter Info</button>
+            <button
+                className="down_votes"
+                onClick={() => {
+                    open_modal();
+                    set_modal_vote_type(false);
+                }}
+            >
+                {down_vote_count}
+            </button>
         </div>
     );
 }
 
-function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
+function VoterListInfiniteScroll({
+    vote_type,
+    vote_id,
+    close_modal,
+    modal_vote_type,
+    up_vote_count,
+    down_vote_count,
+}) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -240,12 +267,12 @@ function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
         data,
         error,
     } = useInfiniteQuery(
-        ["voter_info", { vote_type, vote_id, is_up_vote: true }],
+        ["voter_info", { vote_type, vote_id, is_up_vote: modal_vote_type }],
         ({ pageParam = 0 }) =>
             get_all_profile_who_voted(
                 vote_type,
                 vote_id,
-                true,
+                modal_vote_type,
                 VOTERS_PER_PAGE,
                 pageParam
             ),
@@ -308,13 +335,29 @@ function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
             if (i + 1 === length_of_voters) {
                 return (
                     <div ref={lastPostRef} key={voter_data.id}>
-                        <VoterCard voter_details={voter_data.voter_details} />
+                        <VoterCard
+                            voter_data={voter_data}
+                            close_modal={close_modal}
+                            voter_info_query={{
+                                vote_type,
+                                vote_id,
+                                is_up_vote: modal_vote_type,
+                            }}
+                        />
                     </div>
                 );
             }
             return (
                 <div key={voter_data.id}>
-                    <VoterCard voter_details={voter_data.voter_details} />
+                    <VoterCard
+                        voter_data={voter_data}
+                        close_modal={close_modal}
+                        voter_info_query={{
+                            vote_type,
+                            vote_id,
+                            is_up_vote: modal_vote_type,
+                        }}
+                    />
                 </div>
             );
         });
@@ -323,7 +366,15 @@ function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
     return (
         <div className="VoterListInfiniteScroll">
             <div className="header">
-                <h2>Voter List</h2>
+                <h2>
+                    {modal_vote_type
+                        ? `${up_vote_count} Up Voter${
+                              up_vote_count !== 1 ? "s" : ""
+                          }`
+                        : `${down_vote_count} Down Voter${
+                              down_vote_count !== 1 ? "s" : ""
+                          }`}
+                </h2>
                 <button
                     className="close_modal_btn"
                     onClick={() => close_modal()}
@@ -345,31 +396,74 @@ function VoterListInfiniteScroll({ vote_type, vote_id, close_modal }) {
             </div>
             {error && <span>Error: {JSON.stringify(error)}</span>}
 
-            <div className="list_of_voters">{list_of_voters}</div>
+            <div className="voter_content">
+                <div className="list_of_voters">
+                    {list_of_voters}
+                    <div className="end_of_voters_lists">
+                        {isFetchingNextPage && <Loading />}
 
-            <div className="end_of_voters_lists">
-                {isFetchingNextPage && <Loading />}
-
-                {hasNextPage === false && <p>No more voters left</p>}
+                        {hasNextPage === false && <p>No more voters</p>}
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
 
-function VoterCard({ voter_details }) {
+function VoterCard({ voter_data, close_modal, voter_info_query }) {
     const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
+    const queryClient = useQueryClient();
+    const [is_following, set_is_following] = useState(voter_data.is_following);
+
+    const follow_or_unfollow_account_mutation = useMutation(
+        (account_id) => {
+            return follow_or_unfollow_account(account_id);
+        },
+        {
+            onSuccess: (data) => {
+                console.log({ data });
+                queryClient.invalidateQueries(["voter_info", voter_info_query]);
+                set_is_following(data.is_following);
+            },
+        }
+    );
+
     return (
         <div className="VoterCard">
-            <ProfilePicture
-                username={voter_details.username}
-                profile_picture_url={voter_details.profile_pic}
-            />
-            <button
-                className="username"
-                onClick={() => navigate(`/profile/${voter_details.username}`)}
-            >
-                {voter_details.username}
-            </button>
+            <div className="left_side">
+                <ProfilePicture
+                    username={voter_data.dataValues.username}
+                    profile_picture_url={voter_data.dataValues.profile_pic}
+                />
+                <button
+                    className="username"
+                    onClick={() => {
+                        close_modal();
+                        setTimeout(() => {
+                            navigate(
+                                `/profile/${voter_data.dataValues.username}`
+                            );
+                        }, 500);
+                    }}
+                >
+                    {voter_data.dataValues.username}
+                </button>
+            </div>
+            {current_user.username === voter_data.dataValues.username ? null : (
+                <button
+                    className={`follower_following_btn ${
+                        is_following ? "following_btn" : "follower_btn"
+                    }`}
+                    onClick={() => {
+                        follow_or_unfollow_account_mutation.mutate(
+                            voter_data.dataValues.id
+                        );
+                    }}
+                >
+                    {is_following ? "Following" : "Follow"}
+                </button>
+            )}
         </div>
     );
 }

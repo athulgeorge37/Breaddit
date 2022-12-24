@@ -1,5 +1,8 @@
 const express = require("express");
-const { validate_request } = require("../middlewares/AuthenticateRequests");
+const {
+    validate_request,
+    validate_role,
+} = require("../middlewares/AuthenticateRequests");
 const router = express.Router();
 
 const db = require("../models");
@@ -308,7 +311,7 @@ router.post("/make_vote", validate_request, async (request, response) => {
     }
 });
 
-router.get("/get_profiles_who_voted", async (request, response) => {
+router.get("/get_all_voters", validate_role, async (request, response) => {
     try {
         const parent_type = request.query.parent_type;
         const parent_id = parseInt(request.query.parent_id);
@@ -393,27 +396,84 @@ router.get("/get_profiles_who_voted", async (request, response) => {
                 {
                     model: db.User,
                     as: "voter_details",
-                    attributes: ["username", "profile_pic"],
+                    attributes: ["username", "profile_pic", "id"],
                 },
             ],
             limit: limit,
             offset: offset,
         });
 
+        if (request.role === "public_user") {
+            response.json({
+                msg: "got all profiles for all_voters",
+                all_voters: all_voters,
+            });
+            return;
+        }
+
+        // const new_follower_data = [];
+        // const new_voter_info = all_voters.forEach(async (row) => {
+        //     const voter_id = row.voter_details.id;
+
+        //     const following_details = await db.Follower.findOne({
+        //         where: {
+        //             followed_by: request.user_id,
+        //             user_id: voter_id,
+        //         },
+        //     });
+
+        //     const is_following = following_details === null ? false : true;
+
+        //     console.log({
+        //         is_following,
+        //         person: row.voter_details.username,
+        //     });
+
+        //     new_follower_data.push({
+        //         is_following: is_following,
+        //         logged_in_user: request.user_id,
+        //         following: voter_id,
+        //     });
+        // });
+
+        const new_follower_data = [];
+        for (const row of all_voters) {
+            const voter_id = row.voter_details.id;
+
+            const following_details = await db.Follower.findOne({
+                where: {
+                    followed_by: request.user_id,
+                    user_id: voter_id,
+                },
+            });
+
+            const is_following = following_details === null ? false : true;
+
+            // console.log({
+            //     is_following,
+            //     person: row.voter_details.username,
+            // });
+
+            const voter_details = row.voter_details;
+
+            new_follower_data.push({
+                ...voter_details,
+                is_following: is_following,
+                id: row.id,
+            });
+        }
+
         // console.log("");
         // console.log({
-        //     all_voters,
-        // });
-        // console.log({
-        //     route: "vote",
-        //     method: "/get_profiles_who_voted",
-        //     print_no: 3,
+        //     new_follower_data,
         // });
         // console.log("");
 
         response.json({
             msg: "got all profiles for all_voters",
-            all_voters: all_voters,
+            all_voters: new_follower_data,
+            // all_voters: all_voters,
+            //new_follower_data: new_follower_data,
         });
     } catch (e) {
         response.json({

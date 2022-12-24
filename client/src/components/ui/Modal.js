@@ -74,7 +74,14 @@ function Modal({ children, close_modal, show_modal }) {
                             },
                         }}
                     >
-                        <motion.div className="modal_content">
+                        <motion.div
+                            className="modal_content"
+                            onClick={(e) => {
+                                // stopPropagation prevents the modal from closing
+                                // when clicking inside the children content
+                                e.stopPropagation();
+                            }}
+                        >
                             {children}
                         </motion.div>
                     </motion.div>
@@ -104,7 +111,6 @@ const useModal = () => {
     };
 
     const close_modal = () => {
-        console.log("closing modal");
         set_show_modal(false);
     };
 

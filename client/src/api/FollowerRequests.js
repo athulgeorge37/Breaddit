@@ -3,6 +3,22 @@ import { get_item_local_storage } from "../helper/local_storage";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/follower`;
 
+const follow_or_unfollow_account = async (account_id) => {
+    const response = await axios.post(
+        `${CUSTOM_ENDPOINT}/follow_or_unfollow_account`,
+        {
+            account_id: account_id,
+        },
+        {
+            headers: {
+                web_access_token: get_item_local_storage("web_access_token"),
+            },
+        }
+    );
+
+    return response.data;
+};
+
 const follow_account = async (username) => {
     const response = await axios.post(
         `${CUSTOM_ENDPOINT}/follow_account`,
@@ -62,6 +78,7 @@ const check_is_following_username = async (username) => {
 };
 
 export {
+    follow_or_unfollow_account,
     follow_account,
     unfollow_account,
     get_accounts_of_type_by_username,

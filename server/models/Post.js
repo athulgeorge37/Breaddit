@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: false,
                 allowNull: true,
             },
+            edited_time: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
             is_inappropriate: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
@@ -54,8 +58,9 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
-            timestamps: true,
-            createdAt: false,
+            // timestamps: true,
+            // createdAt: false,
+            timestamps: false,
         }
     );
 

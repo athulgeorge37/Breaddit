@@ -139,7 +139,8 @@ function DynamicPostCard({ post_id, location }) {
                                     <b>•</b>
                                 </>
                             )}
-                            {calculate_time_passed(post_details.updatedAt)} ago
+                            {calculate_time_passed(post_details.edited_time)}{" "}
+                            ago
                         </div>
                     </div>
                 </div>

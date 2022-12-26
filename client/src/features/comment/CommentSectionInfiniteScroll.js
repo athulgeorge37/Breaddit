@@ -7,7 +7,7 @@ import { useRef, useCallback } from "react";
 import Loading from "../../components/ui/Loading";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { get_all_comments_by_post_id } from "../../api/CommentRequests";
+import { get_all_comments } from "../../api/CommentRequests";
 
 const COMMENTS_PER_PAGE = 2;
 const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
@@ -27,12 +27,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
         // with the new sort_by, because we have put sort_by in the queryName array
         ["comments_of_post_id", post_id, sort_by],
         ({ pageParam = 0 }) =>
-            get_all_comments_by_post_id(
-                post_id,
-                COMMENTS_PER_PAGE,
-                pageParam,
-                sort_by
-            ),
+            get_all_comments(post_id, COMMENTS_PER_PAGE, pageParam, sort_by),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it

@@ -1,7 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-    // when adding any data into this db Table,
-    // it automatically generates an id, createdAt, updatedAt columns
-
     const Comment = sequelize.define(
         "Comment",
         {
@@ -12,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             edited: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
+                allowNull: false,
+            },
+            edited_time: {
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             is_reply: {
@@ -37,8 +38,7 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
-            timestamps: true,
-            createdAt: false,
+            timestamps: false,
         }
     );
 

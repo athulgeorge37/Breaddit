@@ -1,5 +1,6 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/comment`;
 
@@ -59,36 +60,27 @@ const edit_comment_or_reply = async (comment_id, updated_text) => {
     return response.data;
 };
 
-// const get_all_comments_by_post_id = async (post_id) => {
-//     const response = await axios.get(
-//         `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}`
-//     );
-
-//     // returns an object with a property called all_comments: list of comment objects
-//     return response.data;
-// };
-
-const get_all_comments_by_post_id = async (
-    post_id,
-    limit,
-    page_num,
-    filter_by
-) => {
+const get_all_comments = async (post_id, limit, page_num, filter_by) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all_comments/by_post_id/${post_id}/limit/${limit}/page_num/${page_num}/filter_by/${filter_by}`
+        `${CUSTOM_ENDPOINT}/get_all_comments?${query_string_generator({
+            post_id,
+            filter_by,
+            page_num,
+            limit,
+        })}`
     );
 
     return response.data;
 };
 
-const get_all_replies_by_comment_id = async (
-    comment_id,
-    limit,
-    page_num,
-    filter_by
-) => {
+const get_all_replies = async (comment_id, limit, page_num, filter_by) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all_replies/by_comment_id/${comment_id}/limit/${limit}/page_num/${page_num}/filter_by/${filter_by}`
+        `${CUSTOM_ENDPOINT}/get_all_replies?${query_string_generator({
+            comment_id,
+            filter_by,
+            page_num,
+            limit,
+        })}`
     );
 
     // returns an object with a property called all_replies: list of comment objects
@@ -111,7 +103,7 @@ export {
     create_comment_or_reply,
     delete_comment_or_reply,
     edit_comment_or_reply,
-    get_all_comments_by_post_id,
-    get_all_replies_by_comment_id,
+    get_all_comments,
+    get_all_replies,
     check_if_comments_or_replies_exist,
 };

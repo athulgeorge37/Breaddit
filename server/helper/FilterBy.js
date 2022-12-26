@@ -1,21 +1,21 @@
 const determine_order_by = (filter_by) => {
-    switch (filter_by) {
-        case "New":
-            return [["updatedAt", "DESC"]];
-        case "Old":
-            return [["updatedAt", "ASC"]];
-        case "Top":
+    switch (filter_by.toLowerCase()) {
+        case "new":
+            return [["edited_time", "DESC"]];
+        case "old":
+            return [["edited_time", "ASC"]];
+        case "top":
             return [
                 ["up_votes", "DESC"],
                 ["down_votes", "ASC"],
             ];
-        case "Bottom":
+        case "bottom":
             return [
                 ["down_votes", "DESC"],
                 ["up_votes", "ASC"],
             ];
         default:
-            return [["updatedAt", "DESC"]];
+            return [["edited_time", "DESC"]];
     }
 };
 

@@ -13,7 +13,7 @@ import Votes from "../vote/Votes";
 import AdjustableButton from "../../components/ui/AdjustableButton";
 
 import {
-    get_all_replies_by_comment_id,
+    get_all_replies,
     check_if_comments_or_replies_exist,
 } from "../../api/CommentRequests";
 
@@ -81,7 +81,7 @@ function StaticComment({ comment }) {
             return;
         }
 
-        const response = await get_all_replies_by_comment_id(comment.id);
+        const response = await get_all_replies(comment.id);
 
         // console.log("initialising all replies")
         if (response.error) {

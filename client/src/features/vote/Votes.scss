@@ -95,6 +95,10 @@
   
 
     .up_arrow {
+        .up_vote {
+            @include green-filter_color;
+        }
+
         padding-right: 0;
         &:hover .up_vote{
             @include green-filter_color;
@@ -111,7 +115,7 @@
 
     .down_arrow {
         .down_vote {
-            // @include red-filter_color;
+            @include red-filter_color;
             transform: rotate(180deg);
         }
 

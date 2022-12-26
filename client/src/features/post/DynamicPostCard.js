@@ -49,9 +49,7 @@ function DynamicPostCard({ post_id, location }) {
         },
         {
             onSuccess: (data) => {
-                const post_details_data = data.post_details;
-
-                set_post_details(post_details_data);
+                set_post_details(data.post_details);
             },
         }
     );
@@ -71,6 +69,7 @@ function DynamicPostCard({ post_id, location }) {
     });
 
     useEffect(() => {
+        // opening modal if the last page that routed here required it
         if (location.state?.open_modal === true) {
             open_modal();
         }

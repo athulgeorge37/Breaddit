@@ -10,7 +10,7 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // rest api request imports
 import { delete_post, edit_post } from "../../api/PostRequests";
-import { get_all_comments_by_post_id } from "../../api/CommentRequests";
+import { get_all_comments } from "../../api/CommentRequests";
 import { check_if_comments_or_replies_exist } from "../../api/CommentRequests";
 
 // ui component imports
@@ -85,7 +85,7 @@ function Post({ post_details, remove_post_from_list }, ref) {
         }
 
         set_loading_comments(true);
-        const response = await get_all_comments_by_post_id(post_details.id);
+        const response = await get_all_comments(post_details.id);
 
         // console.log("initialising all comments")
         if (response.error) {

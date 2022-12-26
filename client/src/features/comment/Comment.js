@@ -155,7 +155,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         <b>•</b>
                                     </>
                                 )}
-                                {calculate_time_passed(comment.updatedAt)} ago
+                                {calculate_time_passed(comment.edited_time)} ago
                             </div>
                         </div>
                         {comment.author_details.username ===

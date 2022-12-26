@@ -5,7 +5,7 @@ import "./StaticPost.scss";
 import { useEffect, useRef, useState } from "react";
 
 // rest api request imports
-import { get_all_comments_by_post_id } from "../../api/CommentRequests";
+import { get_all_comments } from "../../api/CommentRequests";
 
 // component imports
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
@@ -59,7 +59,7 @@ function StaticPost({ post_details }) {
             return;
         }
 
-        const response = await get_all_comments_by_post_id(post_details.id);
+        const response = await get_all_comments(post_details.id);
 
         // console.log("initialising all comments")
         if (response.error) {

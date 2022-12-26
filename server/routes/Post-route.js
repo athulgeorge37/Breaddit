@@ -205,6 +205,7 @@ router.post("/create_post", validate_request, async (request, response) => {
             image: post_details.image,
             thread_id: post_details.thread_id,
             author_id: user_id,
+            edited: false,
             edited_time: new Date(),
         };
         // post_details.author_id = user_id;

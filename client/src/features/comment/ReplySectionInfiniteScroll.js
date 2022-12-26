@@ -1,7 +1,7 @@
 import "./ReplySectionInfiniteScroll.scss";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { get_all_replies_by_comment_id } from "../../api/CommentRequests";
+import { get_all_replies } from "../../api/CommentRequests";
 import Loading from "../../components/ui/Loading";
 import Comment from "./Comment";
 
@@ -18,12 +18,7 @@ function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
     } = useInfiniteQuery(
         ["replies_of_comment_id_and_post_id", comment_id, post_id, sort_by],
         ({ pageParam = 0 }) =>
-            get_all_replies_by_comment_id(
-                comment_id,
-                REPLIES_PER_PAGE,
-                pageParam,
-                sort_by
-            ),
+            get_all_replies(comment_id, REPLIES_PER_PAGE, pageParam, sort_by),
         {
             getNextPageParam: (lastPage, allPages) => {
                 // when the last page retrieved has no posts in it

@@ -54,7 +54,7 @@
                 }
     
                 .updated_at_time {
-                    color: rgb(135, 135, 135);
+                    color: $text-color-secondary;
                     b {
                         margin-left: 5px;
                         margin-right: 5px;
@@ -86,7 +86,7 @@
 
         .text_content {
             background-color: $background-color-secondary;
-            color: $white;
+            color: $text-color-primary;
 
             // calculate the entire value including padding , margin, border
             // that this div, and the votes div take

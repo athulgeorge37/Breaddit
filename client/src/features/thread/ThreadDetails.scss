@@ -61,9 +61,13 @@
             .description, .createdAt {
                 
                 span {
-                    color: rgb(135, 135, 135);
+                    color: $text-color-primary;
                 }
                 
+            }
+
+            p {
+                color: $text-color-secondary;
             }
         }
 

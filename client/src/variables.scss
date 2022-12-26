@@ -6,22 +6,7 @@
 // to use a specific variable 
 // write $variable-name
 
-$blue: #3f8afb;
-$black: #0d1117;  // 1e293b
-$light-grey: #21262d;
-$dark-grey: #161b22;
-$white: #c9d1d9;
-$red: #d70101;
-$green: #238636;
-
-// $blue: #1d4ed8;
-// $black: #111827;  // #1e293b = slate-800
-// $light-grey: #374151;
-// $dark-grey: #1f2937;
-// $white: #c9d1d9;
-// $red: #d70101;
-// $green: #238636;
-
+// dark mode colors
 $background-color-primary: #111827;   // new black
 $background-color-secondary: #1f2937;  // new dark grey
 $background-color-tertiary: #374151;  // new light grey
@@ -33,13 +18,20 @@ $blue: #3f8afb;         // old blue
 $red: #d70101;          // old red
 $green: #238636;        // old green
 
-// $blue: #1d4ed8;
-// $black: #cbd5e1;  // #1e293b = slate-800
-// $light-grey: white;
-// $dark-grey: white;
-// $white: #c9d1d9;
-// $red: #d70101;
-// $green: #238636;
+
+// light mode colors
+$background-color-primary: #cbd5e1;   // new black
+$background-color-secondary: #94a3b8;  // new dark grey
+$background-color-tertiary: #64748b;  // new light grey
+$text-color-primary: #1f2937;         // old white  
+$text-color-primary-inversed: white; 
+$text-color-secondary: #4b5563;  // new light grey
+$border-color: #64748b;  // new light grey
+$blue: #0284c7;         // old blue
+$red: #dc2626;          // old red
+$green: #059669;        // old green
+
+
 
 @mixin blue-filter_color {
     filter: invert(50%) sepia(28%) saturate(5232%) hue-rotate(199deg) brightness(98%) contrast(100%);
@@ -123,4 +115,10 @@ $text_editor_max_width: 100%;
 
 @mixin shadow {
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+}
+
+@mixin card-styles($color) {
+    background-color: $background-color-secondary;  
+    border:  1px solid $border-color;
+    border-radius: $default-border-radius;
 }

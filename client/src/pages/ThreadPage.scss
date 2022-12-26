@@ -97,7 +97,7 @@
         margin-top: 5px;
 
         button {
-            @include btn-styles($light-grey)
+            @include btn-styles($background-color-tertiary)
         }
 
         .active {
@@ -143,8 +143,8 @@
         gap: 10px;
         
         padding: $inner_padding;
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
+        background-color: $background-color-secondary;
+        border: 1px solid $border-color;
         border-radius: $default-border-radius;
         box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
     
@@ -156,7 +156,7 @@
         }
 
         .clear_btn {
-            @include btn-styles($light-grey);
+            @include btn-styles($background-color-tertiary);
         }
     
         .search_btn {

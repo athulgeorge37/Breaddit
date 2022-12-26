@@ -8,7 +8,7 @@
         width: 100%;
         padding: $inner-padding;
         border-collapse: collapse;
-        background-color: $dark-grey;
+        background-color: $background-color-secondary;
         
         border-radius: 12px 12px 0 0 ;
         
@@ -18,7 +18,7 @@
             th {
                 padding: 12px;
                 text-align: left;
-                border-bottom: 1px solid $light-grey;
+                border-bottom: 1px solid $border-color;
             }
         }
 

@@ -2,12 +2,12 @@
 
 
 .delete_post_modal {
-    background-color: $dark-grey;
+    background-color: $background-color-secondary;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     //z-index: 102;
 
     padding: calc(2*$inner-padding);
-    border: 1px solid $light-grey;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
 
     display: flex;
@@ -25,7 +25,7 @@
         gap: 10px;
 
         .cancel_btn {
-            @include btn-styles($light-grey);
+            @include btn-styles($background-color-tertiary);
         }
 
         .delete_btn {
@@ -38,8 +38,8 @@
 
 .DynamicPostCard {
     margin-bottom: calc(1.5 * $inner_padding);
-    background-color: $dark-grey;
-    border: 1px solid $light-grey;
+    background-color: $background-color-secondary;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
@@ -51,7 +51,7 @@
         align-items: center;
         // padding: $inner_padding 0 10px $inner_padding;
         padding: 0.5em;
-        border-bottom: 1px solid $light-grey;
+        border-bottom: 1px solid $border-color;
 
         .post_user {
             display: flex;
@@ -102,8 +102,8 @@
         }
 
         .text_content {
-            background-color: $dark-grey;
-            color: $white;
+            background-color: $background-color-secondary;
+            color: $text-color-primary;
 
             // calculate the entire value including padding , margin, border
             // that this div, and the votes div take
@@ -135,7 +135,7 @@
         padding: 0.5em;
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $light-grey;   
+        border-top: 1px solid $border-color;   
 
         .votes {
             margin-left: 10px;

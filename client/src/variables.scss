@@ -7,13 +7,39 @@
 // write $variable-name
 
 $blue: #3f8afb;
-$black: #0d1117;
+$black: #0d1117;  // 1e293b
 $light-grey: #21262d;
 $dark-grey: #161b22;
 $white: #c9d1d9;
 $red: #d70101;
 $green: #238636;
 
+// $blue: #1d4ed8;
+// $black: #111827;  // #1e293b = slate-800
+// $light-grey: #374151;
+// $dark-grey: #1f2937;
+// $white: #c9d1d9;
+// $red: #d70101;
+// $green: #238636;
+
+$background-color-primary: #111827;   // new black
+$background-color-secondary: #1f2937;  // new dark grey
+$background-color-tertiary: #374151;  // new light grey
+$text-color-primary: #c9d1d9;         // old white  
+$text-color-primary-inversed: black; 
+$text-color-secondary: #374151;  // new light grey
+$border-color: #374151;  // new light grey
+$blue: #3f8afb;         // old blue
+$red: #d70101;          // old red
+$green: #238636;        // old green
+
+// $blue: #1d4ed8;
+// $black: #cbd5e1;  // #1e293b = slate-800
+// $light-grey: white;
+// $dark-grey: white;
+// $white: #c9d1d9;
+// $red: #d70101;
+// $green: #238636;
 
 @mixin blue-filter_color {
     filter: invert(50%) sepia(28%) saturate(5232%) hue-rotate(199deg) brightness(98%) contrast(100%);
@@ -84,8 +110,8 @@ $text_editor_max_width: 100%;
     border: 1px solid $blue;
     outline: none;
     padding: 5px 12px;
-    background-color: $black;
-    color: $white;
+    background-color: $background-color-primary;
+    color: $text-color-primary;
     border-radius: $default-border-radius;
     font-size: 14px;
     line-height: 20px;

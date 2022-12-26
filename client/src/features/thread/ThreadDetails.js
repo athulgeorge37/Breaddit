@@ -24,7 +24,7 @@ function ThreadDetails() {
     const navigate = useNavigate();
 
     const thread_data = useQuery(
-        ["thread_details", thread_title],
+        ["thread_details", { thread_title }],
         () => {
             return get_thread_details(thread_title);
         },

@@ -3,7 +3,7 @@
 .Rule {
     background: none;
     border: none;
-    color: $white;
+    color: $text-color-primary;
     
 
     .title_and_chevron {
@@ -12,7 +12,7 @@
         align-items: center;
         gap: 10px;
         padding: $inner_padding;
-        border-top: 1px solid $light-grey;
+        border-top: 1px solid $border-color;
 
         .title {
             text-align: start;

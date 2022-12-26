@@ -5,7 +5,8 @@ nav {
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: $black;
+    // background-color: $black;
+    background-color: $background-color-primary;
 
     .nav_content {
         display: flex;
@@ -33,7 +34,7 @@ nav {
             .page_link {
                 margin: 0 10px;
                 text-decoration: none;
-                color: $white;
+                color: $text-color-primary;
             }
     
             .page_link:hover {

@@ -50,7 +50,7 @@
 
         
         .cancel_btn {
-            @include btn-styles($light-grey);
+            @include btn-styles($background-color-tertiary);
         }
         
         .save_btn {
@@ -89,7 +89,7 @@
     .place_holder_img {
         width: 500px;
         height: 200px;
-        background-color: $light-grey;
+        background-color: $background-color-tertiary;
         border-radius: $default-border-radius;
         
         margin-bottom: $inner_padding;
@@ -139,7 +139,7 @@
         gap: 10px;
 
         .cancel {
-            @include btn-styles($light-grey);
+            @include btn-styles($background-color-tertiary);
         }
 
         .add_rule {

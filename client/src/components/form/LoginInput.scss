@@ -3,7 +3,7 @@
 .login_input {
     display: flex;
     flex-direction: column;
-    color: $white;
+    color: $text-color-primary;
     font-size: 14px;
     margin-bottom: 16px;
 
@@ -34,7 +34,7 @@
             outline: none;
             border: none;
             background-color: $black;
-            color: $white;
+            color: $text-color-primary;
             font-size: 14px;
             line-height: 20px;
             padding: 0;

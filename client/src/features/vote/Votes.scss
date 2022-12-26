@@ -23,13 +23,13 @@
     .up_votes, .down_votes {
         background: none;
         border: none;
-        color: $white;
+        color: $text-color-primary;
         cursor: pointer;
         padding: 5px 10px;
         border-radius: $default-border-radius;
         
         &:hover {
-            background-color: $light-grey;
+            background-color: $background-color-tertiary;
         }
     }
 
@@ -53,7 +53,7 @@
             position: absolute;
             bottom: 125%;
             color: $black;
-            background-color: $white;
+            background-color: $text-color-primary;
             padding: 0.5em;
             border-radius: 6px;
             visibility: hidden;
@@ -65,7 +65,7 @@
                 height: 10px;
                 border-radius: 2px;
 
-                background-color: $white;
+                background-color: $text-color-primary;
                 top: 80%;
                 right: 45%;
                 transform: rotate(45deg);
@@ -134,11 +134,11 @@
 }
 
 .voter_list_modal {
-    background-color: $dark-grey;
+    background-color: $background-color-secondary;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 
     padding: calc(2*$inner-padding);
-    border: 1px solid $light-grey;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
 
     display: flex;
@@ -204,7 +204,7 @@
                 align-items: center;
                 justify-content: center;
                 padding: 10px;
-                background-color: $light-grey;
+                background-color: $background-color-tertiary;
                 border-radius: $default-border-radius;
             }
         }
@@ -217,7 +217,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: $light-grey;
+    background-color: $background-color-tertiary;
     border-radius: $default-border-radius;
     padding: 10px;
 
@@ -227,7 +227,7 @@
         
         
         .username {
-            @include btn-style-text($white);
+            @include btn-style-text($text-color-primary);
         }
     }
 

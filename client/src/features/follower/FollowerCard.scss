@@ -1,9 +1,9 @@
 @import "../../variables.scss";
 
 .FollowerCard {
-    border: 1px solid $light-grey;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
-    background-color: $dark-grey;
+    background-color: $background-color-secondary;
     padding: 16px;
 
     .header {
@@ -11,7 +11,7 @@
         justify-content: space-between;
         align-items: center;
         padding-bottom: 10px;
-        border-bottom: 1px solid $light-grey;
+        border-bottom: 1px solid $border-color;
 
         .heading {
             font-size: 20px;

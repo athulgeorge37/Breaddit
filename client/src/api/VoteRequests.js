@@ -22,15 +22,6 @@ const make_vote = async (vote_id, vote_type, up_vote) => {
     return response.data;
 };
 
-const get_vote_count = async (vote_id, vote_type) => {
-    // currently not being used
-    const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_vote_count/by_vote_id/${vote_id}/vote_type/${vote_type}`
-    );
-
-    return response.data;
-};
-
 const get_curr_user_vote = async (parent_id, parent_type) => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_curr_user_vote/by_parent_id/${parent_id}/parent_type/${parent_type}`,
@@ -69,9 +60,4 @@ const get_all_profile_who_voted = async (
     return response.data;
 };
 
-export {
-    make_vote,
-    get_vote_count,
-    get_curr_user_vote,
-    get_all_profile_who_voted,
-};
+export { make_vote, get_curr_user_vote, get_all_profile_who_voted };

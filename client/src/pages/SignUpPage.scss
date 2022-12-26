@@ -11,9 +11,9 @@
 
     .sign_up_card {
         width: 340px;
-        background-color: $dark-grey;
+        background-color: $background-color-secondary;
         padding: 16px;
-        border: 1px solid $light-grey;
+        border: 1px solid $border-color;
         border-radius: 6px;
 
         form {
@@ -60,7 +60,7 @@
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: $white !important;
+            -webkit-text-fill-color: $text-color-primary !important;
         }
 
         .submit_btn {

@@ -1,9 +1,9 @@
 @import "../../variables.scss";
 
 .edit_profile_page {
-    border: 1px solid $light-grey;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
-    background-color: $dark-grey;
+    background-color: $background-color-secondary;
     margin-bottom: 32px;
     padding: 1em;
     display: flex; 

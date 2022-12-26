@@ -5,13 +5,13 @@
 
     &:hover {
         cursor: pointer;
-        background-color: $light-grey;
+        background-color: $background-color-tertiary;
     }
 
     td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid $light-grey;
+        border-bottom: 1px solid $border-color;
     }
     
     

@@ -24,8 +24,8 @@
         gap: 10px;
         
         padding: $inner_padding;
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
+        background-color: $background-color-secondary;
+        border: 1px solid $border-color;
         border-radius: $default-border-radius;
         @include shadow;
 
@@ -40,8 +40,8 @@
                 width: 100%;
                 outline: none;
                 border: none;
-                background-color: $black;
-                color: $white;
+                background-color: $background-color-primary;
+                color: $text-color-primary;
                 font-size: 14px;    
                 line-height: 20px;
                 box-sizing: border-box;

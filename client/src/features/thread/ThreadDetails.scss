@@ -5,8 +5,8 @@
     
     .thread_details {
         margin-top: calc(2* $inner_padding);
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
+        background-color: $background-color-secondary;
+        border: 1px solid $border-color;
         @include shadow;
         // padding: $inner_padding;
         border-radius: $default-border-radius;
@@ -37,7 +37,7 @@
     
                 display: flex;
                 align-items: center;
-                background-color: $light-grey;
+                background-color: $background-color-tertiary;
                 border-radius: $default-border-radius;
     
                 @include shadow;
@@ -71,8 +71,8 @@
 
     .thread_rules {
         margin-top: calc(2* $inner_padding);
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
+        background-color: $background-color-secondary;
+        border: 1px solid $border-color;
         @include shadow;
         // padding: $inner_padding;
         border-radius: $default-border-radius;
@@ -90,8 +90,8 @@
 
     .creator_details {
         margin-top: calc(2* $inner_padding);
-        background-color: $dark-grey;
-        border: 1px solid $light-grey;
+        background-color: $background-color-secondary;
+        border: 1px solid $border-color;
         @include shadow;
         // padding: $inner_padding;
         border-radius: $default-border-radius;
@@ -103,7 +103,7 @@
 
         h3 {
             padding: $inner_padding;
-            border-bottom: 1px solid $light-grey;
+            border-bottom: 1px solid $border-color;
         }
 
         .profile_pic_and_username {
@@ -112,7 +112,7 @@
             padding: 10px $inner_padding ;
             background: none;
             border: none;
-            color: $white;
+            color: $text-color-primary;
 
             .username {
                 text-decoration: underline;

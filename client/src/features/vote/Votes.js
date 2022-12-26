@@ -44,13 +44,12 @@ function Votes({
     const { current_user } = useCurrentUser();
     const queryClient = useQueryClient();
 
+    const { open_modal, close_modal, show_modal } = useModal();
+    const [modal_vote_type, set_modal_vote_type] = useState(true);
+
     const [up_vote_count, set_up_vote_count] = useState(up_votes);
     const [down_vote_count, set_down_vote_count] = useState(down_votes);
     const [curr_user_vote, set_curr_user_vote] = useState(null);
-
-    const { open_modal, close_modal, show_modal } = useModal();
-
-    const [modal_vote_type, set_modal_vote_type] = useState(true);
 
     // curr user vote query
     useQuery(

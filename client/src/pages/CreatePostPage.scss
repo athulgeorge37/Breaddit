@@ -3,9 +3,9 @@
 .CreatePostPage {
     width: 50%;
 
-    background-color: $dark-grey;
+    background-color: $background-color-secondary;
     padding: $inner_padding;
-    border: 1px solid $light-grey;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
@@ -27,5 +27,5 @@
 
 
 .text_editor {
-    color: black;
+    color: $text-color-primary-inversed;
 }

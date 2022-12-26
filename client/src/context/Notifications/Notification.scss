@@ -1,8 +1,8 @@
 @import "../../variables.scss";
 
 .Notification {
-    background-color: $dark-grey;
-    border: 1px solid $light-grey;
+    background-color: $background-color-secondary;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
     overflow: hidden;
     margin-bottom: 16px;

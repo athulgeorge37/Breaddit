@@ -1,8 +1,8 @@
 @import "../../variables.scss";
 
 .CommentSectionInfiniteScroll {
-    background-color: $dark-grey;
-    border: 1px solid $light-grey;
+    background-color: $background-color-secondary;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
     margin-bottom: calc(1.5 * $inner_padding);
@@ -30,7 +30,7 @@
             gap: 10px;
 
             button {
-                @include btn-styles($light-grey)
+                @include btn-styles($background-color-tertiary)
             }
 
             .active {
@@ -46,7 +46,7 @@
         display: flex;
         justify-content: center;
         padding: 10px;
-        border-top: 1px solid $light-grey;
+        border-top: 1px solid $border-color;
 
     }
 }

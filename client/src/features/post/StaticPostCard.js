@@ -100,7 +100,13 @@ function StaticPostCard({ post_details }) {
                     current_user.username ? (
                         <>
                             <Button
-                                onClick={navigate_to_post_page}
+                                onClick={() => {
+                                    navigate(`/post/${post_details.id}`, {
+                                        state: {
+                                            edit_post: true,
+                                        },
+                                    });
+                                }}
                                 type="edit"
                                 span_text="Edit"
                                 img_name="edit"

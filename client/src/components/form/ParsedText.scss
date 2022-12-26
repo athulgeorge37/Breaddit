@@ -54,9 +54,9 @@
         padding: 1em;
         // color: hsl(0, 0%, 20.8%);
         // background-color: #eeeeee;
-        background-color: $black;
-        color: $white;
-        border: 1px solid $light-grey;
+        background-color: $background-color-primary;
+        color: $text-color-primary;
+        border: 1px solid $border-color;
         // border: 1px solid hsl(0, 0%, 77%);
         border-radius: 2px;
         text-align: left;
@@ -97,7 +97,7 @@
             position: absolute;
             // background-color: #757575;
             // color: white;
-            background-color: $light-grey;
+            background-color: $background-color-tertiary;
             font-family: Helvetica,Arial,Tahoma,Verdana,Sans-Serif;
             font-size: 10px;
             line-height: 16px;

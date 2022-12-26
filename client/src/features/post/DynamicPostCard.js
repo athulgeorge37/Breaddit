@@ -72,6 +72,8 @@ function DynamicPostCard({ post_id, location }) {
         // opening modal if the last page that routed here required it
         if (location.state?.open_modal === true) {
             open_modal();
+        } else if (location.state?.edit_post === true) {
+            set_edit_btn_active(true);
         }
     }, []);
 

@@ -5,8 +5,8 @@
     flex-direction: column;
 
     padding: $inner_padding;
-    background-color: $dark-grey;
-    border: 1px solid $light-grey;
+    background-color: $background-color-secondary;
+    border: 1px solid $border-color;
     border-radius: $default-border-radius;
     @include shadow;
 
@@ -21,7 +21,7 @@
         margin-bottom: 16px;
 
         button {
-            @include btn-styles($light-grey);
+            @include btn-styles($background-color-tertiary);
             width: 25%;
             display: flex;
             justify-content: center;

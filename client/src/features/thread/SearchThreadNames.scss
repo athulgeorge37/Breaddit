@@ -11,8 +11,8 @@
             width: 100%;
             outline: none;
             border: none;
-            background-color: $black;
-            color: $white;
+            background-color: $background-color-primary;
+            color: $text-color-primary;
             font-size: 14px;
             line-height: 20px;
             // box-sizing: border-box;
@@ -43,7 +43,7 @@
 
     .thread_name_list {
         margin-top: 10px;
-        border: 1px solid $light-grey;
+        border: 1px solid $border-color;
         border-radius: $default-border-radius;
         @include shadow;
         display: flex;
@@ -52,8 +52,8 @@
         
         .thread_name {
             padding: 10px 12px;
-            background-color: $dark-grey;
-            color: white;
+            background-color: $background-color-secondary;
+            color: $text-color-primary;
             border: none;
             display: flex;
 
@@ -66,11 +66,11 @@
             img {
                 width: 40px;
                 border-radius: $default-border-radius;
-                border: 1px solid $light-grey;
+                border: 1px solid $border-color;
             }
 
             &:hover {
-                background-color: $light-grey;
+                background-color: $background-color-tertiary;
                 cursor: pointer;
             }
         }

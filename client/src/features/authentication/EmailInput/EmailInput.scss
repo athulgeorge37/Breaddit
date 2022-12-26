@@ -34,16 +34,16 @@
         border: 1px solid $blue;
         padding: 5px 12px;
 
-        background-color: $black;
-        color: $white;
+        background-color: $background-color-primary;
+        color: $text-color-primary;
         border-radius: $default-border-radius;
 
 
         input {
             outline: none;
             border: none;
-            background-color: $black;
-            color: $white;
+            background-color: $background-color-primary;
+            color: $text-color-primary;
             font-size: 14px;
             line-height: 20px;
             width: 100%;
@@ -57,7 +57,7 @@
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: $white !important;
+            -webkit-text-fill-color: $text-color-primary !important;
         }
 
     }

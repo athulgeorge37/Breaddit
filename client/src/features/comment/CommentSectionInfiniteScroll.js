@@ -25,7 +25,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
     } = useInfiniteQuery(
         // whenever sort_by changes, react query will refetch the comments
         // with the new sort_by, because we have put sort_by in the queryName array
-        ["comments_of_post_id", post_id, sort_by],
+        ["comments_section", { post_id, sort_by }],
         ({ pageParam = 0 }) =>
             get_all_comments(post_id, COMMENTS_PER_PAGE, pageParam, sort_by),
         {

@@ -32,7 +32,7 @@ const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function PostsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
 
     const [thread_title, set_thread_title] = useState(
         searchParams.get("thread") ?? null

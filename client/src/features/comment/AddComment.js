@@ -46,14 +46,13 @@ function AddComment({
             onSuccess: () => {
                 if (comment_type === "comment") {
                     queryClient.invalidateQueries([
-                        "comments_of_post_id",
-                        post_id,
+                        "comments_section",
+                        { post_id },
                     ]);
                 } else if (comment_type === "reply") {
                     queryClient.invalidateQueries([
-                        "replies_of_comment_id_and_post_id",
-                        parent_comment_id,
-                        post_id,
+                        "replies_section",
+                        { comment_id: parent_comment_id, post_id },
                     ]);
                 }
 
@@ -77,15 +76,14 @@ function AddComment({
                 if (comment_type === "comment") {
                     // console.log({ comment_type, post_id });
                     queryClient.invalidateQueries([
-                        "comments_of_post_id",
-                        post_id,
+                        "comments_section",
+                        { post_id },
                     ]);
                 } else if (comment_type === "reply") {
                     // console.log({ comment_type, post_id, parent_comment_id });
                     queryClient.invalidateQueries([
-                        "replies_of_comment_id_and_post_id",
-                        parent_comment_id,
-                        post_id,
+                        "replies_section",
+                        { comment_id: parent_comment_id, post_id },
                     ]);
                 }
 

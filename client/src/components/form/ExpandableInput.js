@@ -30,28 +30,29 @@ function ExpandableInput({
         <div className="ExpandableInput">
             {initial_content === undefined ? (
                 <textarea
-                    autoFocus
                     className="expandable_input"
                     placeholder={placeholder}
-                    rows={1}
                     onChange={handle_resize}
+                    rows={1}
+                    autoFocus
                 />
             ) : (
                 <>
                     {initial_content === "" ? (
                         <textarea
                             className="expandable_input"
-                            rows={1}
-                            onChange={handle_resize}
-                            value=""
                             placeholder={placeholder}
+                            onChange={handle_resize}
+                            autoFocus
+                            rows={1}
+                            value=""
                         />
                     ) : (
                         <textarea
                             className="expandable_input"
-                            rows={1}
-                            onChange={handle_resize}
                             defaultValue={initial_content}
+                            onChange={handle_resize}
+                            rows={1}
                         />
                     )}
                 </>

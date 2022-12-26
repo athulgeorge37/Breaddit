@@ -43,7 +43,7 @@ function DynamicPostCard({ post_id, location }) {
     const [edit_btn_active, set_edit_btn_active] = useState(false);
 
     const { loading: post_details_loading } = useQuery(
-        ["post_content", post_id],
+        ["post_content", { post_id }],
         () => {
             return get_post_by_id(post_id);
         },

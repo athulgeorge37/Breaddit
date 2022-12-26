@@ -56,7 +56,7 @@ function Votes({
     useQuery(
         // using vote_id to distinguish vote count for comments,
         // since all vote_id will be differenet
-        ["curr_user_vote", vote_type, vote_id],
+        ["curr_user_vote", { vote_type, vote_id }],
         () => get_curr_user_vote(vote_id, vote_type),
         {
             onSuccess: (data) => {
@@ -78,8 +78,7 @@ function Votes({
                 console.log(data);
                 queryClient.invalidateQueries([
                     "curr_user_vote",
-                    vote_type,
-                    vote_id,
+                    { vote_type, vote_id },
                 ]);
             },
         }

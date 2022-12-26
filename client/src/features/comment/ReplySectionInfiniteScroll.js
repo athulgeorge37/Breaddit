@@ -16,7 +16,7 @@ function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
         status,
         error,
     } = useInfiniteQuery(
-        ["replies_of_comment_id_and_post_id", comment_id, post_id, sort_by],
+        ["replies_section", { comment_id, post_id, sort_by }],
         ({ pageParam = 0 }) =>
             get_all_replies(comment_id, REPLIES_PER_PAGE, pageParam, sort_by),
         {

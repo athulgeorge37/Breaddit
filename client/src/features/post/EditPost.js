@@ -94,7 +94,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 queryClient.invalidateQueries(["posts"]);
                 queryClient.invalidateQueries([
                     "post_content",
-                    post_details.id,
+                    { post_id: post_details.id },
                 ]);
 
                 handle_cancel_edit_mode();

@@ -36,7 +36,12 @@ function StaticPostCard({ post_details }) {
     };
 
     useQuery(
-        ["post_has_comments", post_details.id],
+        [
+            "post_has_comments",
+            {
+                post_id: post_details.id,
+            },
+        ],
         () => {
             return check_if_comments_or_replies_exist(
                 "comment",

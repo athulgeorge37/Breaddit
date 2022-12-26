@@ -49,7 +49,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
         useState(false);
 
     useQuery(
-        ["comment_has_replies", comment.id],
+        ["comment_has_replies", { comment_id: comment.id }],
         () => {
             return check_if_comments_or_replies_exist("reply", comment.id);
         },
@@ -71,15 +71,14 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 if (comment.is_reply) {
                     if (parent_comment_id !== null) {
                         queryClient.invalidateQueries([
-                            "replies_of_comment_id_and_post_id",
-                            parent_comment_id,
-                            post_id,
+                            "replies_section",
+                            { comment_id: parent_comment_id, post_id },
                         ]);
                     }
                 } else {
                     queryClient.invalidateQueries([
-                        "comments_of_post_id",
-                        post_id,
+                        "comments_section",
+                        { post_id },
                     ]);
                 }
                 add_notification(

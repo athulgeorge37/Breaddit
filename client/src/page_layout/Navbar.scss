@@ -27,6 +27,17 @@ nav {
                 margin-right: 10px;
             }
         }
+
+        .dark_mode_toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .moon_icon, .sun_icon {
+                width: 25px;
+                height: 25px;
+            }
+        }
     
         .links {
             display: flex;

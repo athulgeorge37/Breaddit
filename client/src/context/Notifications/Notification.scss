@@ -1,9 +1,9 @@
 @import "../../variables.scss";
 
 .Notification {
-    background-color: $background-color-secondary;
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
     overflow: hidden;
     margin-bottom: 16px;
     width: 250px;
@@ -15,7 +15,7 @@
         justify-content: space-between;
         align-items: center;
         .message {
-            padding: $inner-padding;
+            padding: $padding;
     
         }
 
@@ -28,16 +28,16 @@
     
 
     .expiration_bar {
-        background-color: $blue;
+        background-color: var(--blue);
         height: 5px;
     }
     
     .SUCCESS {
-        background-color: $green;
+        background-color: var(--green);
     }
 
     .ERROR {
-        background-color: $red;
+        background-color: var(--red);
     }
 }
 

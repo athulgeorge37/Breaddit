@@ -6,19 +6,19 @@
     
     table {
         width: 100%;
-        padding: $inner-padding;
+        padding: $padding;
         border-collapse: collapse;
-        background-color: $background-color-secondary;
+        background-color: var(--background-color-secondary);
         
         border-radius: 12px 12px 0 0 ;
         
         thead {
-            background-color: $blue;
+            background-color: var(--blue);
             
             th {
                 padding: 12px;
                 text-align: left;
-                border-bottom: 1px solid $border-color;
+                border-bottom: 1px solid var(--border-color);
             }
         }
 
@@ -29,7 +29,7 @@
         margin-top: 16px;
 
         button {
-            @include btn-styles($blue);
+            @include btn-styles(var(--blue));
             margin-right: 10px;
             display: flex;
             justify-content: center;
@@ -37,7 +37,7 @@
         }
 
         .active {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
 
         .page_counts {

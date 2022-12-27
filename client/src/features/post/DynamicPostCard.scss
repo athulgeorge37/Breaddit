@@ -2,13 +2,13 @@
 
 
 .delete_post_modal {
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     //z-index: 102;
 
-    padding: calc(2*$inner-padding);
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    padding: calc(2*$padding);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     display: flex;
     flex-direction: column;
@@ -25,11 +25,11 @@
         gap: 10px;
 
         .cancel_btn {
-            @include btn-styles($background-color-tertiary);
+            @include btn-styles(var(--background-color-tertiary));
         }
 
         .delete_btn {
-            @include btn-styles($red);
+            @include btn-styles(var(--red));
         }
     }
     
@@ -37,10 +37,10 @@
 
 
 .DynamicPostCard {
-    margin-bottom: calc(1.5 * $inner_padding);
-    background-color: $background-color-secondary;
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    margin-bottom: calc(1.5 * $padding);
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
     
@@ -49,9 +49,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        // padding: $inner_padding 0 10px $inner_padding;
+        // padding: $padding 0 10px $padding;
         padding: 0.5em;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid var(--border-color);
 
         .post_user {
             display: flex;
@@ -64,14 +64,14 @@
                     cursor: pointer;
     
                     .username {
-                        color: $blue;
+                        color: var(--blue);
                         text-decoration: underline;
                         
                     }
                 }
     
                 .updated_at_time {
-                    color: $text-color-secondary;
+                    color: var(--text-color-secondary);
                     b {
                         margin-left: 5px;
                         margin-right: 5px;
@@ -102,8 +102,8 @@
         }
 
         .text_content {
-            background-color: $background-color-secondary;
-            color: $text-color-primary;
+            background-color: var(--background-color-secondary);
+            color: var(--text-color-primary);
 
             // calculate the entire value including padding , margin, border
             // that this div, and the votes div take
@@ -135,7 +135,7 @@
         padding: 0.5em;
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $border-color;   
+        border-top: 1px solid var(--border-color);   
 
         .votes {
             margin-left: 10px;

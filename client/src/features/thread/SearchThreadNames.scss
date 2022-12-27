@@ -11,8 +11,8 @@
             width: 100%;
             outline: none;
             border: none;
-            background-color: $background-color-primary;
-            color: $text-color-primary;
+            background-color: var(--background-color-primary);
+            color: var(--text-color-primary);
             font-size: 14px;
             line-height: 20px;
             // box-sizing: border-box;
@@ -22,7 +22,7 @@
         .cancel_icon {
             display: flex;
             align-items: center;
-            color: $red;
+            color: var(--red);
             cursor: pointer;
             background: none;
             border: none;
@@ -43,8 +43,8 @@
 
     .thread_name_list {
         margin-top: 10px;
-        border: 1px solid $border-color;
-        border-radius: $default-border-radius;
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
         @include shadow;
         display: flex;
         flex-direction: column;
@@ -52,8 +52,8 @@
         
         .thread_name {
             padding: 10px 12px;
-            background-color: $background-color-secondary;
-            color: $text-color-primary;
+            background-color: var(--background-color-secondary);
+            color: var(--text-color-primary);
             border: none;
             display: flex;
 
@@ -65,12 +65,12 @@
 
             img {
                 width: 40px;
-                border-radius: $default-border-radius;
-                border: 1px solid $border-color;
+                border-radius: $border-radius;
+                border: 1px solid var(--border-color);
             }
 
             &:hover {
-                background-color: $background-color-tertiary;
+                background-color: var(--background-color-tertiary);
                 cursor: pointer;
             }
         }

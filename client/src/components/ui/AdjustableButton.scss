@@ -1,17 +1,17 @@
 @import "../../variables.scss"; 
 
 .active_btn {
-    @include btn-styles($red);
+    @include btn-styles(var(--red));
 }
 
 .inactive_btn {
-    @include btn-styles($blue);
+    @include btn-styles(var(--blue));
 }
 
 .active_btn_text {
-    @include btn-style-text($red);
+    @include btn-style-text(var(--red));
 }
 
 .inactive_btn_text {
-    @include btn-style-text($blue);
+    @include btn-style-text(var(--blue));
 }

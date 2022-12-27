@@ -4,12 +4,12 @@
     width: 100%;
     
     .thread_details {
-        margin-top: calc(2* $inner_padding);
-        background-color: $background-color-secondary;
-        border: 1px solid $border-color;
+        margin-top: calc(2* $padding);
+        background-color: var(--background-color-secondary);
+        border: 1px solid var(--border-color);
         @include shadow;
-        // padding: $inner_padding;
-        border-radius: $default-border-radius;
+        // padding: $padding;
+        border-radius: $border-radius;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -20,12 +20,12 @@
         .theme {
             position: relative;
             height: 200px;
-            border-radius: $default-border-radius;
+            border-radius: $border-radius;
             border-bottom-left-radius: 0%;
             border-bottom-right-radius: 0%;
             background-size: cover;
 
-            margin-bottom: calc(4 * $inner_padding);
+            margin-bottom: calc(4 * $padding);
 
             .title_and_logo {
                 position: absolute;
@@ -37,8 +37,8 @@
     
                 display: flex;
                 align-items: center;
-                background-color: $background-color-tertiary;
-                border-radius: $default-border-radius;
+                background-color: var(--background-color-tertiary);
+                border-radius: $border-radius;
     
                 @include shadow;
                 width: fit-content;
@@ -46,13 +46,13 @@
                 box-sizing: border-box;
 
                 .title {
-                    margin-right: $inner_padding;
+                    margin-right: $padding;
                 }
             }
         }
 
         .content {
-            padding: $inner_padding;
+            padding: $padding;
             padding-top: 0;
             display: flex;
             flex-direction: column;
@@ -61,25 +61,25 @@
             .description, .createdAt {
                 
                 span {
-                    color: $text-color-primary;
+                    color: var(--text-color-primary);
                 }
                 
             }
 
             p {
-                color: $text-color-secondary;
+                color: var(--text-color-secondary);
             }
         }
 
     }
 
     .thread_rules {
-        margin-top: calc(2* $inner_padding);
-        background-color: $background-color-secondary;
-        border: 1px solid $border-color;
+        margin-top: calc(2* $padding);
+        background-color: var(--background-color-secondary);
+        border: 1px solid var(--border-color);
         @include shadow;
-        // padding: $inner_padding;
-        border-radius: $default-border-radius;
+        // padding: $padding;
+        border-radius: $border-radius;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -87,18 +87,18 @@
 
 
         h3 {
-            padding: $inner_padding;
+            padding: $padding;
         }
 
     }
 
     .creator_details {
-        margin-top: calc(2* $inner_padding);
-        background-color: $background-color-secondary;
-        border: 1px solid $border-color;
+        margin-top: calc(2* $padding);
+        background-color: var(--background-color-secondary);
+        border: 1px solid var(--border-color);
         @include shadow;
-        // padding: $inner_padding;
-        border-radius: $default-border-radius;
+        // padding: $padding;
+        border-radius: $border-radius;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -106,21 +106,21 @@
 
 
         h3 {
-            padding: $inner_padding;
-            border-bottom: 1px solid $border-color;
+            padding: $padding;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .profile_pic_and_username {
             display: flex;
             align-items: center;
-            padding: 10px $inner_padding ;
+            padding: 10px $padding ;
             background: none;
             border: none;
-            color: $text-color-primary;
+            color: var(--text-color-primary);
 
             .username {
                 text-decoration: underline;
-                color: $blue;
+                color: var(--blue);
             }
             cursor: pointer;
             

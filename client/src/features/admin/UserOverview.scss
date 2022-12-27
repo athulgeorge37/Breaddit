@@ -13,11 +13,11 @@
 
         .is_online {
             margin-top: 10px;
-            color: $red;
+            color: var(--red);
         }
 
         .online {
-            color: $green;
+            color: var(--green);
         }
 
         .profile_picture_div {
@@ -36,12 +36,12 @@
 
 
         button {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
             margin-top: 16px;
         }
 
         .banned {
-            @include btn-styles($red);
+            @include btn-styles(var(--red));
         }
     }
 
@@ -57,9 +57,9 @@
             
             .selection_card {
                 margin-right: 16px;
-                padding: 10px $inner-padding;
-                background-color: $background-color-tertiary;
-                border-radius: $default-border-radius;
+                padding: 10px $padding;
+                background-color: var(--background-color-tertiary);
+                border-radius: $border-radius;
 
                 &:hover {
                     cursor: pointer;
@@ -67,7 +67,7 @@
             }
 
             .active {
-                background-color: $blue;
+                background-color: var(--blue);
             }
         }
     }

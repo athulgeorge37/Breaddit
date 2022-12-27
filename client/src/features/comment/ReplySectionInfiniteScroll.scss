@@ -8,12 +8,12 @@
         justify-content: center;
         align-items: center;
         padding: 0.5em;
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border-color);
         padding-right: 0;
 
 
         button {
-            @include btn-style-text($blue);
+            @include btn-style-text(var(--blue));
         }
     }
 }

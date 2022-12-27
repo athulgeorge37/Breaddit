@@ -2,12 +2,12 @@
 
 
 .delete_comment_modal {
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 
-    padding: calc(2*$inner-padding);
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    padding: calc(2*$padding);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     display: flex;
     flex-direction: column;
@@ -24,11 +24,11 @@
         gap: 10px;
 
         .cancel_btn {
-            @include btn-styles($background-color-tertiary);
+            @include btn-styles(var(--background-color-tertiary));
         }
 
         .delete_btn {
-            @include btn-styles($red);
+            @include btn-styles(var(--red));
         }
     }
     
@@ -39,7 +39,7 @@
     padding: 0.5em;
     // padding-bottom: 0;
     // border-bottom: 1px solid $light-grey;
-    border-top: 1px solid $border-color;
+    border-top: 1px solid var(--border-color);
 
 
     .comment_content_container {
@@ -69,14 +69,14 @@
                         cursor: pointer;
     
                         .username {
-                            color: $blue;
+                            color: var(--blue);
                             text-decoration: underline;
                             
                         }
                     }
 
                     .updated_at_time {
-                        color: $text-color-secondary;
+                        color: var(--text-color-secondary);
                         b {
                             margin-left: 5px;
                             margin-right: 5px;
@@ -89,7 +89,7 @@
                     gap: 10px;
 
                     .delete_comment_btn {
-                        @include btn-style-text($red);
+                        @include btn-style-text(var(--red));
                         margin-left: 10px;
                     }
                 }

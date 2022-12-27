@@ -1,7 +1,7 @@
 @import "../../../variables.scss";
 
 .UsernameInput {
-    margin-bottom: $inner_padding;
+    margin-bottom: $padding;
     display: flex;
     flex-direction: column;
 
@@ -11,26 +11,26 @@
     }
 
     .username_input:focus-within {
-        border: 1px solid $blue;
+        border: 1px solid var(--blue);
     }
 
     .username_input {
         display: flex;
         justify-content: space-between;
         
-        border: 1px solid $blue;
+        border: 1px solid var(--blue);
         padding: 5px 12px;
 
-        background-color: $background-color-primary;
-        color: $text-color-primary;
-        border-radius: $default-border-radius;
+        background-color: var(--background-color-primary);
+        color: var(--text-color-primary);
+        border-radius: $border-radius;
 
 
         input {
             outline: none;
             border: none;
-            background-color: $background-color-primary;
-            color: $text-color-primary;
+            background-color: var(--background-color-primary);
+            color: var(--text-color-primary);
             font-size: 14px;
             line-height: 20px;
             width: 100%;
@@ -43,24 +43,24 @@
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: $text-color-primary !important;
+            -webkit-text-fill-color: var(--text-color-primary) !important;
         }
 
     }
 
     .errors {
         margin-top: 4px;
-        color: $blue;
+        color: var(--blue);
 
         ul {
             margin-left: 16px;
 
             .valid{
-                color: $green;
+                color: var(--green);
             }
     
             .invalid {
-                color: $red;
+                color: var(--red);
             }
         }
     }

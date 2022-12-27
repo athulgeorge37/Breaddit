@@ -3,10 +3,10 @@
 .CreatePostPage {
     width: 50%;
 
-    background-color: $background-color-secondary;
-    padding: $inner_padding;
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-secondary);
+    padding: $padding;
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
 
@@ -16,7 +16,7 @@
         gap: 5px;
         
          button {
-            @include btn-style-text($blue);
+            @include btn-style-text(var(--blue));
 
             &:hover {
                 text-decoration: underline;
@@ -27,5 +27,5 @@
 
 
 .text_editor {
-    color: $text-color-primary-inversed;
+    color: var(--text-color-primary-inversed);
 }

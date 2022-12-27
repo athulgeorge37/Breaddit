@@ -6,14 +6,14 @@
     align-items: center;
     
     h2 {
-        margin-bottom: $inner_padding;
+        margin-bottom: $padding;
     }
 
     .sign_up_card {
         width: 340px;
-        background-color: $background-color-secondary;
+        background-color: var(--background-color-secondary);
         padding: 16px;
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
         border-radius: 6px;
 
         form {
@@ -28,18 +28,18 @@
             }
     
             .verify_btn_green {
-                @include btn-styles($green);
+                @include btn-styles(var(--green));
                 width: 100%;
                 margin-bottom: 4px;
             }
 
             .verify_btn_red {
-                @include btn-styles($red);
+                @include btn-styles(var(--red));
                 width: 100%;
                 margin-bottom: 4px;
             }
             .verfication_error {
-                color: $red;
+                color: var(--red);
             }
 
 
@@ -49,7 +49,7 @@
 
         .verify_input {
             @include input-styles;
-            border: 1px solid $blue;
+            border: 1px solid var(--blue);
             margin: 16px 0;
             width: calc(340px - 32px);
         }
@@ -60,11 +60,11 @@
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: $text-color-primary !important;
+            -webkit-text-fill-color: var(--text-color-primary) !important;
         }
 
         .submit_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
             width: 100%;
         }
 

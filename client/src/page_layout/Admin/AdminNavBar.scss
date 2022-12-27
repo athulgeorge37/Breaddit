@@ -14,7 +14,7 @@
         .page_link {
             margin: 0 10px;
             text-decoration: none;
-            color: $text-color-primary;
+            color: var(--text-color-primary);
             margin-bottom: 10px;
         }
     
@@ -23,7 +23,7 @@
         }
     
         .active {
-            border-bottom: 1px solid $blue;
+            border-bottom: 1px solid var(--blue);
         }
     }
 }

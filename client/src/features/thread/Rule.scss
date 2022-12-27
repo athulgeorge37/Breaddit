@@ -3,7 +3,7 @@
 .Rule {
     background: none;
     border: none;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
     
 
     .title_and_chevron {
@@ -11,8 +11,8 @@
         justify-content: space-between;
         align-items: center;
         gap: 10px;
-        padding: $inner_padding;
-        border-top: 1px solid $border-color;
+        padding: $padding;
+        border-top: 1px solid var(--border-color);
 
         .title {
             text-align: start;
@@ -26,7 +26,7 @@
     }
 
     .description {
-        padding: $inner_padding;
+        padding: $padding;
         padding-top: 0;
         text-align: start;
         

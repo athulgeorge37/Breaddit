@@ -1,9 +1,9 @@
 @import "../../variables.scss";
 
 .FollowerCard {
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
-    background-color: $background-color-secondary;
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+    background-color: var(--background-color-secondary);
     padding: 16px;
 
     .header {
@@ -11,7 +11,7 @@
         justify-content: space-between;
         align-items: center;
         padding-bottom: 10px;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid var(--border-color);
 
         .heading {
             font-size: 20px;
@@ -44,7 +44,7 @@
             }
 
             button {
-                @include btn-styles($green);
+                @include btn-styles(var(--green));
                 font-size: 12px;
                 line-height: 12px;
 

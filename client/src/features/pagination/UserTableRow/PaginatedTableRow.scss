@@ -5,13 +5,13 @@
 
     &:hover {
         cursor: pointer;
-        background-color: $background-color-tertiary;
+        background-color: var(--background-color-tertiary);
     }
 
     td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid var(--border-color);
     }
     
     
@@ -23,19 +23,19 @@
     
     .is_banned{
         button {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
     
         .banned {
-            @include btn-styles($red)
+            @include btn-styles(var(--red))
         }
     }
 
     .is_online {
-        color: $red;
+        color: var(--red);
     }
 
     .active {
-        color: $green;
+        color: var(--green);
     }
 }

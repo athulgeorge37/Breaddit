@@ -6,30 +6,21 @@
 // to use a specific variable 
 // write $variable-name
 
-// dark mode colors
-$background-color-primary: #111827;   // new black
-$background-color-secondary: #1f2937;  // new dark grey
-$background-color-tertiary: #374151;  // new light grey
-$text-color-primary: #c9d1d9;         // old white  
-$text-color-primary-inversed: black; 
-$text-color-secondary: #374151;  // new light grey
-$border-color: #374151;  // new light grey
-$blue: #3f8afb;         // old blue
-$red: #d70101;          // old red
-$green: #238636;        // old green
+#root {
+    // attaching to root so we can use these properties for dark mode toggling
+    // actual colors are handled by DarkModeProvider.js
 
-
-// light mode colors
-$background-color-primary: #cbd5e1;   // new black
-$background-color-secondary: #94a3b8;  // new dark grey
-$background-color-tertiary: #64748b;  // new light grey
-$text-color-primary: #1f2937;         // old white  
-$text-color-primary-inversed: white; 
-$text-color-secondary: #4b5563;  // new light grey
-$border-color: #64748b;  // new light grey
-$blue: #0284c7;         // old blue
-$red: #dc2626;          // old red
-$green: #059669;        // old green
+    $background-color-primary: #111827;   // new black
+    $background-color-secondary: #1f2937;  // new dark grey
+    $background-color-tertiary: #374151;  // new light grey
+    $text-color-primary: #c9d1d9;         // old white  
+    $text-color-primary-inversed: black; 
+    $text-color-secondary: #64748b;  // new light grey
+    $border-color: #374151;  // new light grey
+    $blue: #3f8afb;         // old blue
+    $red: #d70101;          // old red
+    $green: #238636;        // old green
+}
 
 
 
@@ -62,12 +53,10 @@ $green: #059669;        // old green
 }
 
 
-$inner_padding: 16px;
-$default-border-radius: 6px;
-
-$text_margin_left: 10px;
-// $text_editor_max_width: 855px;
-$text_editor_max_width: 100%;
+$padding: 16px;
+$border-radius: 6px;
+$text-margin-left: 10px;
+$text-editor-max-width: 100%;
 
 
 // to use mixins, 
@@ -99,17 +88,17 @@ $text_editor_max_width: 100%;
 }
 
 @mixin input_styles {
-    border: 1px solid $blue;
+    border: 1px solid var(--blue);
     outline: none;
     padding: 5px 12px;
-    background-color: $background-color-primary;
-    color: $text-color-primary;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-primary);
+    color: var(--text-color-primary);
+    border-radius: $border-radius;
     font-size: 14px;
     line-height: 20px;
 
     &:focus {
-        border: 1px solid $blue;
+        border: 1px solid var(--blue);
     }
 }
 
@@ -118,7 +107,7 @@ $text_editor_max_width: 100%;
 }
 
 @mixin card-styles($color) {
-    background-color: $background-color-secondary;  
-    border:  1px solid $border-color;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-secondary);  
+    border:  1px solid var(--border-color);
+    border-radius: $border-radius;
 }

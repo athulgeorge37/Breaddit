@@ -7,7 +7,7 @@
     justify-content: space-between;
    
     padding: 0.5em;
-    border-top: 1px solid $border-color;
+    border-top: 1px solid var(--border-color);
 
     .add_comment_pic_and_input {
         display: flex;
@@ -22,7 +22,7 @@
             
         
             .error_msg {
-                color: $red;
+                color: var(--red);
                 margin-top: 0.5em;
                 margin-left: 0.5em;
             }
@@ -31,7 +31,7 @@
     }
 
     .comment_btn {
-        @include btn-styles($green);
+        @include btn-styles(var(--green));
         height: 32px;
         margin-left: 10px;
         margin-top: 3px;
@@ -45,7 +45,7 @@
         width: 100%;
 
         button {
-            @include btn-style-text($blue);
+            @include btn-style-text(var(--blue));
             text-decoration: underline;
         }
     }

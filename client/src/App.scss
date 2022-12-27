@@ -6,25 +6,25 @@
 
 ::-webkit-scrollbar-thumb {
     // background-color: $light-grey;
-    background-color: $background-color-tertiary;
+    background-color: var(--background-color-tertiary);
     border-radius: 100vw;
 
     &:hover {
         //background-color: #262b34;
-        background-color: $background-color-tertiary;
+        background-color: var(--background-color-tertiary);
     }
 } 
 
 ::-webkit-scrollbar-track {
     // background-color: $dark-grey;
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
 }
 
-@supports (scrollbar-color: $background-color-tertiary $background-color-tertiary) {
+@supports (scrollbar-color: var(--background-color-tertiary) var(--background-color-tertiary)) {
     // so it looks somewhat similar of firfox
     * {
         // scrollbar-color: $light-grey $dark-grey;
-        scrollbar-color: $background-color-tertiary $background-color-tertiary;
+        scrollbar-color: var(--background-color-tertiary) var(--background-color-tertiary);
         scrollbar-width: thin;
     }
 }
@@ -35,10 +35,10 @@
 }
 
 body {
-    // color: $white;
-    // background-color: $black;
-    color: $text-color-primary;
-    background-color: $background-color-primary;
+    // color: var(--text-color-primary);
+    // background-color: var(--background-color-primary);
+    color: var(--text-color-primary);
+    background-color: var(--background-color-primary);
 }
 
 .App {

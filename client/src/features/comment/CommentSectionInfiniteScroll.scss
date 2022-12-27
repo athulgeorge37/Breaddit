@@ -1,11 +1,11 @@
 @import "../../variables.scss";
 
 .CommentSectionInfiniteScroll {
-    background-color: $background-color-secondary;
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
-    margin-bottom: calc(1.5 * $inner_padding);
+    margin-bottom: calc(1.5 * $padding);
 
 
     .header {
@@ -30,11 +30,11 @@
             gap: 10px;
 
             button {
-                @include btn-styles($background-color-tertiary)
+                @include btn-styles(var(--background-color-tertiary))
             }
 
             .active {
-                @include btn-styles($blue)
+                @include btn-styles(var(--blue))
             }
         }
     }
@@ -46,7 +46,7 @@
         display: flex;
         justify-content: center;
         padding: 10px;
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border-color);
 
     }
 }

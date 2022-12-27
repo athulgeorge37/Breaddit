@@ -6,7 +6,7 @@ nav {
     top: 0;
     z-index: 100;
     // background-color: $black;
-    background-color: $background-color-primary;
+    background-color: var(--background-color-primary);
 
     .nav_content {
         display: flex;
@@ -34,7 +34,7 @@ nav {
             .page_link {
                 margin: 0 10px;
                 text-decoration: none;
-                color: $text-color-primary;
+                color: var(--text-color-primary);
             }
     
             .page_link:hover {
@@ -42,7 +42,7 @@ nav {
             }
     
             .active {
-                border-bottom: 1px solid $blue;
+                border-bottom: 1px solid var(--blue);
             }
         }
     }

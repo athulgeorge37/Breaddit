@@ -9,21 +9,21 @@
 
 
 .PostContent {
-    margin-bottom: calc(2 * $inner_padding);
-    background-color: $background-color-secondary;
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    margin-bottom: calc(2 * $padding);
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
 
 
     .delete_modal_div {
         .cancel {
-            @include btn-styles($blue);
+            @include btn-styles(var(--blue));
         }
 
         .delete_post_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
     }
    
@@ -32,9 +32,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        // padding: $inner_padding 0 10px $inner_padding;
+        // padding: $padding 0 10px $padding;
         padding: 0.5em;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid var(--border-color);
 
         .post_user {
             display: flex;
@@ -62,8 +62,8 @@
         }
 
         .text_content {
-            background-color: $background-color-secondary;
-            color: $text-color-primary;
+            background-color: var(--background-color-secondary);
+            color: var(--text-color-primary);
 
             // calculate the entire value including padding , margin, border
             // that this div, and the votes div take
@@ -95,7 +95,7 @@
         padding: 0.5em;
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $border-color;   
+        border-top: 1px solid var(--border-color);   
 
         .votes {
             margin-left: 10px;

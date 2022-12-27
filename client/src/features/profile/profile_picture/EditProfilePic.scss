@@ -52,7 +52,7 @@
        
 
         .edit_profile_picture {
-            @include btn-styles($blue);
+            @include btn-styles(var(--blue));
             margin-top: 1em;
             display: flex;
             justify-content: center;

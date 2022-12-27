@@ -4,16 +4,16 @@
     // for sticky filter options panel
     // width: calc(100% + 10px);
     // padding-top: 5px;
-    // padding-bottom: calc(2 * $inner_padding);
+    // padding-bottom: calc(2 * $padding);
     // position: sticky;
     // z-index: 95;
     // top: 59.5px;
     // background-color: $black;
 
     width: 100%;
-    // padding-bottom: calc(2 * $inner_padding);
+    // padding-bottom: calc(2 * $padding);
     // background-color: $black;
-    margin-bottom: calc(2 * $inner_padding);
+    margin-bottom: calc(2 * $padding);
 
 
 
@@ -23,10 +23,10 @@
         justify-content: space-between;
         gap: 10px;
         
-        padding: $inner_padding;
-        background-color: $background-color-secondary;
-        border: 1px solid $border-color;
-        border-radius: $default-border-radius;
+        padding: $padding;
+        background-color: var(--background-color-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
         @include shadow;
 
 
@@ -40,8 +40,8 @@
                 width: 100%;
                 outline: none;
                 border: none;
-                background-color: $background-color-primary;
-                color: $text-color-primary;
+                background-color: var(--background-color-primary);
+                color: var(--text-color-primary);
                 font-size: 14px;    
                 line-height: 20px;
                 box-sizing: border-box;
@@ -51,7 +51,7 @@
             .cancel_icon {
                 display: flex;
                 align-items: center;
-                color: $red;
+                color: var(--red);
                 cursor: pointer;
                 background: none;
                 border: none;
@@ -65,7 +65,7 @@
 
     
         .search_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
     }
 }

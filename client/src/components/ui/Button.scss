@@ -19,7 +19,7 @@ button {
 
 .save_btn {
     // background-color: $dark-grey;
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
     border: none;
     cursor: pointer;   
 
@@ -48,9 +48,9 @@ button {
         position: absolute;
         bottom: 125%;
         right: -20%;
-        // color: $text-color-primary;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        // color: var(--text-color-primary);
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -63,8 +63,8 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            // color: $text-color-primary;
-            background-color: $text-color-primary;
+            // color: var(--text-color-primary);
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 38%;
             transform: rotate(45deg);
@@ -77,7 +77,7 @@ button {
 }
 
 .cancel_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -105,10 +105,10 @@ button {
         position: absolute;
         bottom: 125%;
         right: -58%;
-        // color: $background-color-primary;
-        // color: $text-color-primary;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        // color: var(--background-color-primary);
+        // color: var(--text-color-primary);
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -121,8 +121,8 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
-            // color: $text-color-primary;
+            background-color: var(--text-color-primary);
+            // color: var(--text-color-primary);
             top: 80%;
             right: 40%;
             transform: rotate(45deg);
@@ -135,7 +135,7 @@ button {
 }
 
 .delete_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -163,8 +163,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -50%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -177,7 +177,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 40%;
             transform: rotate(45deg);
@@ -191,7 +191,7 @@ button {
 }
 
 .edit_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -219,8 +219,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -5px;
-        color: $text-color-primary-inversed;
-        background-color: $text-color-primary;
+        color: var(--text-color-primary-inversed);
+        background-color: var(--text-color-primary);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -233,7 +233,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 35%;
             transform: rotate(45deg);
@@ -246,7 +246,7 @@ button {
 }
 
 .award_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -274,8 +274,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -30%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -288,7 +288,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 40%;
             transform: rotate(45deg);
@@ -301,7 +301,7 @@ button {
 }
 
 .add_comment_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -335,8 +335,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -90%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -348,7 +348,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 45%;
             transform: rotate(45deg);
@@ -370,7 +370,7 @@ button {
 }
 
 .comments_section_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -402,8 +402,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -140%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -416,7 +416,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 45%;
             transform: rotate(45deg);
@@ -429,7 +429,7 @@ button {
 }
 
 .add_img_btn {   
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -458,8 +458,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -140%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -472,7 +472,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 45%;
             transform: rotate(45deg);
@@ -485,7 +485,7 @@ button {
 }
 
 .remove_img_btn {
-    background-color:  $background-color-secondary;
+    background-color:  var(--background-color-secondary);
     // background-color: $dark-grey;
     border: none;
     cursor: pointer;   
@@ -513,8 +513,8 @@ button {
         position: absolute;
         bottom: 125%;
         right: -140%;
-        background-color: $text-color-primary;
-        color: $text-color-primary-inversed;
+        background-color: var(--text-color-primary);
+        color: var(--text-color-primary-inversed);
         padding: 0.5em;
         border-radius: 6px;
         visibility: hidden;
@@ -527,7 +527,7 @@ button {
             height: 10px;
             border-radius: 2px;
 
-            background-color: $text-color-primary;
+            background-color: var(--text-color-primary);
             top: 80%;
             right: 45%;
             transform: rotate(45deg);

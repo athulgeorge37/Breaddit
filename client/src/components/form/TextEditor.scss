@@ -2,15 +2,15 @@
 
 
 .text_editor {
-    width: calc(100% - (2 * $inner_padding));
-    margin-bottom: $inner_padding;
+    width: calc(100% - (2 * $padding));
+    margin-bottom: $padding;
 
 
     .ck-content {
         // anything here will affect the styles of the text editor content
 
         ul, ol {
-            margin-left: calc(2 * $text_margin_left);
+            margin-left: calc(2 * $text-margin-left);
         }
 
         pre {

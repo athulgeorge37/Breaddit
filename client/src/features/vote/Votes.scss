@@ -6,11 +6,11 @@
 //     svg {
 //         width: 25px;
 //         height: 25px;
-//         // background-color: $blue;
+//         // background-color: var(--blue);
    
 
 //         // .s0 {
-//         //     fill: $green;
+//         //     fill: var(--green);
 //         // }
 //     }
 // }
@@ -23,13 +23,13 @@
     .up_votes, .down_votes {
         background: none;
         border: none;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         cursor: pointer;
         padding: 5px 10px;
-        border-radius: $default-border-radius;
+        border-radius: $border-radius;
         
         &:hover {
-            background-color: $background-color-tertiary;
+            background-color: var(--background-color-tertiary);
         }
     }
 
@@ -52,8 +52,8 @@
         span {
             position: absolute;
             bottom: 125%;
-            color: $background-color-primary;
-            background-color: $text-color-primary;
+            color: var(--background-color-primary);
+            background-color: var(--text-color-primary);
             padding: 0.5em;
             border-radius: 6px;
             visibility: hidden;
@@ -65,7 +65,7 @@
                 height: 10px;
                 border-radius: 2px;
 
-                background-color: $text-color-primary;
+                background-color: var(--text-color-primary);
                 top: 80%;
                 right: 45%;
                 transform: rotate(45deg);
@@ -134,12 +134,12 @@
 }
 
 .voter_list_modal {
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 
-    padding: calc(2*$inner-padding);
-    border: 1px solid $border-color;
-    border-radius: $default-border-radius;
+    padding: calc(2*$padding);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
 
     display: flex;
     flex-direction: column;
@@ -167,7 +167,7 @@
         .close_modal_btn {
             display: flex;
             align-items: center;
-            color: $red;
+            color: var(--red);
             cursor: pointer;
             background: none;
             border: none;
@@ -204,8 +204,8 @@
                 align-items: center;
                 justify-content: center;
                 padding: 10px;
-                background-color: $background-color-tertiary;
-                border-radius: $default-border-radius;
+                background-color: var(--background-color-tertiary);
+                border-radius: $border-radius;
             }
         }
     }
@@ -217,8 +217,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: $background-color-tertiary;
-    border-radius: $default-border-radius;
+    background-color: var(--background-color-tertiary);
+    border-radius: $border-radius;
     padding: 10px;
 
     .left_side {
@@ -227,7 +227,7 @@
         
         
         .username {
-            @include btn-style-text($text-color-primary);
+            @include btn-style-text(var(--text-color-primary));
         }
     }
 
@@ -236,16 +236,16 @@
         width: 30%
     }
     .following_btn {
-        @include btn-styles($green);
+        @include btn-styles(var(--green));
     }
 
     .follower_btn {
-        @include btn-styles($blue);
+        @include btn-styles(var(--blue));
     }
 
     &:hover {
         .username {    
-            color: $blue;
+            color: var(--blue);
             text-decoration: underline;
         }
     }

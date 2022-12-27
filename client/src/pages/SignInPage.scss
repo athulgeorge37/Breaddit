@@ -8,14 +8,14 @@
 
     .sign_in_card {
         width: 340px;
-        background-color: $background-color-secondary;
+        background-color: var(--background-color-secondary);
         padding: 16px;
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
         border-radius: 6px;
-        margin-top: $inner_padding;
+        margin-top: $padding;
 
         .link {
-            color: $blue;
+            color: var(--blue);
             display: flex;
             justify-content: space-between;
 
@@ -28,7 +28,7 @@
         }
 
         .submit_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
             width: 100%;
             margin-bottom: 4px;
         }
@@ -37,7 +37,7 @@
 
     .errors {
         margin-top: 4px;
-        color: $red;
+        color: var(--red);
     }
 
     

@@ -68,10 +68,10 @@
                 display: flex;
                 justify-content: center;
                 width: 100%;
-                background-color: $background-color-secondary;
+                background-color: var(--background-color-secondary);
                 padding: 10px;
-                border: 1px solid $border-color;
-                border-radius: $default-border-radius;
+                border: 1px solid var(--border-color);
+                border-radius: $border-radius;
             }
         }
     }

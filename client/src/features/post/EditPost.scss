@@ -7,7 +7,7 @@
     width: 100%;
     
     .post_title {
-        width: calc(100% - (2 * $inner_padding));
+        width: calc(100% - (2 * $padding));
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -31,13 +31,13 @@
 
    
     .image_display {
-        width: calc(100% - (2 * $inner_padding));
+        width: calc(100% - (2 * $padding));
         display: flex;
         justify-content: center;
         margin-bottom: 16px;
         img {
             width: 100%;
-            border-radius: $default-border-radius;
+            border-radius: $border-radius;
         }
     }
 
@@ -50,29 +50,29 @@
     }     
     
     .edit_post_buttons {
-        width: calc(100% - (2 * $inner_padding));
+        width: calc(100% - (2 * $padding));
         display: flex;
         gap: 10px;
         justify-content: end;
 
         .cancel_btn {
-            @include btn-styles($background-color-tertiary);
+            @include btn-styles(var(--background-color-tertiary));
         }
 
         .save_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
 
         .create_post_btn {
-            @include btn-styles($green);
+            @include btn-styles(var(--green));
         }
     }
 }
 
 
 .AddThread {
-    width: calc(100% - (2 * $inner_padding));
-    margin: $inner_padding 0;
+    width: calc(100% - (2 * $padding));
+    margin: $padding 0;
     .find_a_thread {
         display: flex;
         flex-direction: column;
@@ -86,8 +86,8 @@
                 width: 100%;
                 outline: none;
                 border: none;
-                background-color: $background-color-primary;
-                color: $text-color-primary;
+                background-color: var(--background-color-primary);
+                color: var(--text-color-primary);
                 font-size: 14px;
                 line-height: 20px;
                 // box-sizing: border-box;
@@ -97,7 +97,7 @@
             .cancel_icon {
                 display: flex;
                 align-items: center;
-                color: $red;
+                color: var(--red);
                 cursor: pointer;
                 background: none;
                 border: none;
@@ -118,8 +118,8 @@
 
         .thread_name_list {
             margin-top: 10px;
-            border: 1px solid $border-color;
-            border-radius: $default-border-radius;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius;
             @include shadow;
             display: flex;
             flex-direction: column;
@@ -127,7 +127,7 @@
             
             .thread_name {
                 padding: 10px 12px;
-                background-color: $background-color-secondary;
+                background-color: var(--background-color-secondary);
                 color: white;
                 border: none;
                 display: flex;
@@ -140,12 +140,12 @@
 
                 img {
                     width: 40px;
-                    border-radius: $default-border-radius;
-                    border: 1px solid $border-color;
+                    border-radius: $border-radius;
+                    border: 1px solid var(--border-color);
                 }
 
                 &:hover {
-                    background-color: $background-color-tertiary;
+                    background-color: var(--background-color-tertiary);
                     cursor: pointer;
                 }
             }
@@ -155,9 +155,9 @@
     .current_thread {
         display: flex;
         justify-content: space-between;
-        background-color: $background-color-tertiary;
+        background-color: var(--background-color-tertiary);
         padding: 10px;
-        border-radius: $default-border-radius;
+        border-radius: $border-radius;
         @include shadow;
         box-sizing: border-box;
 
@@ -169,8 +169,8 @@
             .logo {
                 width: 50px;
                 height: 50px;
-                border-radius: $default-border-radius;
-                border: 1px solid $border-color;
+                border-radius: $border-radius;
+                border: 1px solid var(--border-color);
             }
 
             .title {
@@ -179,7 +179,7 @@
         }
 
         .remove_thread {
-            @include btn-style-text($red);
+            @include btn-style-text(var(--red));
             margin-right: 10px;
         }
     }

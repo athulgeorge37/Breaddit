@@ -21,9 +21,9 @@
         margin-left: 2em;
 
         .read_only_profile_card {
-            border: 1px solid $border-color;
-            border-radius: $default-border-radius;
-            background-color: $background-color-secondary;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius;
+            background-color: var(--background-color-secondary);
             margin-bottom: 32px;
             display: flex; 
         
@@ -93,10 +93,10 @@
                         font-size: large;
         
                         padding: 5px;
-                        border-radius: $default-border-radius;
+                        border-radius: $border-radius;
                     
                         &:hover {
-                            background-color: $background-color-tertiary;
+                            background-color: var(--background-color-tertiary);
                             cursor: pointer;
                         }
                     }
@@ -112,7 +112,7 @@
                     justify-content: space-evenly;
         
                     button {
-                        @include btn-styles($blue);
+                        @include btn-styles(var(--blue));
                     }
                 }
             }    

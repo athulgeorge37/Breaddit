@@ -5,12 +5,12 @@
     .date_btns {
         margin-top: 16px;
         button {
-            @include btn-style-text($blue);
+            @include btn-style-text(var(--blue));
             margin-right: 10px;
         }
 
         .active {
-            @include btn-style-text($green);
+            @include btn-style-text(var(--green));
         }
     }
 
@@ -21,7 +21,7 @@
 
         background-color: white;
         padding: 16px;
-        border-radius: $default-border-radius;
+        border-radius: $border-radius;
         margin-top: 10px;
     }
 

@@ -9,10 +9,10 @@
 
 
 // .PostContent {
-//     margin-bottom: calc(2 * $inner_padding);
+//     margin-bottom: calc(2 * $padding);
 //     background-color: $dark-grey;
 //     border: 1px solid $light-grey;
-//     border-radius: $default-border-radius;
+//     border-radius: $border-radius;
 
 //     box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
    
@@ -21,7 +21,7 @@
 //         display: flex;
 //         justify-content: space-between;
 //         align-items: center;
-//         // padding: $inner_padding 0 10px $inner_padding;
+//         // padding: $padding 0 10px $padding;
 //         padding: 0.5em;
 //         border-bottom: 1px solid $light-grey;
 
@@ -38,11 +38,11 @@
 
 //         .awards {
 //             button {
-//                 @include btn-styles($green);
+//                 @include btn-styles(var(--green));
 //             }
 
 //             .inappropriate {
-//                 @include btn-styles($red);
+//                 @include btn-styles(var(--red));
 //             }
 //         }
         
@@ -112,7 +112,7 @@
 //                     margin-bottom: 10px;
 //                     img {
 //                         width: 100%;
-//                         border-radius: $default-border-radius;
+//                         border-radius: $border-radius;
 //                     }
 //                 }
 

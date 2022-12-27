@@ -3,7 +3,7 @@
 .display_text {
     width: 100%;
     overflow-wrap: break-word;
-    background-color: $background-color-secondary;
+    background-color: var(--background-color-secondary);
 
 
     .Title {
@@ -20,7 +20,7 @@
            
             // aspect-ratio: 16/9;
             // object-fit: cover;
-            border-radius: $default-border-radius;
+            border-radius: $border-radius;
 
         
             @media screen and (min-width: 1300px) {

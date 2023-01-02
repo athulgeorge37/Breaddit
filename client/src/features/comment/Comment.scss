@@ -86,11 +86,19 @@
 
                 .edit_and_delete_btns {
                     display: flex;
-                    gap: 10px;
+                    justify-content: center;
 
-                    .delete_comment_btn {
-                        @include btn-style-text(var(--red));
-                        margin-left: 10px;
+        
+                    .edit_btn,  .delete_btn {
+                        @include btn-styles(var(--background-color-secondary));
+                        padding: 5px;
+                        transition: none;
+                        
+                        .edit_icon, .cancel_icon, .delete_icon {
+                            width: 20px;
+                            height: 20px;
+                            color: var(--text-color-secondary);
+                        }
                     }
                 }
             }
@@ -154,7 +162,28 @@
         
             .reply_btns {
                 display: flex;
-                gap: 10px;
+
+            
+
+                display: flex;
+                justify-content: center;
+
+    
+                .add_comment_btn,  .comment_btn {
+                    @include btn-styles(var(--background-color-secondary));
+                    padding: 5px;
+                    transition: none;
+                    cursor: pointer;
+
+                    display: flex;
+                    align-items: center;
+                    
+                    .add_comment_icon, .cancel_icon, .comment_icon {
+                        width: 20px;
+                        height: 20px;
+                        color: var(--text-color-secondary);
+                    }
+                }
 
                 .view_replies_btn {
                     margin-left: 10px;

@@ -14,6 +14,7 @@ import { check_if_comments_or_replies_exist } from "../../api/CommentRequests";
 // ui
 import Button from "../../components/ui/Button";
 import ResizablePanel from "../../components/ui/ResizablePanel";
+import ToolTip from "../../components/ui/ToolTip";
 
 // components
 import PostContent from "./PostContent";
@@ -22,7 +23,6 @@ import Votes from "../vote/Votes";
 
 // helper
 import { calculate_time_passed } from "../../helper/time";
-import ToolTip from "../../components/ui/ToolTip";
 
 function StaticPostCard({ post_details }) {
     const navigate = useNavigate();
@@ -129,32 +129,34 @@ function StaticPostCard({ post_details }) {
                                 </button>
                             </ToolTip>
 
-                            <button
-                                type="button"
-                                className="delete_btn"
-                                onClick={() => {
-                                    navigate(`/post/${post_details.id}`, {
-                                        state: {
-                                            open_modal: true,
-                                        },
-                                    });
-                                }}
-                            >
-                                <svg
-                                    className="delete_icon"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
+                            <ToolTip text="Delete Post">
+                                <button
+                                    type="button"
+                                    className="delete_btn"
+                                    onClick={() => {
+                                        navigate(`/post/${post_details.id}`, {
+                                            state: {
+                                                open_modal: true,
+                                            },
+                                        });
+                                    }}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    />
-                                </svg>
-                            </button>
+                                    <svg
+                                        className="delete_icon"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
+                                </button>
+                            </ToolTip>
                         </>
                     ) : (
                         <Button
@@ -200,44 +202,14 @@ function StaticPostCard({ post_details }) {
                 )}
 
                 <div className="both_comments_btns">
-                    {/* <Button
-                        onClick={navigate_to_post_page}
-                        type="add_comment"
-                        span_text="Add Comment"
-                        span_class_name="add_comment_span"
-                        img_name="add_comment"
-                        margin_right={true}
-                        active={false}
-                    /> */}
-                    <button
-                        className="add_comment_btn"
-                        type="button"
-                        onClick={navigate_to_post_page}
-                    >
-                        <svg
-                            className="add_comment_icon"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                    </button>
-
-                    {allow_comments_section_btn === true && (
+                    <ToolTip text="Add Comment">
                         <button
-                            className="comment_btn"
+                            className="add_comment_btn"
                             type="button"
                             onClick={navigate_to_post_page}
                         >
                             <svg
-                                className="comment_icon"
+                                className="add_comment_icon"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -247,10 +219,35 @@ function StaticPostCard({ post_details }) {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
                         </button>
+                    </ToolTip>
+
+                    {allow_comments_section_btn === true && (
+                        <ToolTip text="Comments Section">
+                            <button
+                                className="comment_btn"
+                                type="button"
+                                onClick={navigate_to_post_page}
+                            >
+                                <svg
+                                    className="comment_icon"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                    />
+                                </svg>
+                            </button>
+                        </ToolTip>
                     )}
                 </div>
             </div>

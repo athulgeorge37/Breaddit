@@ -9,8 +9,9 @@ import { usePostsPage } from "../../pages/PostsPage";
 // api
 import { get_thread_names } from "../../api/ThreadRequests";
 
-// components
+// ui
 import Loading from "../../components/ui/Loading";
+import ToolTip from "../../components/ui/ToolTip";
 
 function SearchThreadNames() {
     const {
@@ -79,27 +80,29 @@ function SearchThreadNames() {
                     onChange={(e) => handle_search_term_change(e.target.value)}
                 />
                 {thread_title !== null && (
-                    <button
-                        className="cancel_icon"
-                        onClick={() => {
-                            handle_search_term_change("");
-                            input_ref.current.focus();
-                        }}
-                    >
-                        <svg
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
+                    <ToolTip text={"Remove Thread"}>
+                        <button
+                            className="cancel_icon"
+                            onClick={() => {
+                                handle_search_term_change("");
+                                input_ref.current.focus();
+                            }}
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
+                            <svg
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </ToolTip>
                 )}
             </div>
 

@@ -27,9 +27,10 @@
         cursor: pointer;
         padding: 5px 10px;
         border-radius: $border-radius;
+        background-color: var(--background-color-secondary);
         
         &:hover {
-            background-color: var(--background-color-tertiary);
+            filter: brightness(1.2);
         }
     }
 
@@ -49,36 +50,6 @@
 
         position: relative;
 
-        span {
-            position: absolute;
-            bottom: 125%;
-            color: var(--background-color-primary);
-            background-color: var(--text-color-primary);
-            padding: 0.5em;
-            border-radius: 6px;
-            visibility: hidden;
-            
-            &::before {
-                position: absolute;
-                content: '';
-                width: 10px;
-                height: 10px;
-                border-radius: 2px;
-
-                background-color: var(--text-color-primary);
-                top: 80%;
-                right: 45%;
-                transform: rotate(45deg);
-            }
-        }
-
-        &:hover span {
-            visibility: visible;
-        }
-        
-        // &:hover {
-        //     background-color: $light-grey;
-        // }
 
         .vote_img {
             width: 25px;
@@ -105,10 +76,7 @@
         }
 
 
-        span {
-            width: 50px;
-            right: -65%;
-        }
+    
     
     }
 
@@ -124,9 +92,6 @@
         }
 
 
-        span {
-            width: 65px;
-        }
     }
 
 

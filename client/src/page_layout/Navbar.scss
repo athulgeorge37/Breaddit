@@ -33,6 +33,13 @@ nav {
             align-items: center;
             gap: 10px;
 
+            button {
+                background: none;
+                border: none;
+                color: var(--text-color-primary);
+                cursor: pointer;
+            }
+
             .moon_icon, .sun_icon {
                 width: 25px;
                 height: 25px;

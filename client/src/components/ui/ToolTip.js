@@ -1,11 +1,107 @@
 import "./ToolTip.scss";
 import Portal from "../Portal";
-import { cloneElement, useState, useRef } from "react";
+import { cloneElement, useState, useRef, useEffect } from "react";
 
-// from https://www.youtube.com/watch?v=bnuw7pqWUGA
+// mostly from https://www.youtube.com/watch?v=bnuw7pqWUGA
 
-// find_new_placement = position
+function ToolTip({
+    children,
+    text,
+    placement = "top",
+    spacing = 10,
+    disabled = false,
+}) {
+    // text (string) = text for the tooltip
+    // spacing (number) = distance in px u want the tooltip from the child
+    // placement (string) = one of "top", "bottom", "left", "right"
+    //              which is where the tooltip will be placed relative the the child
+    // disabled (boolean) = if we want to show the tooltip or not depending on other factors
+
+    // tooltip will be positioned relative to the screen top and left px value
+
+    // using ref to prevent this object from changing when rerendering
+    const position_ref = useRef({ x: 0, y: 0 });
+    const tooltip_ref = useRef();
+
+    const [show_tooltip, set_show_tooltip] = useState(false);
+
+    const handle_mouse_over = (e) => {
+        // using the event from hover to get
+        // the child elements position to calculate tooltip position
+        position_ref.current = calculate_position(
+            e.currentTarget,
+            tooltip_ref,
+            placement,
+            spacing
+        );
+
+        set_show_tooltip(true);
+    };
+
+    const handle_mouse_leave = () => {
+        set_show_tooltip(false);
+    };
+
+    useEffect(() => {
+        // removing tooltip when user scrolls and tooltip is focused from tabbing
+        const handleScroll = (event) => {
+            // console.log("window.scrollY", window.scrollY);
+            handle_mouse_leave();
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    if (disabled || text === "" || text === undefined) {
+        // not creating portal, or cloning element if tooltip is disabled
+        return <>{children}</>;
+    }
+
+    // clone element allows us to pass props to the
+    // element passed in the first param
+    // in our case it is the children element
+    return (
+        <>
+            {cloneElement(children, {
+                onMouseOver: handle_mouse_over,
+                onMouseLeave: handle_mouse_leave,
+
+                // allowing tooltip to be shown when tabbing through page
+                onFocus: handle_mouse_over,
+                onBlur: handle_mouse_leave,
+                onScroll: handle_mouse_leave,
+            })}
+            <Portal>
+                <span
+                    key={text}
+                    className="ToolTip"
+                    ref={tooltip_ref}
+                    style={{
+                        opacity: show_tooltip ? "1" : "0",
+                        top: `${position_ref.current.y}px`,
+                        left: `${position_ref.current.x}px`,
+
+                        transitionDelay: ` ${
+                            show_tooltip ? 0.01 : 0.02
+                        }s !important`,
+                        transformOrigin: `${negate_placement(placement)}`,
+                        transform: `scale(${show_tooltip ? 1 : 0.7})`,
+                    }}
+                >
+                    {text}
+                </span>
+            </Portal>
+        </>
+    );
+}
+
 const negate_placement = (placement) => {
+    // gives the opposite of the passed in placement
+
     switch (placement) {
         case "top":
             return "bottom";
@@ -32,14 +128,14 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
     // to calculate and return an object of x and y, to position the tooltip
     // child_element = the children passed in the ToolTip component    = el
     let recursive_count = 0;
-    // position = pt
-    // refers to the x and y coordinates the tooltip will use
+
+    // refers to the x and y coordinates the
+    // tooltip will use to position itself
     let position = {
         x: 0,
         y: 0,
     };
 
-    // screen_boundaries = bdys
     // refers to the px value of the boundary where the tooltip is allowed to be in
     const screen_boundaries = {
         top: spacing,
@@ -49,14 +145,18 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
         right:
             document.body.clientWidth -
             (tooltip_ref.current.clientWidth + spacing),
+        // using documents width to not intefere with scrollbar width
     };
 
-    // child_rectangle = elRect
+    // the rectangular px border values of the children element
     const child_rectangle = child_element.getBoundingClientRect();
 
-    return (function recursive_calculate_new_position(placement) {
+    return (function calculate_new_position_recursivley(placement) {
         recursive_count += 1;
 
+        // finding the top left position to place the tooltip
+        // based on the placement by the user
+        // relative the the child elements placement and the tooltips dimensions
         switch (placement) {
             case "top":
                 position.x =
@@ -110,7 +210,7 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
         // preventing infinite recursion calls
         if (recursive_count < 3) {
             // if the position of the tooltip is outside the allowed area
-            // we will call calculate_position again with a different placement
+            // we will call calculate_position again with a the opposite placement
             if (
                 (check_horizontal(placement) &&
                     (position.x < screen_boundaries.left ||
@@ -119,7 +219,7 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
                     (position.y < screen_boundaries.top ||
                         position.y > screen_boundaries.bottom))
             ) {
-                position = recursive_calculate_new_position(
+                position = calculate_new_position_recursivley(
                     negate_placement(placement)
                 );
             }
@@ -142,73 +242,5 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
         return position;
     })(placement);
 };
-
-function ToolTip({
-    children,
-    text,
-    placement = "top",
-    spacing = 10,
-    disabled = false,
-}) {
-    // text (string) = text for the tooltip
-    // spacing (number) = distance in px u want the tooltip from the child
-    // placement (string) = one of "top", "bottom", "left", "right"
-    //              which is where the tooltip will be placed relative the the child
-
-    // using ref to prevent this object from changing when rerendering
-    const position_ref = useRef({ x: 0, y: 0 }); // posRef
-    const tooltip_ref = useRef();
-
-    const [show_tooltip, set_show_tooltip] = useState(false);
-
-    const handle_mouse_over = (e) => {
-        set_show_tooltip(true);
-        position_ref.current = calculate_position(
-            e.currentTarget,
-            tooltip_ref,
-            placement,
-            spacing
-        );
-    };
-
-    const handle_mouse_leave = () => {
-        set_show_tooltip(false);
-    };
-
-    if (disabled) {
-        return <>{children}</>;
-    }
-
-    // clone element allows us to pass props to the
-    // element passed in the first param
-    // in our case it is the children element
-    return (
-        <>
-            {cloneElement(children, {
-                onMouseOver: handle_mouse_over,
-                onMouseLeave: handle_mouse_leave,
-            })}
-            <Portal>
-                <span
-                    className="ToolTip"
-                    ref={tooltip_ref}
-                    style={{
-                        opacity: show_tooltip ? "1" : "0",
-                        top: `${position_ref.current.y}px`,
-                        left: `${position_ref.current.x}px`,
-
-                        transitionDelay: ` ${
-                            show_tooltip ? 0.01 : 0.02
-                        }s !important`,
-                        transformOrigin: `${negate_placement(placement)}`,
-                        transform: `scale(${show_tooltip ? 1 : 0.7})`,
-                    }}
-                >
-                    {text}
-                </span>
-            </Portal>
-        </>
-    );
-}
 
 export default ToolTip;

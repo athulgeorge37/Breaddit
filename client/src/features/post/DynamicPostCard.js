@@ -19,6 +19,7 @@ import { get_post_by_id } from "../../api/PostRequests";
 // ui
 import Button from "../../components/ui/Button";
 import Loading from "../../components/ui/Loading";
+import ToolTip from "../../components/ui/ToolTip";
 
 // components
 import ProfilePicture from "../../features/profile/profile_picture/ProfilePicture";
@@ -150,31 +151,76 @@ function DynamicPostCard({ post_id, location }) {
                     {post_details.author_details.username ===
                     current_user.username ? (
                         <>
-                            {edit_btn_active ? (
-                                <Button
-                                    onClick={() => set_edit_btn_active(false)}
-                                    type="cancel"
-                                    span_text="Cancel"
-                                    img_name="cancel"
-                                    margin_right={true}
-                                />
-                            ) : (
-                                <Button
-                                    onClick={() => set_edit_btn_active(true)}
-                                    type="edit"
-                                    span_text="Edit"
-                                    img_name="edit"
-                                    margin_right={true}
-                                />
-                            )}
+                            <ToolTip
+                                text={
+                                    edit_btn_active
+                                        ? "Cancel Edit"
+                                        : "Edit Post"
+                                }
+                            >
+                                <button
+                                    className="edit_btn"
+                                    type="button"
+                                    onClick={() =>
+                                        set_edit_btn_active(!edit_btn_active)
+                                    }
+                                >
+                                    {edit_btn_active ? (
+                                        <svg
+                                            fill="none"
+                                            className="cancel_icon"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    ) : (
+                                        <svg
+                                            className="edit_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                            />
+                                        </svg>
+                                    )}
+                                </button>
+                            </ToolTip>
 
-                            <Button
-                                onClick={open_modal}
-                                type="delete"
-                                span_text="Delete"
-                                img_name="delete"
-                                margin_right={true}
-                            />
+                            <ToolTip text="Delete Post">
+                                <button
+                                    type="button"
+                                    className="delete_btn"
+                                    onClick={open_modal}
+                                >
+                                    <svg
+                                        className="delete_icon"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
+                                </button>
+                            </ToolTip>
                         </>
                     ) : (
                         <Button

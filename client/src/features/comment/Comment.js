@@ -14,10 +14,13 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import AddComment from "./AddComment";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
-import Button from "../../components/ui/Button";
 import ResizablePanel from "../../components/ui/ResizablePanel";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
+
+// ui
+import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
+import ToolTip from "../../components/ui/ToolTip";
 
 // api
 import {
@@ -157,35 +160,90 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                 {calculate_time_passed(comment.edited_time)} ago
                             </div>
                         </div>
+
                         {comment.author_details.username ===
                             current_user.username && (
                             <div className="edit_and_delete_btns">
-                                {comment_edit_mode ? (
-                                    <Button
+                                <ToolTip
+                                    text={
+                                        comment_edit_mode
+                                            ? "Cancel Edit"
+                                            : `Edit ${
+                                                  comment.is_reply
+                                                      ? "Reply"
+                                                      : "Comment"
+                                              }`
+                                    }
+                                    spacing={5}
+                                >
+                                    <button
                                         onClick={() =>
-                                            set_comment_edit_mode(false)
+                                            set_comment_edit_mode(
+                                                !comment_edit_mode
+                                            )
                                         }
-                                        type="cancel"
-                                        img_name="cancel"
-                                        size="small"
-                                    />
-                                ) : (
-                                    <Button
-                                        onClick={() =>
-                                            set_comment_edit_mode(true)
-                                        }
-                                        type="edit"
-                                        img_name="edit"
-                                        size="small"
-                                    />
-                                )}
+                                        className="edit_btn"
+                                    >
+                                        {comment_edit_mode ? (
+                                            <svg
+                                                className="cancel_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="edit_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </ToolTip>
 
-                                <Button
-                                    onClick={open_modal}
-                                    type="delete"
-                                    img_name="delete"
-                                    size="small"
-                                />
+                                <ToolTip
+                                    text={`Delete ${
+                                        comment.is_reply ? "Reply" : "Comment"
+                                    }`}
+                                    spacing={5}
+                                >
+                                    <button
+                                        className="delete_btn"
+                                        onClick={open_modal}
+                                    >
+                                        <svg
+                                            className="delete_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                            />
+                                        </svg>
+                                    </button>
+                                </ToolTip>
                             </div>
                         )}
                     </div>
@@ -249,39 +307,96 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                         )}
                     </div>
 
-                    <div className="reply_btns">
+                    <>
                         {comment.is_reply === false && (
                             <div className="reply_btns">
-                                {current_user.role !== "admin" && (
-                                    <Button
-                                        onClick={() => {
-                                            set_show_add_reply(!show_add_reply);
-                                        }}
-                                        type="add_comment"
-                                        img_name="add_comment"
-                                        active={show_add_reply}
-                                        img_path="../.."
-                                        size="small"
-                                    />
+                                {allow_replies_section_btn === true && (
+                                    <ToolTip text="Replies" spacing={5}>
+                                        <button
+                                            className="comment_btn"
+                                            type="button"
+                                            onClick={() => {
+                                                set_show_replies_section(
+                                                    !show_replies_section
+                                                );
+                                            }}
+                                        >
+                                            <svg
+                                                className="comment_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </ToolTip>
                                 )}
 
-                                {allow_replies_section_btn === true && (
-                                    <Button
-                                        onClick={() => {
-                                            set_show_replies_section(
-                                                !show_replies_section
-                                            );
-                                        }}
-                                        type="comments_section"
-                                        img_name="comments"
-                                        active={show_replies_section}
-                                        img_path="../.."
-                                        size="small"
-                                    />
+                                {current_user.role !== "admin" && (
+                                    <ToolTip
+                                        text={
+                                            show_add_reply
+                                                ? "Cancel"
+                                                : `Add ${
+                                                      comment.is_reply
+                                                          ? "Reply"
+                                                          : "Comment"
+                                                  }`
+                                        }
+                                        spacing={5}
+                                    >
+                                        <button
+                                            className="add_comment_btn"
+                                            onClick={() => {
+                                                set_show_add_reply(
+                                                    !show_add_reply
+                                                );
+                                            }}
+                                        >
+                                            {show_add_reply ? (
+                                                <svg
+                                                    fill="none"
+                                                    className="cancel_icon"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    className="add_comment_icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    </ToolTip>
                                 )}
                             </div>
                         )}
-                    </div>
+                    </>
                 </div>
 
                 <div className="add_comments_and_show_replies">

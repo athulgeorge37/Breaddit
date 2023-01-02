@@ -20,8 +20,28 @@
         }
 
         .img_btns {
-            display: flex;
             margin-top: 18px;
+
+            display: flex;
+            
+
+            .image_icon_btn, .remove_img_btn {
+                @include btn-styles(var(--background-color-secondary));
+                padding: 5px;
+                transition: none;
+
+                display: flex;
+                align-items: center;
+                
+                .image_icon, .remove_img_icon {
+                    width: 25px;
+                    height: 25px;
+                    color: var(--text-color-secondary);
+                }
+            }
+
+        
+            
         }
     } 
     

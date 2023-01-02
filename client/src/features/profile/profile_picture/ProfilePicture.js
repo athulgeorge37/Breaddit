@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../../context/CurrentUser/CurrentUserProvider";
 import CloudinaryImage from "../../../components/CloudinaryImage";
+import ToolTip from "../../../components/ui/ToolTip";
 
 import "./ProfilePicture.scss";
 
@@ -20,22 +21,27 @@ function ProfilePicture({ profile_picture_url, username, img_path = ".." }) {
     };
 
     return (
-        <div className="profile_picture_div" onClick={handle_profile_redirect}>
-            {profile_picture_url === null ? (
-                <div className="default_profile_pic">
-                    <img
-                        src={`${img_path}/images/default_user.png`}
+        <ToolTip text="Go To Profile">
+            <button
+                className="profile_picture_div"
+                onClick={handle_profile_redirect}
+            >
+                {profile_picture_url === null ? (
+                    <div className="default_profile_pic">
+                        <img
+                            src={`${img_path}/images/default_user.png`}
+                            alt="profile_picture"
+                            className="default_profile_pic_img"
+                        />
+                    </div>
+                ) : (
+                    <CloudinaryImage
+                        image_url={profile_picture_url}
                         alt="profile_picture"
-                        className="default_profile_pic_img"
                     />
-                </div>
-            ) : (
-                <CloudinaryImage
-                    image_url={profile_picture_url}
-                    alt="profile_picture"
-                />
-            )}
-        </div>
+                )}
+            </button>
+        </ToolTip>
     );
 }
 

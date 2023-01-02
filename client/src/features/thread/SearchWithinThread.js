@@ -5,6 +5,9 @@ import "./SearchWithinThread.scss";
 import { useState, useRef, useEffect } from "react";
 import { usePostsPage } from "../../pages/PostsPage";
 
+// ui
+import ToolTip from "../../components/ui/ToolTip";
+
 function SearchWithinThread() {
     const {
         thread_title,
@@ -55,30 +58,32 @@ function SearchWithinThread() {
                         onChange={(e) => handle_search_input(e.target.value)}
                     />
                     {search_within_thread !== null && (
-                        <button
-                            className="cancel_icon"
-                            onClick={() => {
-                                set_search_input("");
-                                set_search_within_thread(null);
-                                input_ref.current.focus();
+                        <ToolTip text="Remove Search">
+                            <button
+                                className="cancel_icon"
+                                onClick={() => {
+                                    set_search_input("");
+                                    set_search_within_thread(null);
+                                    input_ref.current.focus();
 
-                                delete_search_param("search");
-                            }}
-                        >
-                            <svg
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
+                                    delete_search_param("search");
+                                }}
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
+                                <svg
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </ToolTip>
                     )}
                 </div>
 

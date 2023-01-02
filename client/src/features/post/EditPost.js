@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import SearchThreadNames from "../thread/SearchThreadNames";
 import useDebounce from "../../hooks/useDebounce";
 import { get_thread_names } from "../../api/ThreadRequests";
+import ToolTip from "../../components/ui/ToolTip";
 
 function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const add_notification = useNotification();
@@ -152,26 +153,57 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                         hidden={true}
                     />
 
-                    <Button
-                        onClick={() => img_input_ref.current.click()}
-                        type="add_img"
-                        span_text={
+                    {image_url !== null && (
+                        <ToolTip text="Remove Image">
+                            <button
+                                className="remove_img_btn"
+                                onClick={() => set_image_url(null)}
+                            >
+                                <svg
+                                    className="remove_img_icon"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                            </button>
+                        </ToolTip>
+                    )}
+
+                    <ToolTip
+                        text={
                             image_url === null
                                 ? "Upload Image"
                                 : "Replace Image"
                         }
-                        img_name="add_img"
-                    />
-
-                    {image_url !== null && (
-                        <Button
-                            onClick={() => set_image_url(null)}
-                            type="remove_img"
-                            span_text="Remove Image"
-                            img_name="remove_img"
-                            margin_left={true}
-                        />
-                    )}
+                    >
+                        <button
+                            className="image_icon_btn"
+                            onClick={() => img_input_ref.current.click()}
+                        >
+                            <svg
+                                className="image_icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                        </button>
+                    </ToolTip>
                 </div>
             </div>
 

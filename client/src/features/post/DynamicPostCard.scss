@@ -59,6 +59,7 @@
 
             .posted_by_user {
                 display: flex;
+    
 
                 &:hover {
                     cursor: pointer;
@@ -84,6 +85,18 @@
         .btns {
             display: flex;
             justify-content: center;
+
+            .edit_btn, .delete_btn {
+                @include btn-styles(var(--background-color-secondary));
+                padding: 5px;
+                transition: none;
+                
+                .edit_icon, .cancel_icon, .delete_icon {
+                    width: 25px;
+                    height: 25px;
+                    color: var(--text-color-secondary);
+                }
+            }
         }
 
         
@@ -99,6 +112,8 @@
             position: absolute;
             bottom: 1em;
             right: 1em;
+            padding: 5px;
+            padding-right: 0;
         }
 
         .text_content {

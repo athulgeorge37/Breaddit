@@ -5,7 +5,7 @@ import "./Modal.scss";
 import { useEffect, useState } from "react";
 
 // helper
-import { createPortal } from "react-dom";
+import Portal from "../Portal";
 
 // animations
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,75 +27,64 @@ function Modal({ children, close_modal, show_modal }) {
         }
     }, [show_modal]);
 
-    // when show_modal is true
-    // we attach this component to
-    // modal_root div in index.html in the public folder
-    // using createPortal, this way its always
-    // at the top level of our project
-    return createPortal(
-        <AnimatePresence>
-            {show_modal ? (
-                <div className="Modal">
-                    <motion.div
-                        className="modal_backdrop"
-                        initial={{
-                            opacity: 0,
-                        }}
-                        animate={{
-                            opacity: 1,
-                            transition: {
-                                duration: 0.3,
-                            },
-                        }}
-                        exit={{
-                            opacity: 0,
-                            transition: {
-                                duration: 0.1,
-                            },
-                        }}
-                    />
-
-                    <motion.div
-                        className="modal_wrapper"
-                        onClick={close_modal}
-                        initial={{
-                            scale: 0,
-                        }}
-                        animate={{
-                            scale: 1,
-                            transition: {
-                                duration: 0.5,
-                            },
-                        }}
-                        exit={{
-                            scale: 0,
-                            transition: {
-                                duration: 0.3,
-                            },
-                        }}
-                    >
+    return (
+        <Portal>
+            <AnimatePresence>
+                {show_modal ? (
+                    <div className="Modal">
                         <motion.div
-                            className="modal_content"
-                            onClick={(e) => {
-                                // stopPropagation prevents the modal from closing
-                                // when clicking inside the children content
-                                e.stopPropagation();
+                            className="modal_backdrop"
+                            initial={{
+                                opacity: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                transition: {
+                                    duration: 0.3,
+                                },
+                            }}
+                            exit={{
+                                opacity: 0,
+                                transition: {
+                                    duration: 0.1,
+                                },
+                            }}
+                        />
+
+                        <motion.div
+                            className="modal_wrapper"
+                            onClick={close_modal}
+                            initial={{
+                                scale: 0,
+                            }}
+                            animate={{
+                                scale: 1,
+                                transition: {
+                                    duration: 0.5,
+                                },
+                            }}
+                            exit={{
+                                scale: 0,
+                                transition: {
+                                    duration: 0.3,
+                                },
                             }}
                         >
-                            {children}
+                            <motion.div
+                                className="modal_content"
+                                onClick={(e) => {
+                                    // stopPropagation prevents the modal from closing
+                                    // when clicking inside this div, ie: the children content
+                                    e.stopPropagation();
+                                }}
+                            >
+                                {children}
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                </div>
-            ) : null}
-        </AnimatePresence>,
-
-        // attaching to modal_root will require you to use inline styles for the modal's children
-        // if u want to use this method you have to uncomment modal_root div in index.html
-        // document.getElementById("modal_root")
-
-        // using "root" allows styles to be used from the component itself
-        // and works just like the above method
-        document.getElementById("root")
+                    </div>
+                ) : null}
+            </AnimatePresence>
+        </Portal>
     );
 }
 

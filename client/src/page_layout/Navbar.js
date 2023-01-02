@@ -45,7 +45,10 @@ function Navbar() {
                         />
                     </svg>
 
-                    <Toggle set_toggle={set_is_dark_mode} />
+                    <Toggle
+                        set_toggle={set_is_dark_mode}
+                        default_value={is_dark_mode}
+                    />
 
                     <svg
                         className="moon_icon"

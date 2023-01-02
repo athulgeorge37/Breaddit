@@ -67,6 +67,20 @@
         .btns {
             display: flex;
             justify-content: center;
+
+            .edit_btn, .delete_btn {
+                @include btn-styles(var(--background-color-secondary));
+                padding: 5px;
+                transition: none;
+                
+                .edit_icon, .delete_icon {
+                    width: 25px;
+                    height: 25px;
+                    color: var(--text-color-secondary);
+                }
+            }
+
+        
         }
 
         
@@ -132,6 +146,20 @@
 
         .both_comments_btns {    
             display: flex;   
+
+            .comment_btn, .add_comment_btn {
+                @include btn-styles(var(--background-color-secondary));
+                padding: 5px;
+                transition: none;
+                display: flex;
+                align-items: center;
+                
+                .comment_icon, .add_comment_icon {
+                    width: 25px;
+                    height: 25px;
+                    color: var(--text-color-secondary);
+                }
+            }
         }
     }
 

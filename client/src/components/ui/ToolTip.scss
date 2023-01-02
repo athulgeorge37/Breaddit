@@ -1,0 +1,27 @@
+@import "../../variables.scss";
+
+
+    
+
+.ToolTip {
+    position: fixed;
+
+    // font size, weight and letter spacing if u want
+
+    background-color: var(--background-color-tertiary);
+    color: var(--text-color-primary);
+    padding: 7px 10px;
+    border-radius: $border-radius;
+    z-index: 99999;
+    display: inline-block;
+    white-space: nowrap;
+
+    @include shadow;
+
+
+    transition-property: transform, opacity !important;
+    transition-duration: 0.1s !important;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+ 
+
+}

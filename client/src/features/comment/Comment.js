@@ -18,7 +18,6 @@ import ResizablePanel from "../../components/ui/ResizablePanel";
 import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 
 // ui
-import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
 import ToolTip from "../../components/ui/ToolTip";
 

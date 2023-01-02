@@ -81,6 +81,8 @@ function ToolTip({
                     className="ToolTip"
                     ref={tooltip_ref}
                     style={{
+                        // visibility hidden prevent tooltip from interacting with other elements
+                        visibility: show_tooltip ? "visible" : "hidden",
                         opacity: show_tooltip ? "1" : "0",
                         top: `${position_ref.current.y}px`,
                         left: `${position_ref.current.x}px`,

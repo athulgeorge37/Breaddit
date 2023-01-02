@@ -6,7 +6,7 @@
     border-radius: $border-radius;
     overflow: hidden;
     margin-bottom: 16px;
-    width: 250px;
+    width: 275px;   // to change this width, also change it in the notification provider
     animation: slide_into_view 0.8s;
     animation-fill-mode: forwards;
     
@@ -14,16 +14,33 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .message {
-            padding: $padding;
+        padding: $padding;
+        gap: 10px;
     
-        }
 
-        .remove_notfication_btn {
-            .cancel_img {
-                width: 18px;
+        .dismiss_btn {
+            border: none;
+            background: none;
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            .icon {
+                width: 25px;
+                height: 25px;
             }
         }
+
+        .SUCCESS_btn {
+            color: var(--green);
+        }
+
+        .ERROR_btn {
+            color: var(--red);
+        }
+       
     }
     
 

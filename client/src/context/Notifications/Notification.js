@@ -1,6 +1,6 @@
 import React from "react";
 import "./Notification.scss";
-import Button from "../../components/ui/Button";
+import ToolTip from "../../components/ui/ToolTip";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -84,14 +84,44 @@ function Notification({ id, type, message, dispatch }) {
             <div className="content">
                 <div className="message">{message}</div>
 
-                <div className="remove_notfication_btn">
-                    <Button
+                <ToolTip text="Dismiss">
+                    <button
+                        className={`dismiss_btn ${type}_btn`}
                         onClick={handle_close_notification}
-                        type="cancel"
-                        img_name="cancel"
-                        margin_right={true}
-                    />
-                </div>
+                    >
+                        {type === "SUCCESS" ? (
+                            <svg
+                                className="success_icon icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        ) : (
+                            <svg
+                                className="remove_icon icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        )}
+                    </button>
+                </ToolTip>
             </div>
 
             <div

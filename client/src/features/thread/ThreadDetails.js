@@ -96,14 +96,7 @@ function ThreadDetails() {
                     <div className="creator_details">
                         <h3>Creator:</h3>
 
-                        <button
-                            className="profile_pic_and_username"
-                            onClick={() =>
-                                navigate(
-                                    `/profile/${thread_details?.creator_details.username}`
-                                )
-                            }
-                        >
+                        <div className="profile_pic_and_username">
                             <ProfilePicture
                                 profile_picture_url={
                                     thread_details?.creator_details.profile_pic
@@ -113,10 +106,17 @@ function ThreadDetails() {
                                 }
                             />
 
-                            <b className="username">
+                            <b
+                                className="username"
+                                onClick={() =>
+                                    navigate(
+                                        `/profile/${thread_details?.creator_details.username}`
+                                    )
+                                }
+                            >
                                 {thread_details?.creator_details.username}
                             </b>
-                        </button>
+                        </div>
                     </div>
                 </>
             )}

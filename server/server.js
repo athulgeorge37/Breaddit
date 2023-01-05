@@ -1,3 +1,12 @@
+// this was the info for the initial database
+// "development": {
+//     "username": "s3918048",
+//     "password": "breaddit123",
+//     "database": "s3918048",
+//     "host": "rmit.australiaeast.cloudapp.azure.com",
+//     "dialect": "mysql"
+//   },
+
 // creating our express app
 const express = require("express");
 const app = express();

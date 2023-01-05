@@ -22,15 +22,22 @@ function ToolTip({
     // using ref to prevent this object from changing when rerendering
     const position_ref = useRef({ x: 0, y: 0 });
     const tooltip_ref = useRef();
+    const child_ref = useRef();
 
     const [show_tooltip, set_show_tooltip] = useState(false);
 
-    const handle_mouse_over = (e) => {
+    const handle_mouse_over = () => {
         // using the event from hover to get
         // the child elements position to calculate tooltip position
+
         position_ref.current = calculate_position(
-            e.currentTarget,
-            tooltip_ref,
+            child_ref.current.getBoundingClientRect(),
+            {
+                clientWidth: tooltip_ref.current.clientWidth,
+                clientHeight: tooltip_ref.current.clientHeight,
+                offsetWidth: tooltip_ref.current.offsetWidth,
+                offsetHeight: tooltip_ref.current.offsetHeight,
+            },
             placement,
             spacing
         );
@@ -42,9 +49,34 @@ function ToolTip({
         set_show_tooltip(false);
     };
 
+    // useEffect(() => {
+    //     // console.log(child_ref.current.getBoundingClientRect());
+    //     // position_ref.current = calculate_position(
+    //     //     child_ref.current.getBoundingClientRect(),
+    //     //     tooltip_ref,
+    //     //     placement,
+    //     //     spacing
+    //     // );
+    //     set_position(
+    //         calculate_position(
+    //             child_ref.current.getBoundingClientRect(),
+    //             {
+    //                 clientWidth: tooltip_ref.current.clientWidth,
+    //                 clientHeight: tooltip_ref.current.clientHeight,
+    //                 offsetWidth: tooltip_ref.current.offsetWidth,
+    //                 offsetHeight: tooltip_ref.current.offsetHeight,
+    //             },
+    //             placement,
+    //             spacing
+    //         )
+    //     );
+
+    //     // set_show_tooltip(true);
+    // }, [child_ref.current]);
+
     useEffect(() => {
         // removing tooltip when user scrolls and tooltip is focused from tabbing
-        const handleScroll = (event) => {
+        const handleScroll = () => {
             // console.log("window.scrollY", window.scrollY);
             handle_mouse_leave();
         };
@@ -62,19 +94,37 @@ function ToolTip({
     }
 
     // clone element allows us to pass props to the
-    // element passed in the first param
+    // element passed in the first parameter of cloneElement
     // in our case it is the children element
     return (
         <>
             {cloneElement(children, {
+                ref: child_ref,
                 onMouseOver: handle_mouse_over,
                 onMouseLeave: handle_mouse_leave,
-
                 // allowing tooltip to be shown when tabbing through page
                 onFocus: handle_mouse_over,
-                onBlur: handle_mouse_leave,
-                onScroll: handle_mouse_leave,
+                onBlur: handle_mouse_leave, // = onUnFocus
             })}
+            {/* <div
+                ref={child_ref}
+                onMouseOver={handle_mouse_over}
+                onMouseLeave={handle_mouse_leave}
+                onClick={handle_mouse_over}
+                // allowing tooltip to be shown when tabbing through page
+                onFocus={handle_mouse_over}
+                onBlur={handle_mouse_leave} // = onUnFocus
+            >
+                <div
+                    onClick={(e) => {
+                        // stopPropagation prevents the modal from closing
+                        // when clicking inside this div, ie: the children content
+                        e.stopPropagation();
+                    }}
+                >
+                    {children}
+                </div>
+            </div> */}
             <Portal>
                 <span
                     key={text}
@@ -126,9 +176,20 @@ const check_vertical = (placement) => {
     return placement === "top" || placement === "bottom";
 };
 
-const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
+const calculate_position = (
+    child_rect,
+    tooltip_dimensions,
+    placement,
+    spacing
+) => {
     // to calculate and return an object of x and y, to position the tooltip
-    // child_element = the children passed in the ToolTip component    = el
+
+    // child_rect contain {x: left, y:top, width, height, top, left, bottom, right}
+    // where width and height refer to the client hieght
+
+    // tooltip_dimensions also has offsetHeight and offsetWidth
+
+    // child_element = the children passed in the ToolTip component    = el rect
     let recursive_count = 0;
 
     // refers to the x and y coordinates the
@@ -143,15 +204,15 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
         top: spacing,
         left: spacing,
         bottom:
-            window.innerHeight - (tooltip_ref.current.clientHeight + spacing),
+            window.innerHeight - (tooltip_dimensions.clientHeight + spacing),
         right:
             document.body.clientWidth -
-            (tooltip_ref.current.clientWidth + spacing),
+            (tooltip_dimensions.clientWidth + spacing),
         // using documents width to not intefere with scrollbar width
     };
 
     // the rectangular px border values of the children element
-    const child_rectangle = child_element.getBoundingClientRect();
+    // const child_rectangle = child_element.getBoundingClientRect();
 
     return (function calculate_new_position_recursivley(placement) {
         recursive_count += 1;
@@ -162,50 +223,40 @@ const calculate_position = (child_element, tooltip_ref, placement, spacing) => {
         switch (placement) {
             case "top":
                 position.x =
-                    child_rectangle.left +
-                    (child_element.offsetWidth -
-                        tooltip_ref.current.offsetWidth) /
-                        2;
+                    child_rect.left +
+                    (child_rect.width - tooltip_dimensions.offsetWidth) / 2;
                 position.y =
-                    child_rectangle.top -
-                    (tooltip_ref.current.offsetHeight + spacing);
+                    child_rect.top -
+                    (tooltip_dimensions.offsetHeight + spacing);
                 break;
             case "bottom":
                 position.x =
-                    child_rectangle.left +
-                    (child_element.offsetWidth -
-                        tooltip_ref.current.offsetWidth) /
-                        2;
-                position.y = child_rectangle.bottom + spacing;
+                    child_rect.left +
+                    (child_rect.width - tooltip_dimensions.offsetWidth) / 2;
+                position.y = child_rect.bottom + spacing;
                 break;
             case "left":
                 position.x =
-                    child_rectangle.left -
-                    (tooltip_ref.current.offsetWidth + spacing);
+                    child_rect.left -
+                    (tooltip_dimensions.offsetWidth + spacing);
                 position.y =
-                    child_rectangle.top +
-                    (child_element.offsetHeight -
-                        tooltip_ref.current.offsetHeight) /
-                        2;
+                    child_rect.top +
+                    (child_rect.height - tooltip_dimensions.offsetHeight) / 2;
                 break;
             case "right":
-                position.x = child_rectangle.right + spacing;
+                position.x = child_rect.right + spacing;
                 position.y =
-                    child_rectangle.top +
-                    (child_element.offsetHeight -
-                        tooltip_ref.current.offsetHeight) /
-                        2;
+                    child_rect.top +
+                    (child_rect.height - tooltip_dimensions.offsetHeight) / 2;
                 break;
             default:
                 // default position is "top"
                 position.x =
-                    child_rectangle.left +
-                    (child_element.offsetWidth -
-                        tooltip_ref.current.offsetWidth) /
-                        2;
+                    child_rect.left +
+                    (child_rect.width - tooltip_dimensions.offsetWidth) / 2;
                 position.y =
-                    child_rectangle.top -
-                    (tooltip_ref.current.offsetHeight + spacing);
+                    child_rect.top -
+                    (tooltip_dimensions.offsetHeight + spacing);
                 break;
         }
 

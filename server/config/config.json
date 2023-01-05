@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "s3918048",
-    "password": "breaddit123",
-    "database": "s3918048",
-    "host": "rmit.australiaeast.cloudapp.azure.com",
+    "username": "root",
+    "password": "MySQLpassword123###",
+    "database": "breaddit",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {

@@ -27,10 +27,11 @@ import { lazy, Suspense } from "react";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const ProfilePageV2 = lazy(() => import("./pages/ProfilePageV2"));
+const PostsByUser = lazy(() => import("./features/post/PostsByUser"));
+const ProfileDetails = lazy(() => import("./features/profile/ProfileDetails"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
-const ThreadPage = lazy(() => import("./pages/ThreadPage"));
 const CreateThreadPage = lazy(() => import("./pages/CreateThreadPage"));
 const CreatePostPage = lazy(() => import("./pages/CreatePostPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
@@ -70,20 +71,38 @@ function App() {
                                                         element={<SignInPage />}
                                                     />
                                                     <Route
-                                                        path="/profile/:username_route"
+                                                        path="/user/:username_route"
                                                         element={
-                                                            <ProfilePage />
+                                                            <ProfilePageV2 />
                                                         }
-                                                    />
+                                                    >
+                                                        <Route
+                                                            path="profile"
+                                                            element={
+                                                                <ProfileDetails />
+                                                            }
+                                                        />
+                                                        <Route
+                                                            path="posts"
+                                                            element={
+                                                                <PostsByUser />
+                                                            }
+                                                        />
+                                                        <Route
+                                                            path="*"
+                                                            element={
+                                                                <p>
+                                                                    Page does
+                                                                    not exist
+                                                                </p>
+                                                            }
+                                                        />
+                                                    </Route>
                                                     <Route
                                                         path="/create_thread"
                                                         element={
                                                             <CreateThreadPage />
                                                         }
-                                                    />
-                                                    <Route
-                                                        path="/thread/:thread_id_route"
-                                                        element={<ThreadPage />}
                                                     />
                                                     <Route
                                                         path="/create_post"

@@ -48,7 +48,7 @@ function ProfilePage() {
         }
     );
 
-    console.log(data);
+    // console.log(data);
 
     useEffect(() => {
         // tries to make post requsest of profile visit on first render

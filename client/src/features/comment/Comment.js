@@ -343,11 +343,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                         text={
                                             show_add_reply
                                                 ? "Cancel"
-                                                : `Add ${
-                                                      comment.is_reply
-                                                          ? "Reply"
-                                                          : "Comment"
-                                                  }`
+                                                : "Add Reply"
                                         }
                                         spacing={5}
                                     >

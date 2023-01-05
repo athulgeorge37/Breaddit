@@ -16,9 +16,11 @@ function Navbar() {
     const { current_user } = useCurrentUser();
     const { is_dark_mode, set_is_dark_mode } = useDarkMode();
 
-    const determine_active_page = ({ isActive }) => {
-        return "page_link " + (isActive ? "active" : "");
-    };
+    // const determine_active_page = ({ isActive }) => {
+    //     return "page_link " + (isActive ? "active" : "");
+    // };
+
+    // we determine which link is active by a.active
 
     return (
         <nav>
@@ -86,49 +88,29 @@ function Navbar() {
                 </div>
 
                 <div className="links">
-                    <NavLink to="/" className={determine_active_page}>
-                        Home
-                    </NavLink>
+                    <NavLink to="/">Home</NavLink>
 
-                    <NavLink to="/posts" className={determine_active_page}>
-                        Posts
-                    </NavLink>
+                    <NavLink to="/posts">Posts</NavLink>
 
                     {current_user.authenticated === true ? (
                         <>
                             {current_user.role === "user" && (
-                                <NavLink
-                                    to={`/profile/${current_user.username}`}
-                                    className={determine_active_page}
-                                >
+                                <NavLink to={`/user/${current_user.username}`}>
                                     Profile
                                 </NavLink>
                             )}
 
                             {current_user.role === "admin" && (
-                                <NavLink
-                                    to="/admin_dashboard"
-                                    className={determine_active_page}
-                                >
+                                <NavLink to="/admin_dashboard">
                                     Admin Dashboard
                                 </NavLink>
                             )}
                         </>
                     ) : (
                         <>
-                            <NavLink
-                                to="/signup"
-                                className={determine_active_page}
-                            >
-                                Sign Up
-                            </NavLink>
+                            <NavLink to="/signup">Sign Up</NavLink>
 
-                            <NavLink
-                                to="/signin"
-                                className={determine_active_page}
-                            >
-                                Sign In
-                            </NavLink>
+                            <NavLink to="/signin">Sign In</NavLink>
                         </>
                     )}
                 </div>

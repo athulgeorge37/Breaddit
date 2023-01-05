@@ -3,6 +3,7 @@ import {
     get_item_local_storage,
     set_item_local_storage,
 } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/user`;
 
@@ -96,37 +97,23 @@ const edit_user_details = async (email, username, profile_pic, bio) => {
     return response.data;
 };
 
-const get_curr_user_details = async () => {
+const get_user_details = async (username) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_curr_user_details`,
-        {
-            headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
-            },
-        }
-    );
-
-    // returns an object with a property called user_details
-    // user_details is also an object that contains
-    // {
-    //     username,
-    //     email,
-    //     role,
-    //     bio,
-    //     createAt,
-    //     password,
-    //     profile_pic
-    // }
-    return response.data;
-};
-
-const get_user_profile_details = async (username) => {
-    const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_user_profile_details/by_username/${username}`
+        `${CUSTOM_ENDPOINT}/get_user_details?${query_string_generator({
+            username: username,
+        })}`
     );
 
     return response.data;
 };
+
+// const get_user_profile_details = async (username) => {
+//     const response = await axios.get(
+//         `${CUSTOM_ENDPOINT}/get_user_profile_details/by_username/${username}`
+//     );
+
+//     return response.data;
+// };
 
 const is_unique_email = async (new_email) => {
     const response = await axios.get(
@@ -151,8 +138,8 @@ export {
     sign_out,
     delete_user,
     edit_user_details,
-    get_curr_user_details,
-    get_user_profile_details,
+    get_user_details,
+    // get_user_profile_details,
     is_unique_email,
     is_unique_username,
 };

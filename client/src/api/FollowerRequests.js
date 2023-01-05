@@ -1,5 +1,6 @@
 import axios from "axios";
 import { get_item_local_storage } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/follower`;
 
@@ -48,6 +49,29 @@ const unfollow_account = async (username) => {
     return response.data;
 };
 
+const get_all_profiles_who_follow = async (
+    follower_type,
+    user_id,
+    limit,
+    page_num
+) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_all_followers?${query_string_generator({
+            follower_type,
+            user_id,
+            limit,
+            page_num,
+        })}`,
+        {
+            headers: {
+                web_access_token: get_item_local_storage("web_access_token"),
+            },
+        }
+    );
+
+    return response.data;
+};
+
 const get_accounts_of_type_by_username = async (type, username) => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_all/accounts/of_type/${type}/username/${username}`
@@ -81,6 +105,7 @@ export {
     follow_or_unfollow_account,
     follow_account,
     unfollow_account,
+    get_all_profiles_who_follow,
     get_accounts_of_type_by_username,
     get_count_of_type_by_username,
     check_is_following_username,

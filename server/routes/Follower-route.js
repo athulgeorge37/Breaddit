@@ -2,7 +2,133 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 
-const { validate_request } = require("../middlewares/AuthenticateRequests");
+const {
+    validate_request,
+    validate_role,
+} = require("../middlewares/AuthenticateRequests");
+
+router.get("/get_all_followers", validate_role, async (request, response) => {
+    try {
+        // getting all the required data from query params
+        const follower_type = request.query.follower_type.toLocaleLowerCase();
+        const user_id = parseInt(request.query.user_id);
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        // ensuring the requests inputs are valid
+        let can_continue = false;
+        const allowed_follower_types = ["follower", "following"];
+        for (const each_follower_type of allowed_follower_types) {
+            if (each_follower_type.toLocaleLowerCase() === follower_type) {
+                can_continue = true;
+                break;
+            }
+        }
+        if (can_continue === false) {
+            response.json({
+                error: `${follower_type} is an invalid follower_type`,
+                allowed: allowed_follower_types,
+            });
+            return;
+        }
+
+        // ensuring we use the right coloumn in the dtatabse depending on follower_type
+        let follower_id_to_use = {};
+        // so we can get the correct profile details  through sequqelize association
+        let as_relationship_to_use = "";
+        if (follower_type === "follower") {
+            follower_id_to_use = {
+                user_id: user_id,
+            };
+            as_relationship_to_use = "followed_by_user_details";
+        } else {
+            follower_id_to_use = {
+                followed_by: user_id,
+            };
+            as_relationship_to_use = "user_id_details";
+        }
+
+        // getting all the profiles we need who are either following or being followed by user_id
+        const all_profiles = await db.Follower.findAll({
+            where: {
+                ...follower_id_to_use,
+            },
+            include: [
+                {
+                    model: db.User,
+                    as: as_relationship_to_use, // so we include the correct profile details
+                    attributes: ["username", "profile_pic", "id"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        if (request.role === "public_user") {
+            // when user is public user, we do not need to check
+            // if they are following the found accounts
+            // since they themselves do not have an account
+            response.json({
+                msg: `got all profiles for follower_type:${follower_type}`,
+                all_followers: all_profiles,
+            });
+            return;
+        }
+
+        const new_follower_data = [];
+        for (const row of all_profiles) {
+            // ensuring we get the right id from the row of all_profiles we got eariler
+            let where_clause_to_use = {};
+            if (follower_type === "follower") {
+                where_clause_to_use = {
+                    user_id: user_id,
+                    followed_by: row.followed_by_user_details.id,
+                };
+            } else {
+                where_clause_to_use = {
+                    followed_by: user_id,
+                    user_id: row.user_id_details.id,
+                };
+            }
+
+            const following_details = await db.Follower.findOne({
+                where: where_clause_to_use,
+            });
+
+            // if the user_id is following, following_details should not be null
+            const is_following = following_details === null ? false : true;
+
+            // attaching the users username and profile pic to the is_following
+            const follower_details =
+                follower_type === "follower"
+                    ? row.followed_by_user_details
+                    : row.user_id_details;
+
+            new_follower_data.push({
+                ...follower_details,
+                is_following: is_following,
+                id: row.id,
+            });
+        }
+
+        // console.log("");
+        // console.log({
+        //     new_follower_data,
+        // });
+        // console.log("");
+
+        response.json({
+            msg: "got all profiles for all_voters",
+            msg: `got all profiles for follower_type:${follower_type}`,
+            all_followers: new_follower_data,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
 
 router.post(
     "/follow_or_unfollow_account",

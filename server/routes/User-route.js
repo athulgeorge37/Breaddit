@@ -10,44 +10,58 @@ const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 
-// sends a get request to "/user" from the client
-router.get("/get_all", validate_request, async (request, response) => {
-    // since getting the data takes some time
-    // we must put async on the function,
-    // and await for the ORM query "findAll"
+router.get("/get_user_details", async (request, response) => {
+    // gets user details by user_id
+    // when user does not exist, response is null
 
-    const list_of_users = await db.User.findAll();
-    // once we get the list, we send the response back to the client
-    // in the form of a list of json objects
-    response.json(list_of_users);
-});
+    try {
+        const username = request.query.username;
+        const user_details = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
 
-router.get(
-    "/get_curr_user_details",
-    validate_request,
-    async (request, response) => {
-        // gets user details by user_id
-        // when user does not exist, response is null
+        // console.log("");
+        // console.log({ query: request.query, user_details });
+        // console.log("");
 
-        try {
-            const user_details = await db.User.findByPk(request.user_id);
-
+        if (user_details === null) {
             response.json({
-                user_details: {
-                    username: user_details.username,
-                    email: user_details.email,
-                    profile_pic: user_details.profile_pic,
-                    bio: user_details.bio,
-                    createdAt: user_details.createdAt,
-                },
+                error: `account with username: ${username} does not exist`,
             });
-        } catch (e) {
-            response.json({
-                error: e,
-            });
+            return;
         }
+
+        const follower_count = await db.Follower.count({
+            where: {
+                user_id: user_details.id,
+            },
+        });
+
+        const following_count = await db.Follower.count({
+            where: {
+                followed_by: user_details.id,
+            },
+        });
+
+        response.json({
+            user_details: {
+                id: user_details.id,
+                username: user_details.username,
+                profile_pic: user_details.profile_pic,
+                bio: user_details.bio,
+                createdAt: user_details.createdAt,
+                follower_count: follower_count,
+                following_count: following_count,
+            },
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
     }
-);
+});
 
 router.get(
     "/get_user_profile_details/by_username/:username",

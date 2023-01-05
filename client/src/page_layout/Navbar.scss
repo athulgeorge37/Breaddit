@@ -48,18 +48,23 @@ nav {
     
         .links {
             display: flex;
+            align-items: center;
     
-            .page_link {
+            a {
                 margin: 0 10px;
                 text-decoration: none;
                 color: var(--text-color-primary);
             }
     
-            .page_link:hover {
+            a:hover {
                 cursor: pointer;
             }
     
-            .active {
+            // .active {
+            //     border-bottom: 1px solid var(--blue);
+            // }
+
+            a.active {
                 border-bottom: 1px solid var(--blue);
             }
         }

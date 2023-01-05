@@ -404,6 +404,9 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
         });
 
         if (request.role === "public_user") {
+            // when user is public user, we do not need to check
+            // if they are following the found accounts
+            // since they themselves do not have an account
             response.json({
                 msg: "got all profiles for all_voters",
                 all_voters: all_voters,

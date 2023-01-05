@@ -58,6 +58,7 @@
             .comment_author_and_edit_delete_btns {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
 
                 .comment_author {
                     display: flex;
@@ -182,6 +183,10 @@
                         width: 20px;
                         height: 20px;
                         color: var(--text-color-secondary);
+                    }
+
+                    .comment_icon {
+                        color: var(--blue);
                     }
                 }
 

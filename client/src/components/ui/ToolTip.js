@@ -98,7 +98,6 @@ function ToolTip({
                 <AnimatePresence>
                     {show_tooltip ? (
                         <motion.span
-                            key={text}
                             className="ToolTip"
                             ref={tooltip_ref}
                             onMouseOver={hide_tooltip}

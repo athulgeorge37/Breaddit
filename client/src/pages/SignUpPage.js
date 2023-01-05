@@ -90,7 +90,7 @@ function SignUpPage() {
         set_signed_up(true);
 
         // navigating to profile page after short delay
-        setTimeout(() => navigate(`/profile/${response.username}`), 1500);
+        setTimeout(() => navigate(`/user/${response.username}/profile`), 1500);
     };
 
     const handle_submit_form = (e) => {

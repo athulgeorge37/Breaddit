@@ -21,6 +21,7 @@ import Loading from "../../components/ui/Loading";
 // api
 import { upload_image } from "../../api/ImageRequests";
 import { create_thread } from "../../api/ThreadRequests";
+import query_string_generator from "../../helper/query_string_generator";
 
 function CreateThread() {
     const add_notification = useNotification();
@@ -45,7 +46,11 @@ function CreateThread() {
             onSuccess: (data) => {
                 console.log({ data });
                 add_notification("Succesfully created Thread");
-                navigate(`/thread/${data.new_thread_details.id}`);
+                navigate(
+                    `/posts?${query_string_generator({
+                        thread: data.new_thread_details.title,
+                    })}`
+                );
             },
         }
     );

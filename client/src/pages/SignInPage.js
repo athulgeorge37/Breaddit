@@ -71,7 +71,10 @@ function SignInPage() {
                 if (role === "admin") {
                     setTimeout(() => navigate(`/admin_dashboard`), 1000);
                 } else if (role === "user") {
-                    setTimeout(() => navigate(`/profile/${username}`), 1000);
+                    setTimeout(
+                        () => navigate(`/user/${username}/profile`),
+                        1000
+                    );
                 }
             }
         }

@@ -1,6 +1,7 @@
 import "./ToolTip.scss";
 import Portal from "../Portal";
 import { cloneElement, useState, useRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 // mostly from https://www.youtube.com/watch?v=bnuw7pqWUGA
 
@@ -28,6 +29,7 @@ function ToolTip({
     const [tooltip_position, set_tooltip_position] = useState({
         x: -100,
         y: -100,
+        placement_being_used: placement,
     });
 
     const reveal_tooltip = () => {
@@ -53,7 +55,9 @@ function ToolTip({
     }, []);
 
     useEffect(() => {
-        if (tooltip_ref.current) {
+        if (tooltip_ref.current && show_tooltip === true) {
+            // setting tooltip position will rerender tooltip
+            // so it is always using the correct position
             set_tooltip_position(
                 calculate_position(
                     child_ref.current.getBoundingClientRect(),
@@ -68,6 +72,8 @@ function ToolTip({
                 )
             );
         }
+        // tooltip will calculate position whenever show_tooltip is true
+        // and whenever the text changes for a tooltip
     }, [show_tooltip, text]);
 
     if (disabled || text === "" || text === undefined) {
@@ -89,32 +95,73 @@ function ToolTip({
                 onBlur: hide_tooltip, // = onUnFocus
             })}
             <Portal>
-                {show_tooltip ? (
-                    <span
-                        key={text}
-                        className="ToolTip"
-                        ref={tooltip_ref}
-                        style={{
-                            // visibility hidden prevent tooltip from interacting with other elements
-                            visibility: show_tooltip ? "visible" : "hidden",
-                            opacity: show_tooltip ? "1" : "0",
-                            top: `${tooltip_position.y}px`,
-                            left: `${tooltip_position.x}px`,
-
-                            transitionDelay: ` ${
-                                show_tooltip ? 0.01 : 0.02
-                            }s !important`,
-                            transformOrigin: `${negate_placement(placement)}`,
-                            transform: `scale(${show_tooltip ? 1 : 0.7})`,
-                        }}
-                    >
-                        {text}
-                    </span>
-                ) : null}
+                <AnimatePresence>
+                    {show_tooltip ? (
+                        <motion.span
+                            key={text}
+                            className="ToolTip"
+                            ref={tooltip_ref}
+                            onMouseOver={hide_tooltip}
+                            style={{
+                                // visibility hidden prevent tooltip from interacting with other elements
+                                visibility: show_tooltip ? "visible" : "hidden",
+                                top: `${tooltip_position.y}px`,
+                                left: `${tooltip_position.x}px`,
+                            }}
+                            initial={{
+                                opacity: 0,
+                                scale: 0.7,
+                                ...negate_animation_direction(
+                                    tooltip_position.placement_being_used,
+                                    spacing
+                                ),
+                            }}
+                            animate={{
+                                y: 0,
+                                x: 0,
+                                opacity: 1,
+                                scale: 1,
+                                transition: {
+                                    duration: 0.15,
+                                    // duration: 2,
+                                },
+                            }}
+                            exit={{
+                                ...negate_animation_direction(
+                                    placement,
+                                    spacing
+                                ),
+                                opacity: 0,
+                                scale: 0.7,
+                                transition: {
+                                    duration: 0.1,
+                                },
+                            }}
+                        >
+                            {text}
+                        </motion.span>
+                    ) : null}
+                </AnimatePresence>
             </Portal>
         </>
     );
 }
+
+const negate_animation_direction = (placement, spacing) => {
+    // console.log({ placement });
+    switch (placement) {
+        case "top":
+            return { y: spacing * 2 };
+        case "bottom":
+            return { y: spacing * -2 };
+        case "left":
+            return { x: spacing * 2 };
+        case "right":
+            return { x: spacing * -2 };
+        default:
+            return { y: spacing * 2 };
+    }
+};
 
 const negate_placement = (placement) => {
     // gives the opposite of the passed in placement
@@ -152,7 +199,7 @@ const calculate_position = (
     // child_rect contain {x: left, y:top, width, height, top, left, bottom, right}
     // where width and height refer to the client hieght
 
-    // tooltip_dimensions also has offsetHeight and offsetWidth
+    // tooltip_dimensions also has offsetHeight and offsetWidth, clientHeight, clientWidth
 
     // child_element = the children passed in the ToolTip component    = el rect
     let recursive_count = 0;
@@ -162,6 +209,7 @@ const calculate_position = (
     let position = {
         x: 0,
         y: 0,
+        placement_being_used: placement,
     };
 
     // refers to the px value of the boundary where the tooltip is allowed to be in
@@ -187,6 +235,7 @@ const calculate_position = (
         // relative the the child elements placement and the tooltips dimensions
         switch (placement) {
             case "top":
+                position.placement_being_used = "top";
                 position.x =
                     child_rect.left +
                     (child_rect.width - tooltip_dimensions.offsetWidth) / 2;
@@ -195,12 +244,14 @@ const calculate_position = (
                     (tooltip_dimensions.offsetHeight + spacing);
                 break;
             case "bottom":
+                position.placement_being_used = "bottom";
                 position.x =
                     child_rect.left +
                     (child_rect.width - tooltip_dimensions.offsetWidth) / 2;
                 position.y = child_rect.bottom + spacing;
                 break;
             case "left":
+                position.placement_being_used = "left";
                 position.x =
                     child_rect.left -
                     (tooltip_dimensions.offsetWidth + spacing);
@@ -209,6 +260,7 @@ const calculate_position = (
                     (child_rect.height - tooltip_dimensions.offsetHeight) / 2;
                 break;
             case "right":
+                position.placement_being_used = "right";
                 position.x = child_rect.right + spacing;
                 position.y =
                     child_rect.top +
@@ -216,6 +268,7 @@ const calculate_position = (
                 break;
             default:
                 // default position is "top"
+                position.placement_being_used = "top";
                 position.x =
                     child_rect.left +
                     (child_rect.width - tooltip_dimensions.offsetWidth) / 2;

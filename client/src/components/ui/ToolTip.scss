@@ -17,11 +17,6 @@
     white-space: nowrap;
 
     @include shadow;
-
-
-    transition-property: transform, opacity !important;
-    transition-duration: 0.1s !important;
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
  
 
 }

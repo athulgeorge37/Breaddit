@@ -4,7 +4,7 @@ import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/follower`;
 
-const follow_or_unfollow_account = async (account_id) => {
+const follow_or_unfollow_account_request = async (account_id) => {
     const response = await axios.post(
         `${CUSTOM_ENDPOINT}/follow_or_unfollow_account`,
         {
@@ -15,6 +15,18 @@ const follow_or_unfollow_account = async (account_id) => {
                 web_access_token: get_item_local_storage("web_access_token"),
             },
         }
+    );
+
+    return response.data;
+};
+
+const get_follower_following_counts_request = async (user_id) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_follower_following_counts?${query_string_generator(
+            {
+                user_id,
+            }
+        )}`
     );
 
     return response.data;
@@ -102,7 +114,8 @@ const check_is_following_username = async (username) => {
 };
 
 export {
-    follow_or_unfollow_account,
+    follow_or_unfollow_account_request,
+    get_follower_following_counts_request,
     follow_account,
     unfollow_account,
     get_all_profiles_who_follow,

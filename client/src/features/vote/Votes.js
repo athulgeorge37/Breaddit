@@ -22,7 +22,7 @@ import {
 import Loading from "../../components/ui/Loading";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Modal from "../../components/ui/Modal";
-import { follow_or_unfollow_account } from "../../api/FollowerRequests";
+import { follow_or_unfollow_account_request } from "../../api/FollowerRequests";
 import ToolTip from "../../components/ui/ToolTip";
 
 // TODO: making a vote, updates the post table, which affects the edited time
@@ -69,7 +69,7 @@ function Votes({
         }
     );
 
-    const update_vote = useMutation(
+    const { mutate: update_vote } = useMutation(
         (new_vote) => {
             return make_vote(vote_id, vote_type, new_vote);
         },
@@ -94,7 +94,7 @@ function Votes({
 
         const vote_to_send = new_vote === curr_user_vote ? null : new_vote;
 
-        update_vote.mutate(vote_to_send);
+        update_vote(vote_to_send);
 
         // updating the up and down vote counters in the UI to reflect changes in DB
         if (new_vote === true) {
@@ -136,8 +136,7 @@ function Votes({
                         vote_id={vote_id}
                         close_modal={close_modal}
                         modal_vote_type={modal_vote_type}
-                        up_vote_count={up_vote_count}
-                        down_vote_count={down_vote_count}
+                        set_modal_vote_type={set_modal_vote_type}
                     />
                 </div>
             </Modal>
@@ -261,8 +260,7 @@ function VoterListInfiniteScroll({
     vote_id,
     close_modal,
     modal_vote_type,
-    up_vote_count,
-    down_vote_count,
+    set_modal_vote_type,
 }) {
     const {
         fetchNextPage, //function
@@ -370,7 +368,7 @@ function VoterListInfiniteScroll({
     return (
         <div className="VoterListInfiniteScroll">
             <div className="header">
-                <h2>
+                {/* <h2>
                     {modal_vote_type
                         ? `${up_vote_count} Up Voter${
                               up_vote_count !== 1 ? "s" : ""
@@ -378,7 +376,30 @@ function VoterListInfiniteScroll({
                         : `${down_vote_count} Down Voter${
                               down_vote_count !== 1 ? "s" : ""
                           }`}
-                </h2>
+                </h2> */}
+
+                <div className="tabs">
+                    <h2>
+                        <button
+                            className={`${
+                                modal_vote_type === true ? "active" : ""
+                            }`}
+                            onClick={() => set_modal_vote_type(true)}
+                        >
+                            Up Voters
+                        </button>
+                    </h2>
+                    <h2>
+                        <button
+                            className={`${
+                                modal_vote_type === false ? "active" : ""
+                            }`}
+                            onClick={() => set_modal_vote_type(false)}
+                        >
+                            Down Voters
+                        </button>
+                    </h2>
+                </div>
                 <ToolTip text="Close Modal">
                     <button
                         className="close_modal_btn"
@@ -408,7 +429,11 @@ function VoterListInfiniteScroll({
                     <div className="end_of_voters_lists">
                         {isFetchingNextPage && <Loading />}
 
-                        {hasNextPage === false && <p>No more voters</p>}
+                        {hasNextPage === false && (
+                            <p>
+                                No More {modal_vote_type ? "Up" : "Down"} Voters
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -422,9 +447,9 @@ function VoterCard({ voter_data, close_modal, voter_info_query }) {
     const queryClient = useQueryClient();
     const [is_following, set_is_following] = useState(voter_data.is_following);
 
-    const follow_or_unfollow_account_mutation = useMutation(
+    const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {
-            return follow_or_unfollow_account(account_id);
+            return follow_or_unfollow_account_request(account_id);
         },
         {
             onSuccess: (data) => {
@@ -462,9 +487,7 @@ function VoterCard({ voter_data, close_modal, voter_info_query }) {
                         is_following ? "following_btn" : "follower_btn"
                     }`}
                     onClick={() => {
-                        follow_or_unfollow_account_mutation.mutate(
-                            voter_data.dataValues.id
-                        );
+                        follow_or_unfollow_account(voter_data.dataValues.id);
                     }}
                 >
                     {is_following ? "Following" : "Follow"}

@@ -22,28 +22,12 @@ router.get("/get_user_details", async (request, response) => {
             },
         });
 
-        // console.log("");
-        // console.log({ query: request.query, user_details });
-        // console.log("");
-
         if (user_details === null) {
             response.json({
                 error: `account with username: ${username} does not exist`,
             });
             return;
         }
-
-        const follower_count = await db.Follower.count({
-            where: {
-                user_id: user_details.id,
-            },
-        });
-
-        const following_count = await db.Follower.count({
-            where: {
-                followed_by: user_details.id,
-            },
-        });
 
         response.json({
             user_details: {
@@ -52,8 +36,6 @@ router.get("/get_user_details", async (request, response) => {
                 profile_pic: user_details.profile_pic,
                 bio: user_details.bio,
                 createdAt: user_details.createdAt,
-                follower_count: follower_count,
-                following_count: following_count,
             },
         });
     } catch (e) {

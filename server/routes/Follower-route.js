@@ -18,7 +18,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
 
         // ensuring the requests inputs are valid
         let can_continue = false;
-        const allowed_follower_types = ["follower", "following"];
+        const allowed_follower_types = ["followers", "following"];
         for (const each_follower_type of allowed_follower_types) {
             if (each_follower_type.toLocaleLowerCase() === follower_type) {
                 can_continue = true;
@@ -37,7 +37,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         let follower_id_to_use = {};
         // so we can get the correct profile details  through sequqelize association
         let as_relationship_to_use = "";
-        if (follower_type === "follower") {
+        if (follower_type === "followers") {
             follower_id_to_use = {
                 user_id: user_id,
             };
@@ -80,7 +80,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         for (const row of all_profiles) {
             // ensuring we get the right id from the row of all_profiles we got eariler
             let where_clause_to_use = {};
-            if (follower_type === "follower") {
+            if (follower_type === "followers") {
                 where_clause_to_use = {
                     user_id: user_id,
                     followed_by: row.followed_by_user_details.id,
@@ -101,7 +101,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
 
             // attaching the users username and profile pic to the is_following
             const follower_details =
-                follower_type === "follower"
+                follower_type === "followers"
                     ? row.followed_by_user_details
                     : row.user_id_details;
 
@@ -122,6 +122,33 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
             msg: "got all profiles for all_voters",
             msg: `got all profiles for follower_type:${follower_type}`,
             all_followers: new_follower_data,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
+router.get("/get_follower_following_counts", async (request, response) => {
+    try {
+        const user_id = parseInt(request.query.user_id);
+
+        const follower_count = await db.Follower.count({
+            where: {
+                user_id: user_id,
+            },
+        });
+
+        const following_count = await db.Follower.count({
+            where: {
+                followed_by: user_id,
+            },
+        });
+
+        response.json({
+            follower_count: follower_count,
+            following_count: following_count,
         });
     } catch (e) {
         response.json({

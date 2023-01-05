@@ -57,6 +57,40 @@
 
                 }
             }
+
+            .bio_and_btns {
+                
+                .btns {
+                    display: flex;
+                    gap: 10px;
+
+                    .following_btn {
+                        @include btn-styles(var(--green));
+                    }
+
+                    .follow_btn {
+                        @include btn-styles(var(--blue));
+                    }
+
+                    .logout_btn {
+                        @include btn-styles(var(--blue));
+                    }
+
+                    .edit_profile_btn {
+                        @include btn-styles(var(--background-color-tertiary));
+                        padding: 5px;
+                        padding-right: 10px;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+
+                        .edit_btn_icon {
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+                }
+            }
         }
 
     }
@@ -93,6 +127,25 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+
+            button {
+                border: none;
+                background: none;
+                color: var(--text-color-primary);
+                cursor: pointer;
+                font-size: large;
+                padding: 10px 5px;
+            }
+
+            .active {
+                border-bottom: 1px solid var(--blue);
+            }
+
+        }
 
 
         .close_modal_btn {

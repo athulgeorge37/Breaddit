@@ -17,8 +17,9 @@ import {
 import { get_user_details, sign_out } from "../../api/UserRequests";
 import {
     get_all_profiles_who_follow,
-    follow_or_unfollow_account,
+    follow_or_unfollow_account_request,
     check_is_following_username,
+    get_follower_following_counts_request,
 } from "../../api/FollowerRequests";
 
 // ui
@@ -46,17 +47,23 @@ function ReadProfile({ set_toggle_edit_page }) {
     const [user_id, set_user_id] = useState(null);
     const [is_signing_out, set_is_signing_out] = useState(false);
 
-    const follow_or_unfollow_account_mutation = useMutation(
-        () => {
-            return follow_or_unfollow_account(user_id);
+    const { mutate: follow_or_unfollow_account } = useMutation(
+        (account_id) => {
+            return follow_or_unfollow_account_request(account_id);
         },
         {
-            onSuccess: (data) => {
-                console.log({ data });
+            onSuccess: () => {
+                // console.log({ data });
                 queryClient.invalidateQueries([
                     "is_following",
                     { username: username_route },
                 ]);
+
+                queryClient.invalidateQueries([
+                    "follower_following_counts",
+                    { user_id: user_id },
+                ]);
+
                 // set_is_following_user(data.is_following);
             },
         }
@@ -78,6 +85,17 @@ function ReadProfile({ set_toggle_edit_page }) {
         }
     );
 
+    const { data: follower_following_counts } = useQuery(
+        ["follower_following_counts", { user_id }],
+        () => {
+            return get_follower_following_counts_request(user_id);
+        },
+        {
+            // will only_execute after a user_id exists
+            enabled: !!user_id,
+        }
+    );
+
     const { data, isLoading, isError } = useQuery(
         ["user_details", { username: username_route }],
         () => {
@@ -94,7 +112,7 @@ function ReadProfile({ set_toggle_edit_page }) {
         }
     );
 
-    const handle_sign_out = useMutation(sign_out, {
+    const { mutate: handle_sign_out } = useMutation(sign_out, {
         onSuccess: (data) => {
             console.log({ sign_out_time: data });
             set_is_signing_out(true);
@@ -125,6 +143,7 @@ function ReadProfile({ set_toggle_edit_page }) {
             <Modal show_modal={show_modal} close_modal={close_modal}>
                 <div className="follower_list_modal">
                     <FollowerListInfiniteScroll
+                        set_follower_type={set_follower_type}
                         follower_type={follower_type}
                         user_id={user_id}
                         close_modal={close_modal}
@@ -151,12 +170,14 @@ function ReadProfile({ set_toggle_edit_page }) {
                         <button
                             className="followers"
                             onClick={() => {
-                                set_follower_type("Follower");
+                                set_follower_type("Followers");
                                 open_modal();
                             }}
                         >
                             <span id="follower_count">
-                                {user_details.follower_count}
+                                {follower_following_counts == undefined
+                                    ? 0
+                                    : follower_following_counts.follower_count}
                             </span>
                             <label htmlFor="follower_count">Followers</label>
                         </button>
@@ -168,7 +189,9 @@ function ReadProfile({ set_toggle_edit_page }) {
                             }}
                         >
                             <span id="following_count">
-                                {user_details.following_count}
+                                {follower_following_counts == undefined
+                                    ? 0
+                                    : follower_following_counts.following_count}
                             </span>
                             <label htmlFor="following_count">Following</label>
                         </button>
@@ -181,9 +204,16 @@ function ReadProfile({ set_toggle_edit_page }) {
                                     <>
                                         <button
                                             aria-label="follow user"
+                                            className={
+                                                is_following_data.is_following
+                                                    ? "following_btn"
+                                                    : "follow_btn"
+                                            }
                                             type="button"
                                             onClick={() =>
-                                                follow_or_unfollow_account_mutation.mutate()
+                                                follow_or_unfollow_account(
+                                                    user_id
+                                                )
                                             }
                                         >
                                             {is_following_data.is_following
@@ -194,15 +224,40 @@ function ReadProfile({ set_toggle_edit_page }) {
                                 )}
 
                             {username_route === current_user.username && (
-                                <button
-                                    className="logout"
-                                    type="buttton"
-                                    onClick={() => handle_sign_out.mutate()}
-                                >
-                                    {is_signing_out
-                                        ? "Signing Out..."
-                                        : "Sign Out"}
-                                </button>
+                                <>
+                                    <button
+                                        className="edit_profile_btn"
+                                        type="btn"
+                                        onClick={() =>
+                                            set_toggle_edit_page(true)
+                                        }
+                                    >
+                                        <svg
+                                            className="edit_btn_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                            />
+                                        </svg>
+                                        Edit Profile
+                                    </button>
+                                    <button
+                                        className="logout_btn"
+                                        type="buttton"
+                                        onClick={() => handle_sign_out}
+                                    >
+                                        {is_signing_out
+                                            ? "Signing Out..."
+                                            : "Sign Out"}
+                                    </button>
+                                </>
                             )}
                         </div>
                     </div>
@@ -212,7 +267,12 @@ function ReadProfile({ set_toggle_edit_page }) {
     );
 }
 
-function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
+function FollowerListInfiniteScroll({
+    follower_type,
+    user_id,
+    close_modal,
+    set_follower_type,
+}) {
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -220,7 +280,7 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
         data,
         error,
     } = useInfiniteQuery(
-        ["follower_info", { follower_type, user_id }],
+        ["follower_infinite_list", { follower_type, user_id }],
         ({ pageParam = 0 }) =>
             get_all_profiles_who_follow(
                 follower_type,
@@ -246,9 +306,6 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
             },
             onError: (data) => {
                 console.log({ infinite_followers: data });
-            },
-            onSuccess: (data) => {
-                console.log(data);
             },
         }
     );
@@ -295,10 +352,7 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
                         <FollowerCard
                             follower_data={follower_data}
                             close_modal={close_modal}
-                            follower_info_query={{
-                                follower_type,
-                                user_id,
-                            }}
+                            user_id={user_id}
                         />
                     </div>
                 );
@@ -308,10 +362,7 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
                     <FollowerCard
                         follower_data={follower_data}
                         close_modal={close_modal}
-                        follower_info_query={{
-                            follower_type,
-                            user_id,
-                        }}
+                        user_id={user_id}
                     />
                 </div>
             );
@@ -321,7 +372,28 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
     return (
         <div className="FollowerListInfiniteScroll">
             <div className="header">
-                <h2>{follower_type}</h2>
+                <div className="tabs">
+                    <h2>
+                        <button
+                            className={`${
+                                follower_type === "Followers" ? "active" : ""
+                            }`}
+                            onClick={() => set_follower_type("Followers")}
+                        >
+                            Followers
+                        </button>
+                    </h2>
+                    <h2>
+                        <button
+                            className={`${
+                                follower_type === "Following" ? "active" : ""
+                            }`}
+                            onClick={() => set_follower_type("Following")}
+                        >
+                            Following
+                        </button>
+                    </h2>
+                </div>
                 <ToolTip text="Close Modal">
                     <button
                         className="close_modal_btn"
@@ -351,7 +423,9 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
                     <div className="end_of_followers_lists">
                         {isFetchingNextPage && <Loading />}
 
-                        {hasNextPage === false && <p>No more followers</p>}
+                        {hasNextPage === false && (
+                            <p>No More {follower_type}</p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -359,7 +433,7 @@ function FollowerListInfiniteScroll({ follower_type, user_id, close_modal }) {
     );
 }
 
-function FollowerCard({ follower_data, close_modal, follower_info_query }) {
+function FollowerCard({ follower_data, close_modal, user_id }) {
     const navigate = useNavigate();
     const { current_user } = useCurrentUser();
     const queryClient = useQueryClient();
@@ -367,16 +441,16 @@ function FollowerCard({ follower_data, close_modal, follower_info_query }) {
         follower_data.is_following
     );
 
-    const follow_or_unfollow_account_mutation = useMutation(
+    const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {
-            return follow_or_unfollow_account(account_id);
+            return follow_or_unfollow_account_request(account_id);
         },
         {
             onSuccess: (data) => {
-                console.log({ data });
+                // console.log({ data });
                 queryClient.invalidateQueries([
-                    "follower_info",
-                    follower_info_query,
+                    "follower_following_counts",
+                    { user_id: user_id },
                 ]);
                 set_is_following(data.is_following);
             },
@@ -384,7 +458,7 @@ function FollowerCard({ follower_data, close_modal, follower_info_query }) {
     );
 
     return (
-        <div className="VoterCard">
+        <div className="FollowerCard">
             <div className="left_side">
                 <ProfilePicture
                     username={follower_data.dataValues.username}
@@ -411,9 +485,7 @@ function FollowerCard({ follower_data, close_modal, follower_info_query }) {
                         is_following ? "following_btn" : "follower_btn"
                     }`}
                     onClick={() => {
-                        follow_or_unfollow_account_mutation.mutate(
-                            follower_data.dataValues.id
-                        );
+                        follow_or_unfollow_account(follower_data.dataValues.id);
                     }}
                 >
                     {is_following ? "Following" : "Follow"}

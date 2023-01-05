@@ -4,8 +4,9 @@
 .profile_picture_div {
     margin-right: 10px;
     border: none;
-    
     background: none;
+    border: 2px solid var(--background-color-secondary);
+    border-radius: $border-radius;
 
     &:hover {
         cursor: pointer;

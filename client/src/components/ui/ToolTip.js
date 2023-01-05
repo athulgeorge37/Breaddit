@@ -20,65 +20,29 @@ function ToolTip({
     // tooltip will be positioned relative to the screen top and left px value
 
     // using ref to prevent this object from changing when rerendering
-    const position_ref = useRef({ x: 0, y: 0 });
-    const tooltip_ref = useRef();
+    // const position_ref = useRef({ x: 0, y: 0 });
     const child_ref = useRef();
+    const tooltip_ref = useRef();
 
     const [show_tooltip, set_show_tooltip] = useState(false);
+    const [tooltip_position, set_tooltip_position] = useState({
+        x: -100,
+        y: -100,
+    });
 
-    const handle_mouse_over = () => {
-        // using the event from hover to get
-        // the child elements position to calculate tooltip position
-
-        position_ref.current = calculate_position(
-            child_ref.current.getBoundingClientRect(),
-            {
-                clientWidth: tooltip_ref.current.clientWidth,
-                clientHeight: tooltip_ref.current.clientHeight,
-                offsetWidth: tooltip_ref.current.offsetWidth,
-                offsetHeight: tooltip_ref.current.offsetHeight,
-            },
-            placement,
-            spacing
-        );
-
+    const reveal_tooltip = () => {
         set_show_tooltip(true);
     };
 
-    const handle_mouse_leave = () => {
+    const hide_tooltip = () => {
         set_show_tooltip(false);
     };
-
-    // useEffect(() => {
-    //     // console.log(child_ref.current.getBoundingClientRect());
-    //     // position_ref.current = calculate_position(
-    //     //     child_ref.current.getBoundingClientRect(),
-    //     //     tooltip_ref,
-    //     //     placement,
-    //     //     spacing
-    //     // );
-    //     set_position(
-    //         calculate_position(
-    //             child_ref.current.getBoundingClientRect(),
-    //             {
-    //                 clientWidth: tooltip_ref.current.clientWidth,
-    //                 clientHeight: tooltip_ref.current.clientHeight,
-    //                 offsetWidth: tooltip_ref.current.offsetWidth,
-    //                 offsetHeight: tooltip_ref.current.offsetHeight,
-    //             },
-    //             placement,
-    //             spacing
-    //         )
-    //     );
-
-    //     // set_show_tooltip(true);
-    // }, [child_ref.current]);
 
     useEffect(() => {
         // removing tooltip when user scrolls and tooltip is focused from tabbing
         const handleScroll = () => {
             // console.log("window.scrollY", window.scrollY);
-            handle_mouse_leave();
+            hide_tooltip();
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -87,6 +51,24 @@ function ToolTip({
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
+    useEffect(() => {
+        if (tooltip_ref.current) {
+            set_tooltip_position(
+                calculate_position(
+                    child_ref.current.getBoundingClientRect(),
+                    {
+                        clientWidth: tooltip_ref.current.clientWidth,
+                        clientHeight: tooltip_ref.current.clientHeight,
+                        offsetWidth: tooltip_ref.current.offsetWidth,
+                        offsetHeight: tooltip_ref.current.offsetHeight,
+                    },
+                    placement,
+                    spacing
+                )
+            );
+        }
+    }, [show_tooltip, text]);
 
     if (disabled || text === "" || text === undefined) {
         // not creating portal, or cloning element if tooltip is disabled
@@ -100,52 +82,35 @@ function ToolTip({
         <>
             {cloneElement(children, {
                 ref: child_ref,
-                onMouseOver: handle_mouse_over,
-                onMouseLeave: handle_mouse_leave,
+                onMouseOver: reveal_tooltip,
+                onMouseLeave: hide_tooltip,
                 // allowing tooltip to be shown when tabbing through page
-                onFocus: handle_mouse_over,
-                onBlur: handle_mouse_leave, // = onUnFocus
+                onFocus: reveal_tooltip,
+                onBlur: hide_tooltip, // = onUnFocus
             })}
-            {/* <div
-                ref={child_ref}
-                onMouseOver={handle_mouse_over}
-                onMouseLeave={handle_mouse_leave}
-                onClick={handle_mouse_over}
-                // allowing tooltip to be shown when tabbing through page
-                onFocus={handle_mouse_over}
-                onBlur={handle_mouse_leave} // = onUnFocus
-            >
-                <div
-                    onClick={(e) => {
-                        // stopPropagation prevents the modal from closing
-                        // when clicking inside this div, ie: the children content
-                        e.stopPropagation();
-                    }}
-                >
-                    {children}
-                </div>
-            </div> */}
             <Portal>
-                <span
-                    key={text}
-                    className="ToolTip"
-                    ref={tooltip_ref}
-                    style={{
-                        // visibility hidden prevent tooltip from interacting with other elements
-                        visibility: show_tooltip ? "visible" : "hidden",
-                        opacity: show_tooltip ? "1" : "0",
-                        top: `${position_ref.current.y}px`,
-                        left: `${position_ref.current.x}px`,
+                {show_tooltip ? (
+                    <span
+                        key={text}
+                        className="ToolTip"
+                        ref={tooltip_ref}
+                        style={{
+                            // visibility hidden prevent tooltip from interacting with other elements
+                            visibility: show_tooltip ? "visible" : "hidden",
+                            opacity: show_tooltip ? "1" : "0",
+                            top: `${tooltip_position.y}px`,
+                            left: `${tooltip_position.x}px`,
 
-                        transitionDelay: ` ${
-                            show_tooltip ? 0.01 : 0.02
-                        }s !important`,
-                        transformOrigin: `${negate_placement(placement)}`,
-                        transform: `scale(${show_tooltip ? 1 : 0.7})`,
-                    }}
-                >
-                    {text}
-                </span>
+                            transitionDelay: ` ${
+                                show_tooltip ? 0.01 : 0.02
+                            }s !important`,
+                            transformOrigin: `${negate_placement(placement)}`,
+                            transform: `scale(${show_tooltip ? 1 : 0.7})`,
+                        }}
+                    >
+                        {text}
+                    </span>
+                ) : null}
             </Portal>
         </>
     );

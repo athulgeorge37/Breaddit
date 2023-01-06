@@ -2,15 +2,18 @@
 
 
 .profile_picture_div {
-    margin-right: 10px;
     border: none;
     background: none;
     border: 2px solid var(--background-color-secondary);
     border-radius: $border-radius;
+    background-color: var(--background-color-secondary);
+    // overflow: hidden;
+    // cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
 
-    &:hover {
-        cursor: pointer;
-    }
 
     .default_profile_pic {
         // padding: 0.5em;
@@ -24,10 +27,10 @@
 
         color: var(--text-color-primary);
     
-    //    svg {
-    //     width: 30px;
-    //     height: 30px;
-    //    }
+        //    svg {
+        //     width: 30px;
+        //     height: 30px;
+        //    }
     
         // .default_profile_pic_img {
         //     width: 30px;

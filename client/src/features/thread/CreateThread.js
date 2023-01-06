@@ -82,10 +82,10 @@ function CreateThread() {
             <div className="edit_logo_and_theme">
                 <div className="edit_logo">
                     <label htmlFor="">Logo:</label>
-                    <EditProfilePic
+                    {/* <EditProfilePic
                         profile_picture_url={logo_url}
                         set_profile_picture_url={set_logo_url}
-                    />
+                    /> */}
                 </div>
 
                 <div className="edit_theme">

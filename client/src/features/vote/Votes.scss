@@ -141,9 +141,14 @@
                 padding: 10px 5px;
             }
 
-            .active {
-                border-bottom: 1px solid var(--blue);
+            .active_up_vote_tab {
+                border-bottom: 3px solid var(--green);
             }
+
+            .active_down_vote_tab {
+                border-bottom: 3px solid var(--red);
+            }
+
 
         }
 

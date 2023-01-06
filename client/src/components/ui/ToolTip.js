@@ -57,7 +57,10 @@ function ToolTip({
     useEffect(() => {
         if (tooltip_ref.current && show_tooltip === true) {
             // setting tooltip position will rerender tooltip
-            // so it is always using the correct position
+            // so it is always using the correct
+
+            // console.log("calculating tooltip pos");
+
             set_tooltip_position(
                 calculate_position(
                     child_ref.current.getBoundingClientRect(),

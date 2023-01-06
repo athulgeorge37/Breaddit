@@ -78,7 +78,12 @@ const delete_user = async () => {
     return response.data;
 };
 
-const edit_user_details = async (email, username, profile_pic, bio) => {
+const edit_user_details = async ({
+    email = null,
+    username = null,
+    profile_pic = null,
+    bio = null,
+}) => {
     const response = await axios.put(
         `${CUSTOM_ENDPOINT}/edit_user_details`,
         {

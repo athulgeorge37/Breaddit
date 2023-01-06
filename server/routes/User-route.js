@@ -316,37 +316,41 @@ router.put(
     "/edit_user_details",
     validate_request,
     async (request, response) => {
-        // where edited_post_details = {
-        //     "post_id": 2,
-        //     "post_text": "new_post_text",
-        //     "post_image": "new_img_url"
-        // }
-
         try {
             const { email, username, profile_pic, bio } = request.body;
 
-            await db.User.update(
-                {
-                    email: email,
-                    username: username,
-                    profile_pic: profile_pic,
-                    bio: bio,
+            // will only add to object if it is defined
+            const fields_to_update = {
+                ...(email && { email }),
+                ...(username && { username }),
+                ...(profile_pic && {
+                    // when we want to make profile_pic null
+                    // make sure to pass profile_pic from body as "null" string
+                    // if we pass null, we wont append profile_pic to fields_to_update object
+                    // and we wont edit it in DB
+                    profile_pic: profile_pic === "null" ? null : profile_pic,
+                }),
+                ...(bio && {
+                    // same logic for bio as it was for profile pic
+                    bio: bio === "null" ? null : bio,
+                }),
+            };
+
+            // updating user in DB
+            await db.User.update(fields_to_update, {
+                where: {
+                    id: request.user_id,
                 },
-                {
-                    where: {
-                        id: request.user_id,
-                    },
-                }
-            );
+            });
+
+            // console.log("");
+            // console.log({
+            //     profile_pic: updated_user_details.profile_pic,
+            // });
+            // console.log("");
 
             response.json({
                 msg: "Succesfully edited profile in db",
-                // updated_user_details: {
-                //     email: updated_user_details.email,
-                //     username: updated_user_details.username,
-                //     profile_pic: updated_user_details.profile_pic,
-                //     bio: updated_user_details.bio
-                // }
             });
         } catch (e) {
             response.json({

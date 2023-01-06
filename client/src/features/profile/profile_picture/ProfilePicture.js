@@ -12,8 +12,9 @@ import ToolTip from "../../../components/ui/ToolTip";
 function ProfilePicture({
     profile_picture_url,
     username,
-    large = false,
+    img_size = 30,
     disable_tooltip = false,
+    margin_right = 10,
 }) {
     const { current_user } = useCurrentUser();
     // make profile_picture_div have an onclick property that redirects them to
@@ -46,6 +47,10 @@ function ProfilePicture({
                     }
                     handle_profile_redirect();
                 }}
+                style={{
+                    marginRight: `${margin_right}px`,
+                    cursor: disable_tooltip ? "" : "pointer",
+                }}
             >
                 {profile_picture_url === null ? (
                     <div className="default_profile_pic">
@@ -55,8 +60,8 @@ function ProfilePicture({
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
                             style={{
-                                height: `${large ? 50 : 30}px`,
-                                width: `${large ? 50 : 30}px`,
+                                height: `${img_size}px`,
+                                width: `${img_size}px`,
                             }}
                         >
                             <path
@@ -69,11 +74,9 @@ function ProfilePicture({
                 ) : (
                     <CloudinaryImage
                         image_url={profile_picture_url}
-                        style={{
-                            width: `calc(${large ? 50 : 30}px + 0.5em)`,
-                            height: `calc(${large ? 50 : 30}px + 0.5em)`,
-                        }}
-                        alt="profile_picture"
+                        height={`${img_size === 30 ? 38 : img_size}px`}
+                        width={`${img_size === 30 ? 38 : img_size}px`}
+                        alt="profile picture"
                     />
                 )}
             </button>

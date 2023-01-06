@@ -43,6 +43,7 @@
             }
     
             .default_profile_pic {
+                padding: 0;
                 img {
                     width: 180px;
                     height: 180px;
@@ -51,11 +52,19 @@
         }
        
 
-        .edit_profile_picture {
-            @include btn-styles(var(--blue));
-            margin-top: 1em;
+        .edit_profile_picture_btn {
+            @include btn-styles(var(--text-color-secondary));
+            margin-top: 10px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            color: var(--text-color-primary);
+
+            .edit_icon {
+                width: 25px;
+                height: 25px;
+                margin-right: 10px;
+            }
         }
     }
 
@@ -63,6 +72,22 @@
         display: flex;
         justify-content: space-evenly;
         margin-top: 16px;
+
+
+        button {
+            // color: var(--text-color-primary);
+            @include btn-styles(var(--background-color-secondary));
+            padding: 5px;
+            transition: none;
+            display: flex;
+            align-items: center;
+
+            svg {
+                width: 25px;
+                height: 25px;
+                color: var(--text-color-secondary);
+            }
+        }
         
     }
 }

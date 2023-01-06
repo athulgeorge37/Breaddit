@@ -382,7 +382,9 @@ function VoterListInfiniteScroll({
                     <h2>
                         <button
                             className={`${
-                                modal_vote_type === true ? "active" : ""
+                                modal_vote_type === true
+                                    ? "active_up_vote_tab"
+                                    : ""
                             }`}
                             onClick={() => set_modal_vote_type(true)}
                         >
@@ -392,7 +394,9 @@ function VoterListInfiniteScroll({
                     <h2>
                         <button
                             className={`${
-                                modal_vote_type === false ? "active" : ""
+                                modal_vote_type === false
+                                    ? "active_down_vote_tab"
+                                    : ""
                             }`}
                             onClick={() => set_modal_vote_type(false)}
                         >

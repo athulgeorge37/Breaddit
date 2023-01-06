@@ -1,621 +1,466 @@
-// // style import
-// import "./ReadProfile.scss";
+// style import
+import "./ReadProfile.scss";
 
-// // hook imports
-// import { useState, useEffect } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
+// hooks
+import { useState, useRef, useCallback } from "react";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useParams, useNavigate } from "react-router-dom";
+import { useModal } from "../../components/ui/Modal";
+import {
+    useQuery,
+    useInfiniteQuery,
+    useQueryClient,
+    useMutation,
+} from "@tanstack/react-query";
 
-// // component imports
-// import FollowerCard from "../follower/FollowerCard";
-// import Post from "../post/Post";
-// import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-// import Loading from "../../components/ui/Loading";
+// api
+import { get_user_details, sign_out } from "../../api/UserRequests";
+import {
+    get_all_profiles_who_follow,
+    follow_or_unfollow_account_request,
+    check_is_following_username,
+    get_follower_following_counts_request,
+} from "../../api/FollowerRequests";
 
-// // rest api requests imports
-// import {
-//     get_all_posts_by_username,
-//     get_all_posts_by_curr_user,
-// } from "../../api/PostRequests";
-// import { get_current_date } from "../../helper/time";
-// import {
-//     get_accounts_of_type_by_username,
-//     get_count_of_type_by_username,
-//     check_is_following_username,
-//     follow_account,
-//     unfollow_account,
-// } from "../../api/FollowerRequests";
+// ui
+import ToolTip from "../../components/ui/ToolTip";
+import Modal from "../../components/ui/Modal";
+import Loading from "../../components/ui/Loading";
 
-// // rest api requert imports
-// import {
-//     get_user_details,
-//     get_user_profile_details,
-//     sign_out,
-// } from "../../api/UserRequests";
+// components
+import ProfilePicture from "./profile_picture/ProfilePicture";
 
+// helper
 // import DOMPurify from "dompurify";
-// import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-
-// function ReadProfile({ set_toggle_edit_page }) {
-//     const navigate = useNavigate();
-//     const { username_route } = useParams();
-//     const { current_user, remove_current_user } = useCurrentUser();
-
-//     const [is_signing_out, set_is_signing_out] = useState(false);
-//     const [is_following_user, set_is_following_user] = useState(false);
-
-//     const [all_user_posts, set_all_user_posts] = useState([]);
-//     const [is_loading, set_is_loading] = useState(true);
-
-//     const [user_profile_details, set_user_profile_details] = useState({
-//         email: "unknown",
-//         username: "unknown",
-//         profile_pic: null,
-//         createdAt: "2000-01-01T01:01:01.000Z",
-//         bio: null,
-//     });
-
-//     const [followers, set_followers] = useState({
-//         count: 0,
-//         data: [],
-//         show_data: false,
-//     });
-
-//     const [following, set_following] = useState({
-//         count: 0,
-//         data: [],
-//         show_data: false,
-//     });
-
-//     const initialise_profile_data = async (is_cancelled) => {
-//         if (is_cancelled === true) {
-//             console.log("canceling profile data request");
-//             return;
-//         }
-
-//         set_is_loading(true);
-//         // console.log("initialising profile data")
-
-//         const initialised_user_details = await initialise_user_details();
-//         // console.log("user_profile_details.username ===", user_profile_details.username)
-
-//         const initialised_counts = await initialise_counts();
-//         // console.log({
-//         //     followers: followers.count,
-//         //     following: following.count
-//         // })
-
-//         let initialised_is_following;
-//         // console.log("username_route", username_route)
-//         // console.log("current_user.username", current_user.username)
-//         if (username_route === current_user.username) {
-//             // console.log("not fetching is_following_user, cus we are logged in")
-//             initialised_is_following = true;
-//             // need to make true so we do fetch user posts below
-//         } else {
-//             initialised_is_following = await initialise_is_following_user();
-//         }
-
-//         // console.log("initialised_user_details", initialised_user_details)
-//         set_user_profile_details(initialised_user_details);
-
-//         // console.log("initialised_counts", initialised_counts)
-//         set_followers({
-//             ...followers,
-//             count: initialised_counts.follower_count,
-//         });
-//         set_following({
-//             ...following,
-//             count: initialised_counts.following_count,
-//         });
-
-//         // console.log("initialised_is_following", initialised_is_following)
-//         set_is_following_user(initialised_is_following);
-
-//         if (initialised_is_following === true) {
-//             const initialised_user_posts = await initialise_user_posts();
-//             set_all_user_posts(initialised_user_posts);
-//         }
-
-//         set_is_loading(false);
-//     };
-
-//     const initialise_user_details = async () => {
-//         let response;
-//         // console.log("username_route", username_route)
-//         // console.log("current_user.username", current_user.username)
-//         if (username_route === current_user.username) {
-//             response = await get_user_details();
-//             // this response includes the user email, so they can change it
-//         } else {
-//             response = await get_user_profile_details(username_route);
-//             // this response does not include the user email, only profile details
-//         }
-
-//         if (response.error) {
-//             console.log(response);
-//             return;
-//         }
-
-//         // set_user_profile_details(response.user_details)
-//         return response.user_details;
-//     };
-
-//     const initialise_user_posts = async () => {
-//         // no need to fetch if we are not following the user
-//         // if (is_following_user === false) {
-//         //     // keeping all_user_posts as []
-//         //     console.log("not fetching user posts")
-//         //     return
-//         // }
-
-//         // console.log("fetching user posts")
-//         let response;
-//         if (username_route === current_user.username) {
-//             response = await get_all_posts_by_curr_user(username_route);
-//         } else {
-//             response = await get_all_posts_by_username(username_route);
-//         }
-
-//         if (response.error) {
-//             console.log(response);
-//             return;
-//         }
-
-//         // set_all_user_posts(response.all_posts)
-//         return response.all_posts;
-//     };
-
-//     const initialise_is_following_user = async () => {
-//         const response = await check_is_following_username(username_route);
-
-//         if (response.error) {
-//             console.log(response);
-//             return false;
-//         }
-
-//         // set_is_following_user(response.is_following)
-//         return response.is_following;
-//     };
-
-//     const handle_follow_btn = async () => {
-//         let new_is_following_user;
-//         let response;
-//         if (is_following_user === true) {
-//             // trying to unfollow a user
-//             // console.log("unfollowing account")
-//             response = await unfollow_account(user_profile_details.username);
-//             new_is_following_user = false;
-//         } else {
-//             // trying to follow a user
-//             response = await follow_account(user_profile_details.username);
-//             new_is_following_user = true;
-//         }
-
-//         console.log(response);
-//         if (response.error) {
-//             return;
-//         }
-
-//         set_is_following_user(new_is_following_user);
-//     };
-
-//     const initialise_counts = async () => {
-//         // if (user_profile_details.username === "unknown") {
-//         //     console.log("username is unknown")
-//         //     return
-//         // }
-
-//         const follower_response = await get_count_of_type_by_username(
-//             "follower",
-//             username_route
-//         );
-
-//         if (follower_response.error) {
-//             console.log("follower_response", follower_response);
-//             return;
-//         }
-
-//         const following_response = await get_count_of_type_by_username(
-//             "following",
-//             username_route
-//         );
-
-//         if (following_response.error) {
-//             console.log("following_response", following_response);
-//             return;
-//         }
-
-//         // set_followers({
-//         //     ...followers,
-//         //     count: follower_response.count
-//         // })
-
-//         // set_following({
-//         //     ...following,
-//         //     count: following_response.count
-//         // })
-
-//         return {
-//             follower_count: follower_response.count,
-//             following_count: following_response.count,
-//         };
-//     };
-
-//     const get_all_follower_data = async () => {
-//         // only calling rest api request when data array is empty
-//         // if (followers.data.length > 0) {
-//         //     set_followers({
-//         //         ...followers,
-//         //         show_data: true,
-//         //     })
-//         //     return
-//         // }
-
-//         const response = await get_accounts_of_type_by_username(
-//             "follower",
-//             user_profile_details.username
-//         );
-//         // console.log(response)
-//         if (response.error) {
-//             console.log(response);
-//             return;
-//         }
-
-//         set_followers({
-//             ...followers,
-//             show_data: true,
-//             data: response.all_accounts,
-//         });
-//     };
-
-//     const get_all_following_data = async () => {
-//         // only calling rest api request when data array is empty
-//         // if (following.data.length > 0) {
-//         //     set_following({
-//         //         ...following,
-//         //         show_data: true,
-//         //     })
-//         //     return
-//         // }
-
-//         const response = await get_accounts_of_type_by_username(
-//             "following",
-//             user_profile_details.username
-//         );
-//         // (response)
-//         if (response.error) {
-//             console.log(response);
-//             return;
-//         }
-
-//         set_following({
-//             ...following,
-//             show_data: true,
-//             data: response.all_accounts,
-//         });
-//     };
-
-//     const handle_set_follower_card = async (type_to_set) => {
-//         // where type_to_set is the type of follower / following card we want to set
-
-//         if (type_to_set === "follower") {
-//             await get_all_follower_data();
-//             set_following({
-//                 ...following,
-//                 show_data: false,
-//             });
-//         } else if (type_to_set === "following") {
-//             await get_all_following_data();
-//             set_followers({
-//                 ...followers,
-//                 show_data: false,
-//             });
-//         }
-//     };
-
-//     const handle_sign_out = async () => {
-//         const sign_out_response = await sign_out();
-//         console.log(sign_out_response);
-//         if (sign_out_response.error) {
-//             return;
-//         }
-
-//         set_is_signing_out(true);
-//         setTimeout(() => {
-//             navigate("/signin");
-
-//             // removing web token from localstorage and
-//             // updating current_user in App.js,
-//             // to remove users access to certain pages
-//             remove_current_user();
-//         }, 1000);
-//     };
-
-//     const remove_post_from_list = (post_to_remove_id) => {
-//         const new_post_list = all_user_posts.filter((my_post) => {
-//             return my_post.id !== post_to_remove_id;
-//         });
-
-//         set_all_user_posts(new_post_list);
-//     };
-
-//     // const initialise_data = useCallback(async () => {
-
-//     //     set_is_loading(true)
-
-//     //     console.log("initialising profile data")
-
-//     //     await initialise_user_details()
-//     //     console.log("user_profile_details.username ===", user_profile_details.username)
-
-//     //     await initialise_counts()
-//     //     console.log({
-//     //         followers: followers.count,
-//     //         following: following.count
-//     //     })
-
-//     //     await initialise_is_following_user()
-
-//     //     await initialise_user_posts()
-
-//     //     set_is_loading(false)
-
-//     // }, [username_route])
-
-//     // useEffect(() => {
-
-//     //     // initialise_profile_data()
-//     //     initialise_data()
-
-//     // }, [initialise_data])
-
-//     useEffect(() => {
-//         let is_cancelled = false;
-
-//         initialise_profile_data(is_cancelled);
-
-//         return () => {
-//             is_cancelled = true;
-//         };
-//     }, [username_route]);
-
-//     return (
-//         <div className="ReadProfile">
-//             {is_loading === true ? (
-//                 <Loading />
-//             ) : (
-//                 <>
-//                     <div className="follower_following_cards">
-//                         {/* {
-//                         followers.show_data
-//                         ?
-//                         <FollowerCard
-//                             state_object={followers}
-//                             set_state_object={set_followers}
-//                             state_name={"Followers"}
-//                             state_type={"follower"}
-//                         />
-//                         :
-//                             <FollowerCard
-//                             state_object={following}
-//                             set_state_object={set_following}
-//                             state_name={"Following"}
-//                             state_type={"following"}
-//                         />
-//                     } */}
-
-//                         {followers.show_data && (
-//                             <FollowerCard
-//                                 state_object={followers}
-//                                 set_state_object={set_followers}
-//                                 state_name={"Followers"}
-//                                 state_type={"follower"}
-//                             />
-//                         )}
-
-//                         {following.show_data && (
-//                             <FollowerCard
-//                                 state_object={following}
-//                                 set_state_object={set_following}
-//                                 state_name={"Following"}
-//                                 state_type={"following"}
-//                             />
-//                         )}
-//                     </div>
-
-//                     <div className="profile_card_and_user_posts">
-//                         <div className="read_only_profile_card">
-//                             <div className="section_one">
-//                                 <ProfilePicture
-//                                     profile_picture_url={
-//                                         user_profile_details.profile_pic
-//                                     }
-//                                     username={user_profile_details.username}
-//                                 />
-
-//                                 <div className="name_and_date_joined">
-//                                     <div className="username">
-//                                         {user_profile_details.username}
-//                                     </div>
-//                                     <div className="date_joined">
-//                                         {get_current_date(
-//                                             user_profile_details.createdAt
-//                                         )}
-//                                     </div>
-//                                 </div>
-//                             </div>
-
-//                             <div className="section_two">
-//                                 <div className="profile_stats">
-//                                     <div
-//                                         className="followers count_and_text"
-//                                         onClick={() =>
-//                                             handle_set_follower_card("follower")
-//                                         }
-//                                     >
-//                                         <div className="follower_count">
-//                                             {followers.count}
-//                                         </div>
-//                                         <div className="follower_text">
-//                                             Followers
-//                                         </div>
-//                                     </div>
-
-//                                     <div
-//                                         className="following count_and_text"
-//                                         onClick={() =>
-//                                             handle_set_follower_card(
-//                                                 "following"
-//                                             )
-//                                         }
-//                                     >
-//                                         <div className="following_count">
-//                                             {following.count}
-//                                         </div>
-//                                         <div className="following_text">
-//                                             Following
-//                                         </div>
-//                                     </div>
-
-//                                     <div className="bread_crumbs count_and_text">
-//                                         <div className="bread_crumbs_count">
-//                                             1000
-//                                         </div>
-//                                         <div className="bread_crumbs_text">
-//                                             Points
-//                                         </div>
-//                                     </div>
-//                                 </div>
-
-//                                 <div className="about_me">
-//                                     {user_profile_details.bio === null ? (
-//                                         <>
-//                                             {username_route ===
-//                                                 current_user.username &&
-//                                                 "Click Edit Profile to add your own bio"}
-//                                         </>
-//                                     ) : (
-//                                         <div
-//                                             className="bio"
-//                                             dangerouslySetInnerHTML={{
-//                                                 __html: DOMPurify.sanitize(
-//                                                     user_profile_details.bio
-//                                                 ),
-//                                             }}
-//                                         >
-//                                             {/* {user_profile_details.bio} */}
-//                                         </div>
-//                                     )}
-//                                 </div>
-
-//                                 <div className="profile_btns">
-//                                     {username_route ===
-//                                     current_user.username ? (
-//                                         <>
-//                                             <button
-//                                                 className="edit_profile"
-//                                                 onClick={() =>
-//                                                     set_toggle_edit_page(true)
-//                                                 }
-//                                             >
-//                                                 Edit Profile
-//                                             </button>
-
-//                                             <button
-//                                                 className="sign_out"
-//                                                 onClick={handle_sign_out}
-//                                             >
-//                                                 {is_signing_out
-//                                                     ? "...Signing Out"
-//                                                     : "Sign Out"}
-//                                             </button>
-//                                         </>
-//                                     ) : (
-//                                         <button
-//                                             className="follow_btn"
-//                                             onClick={handle_follow_btn}
-//                                         >
-//                                             {is_following_user
-//                                                 ? "Following"
-//                                                 : "Follow"}
-//                                         </button>
-//                                     )}
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         <div className="user_posts">
-//                             {username_route === current_user.username ? (
-//                                 <>
-//                                     {all_user_posts.length === 0 ? (
-//                                         <div className="no_posts">
-//                                             You have not made any posts
-//                                             <button
-//                                                 onClick={() =>
-//                                                     navigate("/posts")
-//                                                 }
-//                                             >
-//                                                 Create Post
-//                                             </button>
-//                                         </div>
-//                                     ) : (
-//                                         <div className="All_Posts">
-//                                             {all_user_posts.map(
-//                                                 (post_details) => {
-//                                                     return (
-//                                                         <Post
-//                                                             key={
-//                                                                 post_details.id
-//                                                             }
-//                                                             post_details={
-//                                                                 post_details
-//                                                             }
-//                                                             remove_post_from_list={
-//                                                                 remove_post_from_list
-//                                                             }
-//                                                         />
-//                                                     );
-//                                                 }
-//                                             )}
-//                                         </div>
-//                                     )}
-//                                 </>
-//                             ) : (
-//                                 <>
-//                                     {is_following_user === true ? (
-//                                         <div className="All_Posts">
-//                                             {all_user_posts.map(
-//                                                 (post_details) => {
-//                                                     return (
-//                                                         <Post
-//                                                             key={
-//                                                                 post_details.id
-//                                                             }
-//                                                             post_details={
-//                                                                 post_details
-//                                                             }
-//                                                             remove_post_from_list={
-//                                                                 remove_post_from_list
-//                                                             }
-//                                                         />
-//                                                     );
-//                                                 }
-//                                             )}
-//                                         </div>
-//                                     ) : (
-//                                         <div className="not_following">
-//                                             Follow {username_route} to see their
-//                                             recent activity
-//                                         </div>
-//                                     )}
-//                                 </>
-//                             )}
-//                         </div>
-//                     </div>
-//                 </>
-//             )}
-//         </div>
-//     );
-// }
-
-// export default ReadProfile;
+import { human_readable_date } from "../../helper/time";
+
+const FOLLOWERS_PER_PAGE = 2;
+
+function ReadProfile({ set_is_editing_profile, user_details, user_id }) {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const { username_route } = useParams();
+    const { current_user, remove_current_user } = useCurrentUser();
+    const { show_modal, open_modal, close_modal } = useModal();
+
+    const [follower_type, set_follower_type] = useState(null);
+
+    const [is_signing_out, set_is_signing_out] = useState(false);
+
+    const { mutate: follow_or_unfollow_account } = useMutation(
+        (account_id) => {
+            return follow_or_unfollow_account_request(account_id);
+        },
+        {
+            onSuccess: () => {
+                // console.log({ data });
+                queryClient.invalidateQueries([
+                    "is_following",
+                    { username: username_route },
+                ]);
+
+                queryClient.invalidateQueries([
+                    "follower_following_counts",
+                    { user_id: user_id },
+                ]);
+            },
+        }
+    );
+
+    const { data: is_following_data } = useQuery(
+        ["is_following", { username: username_route }],
+        () => {
+            return check_is_following_username(username_route);
+        },
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log("is_following username error", data.error);
+                    return;
+                }
+            },
+        }
+    );
+
+    const { data: follower_following_counts } = useQuery(
+        ["follower_following_counts", { user_id }],
+        () => {
+            return get_follower_following_counts_request(user_id);
+        },
+        {
+            // will only_execute after a user_id exists
+            enabled: !!user_id,
+        }
+    );
+
+    const { mutate: handle_sign_out } = useMutation(sign_out, {
+        onSuccess: (data) => {
+            console.log({ sign_out_time: data });
+            set_is_signing_out(true);
+            setTimeout(() => {
+                navigate("/signin");
+
+                // removing web token from localstorage and
+                // updating current_user in App.js,
+                // to remove users access to authenticated pages
+                remove_current_user();
+            }, 1000);
+        },
+    });
+
+    return (
+        <div className="ReadProfile">
+            <Modal show_modal={show_modal} close_modal={close_modal}>
+                <div className="follower_list_modal">
+                    <FollowerListInfiniteScroll
+                        set_follower_type={set_follower_type}
+                        follower_type={follower_type}
+                        user_id={user_id}
+                        close_modal={close_modal}
+                    />
+                </div>
+            </Modal>
+
+            <div className="user_details_card">
+                <div className="username_and_picture">
+                    <ProfilePicture
+                        username={user_details.username}
+                        profile_picture_url={user_details.profile_pic}
+                        img_size={100}
+                        disable_tooltip
+                        margin_right={0}
+                    />
+                    <p className="username">{user_details.username}</p>
+                    <div className="join_data">
+                        <label htmlFor="join_date">Joined On:</label>
+                        <p id="join_date">
+                            {human_readable_date(user_details.createdAt)}
+                        </p>
+                    </div>
+                </div>
+                <div className="user_data_and_bio">
+                    <div className="user_data">
+                        <button
+                            className="followers"
+                            onClick={() => {
+                                set_follower_type("Followers");
+                                open_modal();
+                            }}
+                        >
+                            <span id="follower_count">
+                                {follower_following_counts == undefined
+                                    ? 0
+                                    : follower_following_counts.follower_count}
+                            </span>
+                            <label htmlFor="follower_count">Followers</label>
+                        </button>
+                        <button
+                            className="following"
+                            onClick={() => {
+                                set_follower_type("Following");
+                                open_modal();
+                            }}
+                        >
+                            <span id="following_count">
+                                {follower_following_counts == undefined
+                                    ? 0
+                                    : follower_following_counts.following_count}
+                            </span>
+                            <label htmlFor="following_count">Following</label>
+                        </button>
+                    </div>
+                    <p className="bio">{user_details.bio ?? "No Bio"}</p>
+
+                    <div className="btns">
+                        {is_following_data !== undefined &&
+                            username_route !== current_user.username && (
+                                <>
+                                    <button
+                                        aria-label="follow user"
+                                        className={
+                                            is_following_data.is_following
+                                                ? "following_btn"
+                                                : "follow_btn"
+                                        }
+                                        type="button"
+                                        onClick={() =>
+                                            follow_or_unfollow_account(user_id)
+                                        }
+                                    >
+                                        {is_following_data.is_following
+                                            ? "Following"
+                                            : "Follow"}
+                                    </button>
+                                </>
+                            )}
+
+                        {username_route === current_user.username && (
+                            <>
+                                <button
+                                    className="edit_profile_btn"
+                                    type="btn"
+                                    onClick={() => set_is_editing_profile(true)}
+                                >
+                                    <svg
+                                        className="edit_btn_icon"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                        />
+                                    </svg>
+                                    Edit Profile
+                                </button>
+                                <button
+                                    className="logout_btn"
+                                    type="buttton"
+                                    onClick={handle_sign_out}
+                                >
+                                    {is_signing_out
+                                        ? "Signing Out..."
+                                        : "Sign Out"}
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function FollowerListInfiniteScroll({
+    follower_type,
+    user_id,
+    close_modal,
+    set_follower_type,
+}) {
+    const {
+        fetchNextPage, //function
+        hasNextPage, // boolean
+        isFetchingNextPage, // boolean
+        data,
+        error,
+    } = useInfiniteQuery(
+        ["follower_infinite_list", { follower_type, user_id }],
+        ({ pageParam = 0 }) =>
+            get_all_profiles_who_follow(
+                follower_type,
+                user_id,
+                FOLLOWERS_PER_PAGE,
+                pageParam
+            ),
+        {
+            getNextPageParam: (lastPage, allPages) => {
+                // when the last page retrieved has no posts in it
+                // we return undefined so hasNextPage becomes false
+
+                // when the last page's posts does have posts in it, it indicates
+                // there are more posts, so we set the page number to
+                // all_pages.length
+
+                // we do not add 1 since, page numbers in the server start from
+                // 0 and go up
+
+                return lastPage.all_followers.length
+                    ? allPages.length
+                    : undefined;
+            },
+            onError: (data) => {
+                console.log({ infinite_followers: data });
+            },
+        }
+    );
+
+    const intObserver = useRef();
+    const lastFollowerRef = useCallback(
+        (follower) => {
+            // not requesting next page if current page is loading
+            if (isFetchingNextPage) {
+                return;
+            }
+
+            // disconnecting previous intersection observers
+            if (intObserver.current) {
+                intObserver.current.disconnect();
+            }
+
+            // fetching next intersection observer
+            intObserver.current = new IntersectionObserver((followers) => {
+                // console.log({
+                //     isIntersecting: posts[0].isIntersecting,
+                //     hasNextPage,
+                // });
+                if (followers[0].isIntersecting && hasNextPage) {
+                    console.log("Fetching more folllowers");
+                    fetchNextPage();
+                }
+            });
+
+            if (follower) {
+                intObserver.current.observe(follower);
+            }
+        },
+        [isFetchingNextPage, fetchNextPage, hasNextPage]
+    );
+
+    const list_of_followers = data?.pages.map((pg) => {
+        const length_of_followers = pg.all_followers.length;
+
+        return pg.all_followers.map((follower_data, i) => {
+            if (i + 1 === length_of_followers) {
+                return (
+                    <div ref={lastFollowerRef} key={follower_data.id}>
+                        <FollowerCard
+                            follower_data={follower_data}
+                            close_modal={close_modal}
+                            user_id={user_id}
+                        />
+                    </div>
+                );
+            }
+            return (
+                <div key={follower_data.id}>
+                    <FollowerCard
+                        follower_data={follower_data}
+                        close_modal={close_modal}
+                        user_id={user_id}
+                    />
+                </div>
+            );
+        });
+    });
+
+    return (
+        <div className="FollowerListInfiniteScroll">
+            <div className="header">
+                <div className="tabs">
+                    <h2>
+                        <button
+                            className={`${
+                                follower_type === "Followers" ? "active" : ""
+                            }`}
+                            onClick={() => set_follower_type("Followers")}
+                        >
+                            Followers
+                        </button>
+                    </h2>
+                    <h2>
+                        <button
+                            className={`${
+                                follower_type === "Following" ? "active" : ""
+                            }`}
+                            onClick={() => set_follower_type("Following")}
+                        >
+                            Following
+                        </button>
+                    </h2>
+                </div>
+                <ToolTip text="Close Modal">
+                    <button
+                        className="close_modal_btn"
+                        onClick={() => close_modal()}
+                    >
+                        <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </ToolTip>
+            </div>
+            {error && <span>Error: {JSON.stringify(error)}</span>}
+
+            <div className="follower_content">
+                <div className="list_of_followers">
+                    {list_of_followers}
+                    <div className="end_of_followers_lists">
+                        {isFetchingNextPage && <Loading />}
+
+                        {hasNextPage === false && (
+                            <p>No More {follower_type}</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function FollowerCard({ follower_data, close_modal, user_id }) {
+    const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
+    const queryClient = useQueryClient();
+    const [is_following, set_is_following] = useState(
+        follower_data.is_following
+    );
+
+    const { mutate: follow_or_unfollow_account } = useMutation(
+        (account_id) => {
+            return follow_or_unfollow_account_request(account_id);
+        },
+        {
+            onSuccess: (data) => {
+                // console.log({ data });
+                queryClient.invalidateQueries([
+                    "follower_following_counts",
+                    { user_id: user_id },
+                ]);
+                set_is_following(data.is_following);
+            },
+        }
+    );
+
+    return (
+        <div className="FollowerCard">
+            <div className="left_side">
+                <ProfilePicture
+                    username={follower_data.dataValues.username}
+                    profile_picture_url={follower_data.dataValues.profile_pic}
+                />
+                <button
+                    className="username"
+                    onClick={() => {
+                        close_modal();
+                        setTimeout(() => {
+                            navigate(
+                                `/user/${follower_data.dataValues.username}/profile`
+                            );
+                        }, 500);
+                    }}
+                >
+                    {follower_data.dataValues.username}
+                </button>
+            </div>
+            {current_user.username ===
+            follower_data.dataValues.username ? null : (
+                <button
+                    className={`follower_following_btn ${
+                        is_following ? "following_btn" : "follower_btn"
+                    }`}
+                    onClick={() => {
+                        follow_or_unfollow_account(follower_data.dataValues.id);
+                    }}
+                >
+                    {is_following ? "Following" : "Follow"}
+                </button>
+            )}
+        </div>
+    );
+}
+
+export default ReadProfile;

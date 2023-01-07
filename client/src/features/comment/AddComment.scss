@@ -4,38 +4,43 @@
 
 .Add_Comment {
     display: flex;
-    justify-content: space-between;
-   
+    // justify-content: space-between;
+    align-items: center;
     padding: 0.5em;
     border-top: 1px solid var(--border-color);
+    gap: 10px;
 
-    .add_comment_pic_and_input {
+    
+    .profile_pic {
+        align-self: flex-start;
+        //margin-bottom: auto;
+    }
+
+
+
+    .input_and_btn {
+
         display: flex;
         width: 100%;
-
-        .input_and_errors {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-            margin-top: 3px;
-            
+        gap: 10px;
         
-            .error_msg {
-                color: var(--red);
-                margin-top: 0.5em;
-                margin-left: 0.5em;
-            }
+        // .ResizableInput {
+        //     margin-top: 3px;
+        // }
+        
+        .comment_btn {
+            @include btn-styles(var(--green));
+            height: 30px;
+            // margin-left: 10px;
+            // margin-top: 3px;
         }
-
     }
 
-    .comment_btn {
-        @include btn-styles(var(--green));
-        height: 32px;
-        margin-left: 10px;
-        margin-top: 3px;
-    }
+    // .edit_comment {
+    //     .ResizableInput, .comment_btn {
+    //         margin-top: 0px;
+    //     }
+    // }
 
     .not_signed_in {
         display: flex;

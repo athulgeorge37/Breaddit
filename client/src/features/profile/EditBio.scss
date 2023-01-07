@@ -1,0 +1,51 @@
+@import "../../variables.scss";
+
+.EditBio {
+    border-top: 1px solid var(--border-color);
+    padding: $padding;
+    display: flex;
+    justify-content: space-between;
+
+
+    .edit_bio_input, .bio_content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .bio_btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+
+        .bio_btn {
+            @include btn-styles(var(--text-color-secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            color: var(--text-color-primary);
+            background-color: var(--text-color-secondary);
+            
+            svg {
+                width: 25px;
+                height: 25px;
+                margin-right: 10px;
+            }
+            
+        }
+        
+        .save_bio_btn {
+            background-color: var(--green);
+        }
+    }
+
+}
+
+.edit_mode {
+    flex-direction: column;
+    
+    .bio_btns {
+        justify-content: flex-end;
+    }
+}

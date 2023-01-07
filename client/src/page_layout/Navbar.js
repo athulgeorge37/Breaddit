@@ -95,7 +95,9 @@ function Navbar() {
                     {current_user.authenticated === true ? (
                         <>
                             {current_user.role === "user" && (
-                                <NavLink to={`/user/${current_user.username}`}>
+                                <NavLink
+                                    to={`/user/${current_user.username}/profile`}
+                                >
                                     Profile
                                 </NavLink>
                             )}

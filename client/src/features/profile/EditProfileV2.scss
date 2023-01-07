@@ -1,5 +1,24 @@
 @import "../../variables.scss";
 
 .EditProfile {
+    display: flex;
+    flex-direction: column;
+    // gap: calc(2 * $padding);
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(border-color);
+    border-radius: $border-radius;
+    @include shadow;
+    
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $padding;
 
+    
+        .cancel_edit_profile_btn {
+            @include btn-styles(var(--blue));
+        }
+    }
+    
 }

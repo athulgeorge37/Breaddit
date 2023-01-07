@@ -1,18 +1,25 @@
+// styles
 import "./EditProfilePic.scss";
 
+// hooks
 import { useState, useRef } from "react";
-import AvatarEditor from "react-avatar-editor";
-
-import ProfilePicture from "./ProfilePicture";
-import Loading from "../../../components/ui/Loading";
-import Button from "../../../components/ui/Button";
-import { upload_image } from "../../../api/ImageRequests";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "../../../context/Notifications/NotificationProvider";
+
+// ui
+import Loading from "../../../components/ui/Loading";
 import ToolTip from "../../../components/ui/ToolTip";
+
+// components
+import AvatarEditor from "react-avatar-editor";
+import ProfilePicture from "./ProfilePicture";
+
+// api
+import { upload_image } from "../../../api/ImageRequests";
 import { edit_user_details } from "../../../api/UserRequests";
 
 function EditProfilePic({ user_details }) {
+    const queryClient = useQueryClient();
     const add_notification = useNotification();
 
     const [editing_img, set_editing_img] = useState(false);
@@ -152,8 +159,20 @@ function EditProfilePic({ user_details }) {
                 return edit_user_details({ profile_pic: new_profile_pic });
             },
             {
-                onSuccess: (data) => {
+                onSuccess: () => {
                     add_notification("Succesfully Edited Profile Picture");
+                    queryClient.invalidateQueries([
+                        "user_details",
+                        {
+                            username: user_details.username,
+                        },
+                    ]);
+                },
+                onError: () => {
+                    add_notification(
+                        "Unable to edit profile picture, please try again later.",
+                        "ERROR"
+                    );
                 },
             }
         );
@@ -173,26 +192,90 @@ function EditProfilePic({ user_details }) {
                         scale={picture.zoom}
                     />
 
-                    <div className="img_btns">
-                        <input
-                            id="upload_img"
-                            type="file"
-                            ref={img_input_ref}
-                            onChange={(e) =>
-                                handleFileChange(e.target.files[0])
-                            }
-                            hidden={true}
-                        />
+                    <div className="img_btns_and_sliders">
+                        <div className="sliders">
+                            <label htmlFor="zoom" className="zoom_label">
+                                Zoom
+                            </label>
+                            <input
+                                className="zoom_slider"
+                                id="zoom"
+                                type="range"
+                                defaultValue={2}
+                                min={1}
+                                max={10}
+                                step={0.1}
+                                onChange={(e) => handle_zoom(e.target.value)}
+                            />
 
-                        {(picture.img === null ||
-                            profile_picture_url === null) && (
-                            <ToolTip text={"Remove Image"}>
+                            <label className="rotate_label" htmlFor="rotate">
+                                Rotate
+                            </label>
+                            <input
+                                className="rotate_slider"
+                                id="rotate"
+                                type="range"
+                                defaultValue={0}
+                                min={0}
+                                max={360}
+                                step={1}
+                                onChange={(e) =>
+                                    handle_rotation(e.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="img_btns">
+                            <input
+                                id="upload_img"
+                                type="file"
+                                ref={img_input_ref}
+                                onChange={(e) =>
+                                    handleFileChange(e.target.files[0])
+                                }
+                                hidden={true}
+                            />
+
+                            {(picture.img === null ||
+                                profile_picture_url === null) && (
+                                <ToolTip text={"Remove Image"}>
+                                    <button
+                                        className="remove_img_btn"
+                                        onClick={handleRemoveImage}
+                                    >
+                                        <svg
+                                            className="remove_img_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
+                                        </svg>
+                                    </button>
+                                </ToolTip>
+                            )}
+
+                            <ToolTip
+                                text={
+                                    picture.img === null
+                                        ? "Upload Image"
+                                        : "Replace Image"
+                                }
+                            >
                                 <button
-                                    className="remove_img_btn"
-                                    onClick={handleRemoveImage}
+                                    className="upload_img_btn"
+                                    onClick={() =>
+                                        img_input_ref.current.click()
+                                    }
                                 >
                                     <svg
-                                        className="remove_img_icon"
+                                        className="upload_img_icon"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -202,71 +285,19 @@ function EditProfilePic({ user_details }) {
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             strokeWidth={2}
-                                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                         />
                                     </svg>
                                 </button>
                             </ToolTip>
-                        )}
 
-                        <ToolTip
-                            text={
-                                picture.img === null
-                                    ? "Upload Image"
-                                    : "Replace Image"
-                            }
-                        >
-                            <button
-                                className="upload_img_btn"
-                                onClick={() => img_input_ref.current.click()}
-                            >
-                                <svg
-                                    className="upload_img_icon"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
-                            </button>
-                        </ToolTip>
-
-                        <ToolTip text={"Cancel"}>
-                            <button
-                                className="cancel_btn"
-                                onClick={handleCancel}
-                            >
-                                <svg
-                                    className="cancel_icon"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                </svg>
-                            </button>
-                        </ToolTip>
-
-                        {picture.img !== null && (
-                            <ToolTip text={"Save"}>
+                            <ToolTip text={"Cancel"}>
                                 <button
-                                    className="save_btn"
-                                    onClick={handleSave}
+                                    className="cancel_btn"
+                                    onClick={handleCancel}
                                 >
                                     <svg
-                                        className="save_icon"
+                                        className="cancel_icon"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -276,42 +307,36 @@ function EditProfilePic({ user_details }) {
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             strokeWidth={2}
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                                         />
                                     </svg>
                                 </button>
                             </ToolTip>
-                        )}
-                    </div>
 
-                    <div className="sliders">
-                        <label htmlFor="zoom" className="zoom_label">
-                            Zoom
-                        </label>
-                        <input
-                            className="zoom_slider"
-                            id="zoom"
-                            type="range"
-                            defaultValue={2}
-                            min={1}
-                            max={10}
-                            step={0.1}
-                            onChange={(e) => handle_zoom(e.target.value)}
-                        />
-
-                        <label className="rotate_label" htmlFor="rotate">
-                            Rotate
-                        </label>
-                        <input
-                            className="rotate_slider"
-                            id="rotate"
-                            type="range"
-                            defaultValue={0}
-                            min={0}
-                            max={360}
-                            step={1}
-                            onChange={(e) => handle_rotation(e.target.value)}
-                        />
+                            {picture.img !== null && (
+                                <ToolTip text={"Save"}>
+                                    <button
+                                        className="save_btn"
+                                        onClick={handleSave}
+                                    >
+                                        <svg
+                                            className="save_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
+                                        </svg>
+                                    </button>
+                                </ToolTip>
+                            )}
+                        </div>
                     </div>
                 </div>
             ) : (

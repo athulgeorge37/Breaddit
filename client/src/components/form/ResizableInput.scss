@@ -1,0 +1,15 @@
+@import "../../variables.scss";
+
+.ResizableInput {
+    width: 100%;
+    
+    @include input_styles;
+    box-sizing: border-box;
+    width: 100%;
+    resize: none;
+    
+    
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+}

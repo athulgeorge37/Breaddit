@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./AddComment.scss";
 
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-import ExpandableInput from "../../components/form/ExpandableInput";
+import ResizableInput from "../../components/form/ResizableInput";
 
 import {
     create_comment_or_reply,
@@ -126,40 +126,46 @@ function AddComment({
         <div className={`Add_Comment ${comment_type}_add_comment`}>
             {current_user.role === "user" ? (
                 <>
-                    <div className="add_comment_pic_and_input">
-                        {show_profile_pic && (
+                    {show_profile_pic && (
+                        <div className="profile_pic">
                             <ProfilePicture
                                 profile_picture_url={current_user.profile_pic}
                                 username={current_user.username}
+                                margin_right={0}
                             />
-                        )}
-
-                        <div className="input_and_errors">
-                            <ExpandableInput
-                                set_input_content={set_comment_content}
-                                max_height_px={150}
-                                placeholder={placeholder}
-                                initial_content={comment_content}
-                            />
-
-                            {error_msg && (
-                                <div className="error_msg">
-                                    Comment cannot be empty!
-                                </div>
-                            )}
                         </div>
-                    </div>
+                    )}
 
-                    <button
-                        className="comment_btn"
-                        onClick={
-                            is_editing
-                                ? submit_edit_comment
-                                : submit_add_comment
-                        }
-                    >
-                        {btn_text}
-                    </button>
+                    <div className="input_and_btn">
+                        <ResizableInput
+                            onChange={set_comment_content}
+                            max_height={150}
+                            placeholder={placeholder}
+                            value={comment_content}
+                        />
+                        {/* <div className="input_and_errors">
+
+                        {error_msg && (
+                            <div className="error_msg">
+                            Comment cannot be empty!
+                            </div>
+                            )}
+                        </div> */}
+                        {/* <div className="add_comment_pic_and_input">
+
+</div> */}
+
+                        <button
+                            className="comment_btn"
+                            onClick={
+                                is_editing
+                                    ? submit_edit_comment
+                                    : submit_add_comment
+                            }
+                        >
+                            {btn_text}
+                        </button>
+                    </div>
                 </>
             ) : (
                 <div className="not_signed_in">

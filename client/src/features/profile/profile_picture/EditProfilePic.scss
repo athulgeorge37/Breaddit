@@ -3,24 +3,78 @@
 
 .EditProfilePic {
     display: flex;
+    border-top: 1px solid var(--border-color);
+    padding: $padding;
 
     .open_edit_mode {
         display: flex;
-        flex-direction: column;
+        gap: calc(2 * $padding);
+        align-items: flex-end;
+        width: 100%;
 
-        .sliders {
+        .img_btns_and_sliders {
+            height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: space-evenly;
 
-            .zoom_slider {
-                margin-bottom: 10px;
+            .sliders {
+                display: flex;
+                flex-direction: column;
+    
+                .zoom_slider {
+                    margin-bottom: 10px;
+                }
             }
+
+            .img_btns {
+                display: flex;
+                
+                justify-content: space-evenly;
+                
+                
+        
+                button {
+                    // color: var(--text-color-primary);
+                    @include btn-styles(var(--background-color-tertiary));
+                    padding: 5px;
+                    transition: none;
+                    display: flex;
+                    align-items: center;
+        
+                    svg {
+                        width: 25px;
+                        height: 25px;
+                        color: var(--text-color-secondary);
+                    }
+                }
+
+                .remove_img_icon {
+                    color: var(--red);
+                }
+
+                .upload_img_icon {
+                    color: var(--blue);
+                }
+
+                .save_icon {
+                    color: var(--green);
+                }
+                
+            }
+
+           
         }
+
     }
 
     .closed_edit_mode {
+        width: 100%;
         display: flex;
-        flex-direction: column;
+        gap: calc(2 * $padding);
+        align-items: flex-end;
+        
+        
 
         .loading_div {
             display: flex;
@@ -54,40 +108,21 @@
 
         .edit_profile_picture_btn {
             @include btn-styles(var(--text-color-secondary));
-            margin-top: 10px;
+            // margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             color: var(--text-color-primary);
+            height: fit-content;
 
             .edit_icon {
                 width: 25px;
                 height: 25px;
                 margin-right: 10px;
+
             }
         }
     }
 
-    .img_btns {
-        display: flex;
-        justify-content: space-evenly;
-        margin-top: 16px;
-
-
-        button {
-            // color: var(--text-color-primary);
-            @include btn-styles(var(--background-color-secondary));
-            padding: 5px;
-            transition: none;
-            display: flex;
-            align-items: center;
-
-            svg {
-                width: 25px;
-                height: 25px;
-                color: var(--text-color-secondary);
-            }
-        }
-        
-    }
+    
 }

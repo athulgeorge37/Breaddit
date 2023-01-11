@@ -1,0 +1,30 @@
+@import "../../variables.scss";
+
+
+.EditUsername {
+    border-top: 1px solid var(--border-color);
+    padding: $padding;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .edit_content, .static_content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btns {
+        display: flex;
+        gap: 10px;
+        
+        button {
+            @include btn-styles(var(--text-color-secondary))
+        }
+    }
+
+}
+
+.editing {
+    align-items: flex-end;
+}
+

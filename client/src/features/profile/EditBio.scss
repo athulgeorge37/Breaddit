@@ -13,10 +13,17 @@
         gap: 5px;
     }
 
+    .bio_content {
+        .bio {
+            white-space: pre-line;
+        }
+    }
+
     .bio_btns {
         display: flex;
         gap: 10px;
         margin-top: 10px;
+        align-items: flex-end;
 
         .bio_btn {
             @include btn-styles(var(--text-color-secondary));
@@ -26,6 +33,7 @@
             border: none;
             color: var(--text-color-primary);
             background-color: var(--text-color-secondary);
+            height: fit-content;
             
             svg {
                 width: 25px;

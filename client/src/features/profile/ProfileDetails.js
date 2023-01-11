@@ -13,7 +13,7 @@ function ProfileDetails() {
     const { current_user } = useCurrentUser();
     const { username_route } = useParams();
 
-    const [is_editing_profile, set_is_editing_profile] = useState(false);
+    // const [is_editing_profile, set_is_editing_profile] = useState(false);
     const [user_id, set_user_id] = useState(null);
 
     const { data, isLoading, isError } = useQuery(
@@ -45,7 +45,7 @@ function ProfileDetails() {
 
     return (
         <div className="ProfileDetails">
-            <>
+            {/* <>
                 {username_route === current_user.username &&
                 is_editing_profile ? (
                     <EditProfile
@@ -60,7 +60,8 @@ function ProfileDetails() {
                         user_id={user_id}
                     />
                 )}
-            </>
+            </> */}
+            <ReadProfile user_details={user_details} user_id={user_id} />
         </div>
     );
 }

@@ -36,7 +36,7 @@ import { human_readable_date } from "../../helper/time";
 
 const FOLLOWERS_PER_PAGE = 2;
 
-function ReadProfile({ set_is_editing_profile, user_details, user_id }) {
+function ReadProfile({ user_details, user_id }) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { username_route } = useParams();
@@ -199,7 +199,13 @@ function ReadProfile({ set_is_editing_profile, user_details, user_id }) {
                                 <button
                                     className="edit_profile_btn"
                                     type="btn"
-                                    onClick={() => set_is_editing_profile(true)}
+                                    onClick={() => {
+                                        navigate(`/edit_profile`, {
+                                            state: {
+                                                user_details: user_details,
+                                            },
+                                        });
+                                    }}
                                 >
                                     <svg
                                         className="edit_btn_icon"

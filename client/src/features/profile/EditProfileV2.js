@@ -4,15 +4,28 @@ import "./EditProfileV2.scss";
 // components
 import EditProfilePic from "./profile_picture/EditProfilePic";
 import EditBio from "./EditBio";
+import EditUsername from "./EditUsername";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
-function EditProfileV2({ user_details, set_is_editing_profile }) {
+function EditProfileV2() {
+    const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
+    const {
+        state: { user_details },
+    } = useLocation();
+
+    // console.log({ user_details });
+
     return (
         <div className="EditProfile">
             <div className="header">
                 <h2>Edit Profile</h2>
                 <button
                     className="cancel_edit_profile_btn"
-                    onClick={() => set_is_editing_profile(false)}
+                    onClick={() =>
+                        navigate(`/user/${current_user.username}/profile`)
+                    }
                 >
                     Back To Profile
                 </button>
@@ -21,6 +34,8 @@ function EditProfileV2({ user_details, set_is_editing_profile }) {
             <EditProfilePic user_details={user_details} />
 
             <EditBio user_details={user_details} />
+
+            <EditUsername user_details={user_details} />
         </div>
     );
 }

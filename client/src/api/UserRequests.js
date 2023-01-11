@@ -128,9 +128,11 @@ const is_unique_email = async (new_email) => {
     return response.data;
 };
 
-const is_unique_username = async (new_username) => {
+const is_unique_username_request = async (new_username) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/check_is_unique_username/${new_username}`
+        `${CUSTOM_ENDPOINT}/check_is_unique_username?${query_string_generator({
+            username: new_username,
+        })}`
     );
 
     return response.data;
@@ -146,5 +148,5 @@ export {
     get_user_details,
     // get_user_profile_details,
     is_unique_email,
-    is_unique_username,
+    is_unique_username_request,
 };

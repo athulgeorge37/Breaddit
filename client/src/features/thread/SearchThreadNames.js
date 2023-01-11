@@ -58,7 +58,7 @@ function SearchThreadNames() {
     };
 
     useEffect(() => {
-        // used to ensure the input's value correctly matches the search param
+        // used to ensure the input's value correctly matches the url search param
 
         if (thread_title === null) {
             set_threads_list([]);

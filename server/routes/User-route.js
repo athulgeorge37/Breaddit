@@ -95,20 +95,33 @@ router.get("/check_is_unique_email/:new_email", async (request, response) => {
     response.json(users_with_new_email === 0 ? true : false);
 });
 
-router.get(
-    "/check_is_unique_username/:new_username",
-    async (request, response) => {
-        // checks if the entered username is unique
+router.get("/check_is_unique_username", async (request, response) => {
+    // checks if the entered username is unique
+    const username = request.query.username;
+    const users_with_new_username = await db.User.findOne({
+        where: {
+            username: username,
+        },
+    });
 
-        const users_with_new_username = await db.User.count({
-            where: {
-                username: request.params.new_username,
-            },
-        });
-
-        response.json(users_with_new_username === 0 ? true : false);
+    // console.log("");
+    // console.log({ users: JSON.stringify(users_with_new_username) });
+    // console.log("");
+    let is_unique = true;
+    if (
+        users_with_new_username !== null &&
+        users_with_new_username.username === username
+    ) {
+        is_unique = false;
     }
-);
+
+    response.json({
+        is_unique: is_unique,
+    });
+    // response.json({
+    //     is_unique: users_with_new_username === 0 ? true : false,
+    // });
+});
 
 router.get(
     "/check_is_valid_web_token",

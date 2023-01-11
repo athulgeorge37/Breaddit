@@ -15,6 +15,7 @@ import { edit_user_details } from "../../api/UserRequests";
 function EditBio({ user_details }) {
     const queryClient = useQueryClient();
     const add_notification = useNotification();
+
     const [bio, set_bio] = useState(user_details.bio ?? "");
     const [is_editing, set_is_editing] = useState(false);
 
@@ -42,8 +43,11 @@ function EditBio({ user_details }) {
     );
 
     const handle_save_bio = () => {
-        // updating bio in DB
-        update_bio(bio === "" ? "null" : bio);
+        // not updating bio, if we are saving the same details
+        if (bio !== user_details.bio) {
+            // updating bio in DB
+            update_bio(bio === "" ? "null" : bio);
+        }
 
         // closing edit mode
         set_is_editing(false);
@@ -94,7 +98,7 @@ function EditBio({ user_details }) {
                                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
-                            Cancel Edit
+                            Cancel
                         </button>
                         <button
                             className="save_bio_btn bio_btn"
@@ -114,7 +118,7 @@ function EditBio({ user_details }) {
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
-                            Save Bio
+                            Save
                         </button>
                     </>
                 ) : (
@@ -139,7 +143,7 @@ function EditBio({ user_details }) {
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                             />
                         </svg>
-                        Edit Bio
+                        Edit
                     </button>
                 )}
             </div>

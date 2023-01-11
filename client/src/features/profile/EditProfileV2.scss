@@ -5,7 +5,7 @@
     flex-direction: column;
     // gap: calc(2 * $padding);
     background-color: var(--background-color-secondary);
-    border: 1px solid var(border-color);
+    border: 1px solid var(--border-color);
     border-radius: $border-radius;
     @include shadow;
     

@@ -30,6 +30,7 @@ const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProfilePageV2 = lazy(() => import("./pages/ProfilePageV2"));
 const PostsByUser = lazy(() => import("./features/post/PostsByUser"));
 const ProfileDetails = lazy(() => import("./features/profile/ProfileDetails"));
+const EditProfileV2 = lazy(() => import("./features/profile/EditProfileV2"));
 const PostsPage = lazy(() => import("./pages/PostsPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
 const CreateThreadPage = lazy(() => import("./pages/CreateThreadPage"));
@@ -69,6 +70,12 @@ function App() {
                                                     <Route
                                                         path="/signin"
                                                         element={<SignInPage />}
+                                                    />
+                                                    <Route
+                                                        path="/edit_profile"
+                                                        element={
+                                                            <EditProfileV2 />
+                                                        }
                                                     />
                                                     <Route
                                                         path="/user/:username_route"

@@ -1,0 +1,46 @@
+@import "../../variables.scss";
+
+.Input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    // .input_label {
+    //     margin-bottom: 5px
+    // }
+
+    .input_field {
+        @include input_styles;
+        width: 100%;
+    }
+    
+    .error_list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        margin-left: 5px;
+        // margin-top: 10px;
+
+        .error_item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            list-style: none;
+
+
+            svg {
+                width: 15px;
+                height: 15px;
+            }
+        }
+
+        .error {
+            color: var(--red);
+        }
+        
+        .not_error {
+            color: var(--green);
+        }
+    }
+}

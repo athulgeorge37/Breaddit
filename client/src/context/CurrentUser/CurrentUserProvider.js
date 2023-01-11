@@ -41,10 +41,10 @@ export default function CurrentUserProvider({ children }) {
             console.log("user is invalid");
             set_current_user(DEFAULT_CURR_USER_STATE);
         } else {
-            console.log({
-                msg: `SignedIn as ${valid_web_token.username}`,
-                role: valid_web_token.role,
-            });
+            // console.log({
+            //     msg: `SignedIn as ${valid_web_token.username}`,
+            //     role: valid_web_token.role,
+            // });
 
             set_current_user({
                 username: valid_web_token.username,
@@ -67,10 +67,24 @@ export default function CurrentUserProvider({ children }) {
         };
     };
 
-    const update_current_user = (new_username, new_profile_pic) => {
+    // const update_current_user = (new_username, new_profile_pic) => {
+    //     set_current_user({
+    //         ...current_user,
+    //         username: new_username,
+    //         profile_pic: new_profile_pic,
+    //     });
+    // };
+
+    const update_current_user_username = (new_username) => {
         set_current_user({
             ...current_user,
             username: new_username,
+        });
+    };
+
+    const update_current_user_profile_pic = (new_profile_pic) => {
+        set_current_user({
+            ...current_user,
             profile_pic: new_profile_pic,
         });
     };
@@ -87,7 +101,8 @@ export default function CurrentUserProvider({ children }) {
                 current_user,
                 remove_current_user,
                 initialise_curr_user,
-                update_current_user,
+                update_current_user_profile_pic,
+                update_current_user_username,
             }}
         >
             {children}
@@ -103,13 +118,15 @@ export const useCurrentUser = () => {
         current_user,
         remove_current_user,
         initialise_curr_user,
-        update_current_user,
+        update_current_user_profile_pic,
+        update_current_user_username,
     } = useContext(CurrentUserContext);
 
     return {
         current_user,
         remove_current_user,
         initialise_curr_user,
-        update_current_user,
+        update_current_user_profile_pic,
+        update_current_user_username,
     };
 };

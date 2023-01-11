@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { is_unique_username } from "../../../api/UserRequests";
+import { is_unique_username_request } from "../../../api/UserRequests";
 
 import "./UsernameInput.scss";
 
@@ -33,7 +33,7 @@ function UsernameInput({ set_username_info, initial_username }) {
 
         // this is very inneficient since it running every time on change
         // should call when submitting sign_up
-        let unique_name = await is_unique_username(new_username);
+        let unique_name = await is_unique_username_request(new_username);
 
         if (
             initial_username !== undefined &&
@@ -44,12 +44,12 @@ function UsernameInput({ set_username_info, initial_username }) {
 
         set_usernname_validity({
             correct_length: correct_length,
-            unique_name: unique_name,
+            unique_name: unique_name.is_unique,
         });
 
         set_username_info({
             username: new_username,
-            valid: correct_length && unique_name,
+            valid: correct_length && unique_name.is_unique,
         });
     };
 

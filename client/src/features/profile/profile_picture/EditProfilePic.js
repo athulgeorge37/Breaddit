@@ -5,6 +5,7 @@ import "./EditProfilePic.scss";
 import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "../../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../../context/CurrentUser/CurrentUserProvider";
 
 // ui
 import Loading from "../../../components/ui/Loading";
@@ -19,6 +20,7 @@ import { upload_image } from "../../../api/ImageRequests";
 import { edit_user_details } from "../../../api/UserRequests";
 
 function EditProfilePic({ user_details }) {
+    const { update_current_user_profile_pic } = useCurrentUser();
     const queryClient = useQueryClient();
     const add_notification = useNotification();
 
@@ -81,6 +83,7 @@ function EditProfilePic({ user_details }) {
             // when we previously had a profile pic in DB
             // that was not empty (not null)
             edit_profile_pic("null");
+            update_current_user_profile_pic(null);
         }
         // so we know what the profile pic in DB, for future ref
         set_profile_picture_url(null);
@@ -149,6 +152,7 @@ function EditProfilePic({ user_details }) {
                 set_profile_picture_url(data);
                 // save to DB new profile pic here
                 edit_profile_pic(data);
+                update_current_user_profile_pic(data);
             },
         }
     );

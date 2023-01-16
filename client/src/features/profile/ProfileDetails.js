@@ -45,22 +45,6 @@ function ProfileDetails() {
 
     return (
         <div className="ProfileDetails">
-            {/* <>
-                {username_route === current_user.username &&
-                is_editing_profile ? (
-                    <EditProfile
-                        set_is_editing_profile={set_is_editing_profile}
-                        user_details={user_details}
-                        user_id={user_id}
-                    />
-                ) : (
-                    <ReadProfile
-                        set_is_editing_profile={set_is_editing_profile}
-                        user_details={user_details}
-                        user_id={user_id}
-                    />
-                )}
-            </> */}
             <ReadProfile user_details={user_details} user_id={user_id} />
         </div>
     );

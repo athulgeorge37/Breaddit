@@ -13,6 +13,37 @@
         @include input_styles;
         width: 100%;
     }
+
+    .input_with_icon {
+        display: flex;
+        justify-content: space-between;
+
+        // input_with_icon div also has a classname input_field
+        // and gets the styles for the input from there
+
+        input {
+            width: 100%;
+            font-size: 14px;
+            background-color: var(--background-color-primary);
+            color: var(--text-color-primary);
+            outline: none;
+            border: none;
+            
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--blue);
+
+            svg {
+                width: 20px;
+                height: 20px;
+                margin-left: 5px;
+            }
+        }
+    }
     
     .error_list {
         display: flex;

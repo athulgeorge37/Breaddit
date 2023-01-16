@@ -102,6 +102,23 @@ const edit_user_details = async ({
     return response.data;
 };
 
+const edit_user_password = async ({ current_password, new_password }) => {
+    const response = await axios.put(
+        `${CUSTOM_ENDPOINT}/change_password`,
+        {
+            current_password: current_password,
+            new_password: new_password,
+        },
+        {
+            headers: {
+                web_access_token: get_item_local_storage("web_access_token"),
+            },
+        }
+    );
+
+    return response.data;
+};
+
 const get_user_details = async (username) => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_user_details?${query_string_generator({
@@ -147,6 +164,7 @@ export {
     edit_user_details,
     get_user_details,
     // get_user_profile_details,
+    edit_user_password,
     is_unique_email,
     is_unique_username_request,
 };

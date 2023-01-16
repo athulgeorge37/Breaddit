@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 // ui
 import Input from "../../components/form/Input";
@@ -13,13 +14,10 @@ import Input from "../../components/form/Input";
 // api
 import { is_unique_username_request } from "../../api/UserRequests";
 import { edit_user_details } from "../../api/UserRequests";
-import { useNavigate } from "react-router-dom";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
 function EditUsername({ user_details }) {
     const add_notification = useNotification();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const { update_current_user_username } = useCurrentUser();
 
     const [username, set_username] = useState(user_details.username);
@@ -143,8 +141,8 @@ function EditUsername({ user_details }) {
                 </div>
             ) : (
                 <div className="static_content">
-                    <label>Username:</label>
-                    <p>{username}</p>
+                    <label htmlFor="username">Username:</label>
+                    <p id="username">{username}</p>
                 </div>
             )}
 
@@ -157,9 +155,24 @@ function EditUsername({ user_details }) {
                                 set_is_editing(false);
                             }}
                         >
+                            <svg
+                                className="cancel_icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
                             Cancel
                         </button>
                         <button
+                            className="save_btn"
                             onClick={() => {
                                 if (
                                     is_unique_username &&
@@ -177,6 +190,20 @@ function EditUsername({ user_details }) {
                                 // navigate(`/user/${username}/profile`);
                             }}
                         >
+                            <svg
+                                className="save_icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
                             Save
                         </button>
                     </>
@@ -186,6 +213,20 @@ function EditUsername({ user_details }) {
                             set_is_editing(true);
                         }}
                     >
+                        <svg
+                            className="edit_icon"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                        </svg>
                         Edit
                     </button>
                 )}

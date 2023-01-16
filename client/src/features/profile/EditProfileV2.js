@@ -5,6 +5,9 @@ import "./EditProfileV2.scss";
 import EditProfilePic from "./profile_picture/EditProfilePic";
 import EditBio from "./EditBio";
 import EditUsername from "./EditUsername";
+import EditPassword from "./EditPassword";
+
+// hooks
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 
@@ -14,8 +17,6 @@ function EditProfileV2() {
     const {
         state: { user_details },
     } = useLocation();
-
-    // console.log({ user_details });
 
     return (
         <div className="EditProfile">
@@ -36,6 +37,8 @@ function EditProfileV2() {
             <EditBio user_details={user_details} />
 
             <EditUsername user_details={user_details} />
+
+            <EditPassword />
         </div>
     );
 }

@@ -240,14 +240,13 @@ router.post("/sign_in", async (request, response) => {
         // comparing password user inputted
         // with the hashed password in the db
         // this hashed password already contains the salt, so we dont need to pass it again
-        bcrypt.compare(password, user_details.password).then((match) => {
-            // if they do not match, send error
-            if (!match) {
-                response.json({
-                    error: "Wrong Email Password Combination",
-                });
-            }
-        });
+        const match = await bcrypt.compare(password, user_details.password);
+        if (match === false) {
+            response.json({
+                error: "Wrong Email Password Combination",
+            });
+            return;
+        }
 
         let login_details = { id: 0 };
         if (user_details.role !== "admin") {
@@ -372,5 +371,85 @@ router.put(
         }
     }
 );
+
+router.put("/change_password", validate_request, async (request, response) => {
+    try {
+        const { current_password, new_password } = request.body;
+        const user_id = request.user_id;
+
+        const user_details = await db.User.findByPk(user_id);
+
+        // console.log("");
+        // console.log({
+        //     user_details: JSON.stringify(user_details),
+        //     current_password,
+        //     new_password,
+        // });
+        // console.log("");
+
+        if (!user_details) {
+            response.json({
+                error: `No user with user_id ${user_id}`,
+            });
+            return;
+        }
+
+        // comparing current password user inputted
+        // with the hashed password in the db
+        // this hashed password already contains the salt, so we dont need to pass it again
+        const match = await bcrypt.compare(
+            current_password,
+            user_details.password
+        );
+
+        // console.log(" matching current_password with user_details.password");
+        // console.log({ match });
+        // console.log("");
+        // if they do not match, send error
+        if (match === false) {
+            response.json({
+                error: "Invalid current password",
+            });
+            return;
+        }
+
+        // now that we know the current password is valid
+        // we will check if the current password is equal to the new password
+        if (current_password === new_password) {
+            response.json({
+                // Current password in DB cannot be same as new password
+                error: "New password cannot be same as current password",
+            });
+            return;
+        }
+
+        // generating the salt
+        const salt = await bcrypt.genSalt(10); // higher this number, higher the strength
+
+        // hashing the password, with the salt
+        // so hashed_password = salt + hash(password + salt)
+        const hashed_password = await bcrypt.hash(new_password, salt);
+
+        // updating user in DB
+        await db.User.update(
+            {
+                password: hashed_password,
+            },
+            {
+                where: {
+                    id: user_id,
+                },
+            }
+        );
+
+        response.json({
+            msg: "Succesfully updated password in db",
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
 
 module.exports = router;

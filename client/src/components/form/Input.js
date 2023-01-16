@@ -9,6 +9,7 @@ function Input({
     id,
     maxLength,
     minLength,
+    icon, // svg element for an icon, which is on the right side of the input with left margin
     errors = [],
     label_hidden = false,
     autoFocus = false,
@@ -25,17 +26,33 @@ function Input({
                     {label_text}
                 </label>
             )}
-            <input
-                id={id}
-                className={`input_field ${id}_input`}
-                type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                autoFocus={autoFocus}
-                maxLength={maxLength}
-                minLength={minLength}
-            />
+            {icon ? (
+                <div className={`input_field ${id}_input input_with_icon`}>
+                    <input
+                        id={id}
+                        type={type}
+                        value={value}
+                        onChange={onChange}
+                        placeholder={placeholder}
+                        autoFocus={autoFocus}
+                        maxLength={maxLength}
+                        minLength={minLength}
+                    />
+                    {icon}
+                </div>
+            ) : (
+                <input
+                    id={id}
+                    className={`input_field ${id}_input`}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    autoFocus={autoFocus}
+                    maxLength={maxLength}
+                    minLength={minLength}
+                />
+            )}
             {errors.length === 0 ? null : (
                 <ul className={`error_list ${id}_input_errors`}>
                     {errors.map((error) => {

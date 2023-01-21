@@ -12,6 +12,15 @@ import {
 } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../components/ui/Modal";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+
+// ui
+import Loading from "../../components/ui/Loading";
+import Modal from "../../components/ui/Modal";
+import ToolTip from "../../components/ui/ToolTip";
+
+// components
+import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 
 // api
 import {
@@ -19,11 +28,7 @@ import {
     get_curr_user_vote,
     make_vote,
 } from "../../api/VoteRequests";
-import Loading from "../../components/ui/Loading";
-import ProfilePicture from "../profile/profile_picture/ProfilePicture";
-import Modal from "../../components/ui/Modal";
 import { follow_or_unfollow_account_request } from "../../api/FollowerRequests";
-import ToolTip from "../../components/ui/ToolTip";
 
 // TODO: making a vote, updates the post table, which affects the edited time
 // fix that boii
@@ -44,6 +49,7 @@ function Votes({
 }) {
     const { current_user } = useCurrentUser();
     const queryClient = useQueryClient();
+    const add_notification = useNotification();
 
     const { open_modal, close_modal, show_modal } = useModal();
     const [modal_vote_type, set_modal_vote_type] = useState(true);
@@ -61,9 +67,11 @@ function Votes({
         {
             onSuccess: (data) => {
                 if (data.error) {
+                    if (data.error.message === "jwt malformed") {
+                        return;
+                    }
                     console.log(data);
                 }
-
                 set_curr_user_vote(data.curr_user_vote);
             },
         }
@@ -86,9 +94,8 @@ function Votes({
 
     const handle_vote_change = async (new_vote) => {
         if (current_user.role !== "user") {
-            console.log({
-                msg: "non users cannot make a vote",
-            });
+            add_notification("Please Sign In to Vote", "ERROR");
+
             return;
         }
 
@@ -368,16 +375,6 @@ function VoterListInfiniteScroll({
     return (
         <div className="VoterListInfiniteScroll">
             <div className="header">
-                {/* <h2>
-                    {modal_vote_type
-                        ? `${up_vote_count} Up Voter${
-                              up_vote_count !== 1 ? "s" : ""
-                          }`
-                        : `${down_vote_count} Down Voter${
-                              down_vote_count !== 1 ? "s" : ""
-                          }`}
-                </h2> */}
-
                 <div className="tabs">
                     <h2>
                         <button
@@ -477,7 +474,7 @@ function VoterCard({ voter_data, close_modal, voter_info_query }) {
                         close_modal();
                         setTimeout(() => {
                             navigate(
-                                `/profile/${voter_data.dataValues.username}`
+                                `/user/${voter_data.dataValues.username}/profile`
                             );
                         }, 500);
                     }}

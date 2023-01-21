@@ -42,8 +42,8 @@ const notification_reducer = (state, action) => {
 };
 
 export default function NotificationProvider({ children }) {
-    const [all_notifications, dispatch] = useReducer(notification_reducer, []);
     // this empty array is the initial state
+    const [all_notifications, dispatch] = useReducer(notification_reducer, []);
 
     return (
         <NotificationContext.Provider value={dispatch}>

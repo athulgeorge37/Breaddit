@@ -1,141 +1,164 @@
-// style import
+// styles
 import "./SignInPage.scss";
 
-// hook imports
+// hooks
 import { useState } from "react";
+import { useDebouncedIsUniqueEmail } from "../features/profile/EditEmail";
 import { useNavigate } from "react-router-dom";
-
-// component imports
-import LoginInput from "../components/form/LoginInput";
-
-// rest api request imports
-import { is_unique_email_request, sign_in } from "../api/UserRequests";
+import { useMutation } from "@tanstack/react-query";
+import { useNotification } from "../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
+
+// form
+import Input from "../components/form/Input";
+import PasswordInput from "../components/form/PasswordInput";
+
+// ui
+import Loading from "../components/ui/Loading";
+
+// api
+import { sign_in_request } from "../api/UserRequests";
 
 function SignInPage() {
     const navigate = useNavigate();
+    const add_notification = useNotification();
     const { initialise_curr_user } = useCurrentUser();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [is_signing_in, set_is_signing_in] = useState(false);
+    const [email, set_email] = useState("");
+    const { is_unique_email } = useDebouncedIsUniqueEmail(email);
 
-    // constructor to deal with the validity of email and password and the overall form
-    const [valid_signup_details, set_valid_signup_details] = useState({
-        email_validity: true,
-        password_validity: true,
-        form_validity: true,
-        is_banned: false,
-    });
+    const [password, set_password] = useState("");
 
-    const submit_sign_in_form = async (e) => {
-        e.preventDefault();
+    const [loading_sign_in, set_loading_sign_in] = useState(false);
 
-        // checks if the form is filled out or not
-        for (const field of [email, password]) {
-            if (field === "") {
-                set_valid_signup_details({
-                    ...valid_signup_details,
-                    form_validity: false,
-                });
-                return;
-            }
-        }
-
-        const unique_email_response = await is_unique_email_request(email);
-        // setting email validity to false, if
-        // email entered is unique which means they dont have an account
-        const valid_email = !unique_email_response;
-
-        let is_banned = false;
-        let valid_password = false;
-        if (valid_email) {
-            const sign_in_response = await sign_in(email, password);
-            if (sign_in_response.error) {
-                // if there is no errors
-                console.log("sign_in_request error:", sign_in_response.error);
-                if (sign_in_response.is_banned === true) {
-                    is_banned = true;
-                    valid_password = true;
+    const { mutate: sign_in, data: sign_in_data } = useMutation(
+        () => {
+            return sign_in_request(email, password);
+        },
+        {
+            onSuccess: async (data) => {
+                if (data.error) {
+                    // console.log({ data });
+                    if (data.error === "Wrong Email Password Combination") {
+                        add_notification(
+                            " Invalid Email Password Combination",
+                            "ERROR"
+                        );
+                    } else if (data.error === "User does not exist") {
+                        add_notification(
+                            "This email isn't connected to an account.",
+                            "ERROR"
+                        );
+                    } else {
+                        console.log({ data });
+                        add_notification(
+                            "An error occured while Signing In, please try again later",
+                            "ERROR"
+                        );
+                    }
+                    return;
                 }
-            } else {
-                valid_password = true;
 
-                // so that the curr_user state is updated in App.js
-                // allows the user to interact with the other pages
+                if (data.is_banned === true) {
+                    add_notification("This account has been banned", "ERROR");
+                    return;
+                }
+
+                set_loading_sign_in(true);
+
                 const { username, role } = await initialise_curr_user();
 
-                // Delays the redirect so the user can see the visual cue
-                set_is_signing_in(true);
+                setTimeout(() => {
+                    set_loading_sign_in(false);
+                    add_notification("Succesfully Signed In");
 
-                if (role === "admin") {
-                    setTimeout(() => navigate(`/admin_dashboard`), 1000);
-                } else if (role === "user") {
-                    setTimeout(
-                        () => navigate(`/user/${username}/profile`),
-                        1000
-                    );
-                }
-            }
+                    if (role === "admin") {
+                        navigate(`/admin_dashboard`);
+                    } else if (role === "user") {
+                        navigate(`/user/${username}/profile`);
+                    }
+                }, 1500);
+            },
+            onError: (data) => {
+                console.log({ data });
+                add_notification(
+                    "Unable to Sign In, please try again later",
+                    "ERROR"
+                );
+            },
+        }
+    );
+
+    const handle_sign_in = () => {
+        if (email === "") {
+            add_notification("Please enter an email adress", "ERROR");
+            return;
         }
 
-        set_valid_signup_details({
-            ...valid_signup_details,
-            email_validity: valid_email,
-            password_validity: valid_password,
-            form_validity: true,
-            is_banned: is_banned,
-        });
+        if (password === "") {
+            add_notification("Please enter a password", "ERROR");
+            return;
+        }
+
+        sign_in();
     };
 
     return (
-        <div className="Sign_In_Page">
-            <h2>Sign In</h2>
+        <div className="SignInPage">
+            <h2>Sign In:</h2>
+            <Input
+                label_text="Email:"
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => set_email(e.target.value)}
+            />
 
-            <div className="sign_in_card">
-                <form onSubmit={submit_sign_in_form}>
-                    <LoginInput
-                        htmlFor="email"
-                        input_type="email"
-                        update_on_change={setEmail}
-                        boolean_check={valid_signup_details.email_validity}
+            {is_unique_email === true && email !== "" && (
+                <div className="sign_in_redirect_div">
+                    This email is not connected to an account.
+                    <button
+                        className="sign_up_redirect"
+                        onClick={() => navigate("/signup")}
                     >
-                        <div className="link">
-                            This email is not connected to an account.
-                            <button
-                                onClick={() =>
-                                    setTimeout(() => navigate("/signup"), 1000)
-                                }
-                            >
-                                Sign Up
-                            </button>
-                        </div>
-                    </LoginInput>
-
-                    <LoginInput
-                        htmlFor="password"
-                        input_type="password"
-                        update_on_change={setPassword}
-                        boolean_check={valid_signup_details.password_validity}
-                    >
-                        Your email password combination is incorrect!
-                    </LoginInput>
-
-                    <input
-                        type="submit"
-                        value={is_signing_in ? "...Signing In" : "Sign In"}
-                        className="submit_btn"
-                    />
-                </form>
-
-                <div className="errors">
-                    {valid_signup_details.form_validity === false &&
-                        "Please ensure all sign in fields are entered"}
-
-                    {valid_signup_details.is_banned === true &&
-                        "The Account associated with this login has been banned"}
+                        Sign Up
+                    </button>
                 </div>
-            </div>
+            )}
+
+            <PasswordInput
+                password={password}
+                set_password={set_password}
+                set_validity={() => {}}
+                input_props={{
+                    label_text: "Password:",
+                    id: "password",
+                }}
+                show_errors={false}
+            />
+
+            {loading_sign_in ? (
+                <div className="loading_div">
+                    <Loading />
+                </div>
+            ) : (
+                <button className="sign_in_btn" onClick={handle_sign_in}>
+                    Sign In
+                </button>
+            )}
+
+            {sign_in_data?.is_banned === true && (
+                <div className="is_banned_error error">
+                    The account associated with this email adress has been
+                    banned.
+                </div>
+            )}
+
+            {sign_in_data?.error === "Wrong Email Password Combination" && (
+                <div className="invalid_credentials error">
+                    Invalid Email Password Combination
+                </div>
+            )}
         </div>
     );
 }

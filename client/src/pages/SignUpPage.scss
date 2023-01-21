@@ -1,74 +1,53 @@
 @import "../variables.scss";
 
-.Sign_Up_Page {
+.SignUpPage {
+    
+    background-color: var(--background-color-secondary);
+    padding: calc(1.5 * $padding);
+    border-radius: $border-radius;
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    
+    gap: $padding;
+    width: 350px;
+
     h2 {
-        margin-bottom: $padding;
+        border-bottom: 1px solid var(--border-color);
     }
-
-    .sign_up_card {
-        width: 340px;
-        background-color: var(--background-color-secondary);
-        padding: 16px;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-
-        form {
-
     
-            .verification_code_input {
-                visibility: hidden;
-            }
-    
-            h2 {
-                margin-bottom: 16px
-            }
-    
-            .verify_btn_green {
-                @include btn-styles(var(--green));
-                width: 100%;
-                margin-bottom: 4px;
-            }
-
-            .verify_btn_red {
-                @include btn-styles(var(--red));
-                width: 100%;
-                margin-bottom: 4px;
-            }
-            .verfication_error {
-                color: var(--red);
-            }
+    .send_verification_btn {
+        @include btn-styles(var(--blue));
+    } 
 
 
-    
-        }
-
-
-        .verify_input {
-            @include input-styles;
-            border: 1px solid var(--blue);
-            margin: 16px 0;
-            width: calc(340px - 32px);
-        }
-
-        // prevents default sytling when autofilling
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus,
-        input:-webkit-autofill:active {
-            transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: var(--text-color-primary) !important;
-        }
-
-        .submit_btn {
-            @include btn-styles(var(--green));
-            width: 100%;
-        }
-
+    .verification_code_div {
+        display: flex;
+        justify-content: center;
     }
-
-   
+    
+    
+    .loading_div {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .sign_in_redirect {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--blue);
+        
+        button {
+            @include btn-style-text(var(--blue));
+            
+            text-decoration: underline;
+            
+        }
+    }
+    
+    
+    .sign_up_btn {
+        @include btn-styles(var(--green));
+    }
 }

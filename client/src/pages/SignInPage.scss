@@ -1,46 +1,47 @@
 @import "../variables.scss";
 
-.Sign_In_Page {
+
+.SignInPage {
+    background-color: var(--background-color-secondary);
+    padding: calc(1.5 * $padding);
+    border-radius: $border-radius;
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: $padding;
+    width: 350px;
 
-
-    .sign_in_card {
-        width: 340px;
-        background-color: var(--background-color-secondary);
-        padding: 16px;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        margin-top: $padding;
-
-        .link {
-            color: var(--blue);
-            display: flex;
-            justify-content: space-between;
-
-            button {
-                all: unset;
-                cursor: pointer;
-                text-decoration: underline;
-                margin-right: 0.5em;
-            }
-        }
-
-        .submit_btn {
-            @include btn-styles(var(--green));
-            width: 100%;
-            margin-bottom: 4px;
-        }
-
+    h2 {
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .errors {
-        margin-top: 4px;
+    .sign_in_redirect_div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--blue);
+        
+        button {
+            @include btn-style-text(var(--blue));
+            
+            text-decoration: underline;
+            
+        }
+    }
+
+    .loading_div {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .sign_in_btn {
+        @include btn-styles(var(--green));
+    }
+
+
+    .error {
         color: var(--red);
     }
-
-    
-  
-
 }

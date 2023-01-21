@@ -35,7 +35,7 @@ const create_user = async (email, username, password) => {
     return response.data;
 };
 
-const sign_in = async (email, password) => {
+const sign_in_request = async (email, password) => {
     const response = await axios.post(`${CUSTOM_ENDPOINT}/sign_in`, {
         email: email,
         password: password,
@@ -150,7 +150,7 @@ const is_unique_username_request = async (new_username) => {
 export {
     is_valid_web_token,
     create_user,
-    sign_in,
+    sign_in_request,
     sign_out,
     delete_user,
     edit_user_details,

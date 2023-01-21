@@ -23,7 +23,7 @@ function Notification({ id, type, message, dispatch }) {
                 return prev_percent;
             });
 
-            // runs this annonyymous function every 20 ms
+            // runs this annonyymous function every x ms
         }, [30]);
 
         // we need to keep track of the curr_interval_id

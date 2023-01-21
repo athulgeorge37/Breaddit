@@ -7,7 +7,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useMutation } from "@tanstack/react-query";
 
 // form
-import PasswordInputV2 from "../authentication/PasswordInput/PasswordInputV2";
+import PasswordInput from "../../components/form/PasswordInput";
 
 // api
 import { edit_user_password } from "../../api/UserRequests";
@@ -68,24 +68,24 @@ function EditPassword() {
     };
 
     return (
-        <div className="EditPassword">
+        <div className={`EditPassword ${is_editing ? "editing" : "static"}`}>
             {is_editing ? (
                 <div className="edit_content">
-                    <PasswordInputV2
+                    <PasswordInput
+                        password={current_password}
                         set_password={set_current_password}
                         input_props={{
-                            value: current_password,
                             label_text: "Current Password:",
                             id: "current_password",
                         }}
                         show_errors={false}
                     />
 
-                    <PasswordInputV2
+                    <PasswordInput
+                        password={new_password}
                         set_password={set_new_password}
                         set_validity={set_password_validity}
                         input_props={{
-                            value: new_password,
                             label_text: "New Password:",
                             id: "new_password",
                         }}

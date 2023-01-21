@@ -1,0 +1,10 @@
+@import "../../variables.scss";
+
+.EditEmail {
+    border-top: 1px solid var(--border-color);
+    padding: $padding;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+}

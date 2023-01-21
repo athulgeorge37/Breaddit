@@ -9,8 +9,8 @@ const CurrentUserContext = createContext();
 const DEFAULT_CURR_USER_STATE = {
     username: "",
     profile_pic: null,
-    authenticated: false,
     role: null,
+    authenticated: false,
 };
 
 export default function CurrentUserProvider({ children }) {
@@ -24,17 +24,13 @@ export default function CurrentUserProvider({ children }) {
     // allows us to only make one request when component mounts
     useQuery(["is_valid_web_token"], is_valid_web_token, {
         onSuccess: (data) => {
+            // data is the web token
             set_current_user_in_app(data);
         },
+        onError: (data) => {
+            console.log(data);
+        },
     });
-
-    // useEffect(() => {
-    //     // only updates current user state, when there is data
-    //     if (valid_web_token) {
-    //         // console.log("data", valid_web_token);
-    //         set_current_user_in_app(valid_web_token);
-    //     }
-    // }, [valid_web_token]);
 
     const set_current_user_in_app = (valid_web_token) => {
         if (valid_web_token.error) {
@@ -59,6 +55,7 @@ export default function CurrentUserProvider({ children }) {
         console.log("initialising curr user");
         const response = await is_valid_web_token();
 
+        // response here is the web token
         set_current_user_in_app(response);
 
         return {
@@ -66,14 +63,6 @@ export default function CurrentUserProvider({ children }) {
             role: response.role,
         };
     };
-
-    // const update_current_user = (new_username, new_profile_pic) => {
-    //     set_current_user({
-    //         ...current_user,
-    //         username: new_username,
-    //         profile_pic: new_profile_pic,
-    //     });
-    // };
 
     const update_current_user_username = (new_username) => {
         set_current_user({
@@ -92,6 +81,8 @@ export default function CurrentUserProvider({ children }) {
     const remove_current_user = () => {
         remove_item_local_storage("web_access_token");
         set_current_user(DEFAULT_CURR_USER_STATE);
+
+        // prefferably add notifcation here
         console.log("curr user has been removed");
     };
 

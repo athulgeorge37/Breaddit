@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import LoginInput from "../components/form/LoginInput";
 
 // rest api request imports
-import { is_unique_email, sign_in } from "../api/UserRequests";
+import { is_unique_email_request, sign_in } from "../api/UserRequests";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
 function SignInPage() {
@@ -42,7 +42,7 @@ function SignInPage() {
             }
         }
 
-        const unique_email_response = await is_unique_email(email);
+        const unique_email_response = await is_unique_email_request(email);
         // setting email validity to false, if
         // email entered is unique which means they dont have an account
         const valid_email = !unique_email_response;

@@ -23,70 +23,23 @@ function EditUsername({ user_details }) {
     const [username, set_username] = useState(user_details.username);
     const [is_editing, set_is_editing] = useState(false);
 
-    const [is_unique_username, set_is_unique_username] = useState(true);
-    const debounced_search = useDebounce(username, 500);
-    // const [is_loading, set_is_loading] = useState(false);
-    const [min_three_char, set_min_three_char] = useState(true);
-    const [max_fifteen_char, set_max_fifteen_char] = useState(true);
-
-    useEffect(() => {
-        // searching the api for thread names
-        const check_is_unique_username = async () => {
-            // set_is_loading(true);
-
-            if (username === "") {
-                set_is_unique_username(false);
-                return;
-            }
-
-            if (username === user_details.username) {
-                // when user is searching their own name, no need to make a request
-                // and should be true since they already have registered that username
-                set_is_unique_username(true);
-                return;
-            }
-
-            let has_min_three_char = true;
-            if (username.length < 3) {
-                has_min_three_char = false;
-            }
-
-            let has_max_fifteen_char = true;
-            if (username.length > 15) {
-                has_max_fifteen_char = false;
-            }
-
-            set_max_fifteen_char(has_max_fifteen_char);
-            set_min_three_char(has_min_three_char);
-
-            if (!has_min_three_char || !has_max_fifteen_char) {
-                // not making a request until they have met the following conditions
-                return;
-            }
-
-            const data = await is_unique_username_request(debounced_search);
-            if (data.error) {
-                console.log({ data });
-                return;
-            }
-            set_is_unique_username(data.is_unique);
-
-            // set_is_loading(false);
-        };
-
-        if (debounced_search) {
-            // will only check if username is unqiue when 500ms
-            // has passed, after typing
-            check_is_unique_username();
-        }
-    }, [debounced_search]);
+    const { is_unique_username, max_fifteen_char, min_three_char } =
+        useDebouncedIsUniqueUsername(username, user_details.username);
 
     const { mutate: update_username } = useMutation(
         () => {
             return edit_user_details({ username: username });
         },
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
+                if (data.error) {
+                    if (data.error.name === "SequelizeUniqueConstraintError") {
+                        add_notification("Username must be unique", "ERROR");
+                    } else {
+                        console.log(data.error);
+                    }
+                    return;
+                }
                 update_current_user_username(username);
                 queryClient.removeQueries([
                     "user_details",
@@ -95,6 +48,7 @@ function EditUsername({ user_details }) {
                     },
                 ]);
                 add_notification("Succesfully Edited Username");
+                set_is_editing(false);
             },
             onError: () => {
                 add_notification(
@@ -180,14 +134,12 @@ function EditUsername({ user_details }) {
                                     max_fifteen_char
                                 ) {
                                     update_username();
-                                    set_is_editing(false);
                                 } else {
                                     add_notification(
                                         "Please ensure you have met all Username requirements",
                                         "ERROR"
                                     );
                                 }
-                                // navigate(`/user/${username}/profile`);
                             }}
                         >
                             <svg
@@ -235,4 +187,84 @@ function EditUsername({ user_details }) {
     );
 }
 
+const useDebouncedIsUniqueUsername = (username, orginal_username = null) => {
+    const [is_unique_username, set_is_unique_username] = useState(true);
+    const debounced_search = useDebounce(username, 500);
+    // const [is_loading, set_is_loading] = useState(false);
+    const [min_three_char, set_min_three_char] = useState(true);
+    const [max_fifteen_char, set_max_fifteen_char] = useState(true);
+    const [is_valid_username, set_is_valid_username] = useState(false);
+
+    useEffect(() => {
+        // searching the api for thread names
+        const check_is_unique_username = async () => {
+            // set_is_loading(true);
+
+            if (username === "") {
+                set_is_unique_username(false);
+                return;
+            }
+
+            if (orginal_username !== null) {
+                if (username === orginal_username) {
+                    // when user is searching their own name, no need to make a request
+                    // and should be true since they already have registered that username
+                    set_is_unique_username(true);
+                    return;
+                }
+            }
+
+            let has_min_three_char = true;
+            if (username.length < 3) {
+                has_min_three_char = false;
+            }
+
+            let has_max_fifteen_char = true;
+            if (username.length > 15) {
+                has_max_fifteen_char = false;
+            }
+
+            set_max_fifteen_char(has_max_fifteen_char);
+            set_min_three_char(has_min_three_char);
+
+            if (!has_min_three_char || !has_max_fifteen_char) {
+                // not making a request until they have met the following conditions
+                return;
+            }
+
+            const data = await is_unique_username_request(debounced_search);
+            if (data.error) {
+                console.log({ data });
+                return;
+            }
+            set_is_unique_username(data.is_unique);
+
+            // set_is_loading(false);
+        };
+
+        if (debounced_search) {
+            // will only check if username is unqiue when 500ms
+            // has passed, after typing
+            check_is_unique_username();
+        }
+    }, [debounced_search]);
+
+    useEffect(() => {
+        if (is_unique_username && max_fifteen_char && min_three_char) {
+            set_is_valid_username(true);
+        } else {
+            set_is_valid_username(false);
+        }
+    }, [is_unique_username, max_fifteen_char, min_three_char]);
+
+    return {
+        // is_loading,
+        is_unique_username,
+        max_fifteen_char,
+        min_three_char,
+        is_valid_username,
+    };
+};
+
+export { useDebouncedIsUniqueUsername };
 export default EditUsername;

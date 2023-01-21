@@ -92,7 +92,9 @@ router.get("/check_is_unique_email/:new_email", async (request, response) => {
         },
     });
 
-    response.json(users_with_new_email === 0 ? true : false);
+    response.json({
+        is_unique: users_with_new_email === 0 ? true : false,
+    });
 });
 
 router.get("/check_is_unique_username", async (request, response) => {

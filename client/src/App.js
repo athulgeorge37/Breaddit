@@ -25,7 +25,8 @@ import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading
 const HomePage = lazy(() => import("./pages/HomePage"));
-const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+// const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const SignUpPageV2 = lazy(() => import("./pages/SignUpPageV2"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProfilePageV2 = lazy(() => import("./pages/ProfilePageV2"));
 const PostsByUser = lazy(() => import("./features/post/PostsByUser"));
@@ -65,7 +66,9 @@ function App() {
                                                     />
                                                     <Route
                                                         path="/signup"
-                                                        element={<SignUpPage />}
+                                                        element={
+                                                            <SignUpPageV2 />
+                                                        }
                                                     />
                                                     <Route
                                                         path="/signin"

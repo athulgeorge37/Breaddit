@@ -6,6 +6,7 @@ import EditProfilePic from "./profile_picture/EditProfilePic";
 import EditBio from "./EditBio";
 import EditUsername from "./EditUsername";
 import EditPassword from "./EditPassword";
+import EditEmail from "./EditEmail";
 
 // hooks
 import { useLocation, useNavigate } from "react-router-dom";
@@ -39,6 +40,8 @@ function EditProfileV2() {
             <EditUsername user_details={user_details} />
 
             <EditPassword />
+
+            <EditEmail />
         </div>
     );
 }

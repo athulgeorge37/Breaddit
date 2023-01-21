@@ -129,15 +129,7 @@ const get_user_details = async (username) => {
     return response.data;
 };
 
-// const get_user_profile_details = async (username) => {
-//     const response = await axios.get(
-//         `${CUSTOM_ENDPOINT}/get_user_profile_details/by_username/${username}`
-//     );
-
-//     return response.data;
-// };
-
-const is_unique_email = async (new_email) => {
+const is_unique_email_request = async (new_email) => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/check_is_unique_email/${new_email}`
     );
@@ -163,8 +155,7 @@ export {
     delete_user,
     edit_user_details,
     get_user_details,
-    // get_user_profile_details,
     edit_user_password,
-    is_unique_email,
+    is_unique_email_request,
     is_unique_username_request,
 };

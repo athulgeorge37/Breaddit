@@ -29,9 +29,9 @@ const LIGHT_MODE_COLORS = {
 
     "--border-color": "#64748b",
 
-    "--blue": "#0284c7",
-    "--red": "#dc2626",
-    "--green": "#059669",
+    "--blue": "#1d4ed8",
+    "--red": "#b91c1c",
+    "--green": "#238636",
 };
 
 function DarkModeProvider({ children }) {

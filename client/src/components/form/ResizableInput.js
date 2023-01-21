@@ -3,7 +3,6 @@ import "./ResizableInput.scss";
 
 // hooks
 import { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
 
 // article from:
 // https://medium.com/@oherterich/creating-a-textarea-with-dynamic-height-using-react-and-typescript-5ed2d78d9848

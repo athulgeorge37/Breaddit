@@ -29,8 +29,10 @@ Stuff We have used:
     Breaddit email account:
     email: BreadditVerifySignUp@gmail.com
     Password: BreadditVerify#69
+    app password = zgvakbeozlgbishj
+    app password lets us sign into a google account from third party, such as nodemailer
 
-    EmailJS account:
+    EmailJS account: (not being used)
     service ID: Breaddit_Service_69420
     User ID / Public Key: VHjgLz-ZTg3h0Y_xh
     TemplateID: template_9wj4cqc

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // component imports
-import PasswordInput from "../features/authentication/PasswordInput/PasswordInput";
+import PasswordInput from "../components/form/PasswordInput";
 import UsernameInput from "../features/authentication/UsernameInput/UsernameInput";
 import EmailInput from "../features/authentication/EmailInput/EmailInput";
 

@@ -129,6 +129,19 @@ const get_user_details = async (username) => {
     return response.data;
 };
 
+const get_editable_user_details = async () => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_editable_user_details`,
+        {
+            headers: {
+                web_access_token: get_item_local_storage("web_access_token"),
+            },
+        }
+    );
+
+    return response.data;
+};
+
 const is_unique_email_request = async (new_email) => {
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/check_is_unique_email/${new_email}`
@@ -155,6 +168,7 @@ export {
     delete_user,
     edit_user_details,
     get_user_details,
+    get_editable_user_details,
     edit_user_password,
     is_unique_email_request,
     is_unique_username_request,

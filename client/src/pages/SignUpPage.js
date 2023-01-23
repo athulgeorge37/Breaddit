@@ -2,8 +2,8 @@ import "./SignUpPage.scss";
 
 // hooks
 import { useState } from "react";
-import { useDebouncedIsUniqueUsername } from "../features/profile/EditUsername";
-import { useDebouncedIsUniqueEmail } from "../features/profile/EditEmail";
+import { useUsername } from "../features/profile/EditUsername";
+import { useEmail } from "../features/profile/EditEmail";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
@@ -31,12 +31,12 @@ function SignUpPage() {
         is_unique_username,
         max_fifteen_char,
         min_three_char,
+        contains_space,
         is_valid_username,
-    } = useDebouncedIsUniqueUsername(username);
+    } = useUsername(username);
 
     const [email, set_email] = useState("");
-    const { is_unique_email, is_valid_email } =
-        useDebouncedIsUniqueEmail(email);
+    const { is_unique_email, is_valid_email } = useEmail(email);
 
     const [password, set_password] = useState("");
     const [password_validity, set_password_validity] = useState(false);
@@ -150,6 +150,12 @@ function SignUpPage() {
                         id: "max_fifteen_char",
                         msg: "Must be less than 15 characters",
                         is_error: !max_fifteen_char,
+                        hidden: username === "" ? true : false,
+                    },
+                    {
+                        id: "contains_space",
+                        msg: "Must not contain a space",
+                        is_error: contains_space,
                         hidden: username === "" ? true : false,
                     },
                     {

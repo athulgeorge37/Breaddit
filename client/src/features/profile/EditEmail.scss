@@ -7,4 +7,58 @@
     justify-content: space-between;
     align-items: flex-end;
 
+    .edit_content {
+        display: flex;
+        flex-direction: column;
+        gap: $padding;
+        width: 250px;
+         
+        .send_verification_btn {
+            @include btn-styles(var(--blue));
+        } 
+        
+        
+        .verification_code_div {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .loading_div {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+    }
+    
+
+    .btns {
+        display: flex;
+        gap: 10px;
+        
+    
+
+        button {
+            @include btn-styles(var(--text-color-secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            color: var(--text-color-primary);
+            background-color: var(--text-color-secondary);
+            height: fit-content;
+            
+            svg {
+                width: 25px;
+                height: 25px;
+                margin-right: 10px;
+            }
+            
+        }
+        
+        .save_btn {
+            background-color: var(--green);
+        }
+    }
+
+
 }

@@ -46,33 +46,24 @@ router.get("/get_user_details", async (request, response) => {
 });
 
 router.get(
-    "/get_user_profile_details/by_username/:username",
+    "/get_editable_user_details",
+    validate_request,
     async (request, response) => {
         // gets user details by user_id
         // when user does not exist, response is null
 
         try {
-            const username = request.params.username;
-            // user_id is the account we want to seach for
-            const user_details = await db.User.findOne({
-                where: {
-                    username: username,
-                },
-            });
-
-            // account we want to search for doesnt exists
-            if (user_details === null) {
-                response.json({
-                    error: `account with username: ${username} does not exist`,
-                });
-            }
+            const username = request.query.username;
+            const user_details = await db.User.findByPk(request.user_id);
 
             response.json({
                 user_details: {
+                    id: user_details.id,
                     username: user_details.username,
                     profile_pic: user_details.profile_pic,
                     bio: user_details.bio,
                     createdAt: user_details.createdAt,
+                    email: user_details.email,
                 },
             });
         } catch (e) {
@@ -82,6 +73,44 @@ router.get(
         }
     }
 );
+
+// router.get(
+//     "/get_user_profile_details/by_username/:username",
+//     async (request, response) => {
+//         // gets user details by user_id
+//         // when user does not exist, response is null
+
+//         try {
+//             const username = request.params.username;
+//             // user_id is the account we want to seach for
+//             const user_details = await db.User.findOne({
+//                 where: {
+//                     username: username,
+//                 },
+//             });
+
+//             // account we want to search for doesnt exists
+//             if (user_details === null) {
+//                 response.json({
+//                     error: `account with username: ${username} does not exist`,
+//                 });
+//             }
+
+//             response.json({
+//                 user_details: {
+//                     username: user_details.username,
+//                     profile_pic: user_details.profile_pic,
+//                     bio: user_details.bio,
+//                     createdAt: user_details.createdAt,
+//                 },
+//             });
+//         } catch (e) {
+//             response.json({
+//                 error: e,
+//             });
+//         }
+//     }
+// );
 
 router.get("/check_is_unique_email/:new_email", async (request, response) => {
     // checks if the entered email is unique

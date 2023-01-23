@@ -3,7 +3,7 @@ import "./SignInPage.scss";
 
 // hooks
 import { useState } from "react";
-import { useDebouncedIsUniqueEmail } from "../features/profile/EditEmail";
+import { useEmail } from "../features/profile/EditEmail";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "../context/Notifications/NotificationProvider";
@@ -25,7 +25,7 @@ function SignInPage() {
     const { initialise_curr_user } = useCurrentUser();
 
     const [email, set_email] = useState("");
-    const { is_unique_email } = useDebouncedIsUniqueEmail(email);
+    const { is_unique_email } = useEmail(email);
 
     const [password, set_password] = useState("");
 

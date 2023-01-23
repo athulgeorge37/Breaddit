@@ -19,7 +19,7 @@ import ProfilePicture from "./ProfilePicture";
 import { upload_image } from "../../../api/ImageRequests";
 import { edit_user_details } from "../../../api/UserRequests";
 
-function EditProfilePic({ user_details }) {
+function EditProfilePic({ original_profile_pic, original_username }) {
     const { update_current_user_profile_pic } = useCurrentUser();
     const queryClient = useQueryClient();
     const add_notification = useNotification();
@@ -28,9 +28,8 @@ function EditProfilePic({ user_details }) {
     const img_input_ref = useRef();
 
     // profile_picture_url is the current profile pic saved in the DB
-    const [profile_picture_url, set_profile_picture_url] = useState(
-        user_details.profile_pic
-    );
+    const [profile_picture_url, set_profile_picture_url] =
+        useState(original_profile_pic);
 
     var editor = "";
     const [picture, setPicture] = useState({
@@ -168,7 +167,7 @@ function EditProfilePic({ user_details }) {
                     queryClient.invalidateQueries([
                         "user_details",
                         {
-                            username: user_details.username,
+                            username: original_username,
                         },
                     ]);
                 },
@@ -375,7 +374,7 @@ function EditProfilePic({ user_details }) {
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                             />
                         </svg>
-                        Edit Profile Picture
+                        Edit
                     </button>
                 </div>
             )}

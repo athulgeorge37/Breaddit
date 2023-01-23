@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
-    get_item_local_storage,
-    set_item_local_storage,
+    get_item_session_storage,
+    set_item_session_storage,
 } from "../helper/local_storage";
 import query_string_generator from "../helper/query_string_generator";
 
@@ -12,7 +12,7 @@ const is_valid_web_token = async () => {
         `${CUSTOM_ENDPOINT}/check_is_valid_web_token`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -30,7 +30,10 @@ const create_user = async (email, username, password) => {
     });
 
     // settting web_access_token to localstorage
-    set_item_local_storage("web_access_token", response.data.web_access_token);
+    set_item_session_storage(
+        "web_access_token",
+        response.data.web_access_token
+    );
 
     return response.data;
 };
@@ -43,7 +46,7 @@ const sign_in_request = async (email, password) => {
 
     if (response.data.web_access_token) {
         // settting web_access_token to localstorage
-        set_item_local_storage(
+        set_item_session_storage(
             "web_access_token",
             response.data.web_access_token
         );
@@ -60,7 +63,7 @@ const sign_out = async () => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -71,7 +74,7 @@ const sign_out = async () => {
 const delete_user = async () => {
     const response = await axios.delete(`${CUSTOM_ENDPOINT}/delete_user`, {
         headers: {
-            web_access_token: get_item_local_storage("web_access_token"),
+            web_access_token: get_item_session_storage("web_access_token"),
         },
     });
 
@@ -94,7 +97,7 @@ const edit_user_details = async ({
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -111,7 +114,7 @@ const edit_user_password = async ({ current_password, new_password }) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -134,7 +137,7 @@ const get_editable_user_details = async () => {
         `${CUSTOM_ENDPOINT}/get_editable_user_details`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

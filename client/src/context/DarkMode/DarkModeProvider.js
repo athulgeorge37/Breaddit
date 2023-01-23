@@ -1,4 +1,8 @@
 import { useState, useEffect, createContext, useContext } from "react";
+import {
+    get_item_local_storage,
+    set_item_local_storage,
+} from "../../helper/local_storage";
 
 const DarkModeContext = createContext();
 
@@ -35,13 +39,16 @@ const LIGHT_MODE_COLORS = {
 };
 
 function DarkModeProvider({ children }) {
-    const [is_dark_mode, set_is_dark_mode] = useState(true);
+    const [is_dark_mode, set_is_dark_mode] = useState(
+        get_item_local_storage("is_dark_mode") ?? true
+    );
 
     useEffect(() => {
         let COLORS_TO_MAP = DARK_MODE_COLORS;
         if (is_dark_mode === false) {
             COLORS_TO_MAP = LIGHT_MODE_COLORS;
         }
+        set_item_local_storage("is_dark_mode", is_dark_mode);
 
         const root_styles = document.documentElement?.style;
         Object.keys(COLORS_TO_MAP).map((key) => {

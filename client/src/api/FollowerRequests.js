@@ -1,5 +1,5 @@
 import axios from "axios";
-import { get_item_local_storage } from "../helper/local_storage";
+import { get_item_session_storage } from "../helper/local_storage";
 import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/follower`;
@@ -12,7 +12,7 @@ const follow_or_unfollow_account_request = async (account_id) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -40,7 +40,7 @@ const follow_account = async (username) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -53,7 +53,7 @@ const unfollow_account = async (username) => {
         `${CUSTOM_ENDPOINT}/unfollow_account/by_username/${username}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -76,7 +76,7 @@ const get_all_profiles_who_follow = async (
         })}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -105,7 +105,7 @@ const check_is_following_username = async (username) => {
         `${CUSTOM_ENDPOINT}/check_is_following/by_username/${username}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

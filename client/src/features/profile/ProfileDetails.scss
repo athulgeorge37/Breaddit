@@ -51,7 +51,8 @@
                     flex-direction: column;
                     gap: 3px;
 
-                    color: var(--text-color-primary);
+                    color: white;
+                    // color: var(--text-color-primary);
                     background-color: var(--background-color-tertiary);
                     padding: 10px;
                     border-radius: $border-radius;
@@ -90,6 +91,7 @@
 
                 .edit_profile_btn {
                     @include btn-styles(var(--background-color-tertiary));
+
                     padding: 5px;
                     padding-right: 10px;
                     display: flex;

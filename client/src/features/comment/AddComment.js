@@ -33,7 +33,7 @@ function AddComment({
     const [comment_content, set_comment_content] = useState(initial_content);
     const [error_msg, show_error_msg] = useState(false);
 
-    const add_comment = useMutation(
+    const { mutate: add_comment } = useMutation(
         () => {
             return create_comment_or_reply(
                 post_id,
@@ -67,7 +67,7 @@ function AddComment({
         }
     );
 
-    const edit_comment = useMutation(
+    const { mutate: edit_comment } = useMutation(
         () => {
             return edit_comment_or_reply(comment_id, comment_content);
         },
@@ -102,7 +102,7 @@ function AddComment({
             return;
         }
 
-        add_comment.mutate();
+        add_comment();
     };
 
     const submit_edit_comment = async () => {
@@ -110,7 +110,7 @@ function AddComment({
             return;
         }
 
-        edit_comment.mutate();
+        edit_comment();
     };
 
     const validate_comment_content = () => {
@@ -143,17 +143,6 @@ function AddComment({
                             placeholder={placeholder}
                             value={comment_content}
                         />
-                        {/* <div className="input_and_errors">
-
-                        {error_msg && (
-                            <div className="error_msg">
-                            Comment cannot be empty!
-                            </div>
-                            )}
-                        </div> */}
-                        {/* <div className="add_comment_pic_and_input">
-
-</div> */}
 
                         <button
                             className="comment_btn"

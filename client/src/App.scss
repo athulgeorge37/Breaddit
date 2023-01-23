@@ -20,11 +20,11 @@
     background-color: var(--background-color-secondary);
 }
 
-@supports (scrollbar-color: var(--background-color-tertiary) var(--background-color-tertiary)) {
+@supports (scrollbar-color: var(--text-color-secondary) var(--background-color-tertiary)) {
     // so it looks somewhat similar of firfox
     * {
         // scrollbar-color: $light-grey $dark-grey;
-        scrollbar-color: var(--background-color-tertiary) var(--background-color-tertiary);
+        scrollbar-color: var(--text-color-secondary) var(--background-color-tertiary);
         scrollbar-width: thin;
     }
 }

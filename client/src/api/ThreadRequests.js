@@ -1,5 +1,5 @@
 import axios from "axios";
-import { get_item_local_storage } from "../helper/local_storage";
+import { get_item_session_storage } from "../helper/local_storage";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/thread`;
 
@@ -21,7 +21,7 @@ const create_thread = async (
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

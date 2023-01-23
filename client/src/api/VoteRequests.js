@@ -1,5 +1,5 @@
 import axios from "axios";
-import { get_item_local_storage } from "../helper/local_storage";
+import { get_item_session_storage } from "../helper/local_storage";
 import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/vote`;
@@ -14,7 +14,7 @@ const make_vote = async (vote_id, vote_type, up_vote) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -27,7 +27,7 @@ const get_curr_user_vote = async (parent_id, parent_type) => {
         `${CUSTOM_ENDPOINT}/get_curr_user_vote/by_parent_id/${parent_id}/parent_type/${parent_type}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -52,7 +52,7 @@ const get_all_profile_who_voted = async (
         })}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

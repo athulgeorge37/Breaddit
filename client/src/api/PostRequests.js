@@ -1,5 +1,5 @@
 import axios from "axios";
-import { get_item_local_storage } from "../helper/local_storage";
+import { get_item_session_storage } from "../helper/local_storage";
 import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/post`;
@@ -16,7 +16,7 @@ const create_post = async (title, text, image, thread_id) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -29,7 +29,7 @@ const delete_post = async (post_id) => {
         `${CUSTOM_ENDPOINT}/delete_post/by_id/${post_id}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -48,7 +48,7 @@ const edit_post = async (post_id, post_title, post_text, post_image) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -89,7 +89,7 @@ const get_all_posts_by_curr_user = async () => {
         `${CUSTOM_ENDPOINT}/get_all/by_curr_user`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

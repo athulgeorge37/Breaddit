@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { remove_item_local_storage } from "../../helper/local_storage";
+import { remove_item_session_storage } from "../../helper/local_storage";
 import { is_valid_web_token } from "../../api/UserRequests";
 
 import { useQuery } from "@tanstack/react-query";
@@ -79,7 +79,7 @@ export default function CurrentUserProvider({ children }) {
     };
 
     const remove_current_user = () => {
-        remove_item_local_storage("web_access_token");
+        remove_item_session_storage("web_access_token");
         set_current_user(DEFAULT_CURR_USER_STATE);
 
         // prefferably add notifcation here

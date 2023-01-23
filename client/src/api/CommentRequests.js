@@ -1,5 +1,5 @@
 import axios from "axios";
-import { get_item_local_storage } from "../helper/local_storage";
+import { get_item_session_storage } from "../helper/local_storage";
 import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/comment`;
@@ -22,7 +22,7 @@ const create_comment_or_reply = async (
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -35,7 +35,7 @@ const delete_comment_or_reply = async (type, id) => {
         `${CUSTOM_ENDPOINT}/delete/of_type/${type}/by_id/${id}`,
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );
@@ -52,7 +52,7 @@ const edit_comment_or_reply = async (comment_id, updated_text) => {
         },
         {
             headers: {
-                web_access_token: get_item_local_storage("web_access_token"),
+                web_access_token: get_item_session_storage("web_access_token"),
             },
         }
     );

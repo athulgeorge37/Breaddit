@@ -2,8 +2,8 @@ import "./SignUpPage.scss";
 
 // hooks
 import { useState } from "react";
-import { useUsername } from "../features/profile/EditUsername";
-import { useEmail } from "../features/profile/EditEmail";
+import { useUsername } from "../features/profile/edit_profile_details/EditUsername";
+import { useEmail } from "../features/profile/edit_profile_details/EditEmail";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "../context/Notifications/NotificationProvider";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";

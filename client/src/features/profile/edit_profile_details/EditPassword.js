@@ -3,14 +3,14 @@ import "./EditPassword.scss";
 
 // hooks
 import { useState } from "react";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useNotification } from "../../../context/Notifications/NotificationProvider";
 import { useMutation } from "@tanstack/react-query";
 
 // form
-import PasswordInput from "../../components/form/PasswordInput";
+import PasswordInput from "../../../components/form/PasswordInput";
 
 // api
-import { edit_user_password } from "../../api/UserRequests";
+import { edit_user_password } from "../../../api/UserRequests";
 
 function EditPassword() {
     const add_notification = useNotification();

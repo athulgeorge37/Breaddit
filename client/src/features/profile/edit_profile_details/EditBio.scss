@@ -1,43 +1,31 @@
-@import "../../variables.scss";
+@import "../../../variables.scss";
 
-.EditEmail {
+.EditBio {
     border-top: 1px solid var(--border-color);
     padding: $padding;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
 
-    .edit_content {
+
+    .edit_bio_input, .bio_content {
         display: flex;
         flex-direction: column;
-        gap: $padding;
-        width: 250px;
-         
-        .send_verification_btn {
-            @include btn-styles(var(--blue));
-        } 
-        
-        
-        .verification_code_div {
-            display: flex;
-            justify-content: center;
-        }
-        
-        .loading_div {
-            width: 100%;
-            display: flex;
-            justify-content: center;
+        gap: 5px;
+    }
+
+    .bio_content {
+        .bio {
+            white-space: pre-line;
         }
     }
-    
 
-    .btns {
+    .bio_btns {
         display: flex;
         gap: 10px;
-        
-    
+        margin-top: 10px;
+        align-items: flex-end;
 
-        button {
+        .bio_btn {
             @include btn-styles(var(--text-color-secondary));
             display: flex;
             justify-content: center;
@@ -55,10 +43,17 @@
             
         }
         
-        .save_btn {
+        .save_bio_btn {
             background-color: var(--green);
         }
     }
 
+}
 
+.edit_mode {
+    flex-direction: column;
+    
+    .bio_btns {
+        justify-content: flex-end;
+    }
 }

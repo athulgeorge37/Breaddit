@@ -4,19 +4,19 @@ import "./EditBio.scss";
 // hooks
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useNotification } from "../../../context/Notifications/NotificationProvider";
 
 // ui
-import ResizableInput from "../../components/form/ResizableInput";
+import ResizableInput from "../../../components/form/ResizableInput";
 
 // api
-import { edit_user_details } from "../../api/UserRequests";
+import { edit_user_details } from "../../../api/UserRequests";
 
-function EditBio({ user_details }) {
+function EditBio({ original_bio, original_username }) {
     const queryClient = useQueryClient();
     const add_notification = useNotification();
 
-    const [bio, set_bio] = useState(user_details.bio ?? "");
+    const [bio, set_bio] = useState(original_bio ?? "");
     const [is_editing, set_is_editing] = useState(false);
 
     const { mutate: update_bio } = useMutation(
@@ -29,7 +29,7 @@ function EditBio({ user_details }) {
                 queryClient.invalidateQueries([
                     "user_details",
                     {
-                        username: user_details.username,
+                        username: original_username,
                     },
                 ]);
             },
@@ -44,7 +44,7 @@ function EditBio({ user_details }) {
 
     const handle_save_bio = () => {
         // not updating bio, if we are saving the same details
-        if (bio !== user_details.bio) {
+        if (bio !== original_bio) {
             // updating bio in DB
             update_bio(bio === "" ? "null" : bio);
         }
@@ -81,7 +81,7 @@ function EditBio({ user_details }) {
                             className="cancel_bio_btn bio_btn"
                             onClick={() => {
                                 set_is_editing(!is_editing);
-                                set_bio(user_details.bio ?? "");
+                                set_bio(original_bio ?? "");
                             }}
                         >
                             <svg
@@ -126,7 +126,7 @@ function EditBio({ user_details }) {
                         className="edit_bio_btn bio_btn"
                         onClick={() => {
                             set_is_editing(!is_editing);
-                            set_bio(user_details.bio ?? "");
+                            set_bio(original_bio ?? "");
                         }}
                     >
                         <svg

@@ -13,7 +13,7 @@ import ToolTip from "../../../components/ui/ToolTip";
 
 // components
 import AvatarEditor from "react-avatar-editor";
-import ProfilePicture from "./ProfilePicture";
+import ProfilePicture from "../profile_picture/ProfilePicture";
 
 // api
 import { upload_image } from "../../../api/ImageRequests";

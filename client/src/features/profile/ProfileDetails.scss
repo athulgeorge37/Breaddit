@@ -1,6 +1,6 @@
 @import "../../variables.scss";
 
-.ReadProfile {
+.ProfileDetails {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -128,122 +128,6 @@
     
 }
 
-.FollowerListInfiniteScroll {
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-
-            button {
-                border: none;
-                background: none;
-                color: var(--text-color-primary);
-                cursor: pointer;
-                font-size: large;
-                padding: 10px 5px;
-            }
-
-            .active {
-                border-bottom: 3px solid var(--blue);
-            }
-
-        }
 
 
-        .close_modal_btn {
-            display: flex;
-            align-items: center;
-            color: var(--red);
-            cursor: pointer;
-            background: none;
-            border: none;
 
-            svg {
-                width: 30px;
-                height: 30px;
-            }
-        }
-    }
-
-    .follower_content {
-    
-
-        .list_of_followers {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            // this div only becomes scrollable
-            // when the height is greater than max-height
-            // otherwise the height will fit the content of this div
-            max-height: 200px;
-            // overflow auto means it only shows scrollbar when 
-            // this div can be scrolled
-            overflow-y: auto;
-            // puts the scrollbar slightly to the right
-            padding-right: 5px;
-            
-            
-            .end_of_followers_lists {
-                // margin-top: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 10px;
-                background-color: var(--background-color-tertiary);
-                border-radius: $border-radius;
-            }
-        }
-    }
-
-}
-
-
-.FollowerCard {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--background-color-tertiary);
-    border-radius: $border-radius;
-    padding: 10px;
-
-    .left_side {
-        display: flex;
-        align-items: center;
-        
-        
-        .username {
-            @include btn-style-text(var(--text-color-primary));
-        }
-    }
-
-
-    .follower_following_btn {
-        width: 30%
-    }
-    .following_btn {
-        @include btn-styles(var(--green));
-    }
-
-    .follower_btn {
-        @include btn-styles(var(--blue));
-    }
-
-    &:hover {
-        .username {    
-            color: var(--blue);
-            text-decoration: underline;
-        }
-    }
-
-}

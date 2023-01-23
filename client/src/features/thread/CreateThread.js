@@ -8,7 +8,7 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useNavigate } from "react-router-dom";
 
 // components
-import EditProfilePic from "../profile/profile_picture/EditProfilePic";
+import EditProfilePic from "../profile/edit_profile_details/EditProfilePic";
 import Rule from "./Rule";
 
 // ui

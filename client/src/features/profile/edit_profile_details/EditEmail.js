@@ -2,23 +2,23 @@ import "./EditEmail.scss";
 
 // hooks
 import { useState, useEffect } from "react";
-import useDebounce from "../../hooks/useDebounce";
+import useDebounce from "../../../hooks/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useNotification } from "../../../context/Notifications/NotificationProvider";
 
 // form
-import Input from "../../components/form/Input";
-import OTPInput from "../../components/form/OTPInput";
+import Input from "../../../components/form/Input";
+import OTPInput from "../../../components/form/OTPInput";
 
 // ui
-import Loading from "../../components/ui/Loading";
+import Loading from "../../../components/ui/Loading";
 
 // api
 import {
     is_unique_email_request,
     edit_user_details,
-} from "../../api/UserRequests";
-import { send_verification_code_email } from "../../api/EmailRequests";
+} from "../../../api/UserRequests";
+import { send_verification_code_email } from "../../../api/EmailRequests";
 
 function EditEmail({ original_email, original_username }) {
     const queryClient = useQueryClient();

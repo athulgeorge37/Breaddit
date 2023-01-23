@@ -3,7 +3,7 @@ import "./SignInPage.scss";
 
 // hooks
 import { useState } from "react";
-import { useEmail } from "../features/profile/EditEmail";
+import { useEmail } from "../features/profile/edit_profile_details/EditEmail";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "../context/Notifications/NotificationProvider";

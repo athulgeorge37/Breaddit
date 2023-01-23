@@ -1,31 +1,26 @@
-// styles
 import "./ProfilePage.scss";
 
-// components
-import EditProfile from "../features/profile/EditProfile";
-import ReadProfile from "../features/profile/ReadProfile";
-
 // hooks
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-
-import { make_profile_visit } from "../api/ProfileVisitRequests";
-
-import { get_last_minute } from "../helper/get_list_of_dates";
-
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 
-function ProfilePage() {
-    const navigate = useNavigate();
+// components
+import { Outlet, NavLink } from "react-router-dom";
 
+//api
+import { make_profile_visit } from "../api/ProfileVisitRequests";
+
+// helper
+import { get_last_minute } from "../helper/get_list_of_dates";
+
+function ProfilePage() {
     const { current_user } = useCurrentUser();
 
     const { username_route } = useParams();
 
-    const [toggle_edit_page, set_toggle_edit_page] = useState(false);
-
-    const { data, refetch } = useQuery(
+    const { refetch: add_profile_visit } = useQuery(
         ["profile_visit_query"],
         () => {
             if (
@@ -48,48 +43,33 @@ function ProfilePage() {
         }
     );
 
-    // console.log(data);
-
     useEffect(() => {
         // tries to make post requsest of profile visit on first render
         // whenever the username_route changes
-        refetch();
+        add_profile_visit();
     }, [username_route]);
 
     return (
-        <div className="Profile_Page">
-            {current_user.authenticated ? (
-                <>
-                    {username_route === current_user.username ? (
-                        <>
-                            {toggle_edit_page ? (
-                                <EditProfile
-                                    set_toggle_edit_page={set_toggle_edit_page}
-                                />
-                            ) : (
-                                <ReadProfile
-                                    set_toggle_edit_page={set_toggle_edit_page}
-                                />
-                            )}
-                        </>
-                    ) : (
-                        <ReadProfile
-                            set_toggle_edit_page={set_toggle_edit_page}
-                        />
-                    )}
-                </>
-            ) : (
-                <div className="not_signed_in">
-                    To view profiles, please
-                    <button
-                        onClick={() =>
-                            setTimeout(() => navigate("/signin"), 1000)
-                        }
-                    >
-                        Sign In
-                    </button>
-                </div>
-            )}
+        <div className="ProfilePage">
+            <ProfileNavBar />
+            <div className="profile_page_outlet">
+                <Outlet />
+            </div>
+        </div>
+    );
+}
+
+function ProfileNavBar() {
+    const { username_route } = useParams();
+
+    return (
+        <div className="ProfileNavBar">
+            <div className="links">
+                <NavLink to={`/user/${username_route}/profile`}>
+                    Profile
+                </NavLink>
+                <NavLink to={`/user/${username_route}/posts`}>Posts</NavLink>
+            </div>
         </div>
     );
 }

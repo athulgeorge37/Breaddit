@@ -2,37 +2,21 @@
 import "./Votes.scss";
 
 // hooks
-import { useState, useRef, useCallback } from "react";
+import { useState } from "react";
 import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
-import {
-    useMutation,
-    useQuery,
-    useQueryClient,
-    useInfiniteQuery,
-} from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../components/ui/Modal";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 
 // ui
-import Loading from "../../components/ui/Loading";
 import Modal from "../../components/ui/Modal";
 import ToolTip from "../../components/ui/ToolTip";
 
 // components
-import ProfilePicture from "../profile/profile_picture/ProfilePicture";
+import VoterListInfiniteScroll from "../follower/voter_follower_info/VoterListInfiniteScroll";
 
 // api
-import {
-    get_all_profile_who_voted,
-    get_curr_user_vote,
-    make_vote,
-} from "../../api/VoteRequests";
-import { follow_or_unfollow_account_request } from "../../api/FollowerRequests";
-
-// TODO: making a vote, updates the post table, which affects the edited time
-// fix that boii
-const VOTERS_PER_PAGE = 2;
+import { get_curr_user_vote, make_vote } from "../../api/VoteRequests";
 
 const VOTE_COLOR = {
     up_vote: "#238636",
@@ -258,242 +242,6 @@ function Votes({
                     {down_vote_count}
                 </button>
             </ToolTip>
-        </div>
-    );
-}
-
-function VoterListInfiniteScroll({
-    vote_type,
-    vote_id,
-    close_modal,
-    modal_vote_type,
-    set_modal_vote_type,
-}) {
-    const {
-        fetchNextPage, //function
-        hasNextPage, // boolean
-        isFetchingNextPage, // boolean
-        data,
-        error,
-    } = useInfiniteQuery(
-        ["voter_info", { vote_type, vote_id, is_up_vote: modal_vote_type }],
-        ({ pageParam = 0 }) =>
-            get_all_profile_who_voted(
-                vote_type,
-                vote_id,
-                modal_vote_type,
-                VOTERS_PER_PAGE,
-                pageParam
-            ),
-        {
-            getNextPageParam: (lastPage, allPages) => {
-                // when the last page retrieved has no posts in it
-                // we return undefined so hasNextPage becomes false
-
-                // when the last page's posts does have posts in it, it indicates
-                // there are more posts, so we set the page number to
-                // all_pages.length
-
-                // we do not add 1 since, page numbers in the server start from
-                // 0 and go up
-
-                return lastPage.all_voters.length ? allPages.length : undefined;
-            },
-            onError: (data) => {
-                console.log({ infinite_voters: data });
-            },
-        }
-    );
-
-    const intObserver = useRef();
-    const lastPostRef = useCallback(
-        (voter) => {
-            // not requesting next page if current page is loading
-            if (isFetchingNextPage) {
-                return;
-            }
-
-            // disconnecting previous intersection observers
-            if (intObserver.current) {
-                intObserver.current.disconnect();
-            }
-
-            // fetching next intersection observer
-            intObserver.current = new IntersectionObserver((voters) => {
-                // console.log({
-                //     isIntersecting: posts[0].isIntersecting,
-                //     hasNextPage,
-                // });
-                if (voters[0].isIntersecting && hasNextPage) {
-                    console.log("Fetching more voters");
-                    fetchNextPage();
-                }
-            });
-
-            if (voter) {
-                intObserver.current.observe(voter);
-            }
-        },
-        [isFetchingNextPage, fetchNextPage, hasNextPage]
-    );
-
-    const list_of_voters = data?.pages.map((pg) => {
-        const length_of_voters = pg.all_voters.length;
-
-        return pg.all_voters.map((voter_data, i) => {
-            if (i + 1 === length_of_voters) {
-                return (
-                    <div ref={lastPostRef} key={voter_data.id}>
-                        <VoterCard
-                            voter_data={voter_data}
-                            close_modal={close_modal}
-                            voter_info_query={{
-                                vote_type,
-                                vote_id,
-                                is_up_vote: modal_vote_type,
-                            }}
-                        />
-                    </div>
-                );
-            }
-            return (
-                <div key={voter_data.id}>
-                    <VoterCard
-                        voter_data={voter_data}
-                        close_modal={close_modal}
-                        voter_info_query={{
-                            vote_type,
-                            vote_id,
-                            is_up_vote: modal_vote_type,
-                        }}
-                    />
-                </div>
-            );
-        });
-    });
-
-    return (
-        <div className="VoterListInfiniteScroll">
-            <div className="header">
-                <div className="tabs">
-                    <h2>
-                        <button
-                            className={`${
-                                modal_vote_type === true
-                                    ? "active_up_vote_tab"
-                                    : ""
-                            }`}
-                            onClick={() => set_modal_vote_type(true)}
-                        >
-                            Up Voters
-                        </button>
-                    </h2>
-                    <h2>
-                        <button
-                            className={`${
-                                modal_vote_type === false
-                                    ? "active_down_vote_tab"
-                                    : ""
-                            }`}
-                            onClick={() => set_modal_vote_type(false)}
-                        >
-                            Down Voters
-                        </button>
-                    </h2>
-                </div>
-                <ToolTip text="Close Modal">
-                    <button
-                        className="close_modal_btn"
-                        onClick={() => close_modal()}
-                    >
-                        <svg
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
-                </ToolTip>
-            </div>
-            {error && <span>Error: {JSON.stringify(error)}</span>}
-
-            <div className="voter_content">
-                <div className="list_of_voters">
-                    {list_of_voters}
-                    <div className="end_of_voters_lists">
-                        {isFetchingNextPage && <Loading />}
-
-                        {hasNextPage === false && (
-                            <p>
-                                No More {modal_vote_type ? "Up" : "Down"} Voters
-                            </p>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function VoterCard({ voter_data, close_modal, voter_info_query }) {
-    const navigate = useNavigate();
-    const { current_user } = useCurrentUser();
-    const queryClient = useQueryClient();
-    const [is_following, set_is_following] = useState(voter_data.is_following);
-
-    const { mutate: follow_or_unfollow_account } = useMutation(
-        (account_id) => {
-            return follow_or_unfollow_account_request(account_id);
-        },
-        {
-            onSuccess: (data) => {
-                console.log({ data });
-                queryClient.invalidateQueries(["voter_info", voter_info_query]);
-                set_is_following(data.is_following);
-            },
-        }
-    );
-
-    return (
-        <div className="VoterCard">
-            <div className="left_side">
-                <ProfilePicture
-                    username={voter_data.dataValues.username}
-                    profile_picture_url={voter_data.dataValues.profile_pic}
-                />
-                <button
-                    className="username"
-                    onClick={() => {
-                        close_modal();
-                        setTimeout(() => {
-                            navigate(
-                                `/user/${voter_data.dataValues.username}/profile`
-                            );
-                        }, 500);
-                    }}
-                >
-                    {voter_data.dataValues.username}
-                </button>
-            </div>
-            {current_user.username === voter_data.dataValues.username ? null : (
-                <button
-                    className={`follower_following_btn ${
-                        is_following ? "following_btn" : "follower_btn"
-                    }`}
-                    onClick={() => {
-                        follow_or_unfollow_account(voter_data.dataValues.id);
-                    }}
-                >
-                    {is_following ? "Following" : "Follow"}
-                </button>
-            )}
         </div>
     );
 }

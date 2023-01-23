@@ -3,24 +3,24 @@ import "./EditUsername.scss";
 
 // hooks
 import { useState, useEffect } from "react";
-import useDebounce from "../../hooks/useDebounce";
+import useDebounce from "../../../hooks/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNotification } from "../../context/Notifications/NotificationProvider";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useNotification } from "../../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../../context/CurrentUser/CurrentUserProvider";
 
 // ui
-import Input from "../../components/form/Input";
+import Input from "../../../components/form/Input";
 
 // api
-import { is_unique_username_request } from "../../api/UserRequests";
-import { edit_user_details } from "../../api/UserRequests";
+import { is_unique_username_request } from "../../../api/UserRequests";
+import { edit_user_details } from "../../../api/UserRequests";
 
-function EditUsername({ user_details }) {
+function EditUsername({ original_username }) {
     const add_notification = useNotification();
     const queryClient = useQueryClient();
     const { update_current_user_username } = useCurrentUser();
 
-    const [username, set_username] = useState(user_details.username);
+    const [username, set_username] = useState(original_username);
     const [is_editing, set_is_editing] = useState(false);
 
     const {
@@ -29,7 +29,7 @@ function EditUsername({ user_details }) {
         min_three_char,
         contains_space,
         is_valid_username,
-    } = useUsername(username, user_details.username);
+    } = useUsername(username, original_username);
 
     const { mutate: update_username } = useMutation(
         () => {
@@ -49,7 +49,7 @@ function EditUsername({ user_details }) {
                 queryClient.removeQueries([
                     "user_details",
                     {
-                        username: user_details.username,
+                        username: original_username,
                     },
                 ]);
                 add_notification("Succesfully Edited Username");
@@ -116,7 +116,7 @@ function EditUsername({ user_details }) {
                     <>
                         <button
                             onClick={() => {
-                                set_username(user_details.username);
+                                set_username(original_username);
                                 set_is_editing(false);
                             }}
                         >

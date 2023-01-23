@@ -1,0 +1,40 @@
+@import "../../../variables.scss";
+
+.VoterFollowerCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-color-tertiary);
+    border-radius: $border-radius;
+    padding: 10px;
+
+    .left_side {
+        display: flex;
+        align-items: center;
+        
+        
+        .username {
+            @include btn-style-text(var(--text-color-primary));
+        }
+    }
+
+
+    .follower_following_btn {
+        width: 30%
+    }
+    .following_btn {
+        @include btn-styles(var(--green));
+    }
+
+    .follower_btn {
+        @include btn-styles(var(--blue));
+    }
+
+    &:hover {
+        .username {    
+            color: var(--blue);
+            text-decoration: underline;
+        }
+    }
+
+}

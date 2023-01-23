@@ -1,24 +1,24 @@
 // styles
-import "./EditProfileV2.scss";
+import "./EditProfilePage.scss";
 
 // components
-import EditProfilePic from "./profile_picture/EditProfilePic";
-import EditBio from "./EditBio";
-import EditUsername from "./EditUsername";
-import EditPassword from "./EditPassword";
-import EditEmail from "./EditEmail";
+import EditUsername from "../features/profile/edit_profile_details/EditUsername";
+import EditEmail from "../features/profile/edit_profile_details/EditEmail";
+import EditPassword from "../features/profile/edit_profile_details/EditPassword";
+import EditBio from "../features/profile/edit_profile_details/EditBio";
+import EditProfilePic from "../features/profile/edit_profile_details/EditProfilePic";
 
 // ui
-import Loading from "../../components/ui/Loading";
+import Loading from "../components/ui/Loading";
 
 // hooks
 import { useNavigate } from "react-router-dom";
-import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 import { useQuery } from "@tanstack/react-query";
-import { get_editable_user_details } from "../../api/UserRequests";
+import { get_editable_user_details } from "../api/UserRequests";
 import { useState } from "react";
 
-function EditProfileV2() {
+function EditProfilePage() {
     const navigate = useNavigate();
     const { current_user } = useCurrentUser();
 
@@ -40,10 +40,10 @@ function EditProfileV2() {
         return <Loading />;
     }
 
-    const { username, profile_pic, bio, email } = user_details;
+    const { username, email, bio, profile_pic } = user_details;
 
     return (
-        <div className="EditProfile">
+        <div className="EditProfilePage">
             <div className="header">
                 <h2>Edit Profile</h2>
                 <button
@@ -56,20 +56,20 @@ function EditProfileV2() {
                 </button>
             </div>
 
+            <EditUsername original_username={username} />
+
+            <EditEmail original_email={email} original_username={username} />
+
+            <EditPassword />
+
+            <EditBio original_bio={bio} original_username={username} />
+
             <EditProfilePic
                 original_profile_pic={profile_pic}
                 original_username={username}
             />
-
-            <EditBio user_details={user_details} />
-
-            <EditUsername user_details={user_details} />
-
-            <EditPassword />
-
-            <EditEmail original_email={email} original_username={username} />
         </div>
     );
 }
 
-export default EditProfileV2;
+export default EditProfilePage;

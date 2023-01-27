@@ -9,14 +9,15 @@ import {
     createContext,
     useContext,
 } from "react";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 // components
 import StaticPostCard from "../features/post/StaticPostCard";
 import SearchWithinThread from "../features/thread/SearchWithinThread";
-import FilterOptions from "../features/thread/FilterOptions";
+import SortByOptions from "../features/thread/SortByOptions";
 import ThreadDetails from "../features/thread/ThreadDetails";
+import SearchThreadNames from "../features/thread/SearchThreadNames";
 
 // ui
 import Loading from "../components/ui/Loading";
@@ -31,6 +32,8 @@ const POSTS_PER_PAGE = 2;
 const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function PostsPage() {
+    const navigate = useNavigate();
+
     const [searchParams, setSearchParams] = useSearchParams();
     // const queryClient = useQueryClient();
 
@@ -192,8 +195,29 @@ function PostsPage() {
                     delete_search_param,
                 }}
             >
-                <div className="search">
-                    <FilterOptions SORT_BY_OPTIONS={SORT_BY_OPTIONS} />
+                <div className="col_one">
+                    <div className="filter_post_options">
+                        <SortByOptions SORT_BY_OPTIONS={SORT_BY_OPTIONS} />
+
+                        <div className="create_btns">
+                            <button
+                                className="create_thread"
+                                onClick={() => navigate("/create_thread")}
+                            >
+                                Create Thread
+                            </button>
+
+                            <button
+                                className="create_post"
+                                onClick={() => navigate("/create_post")}
+                            >
+                                Create Post
+                            </button>
+                        </div>
+                    </div>
+                    <div className="search_thread_names">
+                        <SearchThreadNames />
+                    </div>
 
                     <ThreadDetails thread_title={thread_title} />
                 </div>

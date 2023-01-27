@@ -14,8 +14,11 @@
     }
 
    
-    .search {
+    .col_one {
         min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: calc(2 * $padding);
         
         @media screen and (min-width: 1100px) {
             // if screen width is greater than or equal to px
@@ -30,6 +33,35 @@
 
         @media screen and (max-width: 800px) {
             width: 95%;
+        }
+
+
+        .filter_post_options {
+            display: flex;
+            flex-direction: column;
+            gap: $padding;
+            
+            padding: $padding;
+            background-color: var(--background-color-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius;
+            @include shadow;
+            
+            .create_btns {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                
+                .create_thread {
+                    @include btn-styles(var(--blue));
+                    width: 50%;
+                }
+                
+                .create_post {
+                    @include btn-styles(var(--green));
+                    width: 50%;
+                }
+            }
         }
     }
 

@@ -7,7 +7,9 @@
     gap: calc(2 * $padding);
 
     .col_one {
-        
+        max-width: 320px;
+        min-width: 300px;
+
         .ThreadDetails {
             // margin-right: calc(2 * $padding);
             margin-top: 0;

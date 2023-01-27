@@ -116,14 +116,23 @@ router.get("/get_thread_names", async (request, response) => {
     try {
         const search_input = request.query.search_input;
 
-        const threads = await db.Thread.findAll({
-            where: {
-                title: {
-                    [Op.like]: `%${search_input}%`,
+        let threads = null;
+        if (search_input === "most_popular_threads") {
+            threads = await db.Thread.findAll({
+                limit: 5,
+            });
+        }
+
+        if (threads === null) {
+            threads = await db.Thread.findAll({
+                where: {
+                    title: {
+                        [Op.like]: `%${search_input}%`,
+                    },
                 },
-            },
-            limit: 10,
-        });
+                limit: 10,
+            });
+        }
 
         response.json({
             msg: "succesfully got thread names",

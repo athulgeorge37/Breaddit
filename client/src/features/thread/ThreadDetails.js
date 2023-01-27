@@ -97,7 +97,7 @@ function ThreadDetails({ thread_title = null, post_id = null }) {
                                     <p>{thread_details?.description}</p>
                                 </div>
                                 <div className="createdAt">
-                                    <span>Created On:</span>
+                                    <span>Since:</span>
                                     <p>
                                         {human_readable_date(
                                             thread_details?.createdAt

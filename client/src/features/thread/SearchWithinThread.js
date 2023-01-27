@@ -46,7 +46,7 @@ function SearchWithinThread() {
                     <input
                         className="search_within_thread_input"
                         ref={input_ref}
-                        type="search"
+                        type="text"
                         placeholder={
                             thread_title !== null
                                 ? `Search within ${thread_title}`

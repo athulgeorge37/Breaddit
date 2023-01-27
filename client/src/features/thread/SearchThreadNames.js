@@ -12,6 +12,7 @@ import { get_thread_names } from "../../api/ThreadRequests";
 // ui
 import Loading from "../../components/ui/Loading";
 import ToolTip from "../../components/ui/ToolTip";
+import { useQuery } from "@tanstack/react-query";
 
 function SearchThreadNames() {
     const {
@@ -68,48 +69,59 @@ function SearchThreadNames() {
         }
     }, [thread_title]);
 
+    const { data } = useQuery(
+        ["most_popular_threads"],
+        () => {
+            return get_thread_names("most_popular_threads");
+        },
+        {}
+    );
+
     return (
         <div className="SearchThreadNames">
-            <div className="search_thread_names_input_div">
-                <input
-                    className="search_thread_names_input"
-                    ref={input_ref}
-                    type="search"
-                    placeholder="Find A Thread"
-                    value={search_term}
-                    onChange={(e) => handle_search_term_change(e.target.value)}
-                />
-                {thread_title !== null && (
-                    <ToolTip text={"Remove Thread"}>
-                        <button
-                            className="cancel_icon"
-                            onClick={() => {
-                                handle_search_term_change("");
-                                input_ref.current.focus();
-                            }}
-                        >
-                            <svg
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
+            <h3>Find A Thread</h3>
+            <div className="search_thread_names_div">
+                <div className="search_thread_names_input_div">
+                    <input
+                        className="search_thread_names_input"
+                        ref={input_ref}
+                        type="text"
+                        placeholder="Star Wars.."
+                        value={search_term}
+                        onChange={(e) =>
+                            handle_search_term_change(e.target.value)
+                        }
+                    />
+                    {search_term !== "" && (
+                        <ToolTip text={"Remove Thread"}>
+                            <button
+                                className="cancel_icon"
+                                onClick={() => {
+                                    handle_search_term_change("");
+                                    input_ref.current.focus();
+                                }}
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                    </ToolTip>
-                )}
+                                <svg
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </ToolTip>
+                    )}
+                </div>
             </div>
 
             {is_loading && thread_title === null ? (
-                <div className="loader">
-                    <Loading />
-                </div>
+                <div className="loader">{/* <Loading /> */}</div>
             ) : (
                 <>
                     {threads_list.length > 0 && thread_title === null ? (
@@ -137,6 +149,35 @@ function SearchThreadNames() {
                         </div>
                     ) : null}
                 </>
+            )}
+
+            {search_term !== "" &&
+                threads_list.length === 0 &&
+                is_loading === false && (
+                    <div className="no_thread_found">No Threads found</div>
+                )}
+
+            {search_term === "" && (
+                <div className="thread_name_list">
+                    <h3>Most Popular</h3>
+                    {data?.threads.map((thread) => {
+                        return (
+                            <button
+                                key={thread.id}
+                                className="thread_name"
+                                onClick={() => {
+                                    set_thread_title(thread.title);
+                                    set_search_term(thread.title);
+                                    set_threads_list([]);
+                                    update_search_param("thread", thread.title);
+                                }}
+                            >
+                                <img src={thread.logo} alt="" />
+                                {thread.title}
+                            </button>
+                        );
+                    })}
+                </div>
             )}
         </div>
     );

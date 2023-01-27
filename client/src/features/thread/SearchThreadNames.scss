@@ -1,38 +1,59 @@
 @import "../../variables.scss";
 
 .SearchThreadNames {
+    display: flex;
+    flex-direction: column;
+    gap: $padding;
 
-    .search_thread_names_input_div {
-        display: flex;
-        justify-content: space-between;
-        @include input_styles;
+    h3 {
+        // padding: $padding;
+        padding-bottom: calc(0.5 * $padding);
+        border-bottom: 1px solid var(--border-color);
+    }
 
-        .search_thread_names_input {
-            width: 100%;
-            outline: none;
-            border: none;
-            background-color: var(--background-color-primary);
-            color: var(--text-color-primary);
-            font-size: 14px;
-            line-height: 20px;
-            // box-sizing: border-box;
+    
+    .search_thread_names_div {
+        background-color: var(--background-color-secondary);
+        padding: $padding;
+        border-radius: $border-radius;
+        border: 1px solid var(--border-color);
+        @include shadow;
 
-     
-        }
-        .cancel_icon {
+        .search_thread_names_input_div {
             display: flex;
-            align-items: center;
-            color: var(--red);
-            cursor: pointer;
-            background: none;
-            border: none;
-
-            svg {
-                width: 20px;
-                height: 20px;
+            justify-content: space-between;
+            @include input_styles;
+    
+            .search_thread_names_input {
+                width: 100%;
+                outline: none;
+                border: none;
+                background-color: var(--background-color-primary);
+                color: var(--text-color-primary);
+                font-size: 14px;
+                line-height: 20px;
+                // box-sizing: border-box;
+    
+         
+            }
+            .cancel_icon {
+                display: flex;
+                align-items: center;
+                color: var(--red);
+                cursor: pointer;
+                background: none;
+                border: none;
+    
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
             }
         }
+        
     }
+
+    
 
     .loader {
         margin-top: 10px;
@@ -42,12 +63,14 @@
 
 
     .thread_name_list {
-        margin-top: 10px;
-        border: 1px solid var(--border-color);
-        border-radius: $border-radius;
-        @include shadow;
         display: flex;
         flex-direction: column;
+        gap: $padding;
+
+        h3 {
+            margin-top: $padding;
+        }
+        
         
         
         .thread_name {
@@ -56,6 +79,10 @@
             color: var(--text-color-primary);
             border: none;
             display: flex;
+
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius;
+            @include shadow;
 
             display: flex;
             align-items: center;
@@ -74,5 +101,15 @@
                 cursor: pointer;
             }
         }
+    }
+
+    .no_thread_found {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        border-radius: $border-radius;
+        border: 1px solid var(--border-color);
+        background-color: var(--background-color-secondary);
+        @include shadow;
     }
 }

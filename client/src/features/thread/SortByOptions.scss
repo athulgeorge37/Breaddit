@@ -1,0 +1,26 @@
+@import "../../variables.scss";
+
+.SortByOptions {
+    
+
+    .sort_by_options {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        button {
+            @include btn-styles(var(--background-color-tertiary));
+            width: 25%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .active {
+            @include btn-styles(var(--blue))
+        }
+    }
+
+    
+
+   
+}

@@ -8,20 +8,19 @@ import { useNotification } from "../../context/Notifications/NotificationProvide
 import { useNavigate } from "react-router-dom";
 
 // components
-import EditProfilePic from "../profile/edit_profile_details/EditProfilePic";
 import Rule from "./Rule";
+import EditThreadLogo from "./EditThreadLogo";
 
 // ui
 import CloudinaryImage from "../../components/CloudinaryImage";
-import ExpandableInput from "../../components/form/ExpandableInput";
-import LoginInput from "../../components/form/LoginInput";
-import Button from "../../components/ui/Button";
 import Loading from "../../components/ui/Loading";
+import Input from "../../components/form/Input";
 
 // api
 import { upload_image } from "../../api/ImageRequests";
-import { create_thread } from "../../api/ThreadRequests";
+import { create_thread_request } from "../../api/ThreadRequests";
 import query_string_generator from "../../helper/query_string_generator";
+import ToolTip from "../../components/ui/ToolTip";
 
 function CreateThread() {
     const add_notification = useNotification();
@@ -33,59 +32,114 @@ function CreateThread() {
     const [theme_url, set_theme_url] = useState(null);
     const [list_of_rules, set_list_of_rules] = useState([]);
 
-    const make_thread = useMutation(
-        () =>
-            create_thread(
-                title,
-                description,
-                logo_url,
-                theme_url,
-                list_of_rules
-            ),
-        {
-            onSuccess: (data) => {
-                console.log({ data });
-                add_notification("Succesfully created Thread");
-                navigate(
-                    `/posts?${query_string_generator({
-                        thread: data.new_thread_details.title,
-                    })}`
-                );
-            },
+    const { mutate: make_thread, isLoading: make_thread_is_loading } =
+        useMutation(
+            () =>
+                create_thread_request(
+                    title,
+                    description,
+                    logo_url,
+                    theme_url,
+                    list_of_rules
+                ),
+            {
+                onSuccess: (data) => {
+                    if (data.error) {
+                        add_notification("Unable to create thread", "ERROR");
+                        console.log({ data });
+                        return;
+                    }
+                    console.log({ data });
+                    add_notification("Succesfully created Thread");
+                    navigate(
+                        `/posts?${query_string_generator({
+                            thread: data.new_thread_details.title,
+                        })}`
+                    );
+                },
+                onError: (data) => {
+                    add_notification("Unable to create thread", "ERROR");
+                    console.log({ data });
+                },
+            }
+        );
+
+    const create_thread = () => {
+        if (title === "") {
+            add_notification("Thread's title cannot be empty", "ERROR");
+            return;
         }
-    );
+        if (description === "") {
+            add_notification("Thread's description's cannot be empty", "ERROR");
+            return;
+        }
+
+        if (logo_url === null) {
+            add_notification("Thread's logo cannot be empty", "ERROR");
+            return;
+        }
+        if (theme_url === null) {
+            add_notification("Thread's theme cannot be empty", "ERROR");
+            return;
+        }
+
+        if (list_of_rules.length === 0) {
+            add_notification("Thread's Rules cannot be empty", "ERROR");
+            return;
+        }
+
+        make_thread();
+    };
 
     return (
         <div className="CreateThread">
             <h2>Create Thread</h2>
             <div className="thread_title_and_description">
-                <LoginInput
-                    htmlFor="title"
-                    input_type="text"
-                    label_name="Title"
+                <Input
+                    id="title"
+                    label_text="Thread Title:"
                     value={title}
-                    update_on_change={set_title}
-                    boolean_check={true}
-                    autoFocus={true}
-                >
-                    Title cannot be empty!
-                </LoginInput>
+                    onChange={(e) => set_title(e.target.value)}
+                    autoFocus
+                    type="text"
+                    errors={[
+                        {
+                            id: "not_empty",
+                            msg: "Cannot be empty",
+                            is_error: title === "" ? true : false,
+                            hidden: false,
+                        },
+                    ]}
+                />
 
-                <label className="description">Description:</label>
-                <ExpandableInput
-                    set_input_content={set_description}
-                    max_height_px={150}
-                    initial_content={description}
+                <Input
+                    id="thread_description"
+                    label_text="Thread Description:"
+                    onChange={set_description}
+                    max_height={150}
+                    value={description}
+                    placeholder="write something"
+                    autoFocus={false}
+                    resizable
+                    initial_height={4}
+                    errors={[
+                        {
+                            id: "not_empty",
+                            msg: "Cannot be empty",
+                            is_error: description === "" ? true : false,
+                            hidden: false,
+                        },
+                    ]}
                 />
             </div>
 
             <div className="edit_logo_and_theme">
                 <div className="edit_logo">
                     <label htmlFor="">Logo:</label>
-                    {/* <EditProfilePic
-                        profile_picture_url={logo_url}
-                        set_profile_picture_url={set_logo_url}
-                    /> */}
+                    <EditThreadLogo
+                        set_logo_url={set_logo_url}
+                        logo_url={logo_url}
+                    />
                 </div>
 
                 <div className="edit_theme">
@@ -106,15 +160,12 @@ function CreateThread() {
                 <button className="cancel_btn" onClick={() => navigate(-1)}>
                     Cancel
                 </button>
-                <button
-                    className="save_btn"
-                    onClick={() => make_thread.mutate()}
-                >
+                <button className="save_btn" onClick={create_thread}>
                     Create Thread
                 </button>
             </div>
 
-            {make_thread.isLoading && <Loading />}
+            {make_thread_is_loading && <Loading />}
         </div>
     );
 }
@@ -124,56 +175,108 @@ function EditRules({ set_list_of_rules, list_of_rules }) {
 
     return (
         <div className="EditRules">
-            <h3>Rules:</h3>
-            <div className="list_of_rules">
-                <ol>
-                    {list_of_rules.map((rule, index) => {
-                        return <Rule key={index} rule={rule} />;
-                    })}
-                </ol>
+            <div className="rules_and_btns">
+                <div className="heading_and_list_of_rules">
+                    <h3>Thread Rules:</h3>
+                    <div className="list_of_rules">
+                        {list_of_rules.length > 0 ? (
+                            <ol>
+                                {list_of_rules.map((rule, index) => {
+                                    return <Rule key={index} rule={rule} />;
+                                })}
+                            </ol>
+                        ) : (
+                            <div className="no_rules">No Rules</div>
+                        )}
+                    </div>
+                </div>
+                {add_rule_is_open === false && (
+                    <button
+                        className="create_rule_btn"
+                        onClick={() => set_add_rule_is_open(true)}
+                    >
+                        Add Rule
+                    </button>
+                )}
             </div>
 
-            {add_rule_is_open ? (
+            {add_rule_is_open && (
                 <CreateRule
                     set_list_of_rules={set_list_of_rules}
                     set_add_rule_is_open={set_add_rule_is_open}
                 />
-            ) : (
-                <button
-                    className="create_rule_btn"
-                    onClick={() => set_add_rule_is_open(true)}
-                >
-                    Create Rule
-                </button>
             )}
         </div>
     );
 }
 
 function CreateRule({ set_list_of_rules, set_add_rule_is_open }) {
+    const add_notification = useNotification();
+
     const [title, set_title] = useState("");
     const [description, set_description] = useState("");
+
+    const handle_add_rule = () => {
+        if (title === "") {
+            add_notification("Rule's title cannot be empty", "ERROR");
+            return;
+        }
+        if (description === "") {
+            add_notification(
+                "Rule's description's title cannot be empty",
+                "ERROR"
+            );
+            return;
+        }
+
+        set_list_of_rules((prev_rules) => [
+            ...prev_rules,
+            {
+                title: title,
+                description: description,
+            },
+        ]);
+        set_add_rule_is_open(false);
+
+        add_notification("Rule has been added");
+    };
 
     return (
         <div className="CreateRule">
             <div className="create">
-                <LoginInput
-                    htmlFor="create_rule_title"
-                    input_type="text"
-                    label_name="Rule Title"
+                <Input
+                    id="create_rule_title"
+                    label_text="Rule Title:"
                     value={title}
-                    update_on_change={set_title}
-                    boolean_check={true}
-                    autoFocus={true}
-                >
-                    Rule Title cannot be empty!
-                </LoginInput>
+                    onChange={(e) => set_title(e.target.value)}
+                    autoFocus
+                    type="text"
+                    errors={[
+                        {
+                            id: "not_empty",
+                            msg: "Cannot be empty",
+                            is_error: title === "" ? true : false,
+                            hidden: false,
+                        },
+                    ]}
+                />
 
-                <label className="description">Rule Description:</label>
-                <ExpandableInput
-                    set_input_content={set_description}
-                    max_height_px={150}
-                    initial_content={description}
+                <Input
+                    id="rule_description"
+                    label_text="Rule Description:"
+                    onChange={set_description}
+                    max_height={150}
+                    value={description}
+                    autoFocus={false}
+                    resizable
+                    errors={[
+                        {
+                            id: "not_empty",
+                            msg: "Cannot be empty",
+                            is_error: description === "" ? true : false,
+                            hidden: false,
+                        },
+                    ]}
                 />
                 <div className="create_rule_btns">
                     <button
@@ -182,19 +285,7 @@ function CreateRule({ set_list_of_rules, set_add_rule_is_open }) {
                     >
                         Cancel
                     </button>
-                    <button
-                        className="add_rule"
-                        onClick={() => {
-                            set_list_of_rules((prev_rules) => [
-                                ...prev_rules,
-                                {
-                                    title: title,
-                                    description: description,
-                                },
-                            ]);
-                            set_add_rule_is_open(false);
-                        }}
-                    >
+                    <button className="add_rule" onClick={handle_add_rule}>
                         Add Rule
                     </button>
                 </div>
@@ -249,23 +340,60 @@ function CreateTheme({ theme_url, set_theme_url }) {
                     hidden={true}
                 />
 
-                <Button
+                {/* <Button
                     onClick={() => img_input_ref.current.click()}
                     type="add_img"
                     span_text={
                         theme_url === null ? "Upload Image" : "Replace Image"
                     }
                     img_name="add_img"
-                />
+                /> */}
+                <ToolTip
+                    text={theme_url === null ? "Upload Image" : "Replace Image"}
+                >
+                    <button
+                        className="upload_img_btn"
+                        onClick={() => img_input_ref.current.click()}
+                    >
+                        <svg
+                            className="upload_img_icon"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+                    </button>
+                </ToolTip>
 
                 {theme_url !== null && (
-                    <Button
-                        onClick={() => set_theme_url(null)}
-                        type="remove_img"
-                        span_text="Remove Image"
-                        img_name="remove_img"
-                        margin_left={true}
-                    />
+                    <ToolTip text={"Remove Image"}>
+                        <button
+                            className="remove_img_btn"
+                            onClick={() => set_theme_url(null)}
+                        >
+                            <svg
+                                className="remove_img_icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </button>
+                    </ToolTip>
                 )}
             </div>
         </div>

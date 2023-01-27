@@ -1,27 +1,44 @@
 @import "../variables.scss";
 
 .PostPage {
-    width: 50%;
-    max-width: 750px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: calc(2 * $padding);
 
-    @media screen and (max-width: 1100px) {
-        width: 80%;
-    }
-
-    @media screen and (max-width: 800px) {
-        width: 90%;
-    }
-
-    .add_new_comment {
-
-        .comment_add_comment {
-            background-color: var(--background-color-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: $border-radius;
-            box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
-            margin-bottom: calc(1.5 * $padding);
+    .col_one {
+        
+        .ThreadDetails {
+            // margin-right: calc(2 * $padding);
+            margin-top: 0;
         }
+
     }
 
+    .col_two {
 
+        width: 50%;
+        max-width: 750px;
+        
+        @media screen and (max-width: 1100px) {
+            width: 80%;
+        }
+        
+        @media screen and (max-width: 800px) {
+            width: 90%;
+        }
+
+        .add_new_comment {
+
+            .comment_add_comment {
+                background-color: var(--background-color-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: $border-radius;
+                box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+                margin-bottom: calc(1.5 * $padding);
+            }
+        }
+        
+    }
+    
 }

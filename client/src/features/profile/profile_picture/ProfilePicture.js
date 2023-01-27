@@ -41,6 +41,7 @@ function ProfilePicture({
         >
             <button
                 className="profile_picture_div"
+                disabled={disable_tooltip}
                 onClick={() => {
                     if (disable_tooltip) {
                         return;

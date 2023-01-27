@@ -2,128 +2,151 @@
 
 .ThreadDetails {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: calc(2 * $padding);
+    margin-top: calc(2 * $padding);
     
-    .thread_details {
-        margin-top: calc(2* $padding);
-        background-color: var(--background-color-secondary);
-        border: 1px solid var(--border-color);
-        @include shadow;
-        // padding: $padding;
-        border-radius: $border-radius;
+
+    .thread_div {
         display: flex;
         flex-direction: column;
         width: 100%;
         box-sizing: border-box;
+        gap: $padding;
 
-        
-        
-        .theme {
-            position: relative;
-            height: 200px;
-            border-radius: $border-radius;
-            border-bottom-left-radius: 0%;
-            border-bottom-right-radius: 0%;
-            background-size: cover;
 
-            margin-bottom: calc(4 * $padding);
-
-            .title_and_logo {
-                position: absolute;
-                bottom: -25%;
-                left: 0; 
-                right: 0; 
-                margin-left: auto; 
-                margin-right: auto; 
-    
-                display: flex;
-                align-items: center;
-                background-color: var(--background-color-tertiary);
-                border-radius: $border-radius;
-    
-                @include shadow;
-                width: fit-content;
-                padding: 5px;
-                box-sizing: border-box;
-
-                .title {
-                    margin-right: $padding;
-                }
-            }
+        h3 {
+            // padding: $padding;
+            padding-bottom: calc(0.5 * $padding);
+            border-bottom: 1px solid var(--border-color);
         }
-
-        .content {
-            padding: $padding;
-            padding-top: 0;
+    
+    
+        .thread_details {
+            background-color: var(--background-color-secondary);
+            border: 1px solid var(--border-color);
+            @include shadow;
+            // padding: $padding;
+            border-radius: $border-radius;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
 
-            .description, .createdAt {
-                
-                span {
-                    color: var(--text-color-primary);
+            
+            
+            .theme {
+                position: relative;
+                height: 200px;
+                border-radius: $border-radius;
+                border-bottom-left-radius: 0%;
+                border-bottom-right-radius: 0%;
+                background-size: cover;
+
+                margin-bottom: calc(4 * $padding);
+
+                .title_and_logo {
+                    position: absolute;
+                    bottom: -25%;
+                    left: 0; 
+                    right: 0; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+        
+                    display: flex;
+                    align-items: center;
+                    background-color: var(--background-color-tertiary);
+                    border-radius: $border-radius;
+        
+                    @include shadow;
+                    width: fit-content;
+                    padding: 5px;
+                    box-sizing: border-box;
+
+                    .title_btn {
+                        margin-right: $padding;
+                        border: none;
+                        background: none;
+
+                        // color: var(--text-color-primary);
+                        // &:hover, &:focus {
+                        //     text-decoration: underline;
+                        //     cursor: pointer;
+                        //     color: var(--blue);
+                        // }
+                        text-decoration: underline;
+                            cursor: pointer;
+                            color: var(--blue);
+                        
+                        
+                    }
                 }
-                
             }
 
-            p {
-                color: var(--text-color-secondary);
+            .content {
+                padding: $padding;
+                padding-top: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .description, .createdAt {
+                    
+                    span {
+                        color: var(--text-color-primary);
+                    }
+                    
+                }
+
+                p {
+                    color: var(--text-color-secondary);
+                }
             }
+
         }
-
     }
 
-    .thread_rules {
-        margin-top: calc(2* $padding);
-        background-color: var(--background-color-secondary);
-        border: 1px solid var(--border-color);
-        @include shadow;
-        // padding: $padding;
-        border-radius: $border-radius;
+    .thread_rules, .creator_details {
+
         display: flex;
         flex-direction: column;
         width: 100%;
         box-sizing: border-box;
+        gap: $padding;
 
 
         h3 {
-            padding: $padding;
-        }
-
-    }
-
-    .creator_details {
-        margin-top: calc(2* $padding);
-        background-color: var(--background-color-secondary);
-        border: 1px solid var(--border-color);
-        @include shadow;
-        // padding: $padding;
-        border-radius: $border-radius;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        box-sizing: border-box;
-
-
-        h3 {
-            padding: $padding;
+            // padding: $padding;
+            padding-bottom: calc(0.5 * $padding);
             border-bottom: 1px solid var(--border-color);
         }
 
-        .profile_pic_and_username {
+        
+
+    }
+
+
+    .creator_details {
+        
+        .profile_pic_and_username_div {
+            border-radius: $border-radius;
             display: flex;
             align-items: center;
             padding: 10px $padding ;
-            background: none;
-            border: none;
-            color: var(--text-color-primary);
 
+            background-color: var(--background-color-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-color-primary);
+            @include shadow;
+                        
             .username {
                 text-decoration: underline;
                 color: var(--blue);
+                cursor: pointer;
             }
-            cursor: pointer;
             
         }
     }
+
 }

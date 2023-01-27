@@ -37,25 +37,49 @@ router.post("/create_thread", validate_request, async (request, response) => {
     }
 });
 
-router.get(
-    "/get_thread_details/by_thread_title/:thread_title",
-    async (request, response) => {
-        try {
-            const thread_title = request.params.thread_title;
+router.get("/get_thread_details", async (request, response) => {
+    try {
+        const thread_title = request.query.thread_title;
+        const post_id = request.query.post_id;
 
-            console.log("");
-            console.log({ thread_title }, "from thread_route get by title");
-            console.log("");
+        console.log("");
+        console.log({ thread_title }, "from thread_route get by title");
+        console.log("");
 
-            if (thread_title === "null") {
-                response.json({
-                    msg: "no thread selected",
-                    thread_details: null,
+        if (thread_title === "null" && post_id === "null") {
+            response.json({
+                msg: "no thread selected",
+                thread_details: null,
+            });
+            return;
+        }
+
+        let thread_details = null;
+
+        if (post_id !== "null") {
+            post_details = await db.Post.findByPk(post_id);
+            if (post_details.thread_id !== null) {
+                thread_details = await db.Thread.findOne({
+                    where: {
+                        id: post_details.thread_id,
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            as: "creator_details",
+                            attributes: ["username", "profile_pic"],
+                        },
+                        {
+                            model: db.Rule,
+                            as: "thread_rules",
+                        },
+                    ],
                 });
-                return;
             }
+        }
 
-            const thread_details = await db.Thread.findOne({
+        if (thread_details === null) {
+            thread_details = await db.Thread.findOne({
                 where: {
                     title: thread_title,
                 },
@@ -71,22 +95,22 @@ router.get(
                     },
                 ],
             });
-
-            console.log("");
-            console.log({ thread_details, thread_title });
-            console.log("");
-
-            response.json({
-                msg: "successfully found thread details",
-                thread_details: thread_details,
-            });
-        } catch (e) {
-            response.json({
-                error: e,
-            });
         }
+
+        console.log("");
+        console.log({ thread_details, thread_title, post_id });
+        console.log("");
+
+        response.json({
+            msg: "successfully found thread details",
+            thread_details: thread_details,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
     }
-);
+});
 
 router.get("/get_thread_names", async (request, response) => {
     try {

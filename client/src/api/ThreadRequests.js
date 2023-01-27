@@ -1,9 +1,10 @@
 import axios from "axios";
 import { get_item_session_storage } from "../helper/local_storage";
+import query_string_generator from "../helper/query_string_generator";
 
 const CUSTOM_ENDPOINT = `${process.env.REACT_APP_REST_API_URL}/api/thread`;
 
-const create_thread = async (
+const create_thread_request = async (
     title,
     description,
     logo,
@@ -29,9 +30,12 @@ const create_thread = async (
     return response.data;
 };
 
-const get_thread_details = async (thread_title) => {
+const get_thread_details = async (thread_title = null, post_id = null) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_thread_details/by_thread_title/${thread_title}`
+        `${CUSTOM_ENDPOINT}/get_thread_details?${query_string_generator({
+            thread_title: thread_title,
+            post_id: post_id,
+        })}`
     );
 
     return response.data;
@@ -45,4 +49,4 @@ const get_thread_names = async (search_input) => {
     return response.data;
 };
 
-export { create_thread, get_thread_details, get_thread_names };
+export { create_thread_request, get_thread_details, get_thread_names };

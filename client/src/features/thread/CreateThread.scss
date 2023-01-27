@@ -2,16 +2,20 @@
 
 .CreateThread {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    // gap: calc(1.5 * $padding);
 
     h2 {
-        margin-bottom: $padding;
+        padding: $padding calc(1.5 * $padding);
     }
 
     .thread_title_and_description {
-        width: 100%;
         display: flex;
         flex-direction: column;
-
+        gap: $padding;
+        padding: calc(1.5 * $padding);
+        border-top: 1px solid var(--border-color);
 
         .description {
             margin-bottom: 4px;
@@ -25,15 +29,17 @@
 
     .edit_logo_and_theme {
         display: flex;
-        gap: calc(2* $padding);
-        margin-bottom: $padding;
+        flex-direction: column;
+
 
         .edit_logo, .edit_theme {
             display: flex;
             flex-direction: column;
+            padding: calc(1.5 * $padding);
+            border-top: 1px solid var(--border-color);
 
             label {
-                margin-bottom: 4px;
+                margin-bottom: 10px;
             }
         }
 
@@ -47,6 +53,8 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+        border-top: 1px solid var(--border-color);
+        padding: $padding calc(1.5 * $padding);
 
         
         .cancel_btn {
@@ -61,21 +69,48 @@
 }
 
 .CreateTheme {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
 
     .img_btns {
         display: flex;
+        gap: 10px;
 
-        label {
-            margin-bottom: 4px;
+        button {
+            // color: var(--text-color-primary);
+            @include btn-styles(var(--background-color-tertiary));
+            padding: 5px;
+            transition: none;
+            display: flex;
+            align-items: center;
+
+            svg {
+                width: 25px;
+                height: 25px;
+                color: var(--text-color-secondary);
+            }
         }
+
+        .remove_img_icon {
+            color: var(--red);
+        }
+
+        .upload_img_icon {
+            color: var(--blue);
+        }
+
+        // .save_icon {
+        //     color: var(--green);
+        // }
+        
     }
 
 
     .image_display {
         width: 500px;
         height: 200px;
-        margin-bottom: $padding;
 
         img {
             border-radius: $border-radius;
@@ -92,7 +127,6 @@
         background-color: var(--background-color-tertiary);
         border-radius: $border-radius;
         
-        margin-bottom: $padding;
     }
 }
 
@@ -101,27 +135,46 @@
 .EditRules {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    
+    padding: calc(1.5 * $padding);
+    border-top: 1px solid var(--border-color);
+    gap: $padding;
 
-    .list_of_rules {
-        
-        margin-top: 5px;
-        
-        ol {
+    .rules_and_btns {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: $padding;
+    
+
+        .heading_and_list_of_rules {
             display: flex;
             flex-direction: column;
+            //width: 100%;
             gap: 10px;
-            margin-left: calc(2*$padding);
+            flex-grow: 1;
+            
+            
+            .list_of_rules {
+                background-color: var(--background-color-primary);
+                padding: $padding;
+                border-radius: $border-radius;
+                
+                ol {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    // margin-left: calc(2*$padding);
+                }
+
+            }
+        
         }
-
-    }
-
-    .create_rule_btn {
-        margin-top: $padding;
-        margin-bottom: $padding;
-        width: calc(500px + 2 * 10px);
-        @include btn-styles(var(--blue));
-        margin-left: calc(2*$padding);
-
+        .create_rule_btn {
+            @include btn-styles(var(--blue));
+            height: fit-content;
+        }
     }
 
 
@@ -130,22 +183,29 @@
 .CreateRule{
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
-    
-    .create_rule_btns {
-        margin-top: 10px;
+
+    .create {
         display: flex;
-        justify-content: flex-end;
-        gap: 10px;
+        flex-direction: column;
+        gap: $padding;
 
-        .cancel {
-            @include btn-styles(var(--background-color-tertiary));
-        }
+        .create_rule_btns {
 
-        .add_rule {
-            @include btn-styles(var(--blue));
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+    
+            .cancel {
+                @include btn-styles(var(--background-color-tertiary));
+            }
+    
+            .add_rule {
+                @include btn-styles(var(--blue));
+            }
         }
     }
+    
+    
 }
 
 

@@ -1,9 +1,13 @@
 @import "../../variables.scss";
 
 .Rule {
-    background: none;
-    border: none;
     color: var(--text-color-primary);
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color);
+    @include shadow;
+    border-radius: $border-radius;
+    cursor: pointer;
+
     
 
     .title_and_chevron {
@@ -12,10 +16,22 @@
         align-items: center;
         gap: 10px;
         padding: $padding;
-        border-top: 1px solid var(--border-color);
+        
 
         .title {
             text-align: start;
+        }
+
+        .chevron {
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            color: var(--text-color-primary);
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
 
@@ -27,13 +43,12 @@
 
     .description {
         padding: $padding;
-        padding-top: 0;
         text-align: start;
+        white-space: pre-line;
         
-        color: rgb(135, 135, 135);
+        border-top: 1px solid var(--border-color);
+        color: var(--text-color-secondary);
     }
 
-    &:hover {
-        cursor: pointer;
-    }
+    
 }

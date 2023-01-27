@@ -10,7 +10,15 @@ import { useRef, useEffect } from "react";
 // code from:
 // https://codesandbox.io/s/autosize-textarea-forked-044vh2?file=/src/useAutosizeTextArea.ts:196-668
 
-function ResizableInput({ onChange, value, placeholder, max_height }) {
+function ResizableInput({
+    onChange,
+    value,
+    placeholder,
+    max_height,
+    maxLength,
+    minLength,
+    autoFocus = true,
+}) {
     const input_ref = useRef(null);
 
     useEffect(() => {
@@ -36,7 +44,9 @@ function ResizableInput({ onChange, value, placeholder, max_height }) {
             style={{
                 maxHeight: max_height ?? "none",
             }}
-            autoFocus
+            autoFocus={autoFocus}
+            maxLength={maxLength}
+            minLength={minLength}
         />
     );
 }

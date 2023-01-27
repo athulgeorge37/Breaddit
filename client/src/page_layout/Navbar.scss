@@ -64,11 +64,28 @@ nav {
             //     border-bottom: 1px solid var(--blue);
             // }
 
-            a.active {
-                border-bottom: 1px solid var(--blue);
+            // a.active {
+            //     border-bottom: 1px solid var(--blue);
+            // }
+
+            a {
+                // border-bottom: 1px solid var(--blue);
+                position: relative;
+            
+                span {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    display: block;
+                    height: 1px;
+                    width: 100%;
+                    background-color: var(--blue);
+                }
             }
         }
     }
 }
+
+
 
 

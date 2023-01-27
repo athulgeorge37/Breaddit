@@ -195,7 +195,7 @@ function PostsPage() {
                 <div className="search">
                     <FilterOptions SORT_BY_OPTIONS={SORT_BY_OPTIONS} />
 
-                    <ThreadDetails />
+                    <ThreadDetails thread_title={thread_title} />
                 </div>
 
                 <div className="create_post_and_list_of_posts">

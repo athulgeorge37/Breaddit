@@ -4,6 +4,7 @@ import "./Navbar.scss";
 // hooks
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 import { useDarkMode } from "../context/DarkMode/DarkModeProvider";
+import { useLocation } from "react-router-dom";
 
 // components
 import { NavLink } from "react-router-dom";
@@ -12,15 +13,18 @@ import { NavLink } from "react-router-dom";
 import Toggle from "../components/ui/Toggle";
 import ToolTip from "../components/ui/ToolTip";
 
+// helper
+import { motion } from "framer-motion";
+
 function Navbar() {
     const { current_user } = useCurrentUser();
     const { is_dark_mode, set_is_dark_mode } = useDarkMode();
 
+    const { pathname } = useLocation();
+
     // const determine_active_page = ({ isActive }) => {
     //     return "page_link " + (isActive ? "active" : "");
     // };
-
-    // we determine which link is active by a.active
 
     return (
         <nav>
@@ -88,9 +92,19 @@ function Navbar() {
                 </div>
 
                 <div className="links">
-                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/">
+                        Home
+                        {pathname === "/" && (
+                            <motion.span layoutId="underline" />
+                        )}
+                    </NavLink>
 
-                    <NavLink to="/posts">Posts</NavLink>
+                    <NavLink to="/posts">
+                        Posts
+                        {pathname === "/posts" && (
+                            <motion.span layoutId="underline" />
+                        )}
+                    </NavLink>
 
                     {current_user.authenticated === true ? (
                         <>
@@ -98,21 +112,37 @@ function Navbar() {
                                 <NavLink
                                     to={`/user/${current_user.username}/profile`}
                                 >
+                                    {pathname.includes(
+                                        `/user/${current_user.username}`
+                                    ) && <motion.span layoutId="underline" />}
                                     Profile
                                 </NavLink>
                             )}
 
                             {current_user.role === "admin" && (
                                 <NavLink to="/admin_dashboard">
+                                    {pathname === "/admin_dashboard" && (
+                                        <motion.span layoutId="underline" />
+                                    )}
                                     Admin Dashboard
                                 </NavLink>
                             )}
                         </>
                     ) : (
                         <>
-                            <NavLink to="/signup">Sign Up</NavLink>
+                            <NavLink to="/signup">
+                                {pathname === "/signup" && (
+                                    <motion.span layoutId="underline" />
+                                )}
+                                Sign Up
+                            </NavLink>
 
-                            <NavLink to="/signin">Sign In</NavLink>
+                            <NavLink to="/signin">
+                                {pathname === "/signin" && (
+                                    <motion.span layoutId="underline" />
+                                )}
+                                Sign In
+                            </NavLink>
                         </>
                     )}
                 </div>

@@ -1,4 +1,5 @@
 import "./Input.scss";
+import ResizableInput from "./ResizableInput";
 
 function Input({
     type,
@@ -9,10 +10,12 @@ function Input({
     id,
     maxLength,
     minLength,
+    max_height,
     icon, // svg element for an icon, which is on the right side of the input with left margin
     errors = [],
     label_hidden = false,
     autoFocus = false,
+    resizable = false,
 }) {
     return (
         <div className="Input">
@@ -41,17 +44,33 @@ function Input({
                     {icon}
                 </div>
             ) : (
-                <input
-                    id={id}
-                    className={`input_field ${id}_input`}
-                    type={type}
-                    value={value}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    autoFocus={autoFocus}
-                    maxLength={maxLength}
-                    minLength={minLength}
-                />
+                <>
+                    {resizable === true ? (
+                        <ResizableInput
+                            id={id}
+                            className={`input_field ${id}_input`}
+                            value={value}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            autoFocus={autoFocus}
+                            maxLength={maxLength}
+                            minLength={minLength}
+                            max_height={max_height}
+                        />
+                    ) : (
+                        <input
+                            id={id}
+                            className={`input_field ${id}_input`}
+                            type={type}
+                            value={value}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            autoFocus={autoFocus}
+                            maxLength={maxLength}
+                            minLength={minLength}
+                        />
+                    )}
+                </>
             )}
             {errors.length === 0 ? null : (
                 <ul className={`error_list ${id}_input_errors`}>

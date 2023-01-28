@@ -69,6 +69,9 @@ function ProfileNavBar() {
                     Profile
                 </NavLink>
                 <NavLink to={`/user/${username_route}/posts`}>Posts</NavLink>
+                <NavLink to={`/user/${username_route}/comments`}>
+                    Comments
+                </NavLink>
             </div>
         </div>
     );

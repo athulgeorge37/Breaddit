@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 const db = require("../models");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
 
-router.get("/get_all", async (request, response) => {
+router.get("/get_all_posts", async (request, response) => {
     // when getting list of posts, we also get
     // the user details who made that post
     try {
@@ -152,16 +152,50 @@ router.get(
     }
 );
 
-router.get("/get_all/by_username/:username", async (request, response) => {
+router.get("/get_all_posts_by_username", async (request, response) => {
     // gets all the post made by an  author using author_id
     try {
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        const order_by = determine_order_by(request.query.filter_by);
+        const search_input = request.query.search_input;
+
+        const username = request.query.username;
+
         const user_details = await db.User.findOne({
             where: {
-                username: request.params.username,
+                username: username,
             },
         });
 
-        const list_of_posts = await db.Post.findAll({
+        let where_search = {
+            author_id: user_details.id,
+        };
+
+        if (search_input !== "null") {
+            // searching all the posts where the title or text is equal to the search_input
+            where_search = {
+                ...where_search,
+                [Op.or]: [
+                    {
+                        title: {
+                            [Op.like]: `%${search_input}%`,
+                        },
+                    },
+                    {
+                        text: {
+                            [Op.like]: `%${search_input}%`,
+                        },
+                    },
+                ],
+            };
+        }
+
+        const all_posts = await db.Post.findAll({
+            where: { ...where_search, is_inappropriate: false },
+            order: order_by,
             include: [
                 {
                     model: db.User,
@@ -169,13 +203,13 @@ router.get("/get_all/by_username/:username", async (request, response) => {
                     attributes: ["username", "profile_pic"],
                 },
             ],
-            where: {
-                author_id: user_details.id,
-                is_inappropriate: false,
-            },
+            limit: limit,
+            offset: offset,
         });
+
         response.json({
-            all_posts: list_of_posts,
+            msg: `succesfully got list of posts by username ${username}`,
+            all_posts,
         });
     } catch (e) {
         response.json({

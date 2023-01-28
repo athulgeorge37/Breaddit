@@ -43,6 +43,7 @@ function FollowerCard({ follower_data, close_modal, user_id }) {
                 <ProfilePicture
                     username={follower_data.dataValues.username}
                     profile_picture_url={follower_data.dataValues.profile_pic}
+                    onClick={close_modal}
                 />
                 <button
                     className="username"

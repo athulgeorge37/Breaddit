@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: column;
     gap: calc(2 * $padding);
+    max-width: 320px;
+    min-width: 300px;
     
 
     .thread_div {

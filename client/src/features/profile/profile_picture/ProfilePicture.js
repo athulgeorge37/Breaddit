@@ -12,6 +12,7 @@ import ToolTip from "../../../components/ui/ToolTip";
 function ProfilePicture({
     profile_picture_url,
     username,
+    onClick = () => {},
     img_size = 30,
     disable_tooltip = false,
     margin_right = 10,
@@ -47,6 +48,7 @@ function ProfilePicture({
                         return;
                     }
                     handle_profile_redirect();
+                    onClick();
                 }}
                 style={{
                     marginRight: `${margin_right}px`,

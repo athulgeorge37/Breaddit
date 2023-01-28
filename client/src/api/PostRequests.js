@@ -64,7 +64,7 @@ const get_all_posts = async (
     thread_title
 ) => {
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all?${query_string_generator({
+        `${CUSTOM_ENDPOINT}/get_all_posts?${query_string_generator({
             limit,
             page_num,
             filter_by,
@@ -97,9 +97,30 @@ const get_all_posts_by_curr_user = async () => {
     return response.data;
 };
 
-const get_all_posts_by_username = async (username) => {
+const get_all_posts_by_username = async ({
+    limit,
+    page_num,
+    filter_by,
+    search_input,
+    username,
+}) => {
+    console.log({
+        limit,
+        page_num,
+        filter_by,
+        search_input,
+        username,
+    });
     const response = await axios.get(
-        `${CUSTOM_ENDPOINT}/get_all/by_username/${username}`
+        `${CUSTOM_ENDPOINT}/get_all_posts_by_username/?${query_string_generator(
+            {
+                limit,
+                page_num,
+                filter_by,
+                search_input,
+                username,
+            }
+        )}`
     );
 
     return response.data;

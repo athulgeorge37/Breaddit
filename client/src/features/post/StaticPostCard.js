@@ -158,16 +158,15 @@ function StaticPostCard({ post_details }) {
                                 </button>
                             </ToolTip>
                         </>
-                    ) : (
-                        <Button
-                            // might need to include on click
-                            // onClick={() => set_delete_btn_active(true)}
-                            type="award"
-                            span_text="Award"
-                            img_name="award"
-                            margin_right={true}
-                        />
-                    )}
+                    ) : // <Button
+                    //     // might need to include on click
+                    //     // onClick={() => set_delete_btn_active(true)}
+                    //     type="award"
+                    //     span_text="Award"
+                    //     img_name="award"
+                    //     margin_right={true}
+                    // />
+                    null}
                 </div>
             </div>
 

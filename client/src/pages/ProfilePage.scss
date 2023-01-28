@@ -5,43 +5,28 @@
     width: 100%;
     box-sizing: border-box;
     max-width: 1000px;
-
-    
+    gap: calc(2 * $padding);
 
     .profile_page_outlet{
-        // border: 1px solid green;
         width: 100%;
+        max-width: calc(1000px - 250px);
     }
 }
 
 .ProfileNavBar {
     display: flex;
     flex-direction: column;
-    
     min-width: 250px;
-    // border: 1px solid red;
-    margin: $padding;
-    margin-top: 0;
-
-
-
 
     .links {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: calc(0.75 * $padding);
         
         a {
+            @include btn-styles(var(--background-color-secondary));
             text-decoration: none;
-            color: var(--text-color-primary);
             padding: $padding;
-            border-radius: $border-radius;
-
-        }
-    
-        a:hover {
-            cursor: pointer;
-            background-color: var(--background-color-secondary);
         }
     
         a.active {

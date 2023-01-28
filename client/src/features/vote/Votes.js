@@ -68,10 +68,10 @@ function Votes({
         {
             onSuccess: (data) => {
                 console.log(data);
-                queryClient.invalidateQueries([
-                    "curr_user_vote",
-                    { vote_type, vote_id },
-                ]);
+                // queryClient.invalidateQueries([
+                //     "curr_user_vote",
+                //     { vote_type, vote_id },
+                // ]);
             },
         }
     );
@@ -150,13 +150,36 @@ function Votes({
                     onClick={() => handle_vote_change(true)}
                 >
                     {curr_user_vote !== true ? (
-                        <img
-                            src={`${img_path}/images/up_arrow_v3.png`}
-                            alt="up_vote"
-                            className={`vote_img up_vote ${
-                                vote_type !== "post" ? "comment_vote_img" : ""
-                            }`}
-                        />
+                        <svg
+                            className=""
+                            style={{
+                                width: vote_type === "post" ? "25px" : "15px",
+                                height: vote_type === "post" ? "25px" : "15px",
+                            }}
+                            version="1.0"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="128.000000pt"
+                            height="128.000000pt"
+                            viewBox="0 0 128.000000 128.000000"
+                            preserveAspectRatio="xMidYMid meet"
+                        >
+                            <g
+                                transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)"
+                                style={{
+                                    fill: VOTE_COLOR.up_vote,
+                                }}
+                                stroke="none"
+                            >
+                                <path
+                                    d="M400 998 c-129 -161 -225 -291 -225 -302 0 -20 6 -21 133 -24 l132
+-3 0 -299 c0 -292 5 -344 33 -362 16 -10 318 -10 334 0 28 18 33 70 33 362 l0
+299 132 3 c115 3 133 5 136 20 4 21 -443 582 -466 586 -12 1 -90 -90 -242
+-280z m433 -32 c103 -129 187 -236 187 -240 0 -3 -53 -7 -117 -8 l-118 -3 -3
+-327 -2 -328 -140 0 -140 0 -2 328 -3 327 -117 3 c-65 1 -118 5 -118 8 0 9
+373 474 380 474 3 0 90 -105 193 -234z"
+                                />
+                            </g>
+                        </svg>
                     ) : (
                         <svg
                             version="1.2"
@@ -193,13 +216,37 @@ function Votes({
                     onClick={() => handle_vote_change(false)}
                 >
                     {curr_user_vote !== false ? (
-                        <img
-                            src={`${img_path}/images/up_arrow_v3.png`}
-                            alt="up_vote"
-                            className={`vote_img down down_vote ${
-                                vote_type !== "post" ? "comment_vote_img" : ""
-                            }`}
-                        />
+                        <svg
+                            className=""
+                            style={{
+                                width: vote_type === "post" ? "25px" : "15px",
+                                height: vote_type === "post" ? "25px" : "15px",
+                                transform: "rotate(180deg)",
+                            }}
+                            version="1.0"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="128.000000pt"
+                            height="128.000000pt"
+                            viewBox="0 0 128.000000 128.000000"
+                            preserveAspectRatio="xMidYMid meet"
+                        >
+                            <g
+                                transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)"
+                                style={{
+                                    fill: VOTE_COLOR.down_vote,
+                                }}
+                                stroke="none"
+                            >
+                                <path
+                                    d="M400 998 c-129 -161 -225 -291 -225 -302 0 -20 6 -21 133 -24 l132
+-3 0 -299 c0 -292 5 -344 33 -362 16 -10 318 -10 334 0 28 18 33 70 33 362 l0
+299 132 3 c115 3 133 5 136 20 4 21 -443 582 -466 586 -12 1 -90 -90 -242
+-280z m433 -32 c103 -129 187 -236 187 -240 0 -3 -53 -7 -117 -8 l-118 -3 -3
+-327 -2 -328 -140 0 -140 0 -2 328 -3 327 -117 3 c-65 1 -118 5 -118 8 0 9
+373 474 380 474 3 0 90 -105 193 -234z"
+                                />
+                            </g>
+                        </svg>
                     ) : (
                         <svg
                             version="1.2"

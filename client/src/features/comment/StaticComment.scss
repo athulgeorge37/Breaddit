@@ -64,15 +64,17 @@
                     display: flex;
                     margin-bottom: 0.2em;
 
-                    .username {
+
+
+                    &:hover {
                         cursor: pointer;
-                        
-                        &:hover {
+    
+                        .username {
                             color: var(--blue);
                             text-decoration: underline;
+                            
                         }
                     }
-                    
 
                     .updated_at_time {
                         color: var(--text-color-secondary);
@@ -81,16 +83,13 @@
                             margin-right: 5px;
                         }
                     }
-
-                    
                 }
 
                 .edit_and_delete_btns {
                     display: flex;
                     justify-content: center;
 
-                    
-
+        
                     .edit_btn,  .delete_btn {
                         @include btn-styles(var(--background-color-secondary));
                         padding: 5px;
@@ -164,6 +163,10 @@
         
             .reply_btns {
                 display: flex;
+
+            
+
+                display: flex;
                 justify-content: center;
 
     
@@ -188,12 +191,6 @@
                 }
 
                 .view_replies_btn {
-                    margin-left: 10px;
-                }
-
-                .link_to_post {
-                    @include btn-style-text(var(--blue));
-                    text-decoration: underline;
                     margin-left: 10px;
                 }
 
@@ -225,6 +222,5 @@
 
 .Reply {
     padding-right: 0;
-    
     width: 100%;
 }

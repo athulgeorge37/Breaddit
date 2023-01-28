@@ -140,9 +140,8 @@ function PostsByUser() {
 
     return (
         <div className="PostsByUser">
-            <h2>{username}'s Posts</h2>
-
-            <div className="sort_by_options_and_search_input">
+            <div className="header">
+                <h2>Posts</h2>
                 <div className="sort_by_options">
                     {SORT_BY_OPTIONS.map((option) => {
                         return (
@@ -158,7 +157,9 @@ function PostsByUser() {
                         );
                     })}
                 </div>
+            </div>
 
+            <div className="sort_by_options_and_search_input">
                 <div className="search_within_posts">
                     <Input
                         onChange={(e) =>

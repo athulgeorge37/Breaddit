@@ -28,33 +28,23 @@ import FollowerListInfiniteScroll from "../follower/profile_follower_info/Follow
 // import DOMPurify from "dompurify";
 import { human_readable_date } from "../../helper/time";
 
-function ProfileDetails({}) {
+function ProfileDetails() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { username_route } = useParams();
     const { current_user, remove_current_user } = useCurrentUser();
     const { show_modal, open_modal, close_modal } = useModal();
 
+    const data = queryClient.getQueryData([
+        "user_details",
+        { username: username_route },
+    ]);
+
+    const user_id = data?.user_details.id;
+
     const [follower_type, set_follower_type] = useState(null);
 
     const [is_signing_out, set_is_signing_out] = useState(false);
-    const [user_id, set_user_id] = useState(null);
-
-    const { data, isLoading, isError } = useQuery(
-        ["user_details", { username: username_route }],
-        () => {
-            return get_user_details(username_route);
-        },
-        {
-            onSuccess: (data) => {
-                if (data.error) {
-                    console.log("user_details error", data.error);
-                    return;
-                }
-                set_user_id(data.user_details.id);
-            },
-        }
-    );
 
     const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {
@@ -117,11 +107,11 @@ function ProfileDetails({}) {
         },
     });
 
-    if (isLoading) {
+    if (data.isLoading) {
         return <Loading />;
     }
 
-    if (isError) {
+    if (data.isError) {
         console.log(data);
         return <p>An Error has occured, check console</p>;
     }

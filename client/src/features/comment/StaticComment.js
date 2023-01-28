@@ -1,105 +1,138 @@
-import "../../features/comment/Comment.scss";
-import { useState, useEffect, useRef } from "react";
+// styles
+import "./StaticComment.scss";
 
-import { calculate_time_passed } from "../../helper/time";
+// hooks
+import { useState } from "react";
+import { useModal } from "../../components/ui/Modal";
+import { useResizablePanel } from "../../components/ui/ResizablePanel";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
+import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
-// might need to npm uninstall from package.json
-// import { v4 as uuid } from 'uuid';
-
-import DOMPurify from "dompurify";
+// components
+import AddComment from "./AddComment";
 import ProfilePicture from "../profile/profile_picture/ProfilePicture";
 import Votes from "../vote/Votes";
+import ResizablePanel from "../../components/ui/ResizablePanel";
+import ReplySectionInfiniteScroll from "./ReplySectionInfiniteScroll";
 
-import AdjustableButton from "../../components/ui/AdjustableButton";
+// ui
+import Modal from "../../components/ui/Modal";
+import ToolTip from "../../components/ui/ToolTip";
 
+// api
 import {
-    get_all_replies,
     check_if_comments_or_replies_exist,
+    delete_comment_or_reply,
 } from "../../api/CommentRequests";
 
-function StaticComment({ comment }) {
+// helper
+import { calculate_time_passed } from "../../helper/time";
+import DOMPurify from "dompurify";
+
+function StaticComment({
+    comment,
+    post_id,
+    sort_by,
+    parent_comment_id = null,
+}) {
     // the comment component renders both surface level comments and
     // replies of those comments, therfore this component actually serves
     // 2 purposes and behaves slightly differently depending on if
     // it is a comment or a reply
 
-    // still need to implement infinite scroll for comments and replies
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const { current_user } = useCurrentUser();
+    const resizable_panel_states = useResizablePanel();
+    const add_notification = useNotification();
+    const { open_modal, close_modal, show_modal } = useModal();
 
     const [show_replies_section, set_show_replies_section] = useState(false);
+    const [show_add_reply, set_show_add_reply] = useState(false);
+    const [comment_edit_mode, set_comment_edit_mode] = useState(false);
     const [allow_replies_section_btn, set_allow_replies_section_btn] =
         useState(false);
 
-    const [allow_read_more_btn, set_allow_read_more_btn] = useState(false);
-    const [read_more_content, set_read_more_content] = useState(false);
-
-    const [all_replies, set_all_replies] = useState([]);
-
-    // required for read_more/less button
-    const comment_content_ref = useRef();
-
-    // for read more btn
-    useEffect(() => {
-        const comment_content_height = comment_content_ref.current.clientHeight;
-
-        // only allowing component to render show more/less btn
-        // if the content of the post takes up more than 100px
-
-        //  if you want to change this value, u must also change in the css
-        // where the classname is .show_less
-        if (comment_content_height > 100) {
-            set_allow_read_more_btn(true);
+    useQuery(
+        ["comment_has_replies", { comment_id: comment.id }],
+        () => {
+            return check_if_comments_or_replies_exist("reply", comment.id);
+        },
+        {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log({ error: data.error });
+                    return;
+                }
+                set_allow_replies_section_btn(data.is_any);
+            },
         }
-    }, []);
+    );
 
-    useEffect(() => {
-        initialse_allow_show_replies_section();
-    }, []);
-
-    const initialse_allow_show_replies_section = async () => {
-        // there is no need to check if there are replies
-        // when the comment rendered already is a reply
-        if (comment.is_reply === true) {
-            // console.log("isreply is true, returning")
-            return;
+    const delete_comment = useMutation(
+        (type) => delete_comment_or_reply(type, comment.id),
+        {
+            onSuccess: () => {
+                if (comment.is_reply) {
+                    if (parent_comment_id !== null) {
+                        queryClient.invalidateQueries([
+                            "replies_section",
+                            { comment_id: parent_comment_id, post_id },
+                        ]);
+                    }
+                } else {
+                    queryClient.invalidateQueries([
+                        "comments_section",
+                        { post_id },
+                    ]);
+                }
+                add_notification(
+                    `Succesfully deleted ${
+                        comment.is_reply ? "Reply" : "Comment"
+                    }`
+                );
+            },
         }
-
-        const response = await check_if_comments_or_replies_exist(
-            "reply",
-            comment.id
-        );
-
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        set_allow_replies_section_btn(response.is_any);
-    };
-
-    const initialise_all_replies = async () => {
-        if (allow_replies_section_btn === false) {
-            return;
-        }
-
-        const response = await get_all_replies(comment.id);
-
-        // console.log("initialising all replies")
-        if (response.error) {
-            console.log(response);
-            return;
-        }
-
-        // response.all_replies is slightly differnt structure to all_comments
-        // actual comment content is in response.all_replies.reply_content
-        set_all_replies(response.all_replies);
-    };
+    );
 
     return (
         <div
             className={
-                "comment_or_reply " + (comment.is_reply ? "Reply" : "Comment")
+                "StaticComment comment_or_reply " +
+                (comment.is_reply ? "Reply" : "Comment")
             }
         >
+            <Modal show_modal={show_modal} close_modal={close_modal}>
+                <div className="delete_comment_modal">
+                    <h2>Delete {comment.is_reply ? "Reply" : "Comment"}?</h2>
+                    <p>
+                        Are you sure you want to delete your{" "}
+                        {comment.is_reply ? "Reply" : "Comment"}? This action is
+                        not reversible.
+                    </p>
+                    <div className="btns">
+                        <button className="cancel_btn" onClick={close_modal}>
+                            Cancel
+                        </button>
+                        <button
+                            className="delete_btn"
+                            onClick={() => {
+                                const type = comment.is_reply
+                                    ? "reply"
+                                    : "comment";
+
+                                delete_comment.mutate(type);
+                                close_modal();
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
             <div className="profile_picture">
                 <ProfilePicture
                     profile_picture_url={comment.author_details.profile_pic}
@@ -110,109 +143,290 @@ function StaticComment({ comment }) {
             <div className="comment_content_container">
                 <div className="comment_content">
                     <div className="comment_author_and_edit_delete_btns">
-                        <div className="comment_author">
-                            <b>{comment.author_details.username} • </b>
-                            {comment.edited && "(edited) • "}
-                            {calculate_time_passed(comment.updatedAt)} ago
-                        </div>
-                    </div>
-                    <div
-                        className={
-                            "comment_content_text " +
-                            (allow_read_more_btn
-                                ? read_more_content
-                                    ? ""
-                                    : "show_less"
-                                : "")
-                        }
-                        ref={comment_content_ref}
-                    >
                         <div
-                            className="comment_text"
-                            dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(comment.text),
-                            }}
+                            className="comment_author"
+                            onClick={() =>
+                                navigate(
+                                    `/profile/${comment.author_details.username}`
+                                )
+                            }
                         >
-                            {/* actual comment text */}
-                            {/* {comment.text} */}
+                            <b className="username">
+                                {comment.author_details.username}
+                            </b>
+                            <div className="updated_at_time">
+                                <b>•</b>
+                                {comment.edited && (
+                                    <>
+                                        <span>edited</span>
+                                        <b>•</b>
+                                    </>
+                                )}
+                                {calculate_time_passed(comment.edited_time)} ago
+                            </div>
                         </div>
+
+                        {comment.author_details.username ===
+                            current_user.username && (
+                            <div className="edit_and_delete_btns">
+                                <ToolTip
+                                    text={
+                                        comment_edit_mode
+                                            ? "Cancel Edit"
+                                            : `Edit ${
+                                                  comment.is_reply
+                                                      ? "Reply"
+                                                      : "Comment"
+                                              }`
+                                    }
+                                    spacing={5}
+                                >
+                                    <button
+                                        onClick={() =>
+                                            set_comment_edit_mode(
+                                                !comment_edit_mode
+                                            )
+                                        }
+                                        className="edit_btn"
+                                    >
+                                        {comment_edit_mode ? (
+                                            <svg
+                                                className="cancel_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="edit_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </ToolTip>
+
+                                <ToolTip
+                                    text={`Delete ${
+                                        comment.is_reply ? "Reply" : "Comment"
+                                    }`}
+                                    spacing={5}
+                                >
+                                    <button
+                                        className="delete_btn"
+                                        onClick={open_modal}
+                                    >
+                                        <svg
+                                            className="delete_icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                            />
+                                        </svg>
+                                    </button>
+                                </ToolTip>
+                            </div>
+                        )}
                     </div>
+                    {comment_edit_mode ? (
+                        <>
+                            {comment.author_details.username ===
+                                current_user.username && (
+                                <div className="edit_comment">
+                                    <AddComment
+                                        parent_comment_id={parent_comment_id}
+                                        comment_id={comment.id}
+                                        execute_after_add_comment={() => {
+                                            set_comment_edit_mode(false);
+                                        }}
+                                        post_id={post_id}
+                                        is_editing={true}
+                                        initial_content={comment.text}
+                                        show_profile_pic={false}
+                                        comment_type={
+                                            comment.is_reply
+                                                ? "reply"
+                                                : "comment"
+                                        }
+                                        btn_text="Save"
+                                    />
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <ResizablePanel
+                            min_height={120}
+                            {...resizable_panel_states}
+                        >
+                            <div className="comment_content_text">
+                                <div
+                                    className="comment_text"
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(
+                                            comment.text
+                                        ),
+                                    }}
+                                />
+                            </div>
+                        </ResizablePanel>
+                    )}
                 </div>
 
                 <div className="comment_btns">
                     <div className="votes_and_read_more_btns">
                         <Votes
                             vote_type={comment.is_reply ? "reply" : "comment"}
-                            comment_id={comment.id}
-                            img_path={"../.."}
+                            vote_id={comment.id}
+                            up_votes={comment.up_votes}
+                            down_votes={comment.down_votes}
                         />
 
-                        <div className="read_more_less_div">
-                            {allow_read_more_btn && (
-                                <AdjustableButton
-                                    boolean_check={read_more_content}
-                                    execute_onclick={() =>
-                                        set_read_more_content(
-                                            !read_more_content
-                                        )
-                                    }
-                                    original_class_name="read_more_less_btn"
-                                    active_name="Read Less"
-                                    inactive_name="Read More"
-                                    btn_type_txt={true}
-                                />
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="reply_btns">
-                        {comment.is_reply === false && (
-                            <div className="reply_btns">
-                                {allow_replies_section_btn === true && (
-                                    <AdjustableButton
-                                        // boolean_check={show_replies}
-                                        boolean_check={show_replies_section}
-                                        execute_onclick={() => {
-                                            // set_show_replies(!show_replies)
-                                            set_show_replies_section(
-                                                !show_replies_section
-                                            );
-
-                                            if (
-                                                show_replies_section === false
-                                            ) {
-                                                initialise_all_replies();
-                                            }
-                                        }}
-                                        original_class_name="view_replies_btn"
-                                        active_name="Hide Replies"
-                                        inactive_name="Show Replies"
-                                        btn_type_txt={true}
-                                    />
-                                )}
+                        {comment_edit_mode === false && (
+                            <div className="show_more_btn">
+                                <resizable_panel_states.ShowMoreBtn />
                             </div>
                         )}
                     </div>
+
+                    <>
+                        {comment.is_reply === false && (
+                            <div className="reply_btns">
+                                {allow_replies_section_btn === true && (
+                                    <ToolTip text="Replies" spacing={5}>
+                                        <button
+                                            className="comment_btn"
+                                            type="button"
+                                            onClick={() => {
+                                                set_show_replies_section(
+                                                    !show_replies_section
+                                                );
+                                            }}
+                                        >
+                                            <svg
+                                                className="comment_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </ToolTip>
+                                )}
+
+                                {current_user.role !== "admin" && (
+                                    <ToolTip
+                                        text={
+                                            show_add_reply
+                                                ? "Cancel"
+                                                : "Add Reply"
+                                        }
+                                        spacing={5}
+                                    >
+                                        <button
+                                            className="add_comment_btn"
+                                            onClick={() => {
+                                                set_show_add_reply(
+                                                    !show_add_reply
+                                                );
+                                            }}
+                                        >
+                                            {show_add_reply ? (
+                                                <svg
+                                                    fill="none"
+                                                    className="cancel_icon"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    className="add_comment_icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    </ToolTip>
+                                )}
+                            </div>
+                        )}
+                    </>
                 </div>
 
                 <div className="add_comments_and_show_replies">
-                    {comment.is_reply === false && (
-                        <div className="comment_replies">
-                            {show_replies_section && (
-                                <>
-                                    {all_replies.map((reply_object) => {
-                                        const reply =
-                                            reply_object.reply_content;
-                                        return (
-                                            <StaticComment
-                                                comment={reply}
-                                                key={reply.id}
-                                            />
-                                        );
-                                    })}
-                                </>
-                            )}
-                        </div>
+                    <div className="add_comments">
+                        {show_add_reply && (
+                            <AddComment
+                                execute_after_add_comment={() => {
+                                    set_show_add_reply(false);
+                                    set_show_replies_section(true);
+
+                                    if (allow_replies_section_btn === false) {
+                                        set_allow_replies_section_btn(true);
+                                    }
+                                }}
+                                placeholder="Add Reply"
+                                btn_text="Reply"
+                                comment_type="reply"
+                                post_id={post_id}
+                                parent_comment_id={comment.id}
+                            />
+                        )}
+                    </div>
+
+                    {comment.is_reply === false && show_replies_section && (
+                        <ReplySectionInfiniteScroll
+                            comment_id={comment.id}
+                            post_id={post_id}
+                            sort_by={sort_by}
+                        />
                     )}
                 </div>
             </div>

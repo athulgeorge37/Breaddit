@@ -220,6 +220,20 @@ function PostsPage() {
                     </div>
 
                     <ThreadDetails thread_title={thread_title} />
+
+                    <div className="scroll_to_top_div">
+                        <button
+                            className="scroll_to_top"
+                            onClick={() =>
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: "smooth",
+                                })
+                            }
+                        >
+                            Back To Top
+                        </button>
+                    </div>
                 </div>
 
                 <div className="create_post_and_list_of_posts">

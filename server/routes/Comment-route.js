@@ -87,6 +87,100 @@ router.get(
     }
 );
 
+router.get("/get_all_comments_by_user", async (request, response) => {
+    // checks if there is any comments,
+    // required to quickly find if we should render the comment_section/show_replies btn
+
+    // when type === comment, in which case parent_id is for a post
+    // when type === reply, in which case parent_id is for a comment
+
+    try {
+        const username = request.query.username;
+
+        const is_reply = request.query.is_reply;
+
+        const limit = parseInt(request.query.limit);
+        let page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        const order_by = determine_order_by(request.query.filter_by);
+
+        const user_details = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
+
+        const all_user_comments = await db.Comment.findAll({
+            where: {
+                author_id: user_details.id,
+                is_reply: is_reply === "true" ? true : false,
+            },
+            order: order_by,
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        if (is_reply === "false") {
+            response.json({
+                msg: "Sucesfully got comments",
+                all_comments: all_user_comments,
+            });
+            return;
+        }
+
+        const list_of_reply_ids = all_user_comments.map((comment) => {
+            return comment.id;
+        });
+
+        const all_parent_comment_ids = await db.Reply.findAll({
+            where: {
+                reply_id: list_of_reply_ids,
+            },
+        });
+
+        const all_reply_and_parent_comments = [];
+        await Promise.all(
+            all_parent_comment_ids.map(async (item, index) => {
+                const parent_comment = await db.Comment.findOne({
+                    where: {
+                        id: item.parent_comment_id,
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            as: "author_details",
+                            attributes: ["username", "profile_pic"],
+                        },
+                    ],
+                });
+
+                all_reply_and_parent_comments.push({
+                    parent_comment: parent_comment,
+                    reply_comment: all_user_comments[index],
+                });
+            })
+        );
+
+        response.json({
+            msg: "succesfully got replies with parent comments",
+            all_comments: all_reply_and_parent_comments,
+        });
+        return;
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
 router.get("/get_all_comments", async (request, response) => {
     // gets all the comments of a post or the replies of a comment
     // where the id is the post_id

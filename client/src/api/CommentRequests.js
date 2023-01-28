@@ -83,7 +83,6 @@ const get_all_replies = async (comment_id, limit, page_num, filter_by) => {
         })}`
     );
 
-    // returns an object with a property called all_replies: list of comment objects
     return response.data;
 };
 
@@ -95,7 +94,29 @@ const check_if_comments_or_replies_exist = async (type, parent_id) => {
         `${CUSTOM_ENDPOINT}/is_any/of_type/${type}/for_parent_id/${parent_id}`
     );
 
-    // returns an object with a property called is_any: boolean
+    return response.data;
+};
+
+const get_all_comments_by_user = async ({
+    username,
+    filter_by,
+    page_num,
+    limit,
+    is_reply,
+}) => {
+    // if type === comment, parent_id should be of post_id
+    // if type === reply, parent_id should be of comment_id
+
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_all_comments_by_user?${query_string_generator({
+            username,
+            filter_by,
+            page_num,
+            limit,
+            is_reply,
+        })}`
+    );
+
     return response.data;
 };
 
@@ -106,4 +127,5 @@ export {
     get_all_comments,
     get_all_replies,
     check_if_comments_or_replies_exist,
+    get_all_comments_by_user,
 };

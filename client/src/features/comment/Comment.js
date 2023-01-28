@@ -31,7 +31,14 @@ import {
 import { calculate_time_passed } from "../../helper/time";
 import DOMPurify from "dompurify";
 
-function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
+function Comment({
+    comment,
+    post_id,
+    sort_by,
+    parent_comment_id = null,
+    allow_show_replies_section = true,
+    link_to_post = false,
+}) {
     // the comment component renders both surface level comments and
     // replies of those comments, therfore this component actually serves
     // 2 purposes and behaves slightly differently depending on if
@@ -63,6 +70,7 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                 }
                 set_allow_replies_section_btn(data.is_any);
             },
+            enabled: allow_show_replies_section,
         }
     );
 
@@ -137,15 +145,15 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
             <div className="comment_content_container">
                 <div className="comment_content">
                     <div className="comment_author_and_edit_delete_btns">
-                        <div
-                            className="comment_author"
-                            onClick={() =>
-                                navigate(
-                                    `/profile/${comment.author_details.username}`
-                                )
-                            }
-                        >
-                            <b className="username">
+                        <div className="comment_author">
+                            <b
+                                className="username"
+                                onClick={() =>
+                                    navigate(
+                                        `/user/${comment.author_details.username}/profile`
+                                    )
+                                }
+                            >
                                 {comment.author_details.username}
                             </b>
                             <div className="updated_at_time">
@@ -338,56 +346,68 @@ function Comment({ comment, post_id, sort_by, parent_comment_id = null }) {
                                     </ToolTip>
                                 )}
 
-                                {current_user.role !== "admin" && (
-                                    <ToolTip
-                                        text={
-                                            show_add_reply
-                                                ? "Cancel"
-                                                : "Add Reply"
-                                        }
-                                        spacing={5}
-                                    >
-                                        <button
-                                            className="add_comment_btn"
-                                            onClick={() => {
-                                                set_show_add_reply(
-                                                    !show_add_reply
-                                                );
-                                            }}
+                                {current_user.role !== "admin" &&
+                                    allow_show_replies_section === true && (
+                                        <ToolTip
+                                            text={
+                                                show_add_reply
+                                                    ? "Cancel"
+                                                    : "Add Reply"
+                                            }
+                                            spacing={5}
                                         >
-                                            {show_add_reply ? (
-                                                <svg
-                                                    fill="none"
-                                                    className="cancel_icon"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    />
-                                                </svg>
-                                            ) : (
-                                                <svg
-                                                    className="add_comment_icon"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                    />
-                                                </svg>
-                                            )}
-                                        </button>
-                                    </ToolTip>
+                                            <button
+                                                className="add_comment_btn"
+                                                onClick={() => {
+                                                    set_show_add_reply(
+                                                        !show_add_reply
+                                                    );
+                                                }}
+                                            >
+                                                {show_add_reply ? (
+                                                    <svg
+                                                        fill="none"
+                                                        className="cancel_icon"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                ) : (
+                                                    <svg
+                                                        className="add_comment_icon"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                )}
+                                            </button>
+                                        </ToolTip>
+                                    )}
+
+                                {link_to_post && (
+                                    <button
+                                        className="link_to_post"
+                                        onClick={() =>
+                                            navigate(`/post/${comment.post_id}`)
+                                        }
+                                    >
+                                        Go To Post
+                                    </button>
                                 )}
                             </div>
                         )}

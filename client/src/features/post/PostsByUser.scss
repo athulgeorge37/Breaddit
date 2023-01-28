@@ -5,34 +5,42 @@
     flex-direction: column;
     gap: calc(1.5 * $padding);
 
-    h2 {
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: calc(0.5 * $padding);
-    }
-
-    .sort_by_options_and_search_input {
+    .header {
         display: flex;
-        gap: $padding;
-    
+        border-bottom: 1px solid var(--border-color);
+        align-items: flex-end;
+        justify-content: space-between;
+
+        h2 {
+            padding-bottom: calc(0.5 * $padding);
+        }
+
 
         .sort_by_options {
             display: flex;
             align-items: center;
             gap: 10px;
-            background-color: var(--background-color-secondary);
-            border: 1px solid var(--border-color);
-            padding: $padding;
-            border-radius: $border-radius;
-            width: fit-content;
+            padding: 5px;
 
             button {
-                @include btn-styles(var(--background-color-tertiary))
+                @include btn-styles(var(--background-color-tertiary));
+                
             }
 
             .active {
                 background-color: var(--blue);
             }
         }
+    }
+
+    
+
+    .sort_by_options_and_search_input {
+        display: flex;
+        gap: $padding;
+    
+
+        
 
         .search_within_posts {
             display: flex;

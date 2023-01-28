@@ -112,7 +112,6 @@ function CommentSectionInfiniteScroll({ post_id }) {
                 <h2>Comments</h2>
 
                 <div className="sort_by_options">
-                    <span>Sort By:</span>
                     {SORT_BY_OPTIONS.map((option) => {
                         return (
                             <button

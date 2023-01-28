@@ -1,5 +1,77 @@
 @import "../../variables.scss";
 
 .CommentsByUser {
-    
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.5 * $padding);
+
+
+    .header {
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        align-items: flex-end;
+        justify-content: space-between;
+
+        .toggle_comment_mode {
+            // padding-bottom: calc(0.5 * $padding);
+
+            display: flex;
+            gap: $padding;
+
+            button {
+                @include btn-style-text(var(--text-color-primary));
+                font-size: large;
+                padding: 10px;
+
+                &:hover {
+                    background-color: var(--background-color-secondary);
+                    border-top-left-radius: $border-radius;
+                    border-top-right-radius: $border-radius;
+                }
+            }
+
+            .active {
+                color: var(--blue);
+                border-bottom: 1px solid var(--blue);
+            }
+        }
+
+        .sort_by_options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+
+            button {
+                @include btn-styles(var(--background-color-tertiary));
+                
+            }
+
+            .active {
+                background-color: var(--blue);
+            }
+        }
+    }
+
+
+    .list_of_comments {
+        display: flex;
+        flex-direction: column;
+        gap: $padding;
+        
+        .comment_wrapper {
+            background-color: var(--background-color-secondary);
+            border-radius: $border-radius;
+            border: 1px solid var(--border-color);
+
+            .reply_comment {
+                margin-left: calc(3.5 * $padding);
+                margin-right: calc(0.5 * $padding);
+
+                // .Reply {
+                //     margin-right: 0.5em;
+                // }
+            }
+        }
+    }
 }

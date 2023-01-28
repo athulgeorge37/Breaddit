@@ -19,6 +19,7 @@
         display: flex;
         flex-direction: column;
         gap: calc(2 * $padding);
+    
         
         @media screen and (min-width: 1100px) {
             // if screen width is greater than or equal to px
@@ -61,6 +62,20 @@
                     @include btn-styles(var(--green));
                     width: 50%;
                 }
+            }
+        }
+
+        .scroll_to_top_div {
+
+            top: calc(100vh - 50px);
+            position: sticky;
+            margin-top: 50px;
+
+
+            .scroll_to_top {
+                position: relative;
+                @include btn-styles(var(--background-color-secondary));
+                color: var(--text-color-primary);
             }
         }
     }

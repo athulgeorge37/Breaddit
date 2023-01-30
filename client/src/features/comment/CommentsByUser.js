@@ -13,8 +13,8 @@ import Comment from "./Comment";
 import { get_all_comments_by_user } from "../../api/CommentRequests";
 
 // constants
-const COMMENTS_PER_PAGE = 2;
-const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
+const COMMENTS_PER_PAGE = 10;
+const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function CommentsByUser() {
     const { pathname } = useLocation();

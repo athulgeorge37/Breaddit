@@ -88,6 +88,7 @@
                 .edit_and_delete_btns {
                     display: flex;
                     justify-content: center;
+                    align-items: center;
 
                     
 
@@ -101,6 +102,13 @@
                             height: 20px;
                             color: var(--text-color-secondary);
                         }
+                    }
+
+                    .link_to_post {
+                        @include btn-style-text(var(--blue));
+                        text-decoration: underline;
+                        margin-left: 10px;
+                        margin-bottom: 5px;
                     }
                 }
             }
@@ -191,11 +199,7 @@
                     margin-left: 10px;
                 }
 
-                .link_to_post {
-                    @include btn-style-text(var(--blue));
-                    text-decoration: underline;
-                    margin-left: 10px;
-                }
+                
 
             }
 

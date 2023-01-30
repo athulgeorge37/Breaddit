@@ -107,8 +107,23 @@ function ProfileNavBar({ user_details }) {
                 </NavLink>
                 <NavLink to={`/user/${username_route}/posts`}>Posts</NavLink>
                 <NavLink to={`/user/${username_route}/comments`}>
-                    Comments / Replies
+                    Comments
                 </NavLink>
+                <NavLink to={`/user/${username_route}/votes`}>Votes</NavLink>
+            </div>
+
+            <div className="scroll_to_top_div">
+                <button
+                    className="scroll_to_top"
+                    onClick={() =>
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        })
+                    }
+                >
+                    Back To Top
+                </button>
             </div>
         </div>
     );

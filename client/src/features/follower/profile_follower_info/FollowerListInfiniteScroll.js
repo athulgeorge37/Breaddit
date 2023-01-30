@@ -16,7 +16,7 @@ import ToolTip from "../../../components/ui/ToolTip";
 import { get_all_profiles_who_follow } from "../../../api/FollowerRequests";
 
 // constants
-const FOLLOWERS_PER_PAGE = 2;
+const FOLLOWERS_PER_PAGE = 10;
 
 function FollowerListInfiniteScroll({
     follower_type,

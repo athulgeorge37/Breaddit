@@ -64,9 +64,15 @@
             border-radius: $border-radius;
             border: 1px solid var(--border-color);
 
+            .comment_or_reply {
+                border-top: none;
+            }
+
             .reply_comment {
                 margin-left: calc(3.5 * $padding);
                 margin-right: calc(0.5 * $padding);
+
+                border-top: 1px solid var(--border-color);
 
                 // .Reply {
                 //     margin-right: 0.5em;

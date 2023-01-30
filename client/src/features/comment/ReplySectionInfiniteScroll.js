@@ -5,7 +5,7 @@ import { get_all_replies } from "../../api/CommentRequests";
 import Loading from "../../components/ui/Loading";
 import Comment from "./Comment";
 
-const REPLIES_PER_PAGE = 2;
+const REPLIES_PER_PAGE = 5;
 
 function ReplySectionInfiniteScroll({ comment_id, post_id, sort_by }) {
     const {

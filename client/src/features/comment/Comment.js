@@ -168,91 +168,106 @@ function Comment({
                             </div>
                         </div>
 
-                        {comment.author_details.username ===
-                            current_user.username && (
-                            <div className="edit_and_delete_btns">
-                                <ToolTip
-                                    text={
-                                        comment_edit_mode
-                                            ? "Cancel Edit"
-                                            : `Edit ${
-                                                  comment.is_reply
-                                                      ? "Reply"
-                                                      : "Comment"
-                                              }`
-                                    }
-                                    spacing={5}
-                                >
-                                    <button
-                                        onClick={() =>
-                                            set_comment_edit_mode(
-                                                !comment_edit_mode
-                                            )
+                        <div className="edit_and_delete_btns">
+                            {comment.author_details.username ===
+                                current_user.username && (
+                                <>
+                                    <ToolTip
+                                        text={
+                                            comment_edit_mode
+                                                ? "Cancel Edit"
+                                                : `Edit ${
+                                                      comment.is_reply
+                                                          ? "Reply"
+                                                          : "Comment"
+                                                  }`
                                         }
-                                        className="edit_btn"
+                                        spacing={5}
                                     >
-                                        {comment_edit_mode ? (
-                                            <svg
-                                                className="cancel_icon"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                />
-                                            </svg>
-                                        ) : (
-                                            <svg
-                                                className="edit_icon"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                                />
-                                            </svg>
-                                        )}
-                                    </button>
-                                </ToolTip>
-
-                                <ToolTip
-                                    text={`Delete ${
-                                        comment.is_reply ? "Reply" : "Comment"
-                                    }`}
-                                    spacing={5}
-                                >
-                                    <button
-                                        className="delete_btn"
-                                        onClick={open_modal}
-                                    >
-                                        <svg
-                                            className="delete_icon"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
+                                        <button
+                                            onClick={() =>
+                                                set_comment_edit_mode(
+                                                    !comment_edit_mode
+                                                )
+                                            }
+                                            className="edit_btn"
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                            />
-                                        </svg>
-                                    </button>
-                                </ToolTip>
-                            </div>
-                        )}
+                                            {comment_edit_mode ? (
+                                                <svg
+                                                    className="cancel_icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    className="edit_icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    </ToolTip>
+
+                                    <ToolTip
+                                        text={`Delete ${
+                                            comment.is_reply
+                                                ? "Reply"
+                                                : "Comment"
+                                        }`}
+                                        spacing={5}
+                                    >
+                                        <button
+                                            className="delete_btn"
+                                            onClick={open_modal}
+                                        >
+                                            <svg
+                                                className="delete_icon"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </ToolTip>
+                                </>
+                            )}
+
+                            {link_to_post && (
+                                <button
+                                    className="link_to_post"
+                                    onClick={() =>
+                                        navigate(`/post/${comment.post_id}`)
+                                    }
+                                >
+                                    Go To Post
+                                </button>
+                            )}
+                        </div>
                     </div>
                     {comment_edit_mode ? (
                         <>
@@ -398,17 +413,6 @@ function Comment({
                                             </button>
                                         </ToolTip>
                                     )}
-
-                                {link_to_post && (
-                                    <button
-                                        className="link_to_post"
-                                        onClick={() =>
-                                            navigate(`/post/${comment.post_id}`)
-                                        }
-                                    >
-                                        Go To Post
-                                    </button>
-                                )}
                             </div>
                         )}
                     </>

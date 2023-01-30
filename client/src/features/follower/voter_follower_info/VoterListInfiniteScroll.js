@@ -16,7 +16,7 @@ import ToolTip from "../../../components/ui/ToolTip";
 import VoterFollowerCard from "./VoterFollowerCard";
 
 // constants
-const VOTERS_PER_PAGE = 2;
+const VOTERS_PER_PAGE = 10;
 
 function VoterListInfiniteScroll({
     vote_type,

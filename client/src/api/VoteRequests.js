@@ -60,4 +60,71 @@ const get_all_profile_who_voted = async (
     return response.data;
 };
 
-export { make_vote, get_curr_user_vote, get_all_profile_who_voted };
+const get_post_votes_by_user = async ({
+    username,
+    up_voted,
+    filter_by,
+    limit,
+    page_num,
+}) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_post_votes_by_user?${query_string_generator({
+            username,
+            up_voted,
+            filter_by,
+            limit,
+            page_num,
+        })}`
+    );
+
+    return response.data;
+};
+
+const get_comment_votes_by_user = async ({
+    username,
+    up_voted,
+    filter_by,
+    limit,
+    page_num,
+}) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_comment_votes_by_user?${query_string_generator({
+            username,
+            up_voted,
+            filter_by,
+            limit,
+            page_num,
+        })}`
+    );
+
+    return response.data;
+};
+
+const get_reply_votes_by_user = async ({
+    username,
+    up_voted,
+    filter_by,
+    limit,
+    page_num,
+}) => {
+    const response = await axios.get(
+        `${CUSTOM_ENDPOINT}/get_reply_votes_by_user?${query_string_generator({
+            username,
+            up_voted,
+            filter_by,
+            limit,
+            page_num,
+        })}`
+    );
+
+    return response.data;
+};
+
+export {
+    make_vote,
+    get_curr_user_vote,
+    get_all_profile_who_voted,
+    get_post_votes_by_user,
+    get_comment_votes_by_user,
+    get_reply_votes_by_user,
+};

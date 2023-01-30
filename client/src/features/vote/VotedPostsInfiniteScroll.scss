@@ -1,0 +1,58 @@
+@import "../../variables.scss";
+
+.VotedPostsInfiniteScroll {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.5 * $padding);
+    width: 100%;
+
+    .list_of_posts {
+        display: flex;
+        flex-direction: column;
+        gap: calc(2 * $padding);
+    }
+
+    .list_of_comments {
+        display: flex;
+        flex-direction: column;
+        gap: $padding;
+        
+        .comment_wrapper {
+            background-color: var(--background-color-secondary);
+            border-radius: $border-radius;
+            border: 1px solid var(--border-color);
+
+            .comment_or_reply {
+                border-top: none;
+            }
+
+            .reply_comment {
+                margin-left: calc(3.5 * $padding);
+                margin-right: calc(0.5 * $padding);
+
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    }
+
+    .end_of_items_lists {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 32px;
+
+        p {
+            @include shadow;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            background-color: var(--background-color-secondary);
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius;
+        }
+    }
+
+    
+
+}

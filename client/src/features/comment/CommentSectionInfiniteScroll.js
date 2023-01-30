@@ -9,8 +9,8 @@ import Loading from "../../components/ui/Loading";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { get_all_comments } from "../../api/CommentRequests";
 
-const COMMENTS_PER_PAGE = 2;
-const SORT_BY_OPTIONS = ["TOP", "BOTTOM", "NEW", "OLD"];
+const COMMENTS_PER_PAGE = 10;
+const SORT_BY_OPTIONS = ["NEW", "OLD", "TOP", "BOTTOM"];
 
 function CommentSectionInfiniteScroll({ post_id }) {
     const [sort_by, set_sort_by] = useState(SORT_BY_OPTIONS[0]);

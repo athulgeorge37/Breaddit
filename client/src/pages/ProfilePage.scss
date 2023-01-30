@@ -47,4 +47,18 @@
             background-color: var(--blue);
         }
     }
+
+    .scroll_to_top_div {
+
+        top: calc(100vh - 50px);
+        position: sticky;
+        margin-top: 50px;
+
+
+        .scroll_to_top {
+            position: relative;
+            @include btn-styles(var(--background-color-secondary));
+            color: var(--text-color-primary);
+        }
+    }
 }

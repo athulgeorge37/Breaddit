@@ -75,7 +75,7 @@ function StaticPostCard({ post_details }) {
                         className="posted_by_user"
                         onClick={() =>
                             navigate(
-                                `/profile/${post_details.author_details.username}`
+                                `/user/${post_details.author_details.username}/profile`
                             )
                         }
                     >

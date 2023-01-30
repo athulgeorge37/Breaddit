@@ -1,0 +1,102 @@
+@import "../../variables.scss";
+
+.VotesByUser {
+
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.5 * $padding);
+
+
+    .header {
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        align-items: flex-end;
+        justify-content: space-between;
+
+        .toggle_voted_mode {
+            display: flex;
+            gap: $padding;
+
+            button {
+                @include btn-style-text(var(--text-color-primary));
+                font-size: large;
+                padding: 10px;
+
+                &:hover {
+                    background-color: var(--background-color-secondary);
+                    border-top-left-radius: $border-radius;
+                    border-top-right-radius: $border-radius;
+                }
+            }
+
+            .up_vote_toggle_btn.active {
+                color: var(--green);
+                border-bottom: 1px solid var(--green);
+            }
+
+            .down_vote_toggle_btn.active {
+                color: var(--red);
+                border-bottom: 1px solid var(--red);
+            }
+        }
+
+        .parent_type_options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+
+            button {
+                @include btn-styles(var(--background-color-tertiary));
+                
+            }
+
+            .active {
+                background-color: var(--blue);
+            }
+        }
+    }
+
+    .header_two {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $padding;
+        width: 100%;
+
+        background-color: var(--background-color-secondary);
+        border-radius: $border-radius;
+        border: 1px solid var(--border-color);
+        @include shadow;
+        
+        .info {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            align-items: center;
+            
+    
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .sort_by_options {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+            
+
+            button {
+                @include btn-styles(var(--background-color-tertiary));
+            }
+
+            .active {
+                background-color: var(--blue);
+            }
+        }
+    }
+}

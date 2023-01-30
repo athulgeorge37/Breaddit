@@ -7,9 +7,10 @@ import { useCurrentUser } from "../../context/CurrentUser/CurrentUserProvider";
 import { useParams, useNavigate } from "react-router-dom";
 import { useModal } from "../../components/ui/Modal";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useNotification } from "../../context/Notifications/NotificationProvider";
 
 // api
-import { sign_out, get_user_details } from "../../api/UserRequests";
+import { sign_out } from "../../api/UserRequests";
 import {
     follow_or_unfollow_account_request,
     check_is_following_username,
@@ -29,6 +30,7 @@ import FollowerListInfiniteScroll from "../follower/profile_follower_info/Follow
 import { human_readable_date } from "../../helper/time";
 
 function ProfileDetails() {
+    const add_notification = useNotification();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { username_route } = useParams();
@@ -98,7 +100,7 @@ function ProfileDetails() {
             set_is_signing_out(true);
             setTimeout(() => {
                 navigate("/signin");
-
+                add_notification("Succesfully Signed Out");
                 // removing web token from localstorage and
                 // updating current_user in App.js,
                 // to remove users access to authenticated pages

@@ -2,16 +2,9 @@
 import "./PostsByUser.scss";
 
 // hooks
-import {
-    useRef,
-    useCallback,
-    useState,
-    createContext,
-    useContext,
-    useEffect,
-} from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // components
 import StaticPostCard from "./StaticPostCard";
@@ -26,8 +19,8 @@ import { get_all_posts_by_username } from "../../api/PostRequests";
 import Loading from "../../components/ui/Loading";
 import ToolTip from "../../components/ui/ToolTip";
 
-const POSTS_PER_PAGE = 2;
-const SORT_BY_OPTIONS = ["New", "Old", "Top", "Bottom"];
+const POSTS_PER_PAGE = 10;
+const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function PostsByUser() {
     const { pathname } = useLocation();
@@ -43,7 +36,6 @@ function PostsByUser() {
         hasNextPage, // boolean
         isFetchingNextPage, // boolean
         data,
-        error,
     } = useInfiniteQuery(
         [
             "posts_by_user",

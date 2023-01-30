@@ -3,6 +3,7 @@ const {
     validate_request,
     validate_role,
 } = require("../middlewares/AuthenticateRequests");
+const determine_order_by = require("../helper/FilterBy");
 const router = express.Router();
 
 const db = require("../models");
@@ -55,6 +56,240 @@ router.get(
         }
     }
 );
+
+router.get("/get_post_votes_by_user", async (request, response) => {
+    // finds the curr_vote a user has made for a specific
+    // parent_type of parent_id
+
+    try {
+        const username = request.query.username;
+        const up_voted = request.query.up_voted;
+
+        const order_by = determine_order_by(request.query.filter_by);
+
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        // console.log("");
+        // console.log({ query: request.query });
+        // console.log("in get_post_votes_by_user");
+
+        const user_details = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
+
+        const all_votes = await db.Vote.findAll({
+            where: {
+                user_id: user_details.id,
+                parent_type: "post",
+                up_vote: up_voted === "true" ? true : false,
+            },
+        });
+
+        const list_of_post_ids = all_votes.map((vote_field) => {
+            return vote_field.post_id;
+        });
+
+        const all_posts = await db.Post.findAll({
+            where: {
+                id: list_of_post_ids,
+                is_inappropriate: false,
+            },
+            order: order_by,
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        response.json({
+            msg: "succefully got all posts",
+            all_items: all_posts,
+        });
+        return;
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
+router.get("/get_comment_votes_by_user", async (request, response) => {
+    // finds the curr_vote a user has made for a specific
+    // parent_type of parent_id
+
+    try {
+        const username = request.query.username;
+        const up_voted = request.query.up_voted;
+
+        const order_by = determine_order_by(request.query.filter_by);
+
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        const user_details = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
+
+        const all_votes = await db.Vote.findAll({
+            where: {
+                user_id: user_details.id,
+                parent_type: "comment",
+                up_vote: up_voted === "true" ? true : false,
+            },
+        });
+
+        const list_of_comment_ids = all_votes.map((vote_field) => {
+            return vote_field.comment_id;
+        });
+
+        const all_comments = await db.Comment.findAll({
+            where: {
+                id: list_of_comment_ids,
+                // is_inappropriate: false,
+            },
+            order: order_by,
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        // console.log("");
+        // console.log({
+        //     query: request.query,
+        //     list_of_comment_ids: JSON.stringify(list_of_comment_ids),
+        //     all_comments: JSON.stringify(all_comments),
+        // });
+        // console.log("in get_comment_votes_by_user");
+
+        response.json({
+            msg: "succefully got all comments",
+            all_items: all_comments,
+        });
+        return;
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
+
+router.get("/get_reply_votes_by_user", async (request, response) => {
+    // finds the curr_vote a user has made for a specific
+    // parent_type of parent_id
+
+    try {
+        const username = request.query.username;
+        const up_voted = request.query.up_voted;
+
+        const order_by = determine_order_by(request.query.filter_by);
+
+        const limit = parseInt(request.query.limit);
+        const page_num = parseInt(request.query.page_num);
+        const offset = limit * page_num;
+
+        const user_details = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
+
+        const all_votes = await db.Vote.findAll({
+            where: {
+                user_id: user_details.id,
+                parent_type: "reply",
+                up_vote: up_voted === "true" ? true : false,
+            },
+            limit: limit,
+            offset: offset,
+        });
+
+        const list_of_reply_ids = all_votes.map((vote_field) => {
+            return vote_field.comment_id;
+        });
+
+        const all_user_replies = await db.Comment.findAll({
+            where: {
+                id: list_of_reply_ids,
+            },
+            order: order_by,
+            include: [
+                {
+                    model: db.User,
+                    as: "author_details",
+                    attributes: ["username", "profile_pic"],
+                },
+            ],
+        });
+
+        const all_parent_comment_ids = await db.Reply.findAll({
+            where: {
+                reply_id: list_of_reply_ids,
+            },
+        });
+
+        // console.log("");
+        // console.log({
+        //     query: request.query,
+        //     all_votes: JSON.stringify(all_votes),
+        //     list_of_reply_ids: JSON.stringify(list_of_reply_ids),
+        //     all_user_replies: JSON.stringify(all_user_replies),
+        //     all_parent_comment_ids: JSON.stringify(all_parent_comment_ids),
+        // });
+        // console.log("in get_reply_votes_by_user");
+        // console.log("");
+
+        const all_reply_and_parent_comments = [];
+        await Promise.all(
+            all_parent_comment_ids.map(async (item, index) => {
+                const parent_comment = await db.Comment.findOne({
+                    where: {
+                        id: item.parent_comment_id,
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            as: "author_details",
+                            attributes: ["username", "profile_pic"],
+                        },
+                    ],
+                });
+
+                all_reply_and_parent_comments.push({
+                    parent_comment: parent_comment,
+                    reply_comment: all_user_replies[index],
+                });
+            })
+        );
+
+        response.json({
+            msg: "succefully got all comments",
+            all_items: all_reply_and_parent_comments,
+        });
+        return;
+    } catch (e) {
+        response.json({
+            error: e,
+        });
+    }
+});
 
 router.get(
     "/get_curr_user_vote/by_parent_id/:id/parent_type/:parent_type",

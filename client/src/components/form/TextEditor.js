@@ -15,13 +15,14 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function TextEditor(props) {
-    const [is_first_render, set_is_first_render] = useState(false);
+    // const [is_first_render, set_is_first_render] = useState(false);
 
-    useEffect(() => {
-        if (is_first_render === false) {
-            set_is_first_render(true);
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (is_first_render === false) {
+    //         set_is_first_render(true);
+    //     }
+    // }, []);
+    console.log(props.post_text);
 
     return (
         <div className="text_editor">

@@ -126,7 +126,7 @@ function DynamicPostCard({ post_id, location }) {
                         className="posted_by_user"
                         onClick={() =>
                             navigate(
-                                `/profile/${post_details.author_details.username}`
+                                `/user/${post_details.author_details.username}/profile`
                             )
                         }
                     >
@@ -222,16 +222,15 @@ function DynamicPostCard({ post_id, location }) {
                                 </button>
                             </ToolTip>
                         </>
-                    ) : (
-                        <Button
-                            // might need to include on click
-                            // onClick={() => set_delete_btn_active(true)}
-                            type="award"
-                            span_text="Award"
-                            img_name="award"
-                            margin_right={true}
-                        />
-                    )}
+                    ) : // <Button
+                    //     // might need to include on click
+                    //     // onClick={() => set_delete_btn_active(true)}
+                    //     type="award"
+                    //     span_text="Award"
+                    //     img_name="award"
+                    //     margin_right={true}
+                    // />
+                    null}
                 </div>
             </div>
 

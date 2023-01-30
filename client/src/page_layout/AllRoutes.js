@@ -19,6 +19,7 @@ const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 const ProfileDetails = lazy(() => import("../features/profile/ProfileDetails"));
 const PostsByUser = lazy(() => import("../features/post/PostsByUser"));
 const CommentsByUser = lazy(() => import("../features/comment/CommentsByUser"));
+const VotesByUser = lazy(() => import("../features/vote/VotesByUser"));
 
 const EditProfilePage = lazy(() => import("../pages/EditProfilePage"));
 
@@ -49,6 +50,7 @@ function AllRoutes() {
                     <Route path="profile" element={<ProfileDetails />} />
                     <Route path="posts" element={<PostsByUser />} />
                     <Route path="comments" element={<CommentsByUser />} />
+                    <Route path="votes" element={<VotesByUser />} />
                     <Route path="*" element={<p>Page does not exist</p>} />
                 </Route>
                 <Route path="/create_thread" element={<CreateThreadPage />} />

@@ -28,7 +28,7 @@ import { useEffect } from "react";
 
 const PostsPageContext = createContext();
 
-const POSTS_PER_PAGE = 2;
+const POSTS_PER_PAGE = 10;
 const SORT_BY_OPTIONS = ["Top", "Bottom", "New", "Old"];
 
 function PostsPage() {

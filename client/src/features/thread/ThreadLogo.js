@@ -17,7 +17,7 @@ function ThreadLogo({ thread_title, img_url, img_path = "../" }) {
             return;
         } else {
             navigate(
-                `/posts?${new URLSearchParams({
+                `/?${new URLSearchParams({
                     thread: thread_title,
                 }).toString()}`
             );

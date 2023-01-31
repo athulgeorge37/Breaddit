@@ -47,8 +47,10 @@ const validate_role = (request, response, next) => {
     // passing the web_access_token through the request header
     const web_access_token = request.header("web_access_token");
 
+    // console.log({ web_access_token });
+
     // if no access token was passed, user is not logged in
-    if (!web_access_token) {
+    if (!web_access_token || web_access_token === "null") {
         // response.json({
         //     error: "User is not logged in",
         //     web_access_token: web_access_token

@@ -69,7 +69,7 @@ function SignUpPage() {
         }
     );
 
-    const { mutate: sign_up } = useMutation(
+    const { mutate: sign_up, isLoading: sign_up_is_loading } = useMutation(
         () => {
             return create_user(email, username, password);
         },
@@ -273,7 +273,12 @@ function SignUpPage() {
                                             <button
                                                 className="sign_in_btn"
                                                 onClick={() =>
-                                                    navigate("/signin")
+                                                    navigate("/signin", {
+                                                        state: {
+                                                            initialise_email:
+                                                                email,
+                                                        },
+                                                    })
                                                 }
                                             >
                                                 Sign In
@@ -305,12 +310,24 @@ function SignUpPage() {
             ) : (
                 <button
                     className="sign_up_btn"
-                    // disabled={true}
+                    disabled={is_loading_redirect || sign_up_is_loading}
                     onClick={handle_sign_up}
                 >
                     Sign Up
                 </button>
             )}
+
+            <button
+                onClick={() =>
+                    navigate("/signin", {
+                        state: {
+                            sign_in_as_guest: true,
+                        },
+                    })
+                }
+            >
+                Sign In as Guest
+            </button>
         </div>
     );
 }

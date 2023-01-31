@@ -4,6 +4,7 @@ import "./VoterListInfiniteScroll.scss";
 // hooks
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef, useCallback } from "react";
+import { useCurrentUser } from "../../../context/CurrentUser/CurrentUserProvider";
 
 // api
 import { get_all_profile_who_voted } from "../../../api/VoteRequests";
@@ -25,6 +26,8 @@ function VoterListInfiniteScroll({
     modal_vote_type,
     set_modal_vote_type,
 }) {
+    const { current_user } = useCurrentUser();
+
     const {
         fetchNextPage, //function
         hasNextPage, // boolean
@@ -32,7 +35,15 @@ function VoterListInfiniteScroll({
         data,
         error,
     } = useInfiniteQuery(
-        ["voter_info", { vote_type, vote_id, is_up_vote: modal_vote_type }],
+        [
+            "voter_info",
+            {
+                vote_type,
+                vote_id,
+                is_up_vote: modal_vote_type,
+                logged_in: current_user.authenticated,
+            },
+        ],
         ({ pageParam = 0 }) =>
             get_all_profile_who_voted(
                 vote_type,

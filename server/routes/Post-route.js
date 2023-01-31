@@ -269,9 +269,9 @@ router.delete(
             const post_id = parseInt(request.params.post_id);
             const user_id = request.user_id;
 
-            console.log("");
-            console.log({ post_id: post_id, user_id });
-            console.log("");
+            // console.log("");
+            // console.log({ post_id: post_id, user_id });
+            // console.log("");
 
             const result = await delete_post(post_id, user_id);
 

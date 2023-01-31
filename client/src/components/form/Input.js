@@ -1,6 +1,14 @@
 import "./Input.scss";
 import ResizableInput from "./ResizableInput";
 
+// errors is a list of object that looks like this
+// {
+//     id: "min_three_char",
+//     msg: "Must contain atleast 3 characters",
+//     is_error: !min_three_char,
+//     hidden: username === "" ? true : false,
+// },
+
 function Input({
     type,
     onChange,
@@ -11,6 +19,7 @@ function Input({
     maxLength,
     minLength,
     max_height,
+    min_height,
     icon, // svg element for an icon, which is on the right side of the input with left margin
     errors = [],
     label_hidden = false,
@@ -56,6 +65,7 @@ function Input({
                             maxLength={maxLength}
                             minLength={minLength}
                             max_height={max_height}
+                            min_height={min_height}
                         />
                     ) : (
                         <input

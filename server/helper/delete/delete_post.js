@@ -34,10 +34,6 @@ const delete_post = async (post_id, user_id) => {
         return comment.id;
     });
 
-    // console.log("");
-    // console.log({ all_post_comment_ids });
-    // console.log("");
-
     await Promise.all(
         all_post_comment_ids.map(async (comment_id) => {
             await delete_comment(comment_id);

@@ -35,7 +35,10 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
 
     const [thread_id, set_thread_id] = useState(null);
 
-    const upload_img_to_cloud = useMutation(
+    const {
+        mutate: upload_img_to_cloud,
+        isLoading: upload_img_to_cloud_is_loading,
+    } = useMutation(
         (new_img) => {
             return upload_image(new_img);
         },
@@ -44,10 +47,17 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 set_image_url(data);
                 add_notification("Image Succesfully Uploaded");
             },
+            onError: (data) => {
+                console.log(data);
+                add_notification(
+                    "Unable to upload image, try again later",
+                    "ERROR"
+                );
+            },
         }
     );
 
-    const make_post = useMutation(
+    const { mutate: make_post, isLoading: make_post_is_loading } = useMutation(
         () => {
             return create_post(post_title, post_text, image_url, thread_id);
         },
@@ -72,7 +82,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
             return;
         }
 
-        make_post.mutate();
+        make_post();
     };
 
     const handle_post_cancel = () => {
@@ -147,9 +157,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                         id="upload_img"
                         type="file"
                         ref={img_input_ref}
-                        onChange={(e) =>
-                            upload_img_to_cloud.mutate(e.target.files[0])
-                        }
+                        onChange={(e) => upload_img_to_cloud(e.target.files[0])}
                         hidden={true}
                     />
 
@@ -207,7 +215,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 </div>
             </div>
 
-            {upload_img_to_cloud.isLoading ? (
+            {upload_img_to_cloud_is_loading ? (
                 <div className="image_display">
                     <Loading />
                 </div>
@@ -242,6 +250,10 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                     <button
                         className="create_post_btn"
                         onClick={handle_post_submit}
+                        disabled={
+                            make_post_is_loading ||
+                            upload_img_to_cloud_is_loading
+                        }
                     >
                         Create Post
                     </button>

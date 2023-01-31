@@ -38,10 +38,11 @@ const create_user = async (email, username, password) => {
     return response.data;
 };
 
-const sign_in_request = async (email, password) => {
+const sign_in_request = async (email, password, as_guest = false) => {
     const response = await axios.post(`${CUSTOM_ENDPOINT}/sign_in`, {
         email: email,
         password: password,
+        as_guest: as_guest,
     });
 
     if (response.data.web_access_token) {

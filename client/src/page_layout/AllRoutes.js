@@ -9,7 +9,7 @@ import { lazy, Suspense } from "react";
 
 // page imports, via lazy loading
 
-const HomePage = lazy(() => import("../pages/HomePage"));
+const AboutPage = lazy(() => import("../pages/AboutPage"));
 
 const SignUpPage = lazy(() => import("../pages/SignUpPage"));
 
@@ -42,9 +42,10 @@ function AllRoutes() {
     return (
         <Suspense fallback={<Loading />}>
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<PostsPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signin" element={<SignInPage />} />
+                <Route path="/about" element={<AboutPage />} />
                 <Route path="/edit_profile" element={<EditProfilePage />} />
                 <Route path="/user/:username_route" element={<ProfilePage />}>
                     <Route path="profile" element={<ProfileDetails />} />
@@ -55,7 +56,6 @@ function AllRoutes() {
                 </Route>
                 <Route path="/create_thread" element={<CreateThreadPage />} />
                 <Route path="/create_post" element={<CreatePostPage />} />
-                <Route path="/posts" element={<PostsPage />} />
                 <Route path="/post/:post_id_route" element={<PostPage />} />
                 <Route path="/admin_dashboard" element={<AdminPage />}>
                     <Route path="summary" element={<Summary />} />

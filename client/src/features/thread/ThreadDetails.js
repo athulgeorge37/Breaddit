@@ -80,7 +80,7 @@ function ThreadDetails({ thread_title = null, post_id = null }) {
                                 className="title_btn"
                                 onClick={() =>
                                     navigate(
-                                        `/posts?${query_string_generator({
+                                        `/?${query_string_generator({
                                             thread: thread_details?.title,
                                         })}`
                                     )

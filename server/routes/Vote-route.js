@@ -556,11 +556,10 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
         const offset = limit * page_num;
 
         // console.log("");
-        // console.log({ query: request.query });
         // console.log({
-        //     route: "vote",
-        //     method: "/get_profiles_who_voted",
-        //     print_no: 1,
+        //     query: request.query,
+        //     role: request.role,
+        //     // all_voters: JSON.stringify(all_voters),
         // });
         // console.log("");
 
@@ -606,21 +605,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
             };
         }
 
-        // console.log("");
-        // console.log({
-        //     ...parent_id_to_use,
-        //     parent_type: parent_type,
-        //     up_vote: up_vote,
-        //     limit,
-        //     offset,
-        // });
-        // console.log({
-        //     route: "vote",
-        //     method: "/get_profiles_who_voted",
-        //     print_no: 2,
-        // });
-        // console.log("");
-
         const all_voters = await db.Vote.findAll({
             where: {
                 ...parent_id_to_use,
@@ -649,57 +633,42 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
             return;
         }
 
-        // const new_follower_data = [];
-        // const new_voter_info = all_voters.forEach(async (row) => {
-        //     const voter_id = row.voter_details.id;
-
-        //     const following_details = await db.Follower.findOne({
-        //         where: {
-        //             followed_by: request.user_id,
-        //             user_id: voter_id,
-        //         },
-        //     });
-
-        //     const is_following = following_details === null ? false : true;
-
-        //     console.log({
-        //         is_following,
-        //         person: row.voter_details.username,
-        //     });
-
-        //     new_follower_data.push({
-        //         is_following: is_following,
-        //         logged_in_user: request.user_id,
-        //         following: voter_id,
-        //     });
-        // });
+        console.log("");
+        console.log({
+            query: request.query,
+            role: request.role,
+            all_voters: JSON.stringify(all_voters[0]),
+        });
+        console.log("");
 
         const new_follower_data = [];
-        for (const row of all_voters) {
-            const voter_id = row.voter_details.id;
+        await Promise.all(
+            all_voters.map(async (row) => {
+                const voter_id = row.voter_details.id;
 
-            const following_details = await db.Follower.findOne({
-                where: {
-                    followed_by: request.user_id,
-                    user_id: voter_id,
-                },
-            });
+                const following_details = await db.Follower.findOne({
+                    where: {
+                        followed_by: request.user_id,
+                        user_id: voter_id,
+                    },
+                });
 
-            const is_following = following_details === null ? false : true;
+                const is_following = following_details === null ? false : true;
 
-            // console.log({
-            //     is_following,
-            //     person: row.voter_details.username,
-            // });
+                // console.log({
+                //     is_following,
+                //     person: row.voter_details.username,
+                // });
 
-            const voter_details = row.voter_details;
+                // const voter_details = row.voter_details;
 
-            new_follower_data.push({
-                ...voter_details,
-                is_following: is_following,
-                id: row.id,
-            });
-        }
+                new_follower_data.push({
+                    voter_details: row.voter_details,
+                    is_following: is_following,
+                    id: row.id,
+                });
+            })
+        );
 
         // console.log("");
         // console.log({

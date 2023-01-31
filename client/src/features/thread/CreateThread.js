@@ -52,7 +52,7 @@ function CreateThread() {
                     console.log({ data });
                     add_notification("Succesfully created Thread");
                     navigate(
-                        `/posts?${query_string_generator({
+                        `/?${query_string_generator({
                             thread: data.new_thread_details.title,
                         })}`
                     );

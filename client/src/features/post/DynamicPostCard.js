@@ -67,7 +67,7 @@ function DynamicPostCard({ post_id, location }) {
                 }
 
                 queryClient.invalidateQueries(["posts"]);
-                navigate("/posts");
+                navigate("/");
                 add_notification(data.msg, data.deleted ? "SUCCESS" : "ERROR");
             },
         }

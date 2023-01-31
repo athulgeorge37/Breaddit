@@ -212,7 +212,22 @@ function ProfileDetails() {
                                     className="edit_profile_btn"
                                     type="btn"
                                     onClick={() => {
-                                        navigate(`/edit_profile`);
+                                        if (
+                                            username_route === "Guest" ||
+                                            user_details.username === "Guest"
+                                        ) {
+                                            add_notification(
+                                                "Guest user cannot edit their profile",
+                                                "ERROR"
+                                            );
+                                            setTimeout(() => {
+                                                add_notification(
+                                                    "To access all of Breaddits features, consider creating an account."
+                                                );
+                                            }, [1000]);
+                                        } else {
+                                            navigate(`/edit_profile`);
+                                        }
                                     }}
                                 >
                                     <svg

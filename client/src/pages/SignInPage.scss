@@ -2,46 +2,63 @@
 
 
 .SignInPage {
-    background-color: var(--background-color-secondary);
-    padding: calc(1.5 * $padding);
-    border-radius: $border-radius;
-    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    gap: $padding;
-    width: 350px;
+    gap: calc(1.5 * $padding);
 
-    h2 {
-        border-bottom: 1px solid var(--border-color);
-    }
 
-    .sign_in_redirect_div {
+    .sign_in_card {
+        background-color: var(--background-color-secondary);
+        padding: calc(1.5 * $padding);
+        border-radius: $border-radius;
+        border: 1px solid var(--border-color);
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--blue);
-        
-        button {
-            @include btn-style-text(var(--blue));
+        flex-direction: column;
+        gap: $padding;
+        width: 350px;
+
+        h2 {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sign_in_redirect_div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--blue);
             
-            text-decoration: underline;
-            
+            button {
+                @include btn-style-text(var(--blue));
+                
+                text-decoration: underline;
+                
+            }
+        }
+
+        .loading_div {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+
+        .sign_in_btn {
+            @include btn-styles(var(--green));
+        }
+
+
+        .error {
+            color: var(--red);
         }
     }
 
-    .loading_div {
-        width: 100%;
+    .sign_in_as_guest_div {
         display: flex;
-        justify-content: center;
-    }
+        justify-content: space-between;
+        padding: calc(0.5 * $padding);
 
-
-    .sign_in_btn {
-        @include btn-styles(var(--green));
-    }
-
-
-    .error {
-        color: var(--red);
+        button {
+            @include btn-style-text(var(--blue));
+        }
     }
 }

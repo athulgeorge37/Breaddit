@@ -15,6 +15,7 @@ function ResizableInput({
     value,
     placeholder,
     max_height,
+    min_height,
     maxLength,
     minLength,
     autoFocus = true,
@@ -43,6 +44,7 @@ function ResizableInput({
             rows={1}
             style={{
                 maxHeight: max_height ?? "none",
+                minHeight: min_height ?? "none",
             }}
             autoFocus={autoFocus}
             maxLength={maxLength}

@@ -17,14 +17,10 @@ import ToolTip from "../components/ui/ToolTip";
 import { motion } from "framer-motion";
 
 function Navbar() {
-    const { current_user } = useCurrentUser();
-    const { is_dark_mode, set_is_dark_mode } = useDarkMode();
-
     const { pathname } = useLocation();
 
-    // const determine_active_page = ({ isActive }) => {
-    //     return "page_link " + (isActive ? "active" : "");
-    // };
+    const { current_user } = useCurrentUser();
+    const { is_dark_mode, set_is_dark_mode } = useDarkMode();
 
     return (
         <nav>
@@ -93,15 +89,15 @@ function Navbar() {
 
                 <div className="links">
                     <NavLink to="/">
-                        Home
+                        Posts
                         {pathname === "/" && (
                             <motion.span layoutId="underline" />
                         )}
                     </NavLink>
 
-                    <NavLink to="/posts">
-                        Posts
-                        {pathname === "/posts" && (
+                    <NavLink to="/about">
+                        About
+                        {pathname === "/about" && (
                             <motion.span layoutId="underline" />
                         )}
                     </NavLink>

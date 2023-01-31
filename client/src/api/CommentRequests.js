@@ -32,7 +32,10 @@ const create_comment_or_reply = async (
 
 const delete_comment_or_reply = async (type, id) => {
     const response = await axios.delete(
-        `${CUSTOM_ENDPOINT}/delete/of_type/${type}/by_id/${id}`,
+        `${CUSTOM_ENDPOINT}/delete_comment_or_reply?${query_string_generator({
+            type,
+            id,
+        })}`,
         {
             headers: {
                 web_access_token: get_item_session_storage("web_access_token"),

@@ -35,7 +35,7 @@ function Navbar() {
                         alt="logo"
                         className="logo_img"
                     />
-                    Breaddit
+                    <h1>Breaddit</h1>
                 </div>
 
                 <div className="dark_mode_toggle">

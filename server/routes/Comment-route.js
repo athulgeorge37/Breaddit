@@ -4,6 +4,8 @@ const { validate_request } = require("../middlewares/AuthenticateRequests");
 const router = express.Router();
 
 const db = require("../models");
+const delete_comment = require("../helper/delete/delete_comment");
+const delete_reply = require("../helper/delete/delete_reply");
 
 router.put(
     "/edit_comment_or_reply",
@@ -334,66 +336,33 @@ router.post(
     }
 );
 
-router.delete("/delete/of_type/:type/by_id/:id", async (request, response) => {
-    try {
-        const type_to_delete_id = request.params.id;
-        const type = request.params.type;
+router.delete(
+    "/delete_comment_or_reply",
+    validate_request,
+    async (request, response) => {
+        try {
+            const type = request.query.type;
+            const id = parseInt(request.query.id);
+            const user_id = request.user_id;
 
-        if (type === "comment") {
-            // had to implement delete replies when deleting comment
-            // cus onDelete: 'cascade' would not work
-            const all_replies = await db.Reply.findAll({
-                where: {
-                    parent_comment_id: type_to_delete_id,
-                },
-                attributes: ["reply_id"],
-            });
+            let result = {
+                deleted: false,
+                msg: "type is invalid",
+            };
 
-            const reply_ids = [];
-            for (const obj of all_replies) {
-                reply_ids.push(obj.reply_id);
+            if (type === "comment") {
+                result = await delete_comment(id, user_id);
+            } else if (type === "reply") {
+                result = await delete_reply(id, user_id);
             }
 
-            // destorying all replies of that comment in Comment table
-            await db.Comment.destroy({
-                where: {
-                    id: reply_ids,
-                },
-            });
-        } else if (type === "reply") {
-            // pass
-        } else {
+            response.json(result);
+        } catch (e) {
             response.json({
-                error: `${type} is not a valid type`,
+                error: e,
             });
         }
-
-        // destroying original comment or reply
-        await db.Comment.destroy({
-            where: {
-                id: type_to_delete_id,
-                // author_id: request.user_id  // get from validate_request
-            },
-        });
-
-        if (type === "comment") {
-            response.json({
-                msg: "Succesfully removed comment and its replies from DB",
-            });
-        } else {
-            response.json({
-                msg: "Succesfully removed reply from DB",
-            });
-        }
-    } catch (e) {
-        response.json({
-            error: e,
-        });
-
-        // response.json({
-        //     error: e
-        // })
     }
-});
+);
 
 module.exports = router;

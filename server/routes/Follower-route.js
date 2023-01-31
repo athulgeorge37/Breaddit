@@ -77,46 +77,41 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         }
 
         const new_follower_data = [];
-        for (const row of all_profiles) {
-            // ensuring we get the right id from the row of all_profiles we got eariler
-            let where_clause_to_use = {};
-            if (follower_type === "followers") {
-                where_clause_to_use = {
-                    user_id: user_id,
-                    followed_by: row.followed_by_user_details.id,
-                };
-            } else {
-                where_clause_to_use = {
-                    followed_by: user_id,
-                    user_id: row.user_id_details.id,
-                };
-            }
+        await Promise.all(
+            all_profiles.map(async (row) => {
+                let where_clause_to_use = {};
+                if (follower_type === "followers") {
+                    where_clause_to_use = {
+                        user_id: user_id,
+                        followed_by: row.followed_by_user_details.id,
+                    };
+                } else {
+                    where_clause_to_use = {
+                        followed_by: user_id,
+                        user_id: row.user_id_details.id,
+                    };
+                }
 
-            const following_details = await db.Follower.findOne({
-                where: where_clause_to_use,
-            });
+                const following_details = await db.Follower.findOne({
+                    where: where_clause_to_use,
+                });
 
-            // if the user_id is following, following_details should not be null
-            const is_following = following_details === null ? false : true;
+                // if the user_id is following, following_details should not be null
+                const is_following = following_details === null ? false : true;
 
-            // attaching the users username and profile pic to the is_following
-            const follower_details =
-                follower_type === "followers"
-                    ? row.followed_by_user_details
-                    : row.user_id_details;
+                // attaching the users username and profile pic to the is_following
+                const follower_details =
+                    follower_type === "followers"
+                        ? row.followed_by_user_details
+                        : row.user_id_details;
 
-            new_follower_data.push({
-                ...follower_details,
-                is_following: is_following,
-                id: row.id,
-            });
-        }
-
-        // console.log("");
-        // console.log({
-        //     new_follower_data,
-        // });
-        // console.log("");
+                new_follower_data.push({
+                    ...follower_details,
+                    is_following: is_following,
+                    id: row.id,
+                });
+            })
+        );
 
         response.json({
             msg: "got all profiles for all_voters",

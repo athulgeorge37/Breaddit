@@ -77,7 +77,15 @@ function Comment({
     const delete_comment = useMutation(
         (type) => delete_comment_or_reply(type, comment.id),
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
+                if (data.error) {
+                    console.log(data);
+                    add_notification("Cannot delete comment", "ERROR");
+                    return;
+                }
+
+                add_notification(data.msg, data.deleted ? "SUCCESS" : "ERROR");
+
                 if (comment.is_reply) {
                     if (parent_comment_id !== null) {
                         queryClient.invalidateQueries([
@@ -91,11 +99,11 @@ function Comment({
                         { post_id },
                     ]);
                 }
-                add_notification(
-                    `Succesfully deleted ${
-                        comment.is_reply ? "Reply" : "Comment"
-                    }`
-                );
+                // add_notification(
+                //     `Succesfully deleted ${
+                //         comment.is_reply ? "Reply" : "Comment"
+                //     }`
+                // );
             },
         }
     );

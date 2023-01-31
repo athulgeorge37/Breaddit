@@ -4,6 +4,7 @@ const router = express.Router();
 const { Op } = require("sequelize");
 const db = require("../models");
 const { validate_request } = require("../middlewares/AuthenticateRequests");
+const delete_post = require("../helper/delete/delete_post");
 
 router.get("/get_all_posts", async (request, response) => {
     // when getting list of posts, we also get
@@ -261,29 +262,20 @@ router.post("/create_post", validate_request, async (request, response) => {
 });
 
 router.delete(
-    "/delete_post/by_id/:id",
+    "/delete_post/post_id/:post_id",
     validate_request,
     async (request, response) => {
         try {
-            // const post = db.Post.findOne({
-            //     where: {
-            //         id: request.params.id,
-            //         author_id: request.user_id
-            //     }
-            // })
+            const post_id = parseInt(request.params.post_id);
+            const user_id = request.user_id;
 
-            // await post.destroy()
+            console.log("");
+            console.log({ post_id: post_id, user_id });
+            console.log("");
 
-            await db.Post.destroy({
-                where: {
-                    id: request.params.id,
-                    author_id: request.user_id,
-                },
-            });
+            const result = await delete_post(post_id, user_id);
 
-            response.json({
-                msg: "Succesfully removed post from db",
-            });
+            response.json(result);
         } catch (e) {
             response.json({
                 error: e,

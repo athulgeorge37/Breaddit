@@ -13,11 +13,10 @@ import ResizablePanel, {
 import { useModal } from "../../components/ui/Modal";
 
 // api
-import { delete_post } from "../../api/PostRequests";
+import { delete_post_request } from "../../api/PostRequests";
 import { get_post_by_id } from "../../api/PostRequests";
 
 // ui
-import Button from "../../components/ui/Button";
 import Loading from "../../components/ui/Loading";
 import ToolTip from "../../components/ui/ToolTip";
 
@@ -55,19 +54,24 @@ function DynamicPostCard({ post_id, location }) {
         }
     );
 
-    const post_deletion = useMutation(() => delete_post(post_id), {
-        onSuccess: (data) => {
-            // removing post on client side when deleted from db
+    const { mutate: delete_post } = useMutation(
+        () => delete_post_request(post_id),
+        {
+            onSuccess: (data) => {
+                // removing post on client side when deleted from db
 
-            if (data.error) {
-                console.log(data);
-                return;
-            }
-            queryClient.invalidateQueries(["posts"]);
-            navigate("/posts");
-            add_notification("Succesfully Deleted Post");
-        },
-    });
+                if (data.error) {
+                    console.log(data);
+                    add_notification("Cannot delete post", "ERROR");
+                    return;
+                }
+
+                queryClient.invalidateQueries(["posts"]);
+                navigate("/posts");
+                add_notification(data.msg, data.deleted ? "SUCCESS" : "ERROR");
+            },
+        }
+    );
 
     useEffect(() => {
         // opening modal if the last page that routed here required it
@@ -102,7 +106,7 @@ function DynamicPostCard({ post_id, location }) {
                         <button
                             className="delete_btn"
                             onClick={() => {
-                                post_deletion.mutate();
+                                delete_post();
                                 // modal_ref.current.close_modal();
                                 close_modal();
                             }}
@@ -222,15 +226,7 @@ function DynamicPostCard({ post_id, location }) {
                                 </button>
                             </ToolTip>
                         </>
-                    ) : // <Button
-                    //     // might need to include on click
-                    //     // onClick={() => set_delete_btn_active(true)}
-                    //     type="award"
-                    //     span_text="Award"
-                    //     img_name="award"
-                    //     margin_right={true}
-                    // />
-                    null}
+                    ) : null}
                 </div>
             </div>
 

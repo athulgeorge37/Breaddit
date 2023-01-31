@@ -24,9 +24,9 @@ const create_post = async (title, text, image, thread_id) => {
     return response.data;
 };
 
-const delete_post = async (post_id) => {
+const delete_post_request = async (post_id) => {
     const response = await axios.delete(
-        `${CUSTOM_ENDPOINT}/delete_post/by_id/${post_id}`,
+        `${CUSTOM_ENDPOINT}/delete_post/post_id/${post_id}`,
         {
             headers: {
                 web_access_token: get_item_session_storage("web_access_token"),
@@ -128,7 +128,7 @@ const get_all_posts_by_username = async ({
 
 export {
     create_post,
-    delete_post,
+    delete_post_request,
     edit_post,
     get_all_posts,
     get_post_by_id,

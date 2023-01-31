@@ -18,8 +18,10 @@ function FollowerCard({ follower_data, close_modal, user_id }) {
     const { current_user } = useCurrentUser();
     const queryClient = useQueryClient();
     const [is_following, set_is_following] = useState(
-        follower_data.is_following
+        follower_data?.is_following ?? null
     );
+
+    console.log({ follower_data });
 
     const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {
@@ -37,12 +39,14 @@ function FollowerCard({ follower_data, close_modal, user_id }) {
         }
     );
 
+    const follower_details = follower_data.follower_details;
+
     return (
         <div className="FollowerCard">
             <div className="left_side">
                 <ProfilePicture
-                    username={follower_data.dataValues.username}
-                    profile_picture_url={follower_data.dataValues.profile_pic}
+                    username={follower_details.username}
+                    profile_picture_url={follower_details.profile_pic}
                     onClick={close_modal}
                 />
                 <button
@@ -51,26 +55,29 @@ function FollowerCard({ follower_data, close_modal, user_id }) {
                         close_modal();
                         setTimeout(() => {
                             navigate(
-                                `/user/${follower_data.dataValues.username}/profile`
+                                `/user/${follower_details.username}/profile`
                             );
                         }, 500);
                     }}
                 >
-                    {follower_data.dataValues.username}
+                    {follower_details.username}
                 </button>
             </div>
-            {current_user.username ===
-            follower_data.dataValues.username ? null : (
-                <button
-                    className={`follower_following_btn ${
-                        is_following ? "following_btn" : "follower_btn"
-                    }`}
-                    onClick={() => {
-                        follow_or_unfollow_account(follower_data.dataValues.id);
-                    }}
-                >
-                    {is_following ? "Following" : "Follow"}
-                </button>
+            {current_user.username === follower_details.username ? null : (
+                <>
+                    {is_following === null ? null : (
+                        <button
+                            className={`follower_following_btn ${
+                                is_following ? "following_btn" : "follower_btn"
+                            }`}
+                            onClick={() => {
+                                follow_or_unfollow_account(follower_details.id);
+                            }}
+                        >
+                            {is_following ? "Following" : "Follow"}
+                        </button>
+                    )}
+                </>
             )}
         </div>
     );

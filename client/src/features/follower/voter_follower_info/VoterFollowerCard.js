@@ -69,7 +69,7 @@ function VoterFollowerCard({ voter_data, close_modal, voter_info_query }) {
                                 is_following ? "following_btn" : "follower_btn"
                             }`}
                             onClick={() => {
-                                follow_or_unfollow_account(voter_data.id);
+                                follow_or_unfollow_account(voter_details.id);
                             }}
                         >
                             {is_following ? "Following" : "Follow"}

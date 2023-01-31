@@ -195,9 +195,18 @@ function ProfileDetails() {
                                                 : "follow_btn"
                                         }
                                         type="button"
-                                        onClick={() =>
-                                            follow_or_unfollow_account(user_id)
-                                        }
+                                        onClick={() => {
+                                            if (
+                                                current_user.authenticated ===
+                                                false
+                                            ) {
+                                                add_notification(
+                                                    "Log In to follow accounts",
+                                                    "ERROR"
+                                                );
+                                            }
+                                            follow_or_unfollow_account(user_id);
+                                        }}
                                     >
                                         {is_following_data.is_following
                                             ? "Following"

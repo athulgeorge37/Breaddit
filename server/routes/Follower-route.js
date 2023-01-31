@@ -10,7 +10,7 @@ const {
 router.get("/get_all_followers", validate_role, async (request, response) => {
     try {
         // getting all the required data from query params
-        const follower_type = request.query.follower_type.toLocaleLowerCase();
+        const follower_type = request.query.follower_type.toLowerCase();
         const user_id = parseInt(request.query.user_id);
         const limit = parseInt(request.query.limit);
         const page_num = parseInt(request.query.page_num);
@@ -20,7 +20,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         let can_continue = false;
         const allowed_follower_types = ["followers", "following"];
         for (const each_follower_type of allowed_follower_types) {
-            if (each_follower_type.toLocaleLowerCase() === follower_type) {
+            if (each_follower_type.toLowerCase() === follower_type) {
                 can_continue = true;
                 break;
             }
@@ -69,9 +69,30 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
             // when user is public user, we do not need to check
             // if they are following the found accounts
             // since they themselves do not have an account
+
+            const all_followers = all_profiles.map((row) => {
+                console.log("");
+                console.log(JSON.stringify(row));
+                console.log("");
+
+                if (follower_type === "followers") {
+                    return {
+                        follower_details: row.followed_by_user_details,
+                        is_following: null,
+                        id: row.id,
+                    };
+                } else {
+                    return {
+                        follower_details: row.user_id_details,
+                        is_following: null,
+                        id: row.id,
+                    };
+                }
+            });
+
             response.json({
                 msg: `got all profiles for follower_type:${follower_type}`,
-                all_followers: all_profiles,
+                all_followers: all_followers,
             });
             return;
         }
@@ -106,7 +127,7 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
                         : row.user_id_details;
 
                 new_follower_data.push({
-                    ...follower_details,
+                    follower_details: follower_details,
                     is_following: is_following,
                     id: row.id,
                 });

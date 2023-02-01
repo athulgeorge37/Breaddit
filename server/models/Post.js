@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 name: "post_id",
             },
-            onDelete: "cascade",
+            // onDelete: "cascade",
             // hooks: true
         });
 
@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
                 // can be null
                 name: "post_id",
             },
-            onDelete: "cascade",
+            // onDelete: "cascade",
         });
     };
 

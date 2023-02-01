@@ -20,7 +20,7 @@ module.exports = {
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        host: process.env.DATABASE_HOST_URL + "&C:\\temp\\cacert.pem",
+        host: process.env.DATABASE_HOST_URL,
         dialect: process.env.DATABASE_DIALECT,
     },
 };

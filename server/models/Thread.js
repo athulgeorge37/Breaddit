@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 name: "thread_id",
             },
-            onDelete: "cascade",
+            // onDelete: "cascade",
             // hooks: true
             as: "thread_rules",
         });
@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 name: "thread_id",
             },
-            onDelete: "cascade",
+            // onDelete: "cascade",
             // hooks: true
             as: "thread_posts",
         });

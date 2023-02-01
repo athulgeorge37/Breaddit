@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
                 // can be null
                 name: "comment_id",
             },
-            onDelete: "cascade",
+            // onDelete: "cascade",
         });
 
         // associations to Replys
@@ -83,14 +83,14 @@ module.exports = (sequelize, DataTypes) => {
             as: "Reply_IDs",
             foreignKey: "reply_id",
 
-            onDelete: "cascade",
+            // onDelete: "cascade",
         });
         Comment.belongsToMany(models.Comment, {
             through: models.Reply,
             as: "Parent_Comment_IDs",
             foreignKey: "parent_comment_id",
 
-            onDelete: "cascade",
+            // onDelete: "cascade",
         });
 
         Comment.hasMany(models.Reply, {

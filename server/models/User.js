@@ -76,59 +76,29 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "author_id",
             // when a row in User is deleted,
             // any table that relates to this will also be deleted
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
 
         User.hasMany(models.Comment, {
             foreignKey: "author_id",
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
 
         User.hasMany(models.Vote, {
             foreignKey: "user_id",
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
 
         User.hasMany(models.Thread, {
             foreignKey: "creator_id",
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
 
         // assoications for user login/logout activity
         User.hasMany(models.UserActivity, {
             foreignKey: "user_id",
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
-
-        // association for profile visits
-        // User.hasMany(models.ProfileVisits, {
-        //     foreignKey: "user_id",
-        //     onDelete: "cascade"
-        // })
-
-        // User.belongsToMany(models.User, {
-        //     through: models.ProfileVisits,
-        //     as: "User_ids_profile_visits",
-        //     foreignKey: "user_id"
-        // })
-        // User.belongsToMany(models.User, {
-        //     through: models.ProfileVisits,
-        //     as: "Visited_by",
-        //     foreignKey: "visited_by"
-        // })
-
-        // User.hasMany(models.ProfileVisits, {
-        //     foreignKey: "user_id",
-        //     // as: 'FollowerLinks',
-
-        //     onDelete: "cascade"
-        // })
-        // User.hasMany(models.ProfileVisits, {
-        //     foreignKey: "visited_by",
-        //     // as: 'FollowingLinks',
-
-        //     onDelete: "cascade"
-        // })
 
         // associations for follower table
         User.belongsToMany(models.User, {
@@ -146,13 +116,13 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "user_id",
             // as: 'FollowerLinks',
 
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
         User.hasMany(models.Follower, {
             foreignKey: "followed_by",
             // as: 'FollowingLinks',
 
-            onDelete: "cascade",
+            // // onDelete: "cascade",
         });
     };
 

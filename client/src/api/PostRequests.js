@@ -37,7 +37,12 @@ const delete_post_request = async (post_id) => {
     return response.data;
 };
 
-const edit_post = async (post_id, post_title, post_text, post_image) => {
+const edit_post_request = async (
+    post_id,
+    post_title,
+    post_text,
+    post_image
+) => {
     const response = await axios.put(
         `${CUSTOM_ENDPOINT}/edit_post`,
         {
@@ -129,7 +134,7 @@ const get_all_posts_by_username = async ({
 export {
     create_post,
     delete_post_request,
-    edit_post,
+    edit_post_request,
     get_all_posts,
     get_post_by_id,
     get_all_posts_by_curr_user,

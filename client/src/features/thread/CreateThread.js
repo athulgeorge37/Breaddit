@@ -116,7 +116,8 @@ function CreateThread() {
                     id="thread_description"
                     label_text="Thread Description:"
                     onChange={set_description}
-                    max_height={150}
+                    max_height={200}
+                    min_height={100}
                     value={description}
                     placeholder="write something"
                     autoFocus={false}

@@ -11,15 +11,14 @@ import TextEditor from "../../components/form/TextEditor";
 import LoginInput from "../../components/form/LoginInput";
 import Loading from "../../components/ui/Loading";
 import CloudinaryImage from "../../components/CloudinaryImage";
-import Button from "../../components/ui/Button";
 import { useNotification } from "../../context/Notifications/NotificationProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { edit_post, create_post } from "../../api/PostRequests";
+import { edit_post_request, create_post } from "../../api/PostRequests";
 import { useNavigate } from "react-router-dom";
-import SearchThreadNames from "../thread/SearchThreadNames";
 import useDebounce from "../../hooks/useDebounce";
 import { get_thread_names } from "../../api/ThreadRequests";
 import ToolTip from "../../components/ui/ToolTip";
+import Input from "../../components/form/Input";
 
 function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const add_notification = useNotification();
@@ -31,6 +30,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
     const [valid_title, set_valid_title] = useState(true);
     const [post_title, set_post_title] = useState(post_details?.title ?? "");
     const [post_text, set_post_text] = useState(post_details?.text ?? "");
+    const [valid_post_text, set_valid_post_text] = useState(true);
     const [image_url, set_image_url] = useState(post_details?.image ?? null);
 
     const [thread_id, set_thread_id] = useState(null);
@@ -65,12 +65,23 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
             onSuccess: (data) => {
                 if (data.error) {
                     console.log(data);
+                    add_notification(
+                        "An Error occured when trying to create a post",
+                        "ERROR"
+                    );
                     return;
                 }
                 handle_post_cancel();
                 add_notification("Succesfully Created Post");
                 queryClient.invalidateQueries(["posts"]);
                 navigate(`/post/${data.new_post_details.id}`);
+            },
+            onError: (data) => {
+                console.log(data);
+                add_notification(
+                    "An Error occured when trying to create a post",
+                    "ERROR"
+                );
             },
         }
     );
@@ -81,8 +92,9 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
             set_valid_title(false);
             return;
         }
-
-        make_post();
+        if (valid_title && valid_post_text && post_title.length < 100) {
+            make_post();
+        }
     };
 
     const handle_post_cancel = () => {
@@ -92,14 +104,24 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
         set_post_text("");
     };
 
-    const post_edit = useMutation(
-        () => edit_post(post_details.id, post_title, post_text, image_url),
+    const { mutate: edit_post } = useMutation(
+        () =>
+            edit_post_request(
+                post_details.id,
+                post_title,
+                post_text,
+                image_url
+            ),
         {
             onSuccess: (data) => {
                 // removing post on client side when deleted from db
 
                 if (data.error) {
                     console.log(data);
+                    add_notification(
+                        "An Error occured when trying to edit the post",
+                        "ERROR"
+                    );
                     return;
                 }
                 queryClient.invalidateQueries(["posts"]);
@@ -111,6 +133,13 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 handle_cancel_edit_mode();
                 add_notification("Succesfully Edited Post");
             },
+            onError: (data) => {
+                console.log(data);
+                add_notification(
+                    "An Error occured when trying to edit the post",
+                    "ERROR"
+                );
+            },
         }
     );
 
@@ -121,7 +150,9 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
             return;
         }
 
-        post_edit.mutate();
+        if (valid_title && valid_post_text) {
+            edit_post();
+        }
     };
 
     const handle_cancel_edit_mode = () => {
@@ -140,17 +171,26 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
             {mode === "create" && <AddThread set_thread_id={set_thread_id} />}
 
             <div className="post_title">
-                <LoginInput
-                    htmlFor="title"
-                    input_type="text"
-                    label_name="Title"
+                <Input
+                    id="title"
+                    label_text="Title:"
+                    onChange={(e) => set_post_title(e.target.value)}
                     value={post_title}
-                    update_on_change={set_post_title}
-                    boolean_check={valid_title}
-                    autoFocus={true}
-                >
-                    Title cannot be empty!
-                </LoginInput>
+                    errors={[
+                        {
+                            id: "required",
+                            msg: "Required",
+                            is_error: post_title === "",
+                            hidden: false,
+                        },
+                        {
+                            id: "max_length_100",
+                            msg: "Must be smaller than 100 characters",
+                            is_error: !(post_title.length < 100),
+                            hidden: false,
+                        },
+                    ]}
+                />
 
                 <div className="img_btns">
                     <input
@@ -229,35 +269,61 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 </>
             )}
 
-            <TextEditor update_text={set_post_text} post_text={post_text} />
+            <TextEditor
+                update_text={(data) => {
+                    if (data.length > 900) {
+                        set_valid_post_text(false);
+                    } else {
+                        set_valid_post_text(true);
+                    }
+                    set_post_text(data);
+                }}
+                post_text={post_text}
+            />
 
-            <div className="edit_post_buttons">
-                <button
-                    onClick={handle_cancel_edit_mode}
-                    className="cancel_btn"
-                >
-                    Cancel
-                </button>
+            <div className="bottom_row">
+                <div className="post_text_info">
+                    <span className="character_count">
+                        Characters: {post_text.length}
+                    </span>
+                    {valid_post_text ? (
+                        <p className="info">
+                            Editing will increase character count more.
+                        </p>
+                    ) : (
+                        <p className="error">
+                            Too many characters, maximum length is 900.
+                        </p>
+                    )}
+                </div>
+                <div className="edit_post_buttons">
+                    <button
+                        onClick={handle_cancel_edit_mode}
+                        className="cancel_btn"
+                    >
+                        Cancel
+                    </button>
 
-                {mode === "edit" ? (
-                    <button
-                        onClick={handle_edit_post_save}
-                        className="save_btn"
-                    >
-                        Save
-                    </button>
-                ) : mode === "create" ? (
-                    <button
-                        className="create_post_btn"
-                        onClick={handle_post_submit}
-                        disabled={
-                            make_post_is_loading ||
-                            upload_img_to_cloud_is_loading
-                        }
-                    >
-                        Create Post
-                    </button>
-                ) : null}
+                    {mode === "edit" ? (
+                        <button
+                            onClick={handle_edit_post_save}
+                            className="save_btn"
+                        >
+                            Save
+                        </button>
+                    ) : mode === "create" ? (
+                        <button
+                            className="create_post_btn"
+                            onClick={handle_post_submit}
+                            disabled={
+                                make_post_is_loading ||
+                                upload_img_to_cloud_is_loading
+                            }
+                        >
+                            Create Post
+                        </button>
+                    ) : null}
+                </div>
             </div>
         </div>
     );

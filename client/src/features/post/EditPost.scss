@@ -1,17 +1,36 @@
 @import "../../variables.scss";
 
 .post_inputs {
+    box-sizing: border-box;
     display: flex;
-    align-items: center;
     flex-direction: column;
     width: 100%;
+    padding: $padding;
+    gap: $padding;
+
+
+    h2 {
+        // width: 100%;
+        // border-bottom: 1px solid var(--border-color);
+        // padding: $padding;
+        // padding-bottom: 5px;
+
+
+    }
     
     .post_title {
-        width: calc(100% - (2 * $padding));
+        // width: calc(100% - (2 * $padding));
+        // width: 100%;
+        // padding: $padding;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        gap: 10px;
+
+        .Input {
+            width: 100%;
+        }
+        
 
         .login_input {
             margin-bottom: 0;
@@ -20,7 +39,7 @@
         }
 
         .img_btns {
-            margin-top: 18px;
+            // margin-top: 18px;
 
             display: flex;
             
@@ -44,10 +63,13 @@
             
         }
     } 
-    
-    .error_msg {
-        margin-top: 10px;
+
+    .text_editor {
+        width: 100%;
+        margin: 0;
     }
+    
+
 
    
     .image_display {
@@ -62,37 +84,58 @@
     }
 
     .post_body {
-        width: 100%;
+        // width: 100%;
         height: 150px;
         margin-bottom: 16px;
         @include input_styles;
         resize: vertical;
     }     
     
-    .edit_post_buttons {
-        width: calc(100% - (2 * $padding));
+    .bottom_row {
         display: flex;
-        gap: 10px;
-        justify-content: end;
+        justify-content: space-between;
+        align-items: center;
+        // width: 100%;
 
-        .cancel_btn {
-            @include btn-styles(var(--background-color-tertiary));
+        .post_text_info {
+            display: flex;
+            gap: 10px;
+
+            .info {
+                color: var(--blue);
+            }
+            
+            .error {
+                color: var(--red);
+            }
         }
 
-        .save_btn {
-            @include btn-styles(var(--green));
-        }
-
-        .create_post_btn {
-            @include btn-styles(var(--green));
+        .edit_post_buttons {
+            // width: calc(100% - (2 * $padding));
+            display: flex;
+            gap: 10px;
+            
+    
+            .cancel_btn {
+                @include btn-styles(var(--background-color-tertiary));
+            }
+    
+            .save_btn {
+                @include btn-styles(var(--green));
+            }
+    
+            .create_post_btn {
+                @include btn-styles(var(--green));
+            }
         }
     }
+    
 }
 
 
 .AddThread {
-    width: calc(100% - (2 * $padding));
-    margin: $padding 0;
+    // width: calc(100% - (2 * $padding));
+    // margin: $padding 0;
     .find_a_thread {
         display: flex;
         flex-direction: column;

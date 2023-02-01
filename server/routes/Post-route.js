@@ -315,7 +315,7 @@ router.put("/edit_post", validate_request, async (request, response) => {
         });
     } catch (e) {
         response.json({
-            error: e.errors[0].message,
+            error: e,
         });
 
         // response.json({

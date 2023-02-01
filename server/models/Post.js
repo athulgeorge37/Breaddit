@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             text: {
-                type: DataTypes.STRING(600),
+                type: DataTypes.STRING(1000),
                 allowNull: false,
                 validate: {
                     len: {
-                        args: [0, 600],
-                        msg: "post text length must be betweeen [1, 500]",
+                        args: [0, 1000],
+                        msg: "post text length must be betweeen [0, 1000]",
                     },
                 },
             },

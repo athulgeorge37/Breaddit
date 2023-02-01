@@ -22,7 +22,7 @@ function TextEditor(props) {
     //         set_is_first_render(true);
     //     }
     // }, []);
-    console.log(props.post_text);
+    // console.log(props.post_text);
 
     return (
         <div className="text_editor">

@@ -1,11 +1,4 @@
-// this was the info for the initial database
-// "development": {
-//     "username": "s3918048",
-//     "password": "breaddit123",
-//     "database": "s3918048",
-//     "host": "rmit.australiaeast.cloudapp.azure.com",
-//     "dialect": "mysql"
-//   },
+require("dotenv").config();
 
 // creating our express app
 const express = require("express");
@@ -107,21 +100,26 @@ const server = new ApolloServer({
 // this require below will run the ./models/index.js file, to start db
 const db = require("./models");
 // sync will make sure our db tables are synced with the database
-db.sequelize.sync().then(() => {
-    // db.sequelize.sync({ force: true });
+db.sequelize
+    .sync()
+    .then(() => {
+        // db.sequelize.sync({ force: true });
 
-    // starting our server when we
-    // run npm start within the server dir
-    // Nodemon will automatically update our
-    // server when we make changes and save
+        // starting our server when we
+        // run npm start within the server dir
+        // Nodemon will automatically update our
+        // server when we make changes and save
 
-    server.start().then((response) => {
-        // so we can use our apollo server for graphql with our app server
-        server.applyMiddleware({ app });
+        server.start().then((response) => {
+            // so we can use our apollo server for graphql with our app server
+            server.applyMiddleware({ app });
 
-        // httpServer contains both subscription server, apollo server and app server
-        httpServer.listen(3001, () => {
-            console.log("server running on port 3001");
+            // httpServer contains both subscription server, apollo server and app server
+            httpServer.listen(process.env.PORT || 3001, () => {
+                console.log("server running on port 3001");
+            });
         });
+    })
+    .catch((e) => {
+        console.log(e);
     });
-});

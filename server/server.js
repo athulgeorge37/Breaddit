@@ -80,6 +80,7 @@ const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
 // Same ApolloServer initialization as before, plus the drain plugin.
 const server = new ApolloServer({
     schema,
+    // persistedQueries: false,
     // passing the same pubsub so our apollo server can publish a subscription event
     context: ({ req, res }) => ({ req, res, pubsub }),
     plugins: [

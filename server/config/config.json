@@ -17,8 +17,8 @@
   "production": {
     "username": "06v65qca5105jo8al1lb",
     "password": "pscale_pw_PKOnepbtSt0r4QvNmZg3XHeXm5ascqf9wQXJhJcgMaI",
-    "database": "breaddit_database",
-    "host": "aws-ap-southeast-2.connect.psdb.cloud",
+    "database": "hello",
+    "host": "aws-ap-southeast-2.connect.psdb.cloud/breaddit_database?ssl={`rejectUnauthorized`:true}",
     "dialect": "mysql"
   }
 }

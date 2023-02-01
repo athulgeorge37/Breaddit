@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "devStart": "nodemon server.js",
+    "start": "nodemon server.js",
     "seed": "npx sequelize-cli db:seed:all",
     "drop": "npx sequelize-cli db:seed:undo:all"
   },

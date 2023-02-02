@@ -17,14 +17,14 @@ app.use(cors());
 // http://localhost:3001/api/user + (route endpoint) within userRoute
 // to get, post, delete, put data in db
 
-const userRoutes = require("./routes/User-route");
-const postRoutes = require("./routes/Post-route");
-const commentRoutes = require("./routes/Comment-route");
-const voteRoutes = require("./routes/Vote-route");
-const followerRoutes = require("./routes/Follower-route");
-const emailRoutes = require("./routes/Email-route");
-const profileVisitRoutes = require("./routes/ProfileVisits-route");
-const threadRoutes = require("./routes/Thread-route");
+const userRoutes = require("./api/User-route");
+const postRoutes = require("./api/Post-route");
+const commentRoutes = require("./api/Comment-route");
+const voteRoutes = require("./api/Vote-route");
+const followerRoutes = require("./api/Follower-route");
+const emailRoutes = require("./api/Email-route");
+const profileVisitRoutes = require("./api/ProfileVisits-route");
+const threadRoutes = require("./api/Thread-route");
 
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);

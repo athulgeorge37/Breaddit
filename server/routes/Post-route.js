@@ -52,23 +52,46 @@ router.get("/get_all_posts", async (request, response) => {
             };
         }
 
-        const all_posts = await db.Post.findAll({
+        // const all_posts = await db.Post.findAll({
+        //     where: { ...where_search, is_inappropriate: false },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_posts_initial = await db.Post.findAll({
             where: { ...where_search, is_inappropriate: false },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
 
+        const all_posts = [];
+        await Promise.all(
+            all_posts_initial.map(async (post) => {
+                const post_details = {
+                    ...JSON.parse(JSON.stringify(post)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: post.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                };
+
+                all_posts.push(post_details);
+            })
+        );
+
         response.json({
             msg: "succesfully got list of posts",
-            all_posts,
+            all_posts: all_posts,
         });
     } catch (e) {
         response.json({
@@ -82,18 +105,33 @@ router.get("/get_by_post_id/:post_id", async (request, response) => {
     try {
         const post_id = parseInt(request.params.post_id);
 
-        const post_details = await db.Post.findOne({
+        // const post_details = await db.Post.findOne({
+        //     where: {
+        //         id: post_id,
+        //     },
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        // });
+        let post_details_initial = await db.Post.findOne({
             where: {
                 id: post_id,
             },
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
         });
+
+        const post_details = {
+            ...JSON.parse(JSON.stringify(post_details_initial)),
+            author_details: await db.User.findOne({
+                where: {
+                    id: post_details_initial.author_id,
+                },
+                attributes: ["username", "profile_pic"],
+            }),
+        };
 
         response.json({
             msg: "succesfully got post details",
@@ -112,20 +150,41 @@ router.get(
     async (request, response) => {
         // gets all the post made by an  author using author_id
         try {
+            // const list_of_posts = await db.Post.findAll({
+            //     where: {
+            //         author_id: request.user_id,
+            //     },
+            //     include: [
+            //         {
+            //             model: db.User,
+            //             as: "author_details",
+            //             attributes: ["username", "profile_pic"],
+            //         },
+            //     ],
+            // });
             const list_of_posts = await db.Post.findAll({
-                include: [
-                    {
-                        model: db.User,
-                        as: "author_details",
-                        attributes: ["username", "profile_pic"],
-                    },
-                ],
                 where: {
                     author_id: request.user_id,
                 },
             });
+
+            const all_posts = [];
+            await Promis.all(
+                list_of_posts.map(async (post) => {
+                    all_posts.push({
+                        ...JSON.parse(JSON.stringify(post)),
+                        author_details: await db.User.findOne({
+                            where: {
+                                id: post.author_id,
+                            },
+                            attributes: ["username", "profile_pic"],
+                        }),
+                    });
+                })
+            );
+
             response.json({
-                all_posts: list_of_posts,
+                all_posts: all_posts,
             });
         } catch (e) {
             response.json({
@@ -176,23 +235,46 @@ router.get("/get_all_posts_by_username", async (request, response) => {
             };
         }
 
-        const all_posts = await db.Post.findAll({
+        // const all_posts = await db.Post.findAll({
+        //     where: { ...where_search, is_inappropriate: false },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_posts_initial = await db.Post.findAll({
             where: { ...where_search, is_inappropriate: false },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
 
+        const all_posts = [];
+        await Promise.all(
+            all_posts_initial.map(async (post) => {
+                const user_details = await db.User.findOne({
+                    where: {
+                        id: post.author_id,
+                    },
+                    attributes: ["username", "profile_pic"],
+                });
+
+                all_posts.push({
+                    ...JSON.parse(JSON.stringify(post)),
+                    author_details: user_details,
+                });
+            })
+        );
+
         response.json({
             msg: `succesfully got list of posts by username ${username}`,
-            all_posts,
+            all_posts: all_posts,
         });
     } catch (e) {
         response.json({

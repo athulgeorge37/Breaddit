@@ -1,4 +1,5 @@
 const { verify } = require("jsonwebtoken");
+require("dotenv").config();
 
 // this function is called every time
 // a user tries to make a request to the rest api

@@ -55,42 +55,97 @@ router.get("/get_thread_details", async (request, response) => {
         if (post_id !== "null") {
             post_details = await db.Post.findByPk(post_id);
             if (post_details.thread_id !== null) {
-                thread_details = await db.Thread.findOne({
+                // thread_details = await db.Thread.findOne({
+                //     where: {
+                //         id: post_details.thread_id,
+                //     },
+                //     include: [
+                //         {
+                //             model: db.User,
+                //             as: "creator_details",
+                //             attributes: ["username", "profile_pic"],
+                //         },
+                //         {
+                //             model: db.Rule,
+                //             as: "thread_rules",
+                //         },
+                //     ],
+                // });
+                const initial_thread_details = await db.Thread.findOne({
                     where: {
                         id: post_details.thread_id,
                     },
-                    include: [
-                        {
-                            model: db.User,
-                            as: "creator_details",
-                            attributes: ["username", "profile_pic"],
-                        },
-                        {
-                            model: db.Rule,
-                            as: "thread_rules",
-                        },
-                    ],
                 });
+
+                const creator_details = await db.User.findOne({
+                    where: {
+                        id: initial_thread_details.creator_id,
+                    },
+                    attributes: ["username", "profile_pic"],
+                });
+
+                const thread_rules = await db.Rule.findAll({
+                    where: {
+                        id: initial_thread_details.id,
+                    },
+                });
+
+                thread_details = {
+                    ...JSON.parse(JSON.stringify(initial_thread_details)),
+                    creator_details: creator_details,
+                    thread_rules: thread_rules,
+                };
+            } else {
+                response.json({
+                    msg: "no thread selected",
+                    thread_details: null,
+                });
+                return;
             }
         }
 
         if (thread_details === null) {
-            thread_details = await db.Thread.findOne({
+            // thread_details = await db.Thread.findOne({
+            //     where: {
+            //         title: thread_title,
+            //     },
+            //     include: [
+            //         {
+            //             model: db.User,
+            //             as: "creator_details",
+            //             attributes: ["username", "profile_pic"],
+            //         },
+            //         {
+            //             model: db.Rule,
+            //             as: "thread_rules",
+            //         },
+            //     ],
+            // });
+
+            const initial_thread_details = await db.Thread.findOne({
                 where: {
                     title: thread_title,
                 },
-                include: [
-                    {
-                        model: db.User,
-                        as: "creator_details",
-                        attributes: ["username", "profile_pic"],
-                    },
-                    {
-                        model: db.Rule,
-                        as: "thread_rules",
-                    },
-                ],
             });
+
+            const creator_details = await db.User.findOne({
+                where: {
+                    id: initial_thread_details.creator_id,
+                },
+                attributes: ["username", "profile_pic"],
+            });
+
+            const thread_rules = await db.Rule.findAll({
+                where: {
+                    id: initial_thread_details.id,
+                },
+            });
+
+            thread_details = {
+                ...JSON.parse(JSON.stringify(initial_thread_details)),
+                creator_details: creator_details,
+                thread_rules: thread_rules,
+            };
         }
 
         response.json({

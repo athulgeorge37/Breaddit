@@ -36,13 +36,21 @@ module.exports = (sequelize, DataTypes) => {
                     min: 0,
                 },
             },
+            author_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            post_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
         },
         {
             timestamps: false,
         }
     );
 
-    // the asssociation this table has with other tables
+    // // the asssociation this table has with other tables
     // Comment.associate = (models) => {
     //     Comment.belongsTo(models.User, {
     //         foreignKey: {
@@ -66,17 +74,6 @@ module.exports = (sequelize, DataTypes) => {
     //         },
     //         onDelete: "cascade",
     //     });
-
-    //     // associations to Replys
-
-    //     // Comment.belongsToMany(models.Comment, {
-    //     //     foreignKey: {
-    //     //         allowNull: false,
-    //     //         name: "comment_id"
-    //     //     },
-    //     //     as: "replies",
-    //     //     through: "Replies",
-    //     // })
 
     //     Comment.belongsToMany(models.Comment, {
     //         through: models.Reply,

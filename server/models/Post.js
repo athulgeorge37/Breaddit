@@ -56,6 +56,14 @@ module.exports = (sequelize, DataTypes) => {
                     min: 0,
                 },
             },
+            author_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            thread_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
         },
         {
             // timestamps: true,

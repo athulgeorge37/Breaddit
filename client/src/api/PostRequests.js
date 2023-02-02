@@ -109,13 +109,6 @@ const get_all_posts_by_username = async ({
     search_input,
     username,
 }) => {
-    console.log({
-        limit,
-        page_num,
-        filter_by,
-        search_input,
-        username,
-    });
     const response = await axios.get(
         `${CUSTOM_ENDPOINT}/get_all_posts_by_username/?${query_string_generator(
             {

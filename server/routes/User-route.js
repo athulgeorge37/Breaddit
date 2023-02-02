@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+require("dotenv").config();
+
 const db = require("../models");
 
 // allows us to hash our password
@@ -179,7 +181,7 @@ router.post("/create_user", async (request, response) => {
                 role: user_details.role,
                 login_id: login_details.id,
             },
-            "secret_for_web_token"
+            process.env.WEB_TOKEN_SECRET
         );
 
         // giving the web token back to the client
@@ -192,11 +194,8 @@ router.post("/create_user", async (request, response) => {
     } catch (e) {
         // we can get an error message when our query does not work
         response.json({
-            error: e.errors[0].message,
+            error: e,
         });
-
-        // to see the whole error, replace below with "e"
-        //response.json(e)
     }
 });
 
@@ -207,8 +206,8 @@ router.post("/sign_in", async (request, response) => {
     let as_guest = request.body.as_guest;
 
     if (as_guest === true) {
-        email = "breadditverifysignup@gmail.com";
-        password = "Pass1!";
+        email = process.env.GUEST_EMAIL;
+        password = process.env.GUEST_PASSWORD;
     }
 
     // finding the first user in db where emails match
@@ -258,7 +257,7 @@ router.post("/sign_in", async (request, response) => {
                 role: user_details.role,
                 login_id: login_details.id,
             },
-            "secret_for_web_token"
+            process.env.WEB_TOKEN_SECRET
         );
         // sign is similart to hashing, however
         // if we know the secret, we can get the data back
@@ -298,23 +297,6 @@ router.put("/sign_out", validate_request, async (request, response) => {
             json({
                 error: e,
             });
-    }
-});
-
-router.delete("/delete_user", validate_request, async (request, response) => {
-    // doesnt work rn, cus the cascade part doesnt work, something to do with comments
-    try {
-        await db.User.destroy({
-            where: {
-                id: request.user_id,
-            },
-        });
-
-        response.json("Succesfully removed user from db");
-    } catch (e) {
-        response.json({
-            error: e,
-        });
     }
 });
 

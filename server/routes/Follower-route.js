@@ -50,20 +50,45 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         }
 
         // getting all the profiles we need who are either following or being followed by user_id
-        const all_profiles = await db.Follower.findAll({
+        // const all_profiles = await db.Follower.findAll({
+        //     where: {
+        //         ...follower_id_to_use,
+        //     },
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: as_relationship_to_use, // so we include the correct profile details
+        //             attributes: ["username", "profile_pic", "id"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_profiles_initial = await db.Follower.findAll({
             where: {
                 ...follower_id_to_use,
             },
-            include: [
-                {
-                    model: db.User,
-                    as: as_relationship_to_use, // so we include the correct profile details
-                    attributes: ["username", "profile_pic", "id"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const all_profiles = [];
+        await Promise.all(
+            all_profiles_initial.map(async (row) => {
+                all_profiles.push({
+                    ...JSON.parse(JSON.stringify(row)),
+                    user_details: await db.User.findOne({
+                        where: {
+                            id:
+                                follower_type === "followers"
+                                    ? row.followed_by
+                                    : row.user_id,
+                        },
+                        attributes: ["username", "profile_pic", "id"],
+                    }),
+                });
+            })
+        );
 
         if (request.role === "public_user") {
             // when user is public user, we do not need to check
@@ -71,19 +96,24 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
             // since they themselves do not have an account
 
             const all_followers = all_profiles.map((row) => {
-                if (follower_type === "followers") {
-                    return {
-                        follower_details: row.followed_by_user_details,
-                        is_following: null,
-                        id: row.id,
-                    };
-                } else {
-                    return {
-                        follower_details: row.user_id_details,
-                        is_following: null,
-                        id: row.id,
-                    };
-                }
+                // if (follower_type === "followers") {
+                //     return {
+                //         follower_details: row.followed_by_user_details,
+                //         is_following: null,
+                //         id: row.id,
+                //     };
+                // } else {
+                //     return {
+                //         follower_details: row.user_id_details,
+                //         is_following: null,
+                //         id: row.id,
+                //     };
+                // }
+                return {
+                    follower_details: row.user_details,
+                    is_following: null,
+                    id: row.id,
+                };
             });
 
             response.json({
@@ -97,15 +127,26 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
         await Promise.all(
             all_profiles.map(async (row) => {
                 let where_clause_to_use = {};
+                // if (follower_type === "followers") {
+                //     where_clause_to_use = {
+                //         user_id: user_id,
+                //         followed_by: row.followed_by_user_details.id,
+                //     };
+                // } else {
+                //     where_clause_to_use = {
+                //         user_id: row.user_id_details.id,
+                //         followed_by: user_id,
+                //     };
+                // }
                 if (follower_type === "followers") {
                     where_clause_to_use = {
                         user_id: user_id,
-                        followed_by: row.followed_by_user_details.id,
+                        followed_by: row.user_details.id,
                     };
                 } else {
                     where_clause_to_use = {
+                        user_id: row.user_details.id,
                         followed_by: user_id,
-                        user_id: row.user_id_details.id,
                     };
                 }
 
@@ -117,13 +158,14 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
                 const is_following = following_details === null ? false : true;
 
                 // attaching the users username and profile pic to the is_following
-                const follower_details =
-                    follower_type === "followers"
-                        ? row.followed_by_user_details
-                        : row.user_id_details;
+                // const follower_details =
+                //     follower_type === "followers"
+                //         ? row.followed_by_user_details
+                //         : row.user_id_details;
 
                 new_follower_data.push({
-                    follower_details: follower_details,
+                    // follower_details: follower_details,
+                    follower_details: row.user_details,
                     is_following: is_following,
                     id: row.id,
                 });
@@ -360,21 +402,42 @@ router.get(
                 });
             }
 
-            const all_accounts = await db.Follower.findAll({
+            // const all_accounts = await db.Follower.findAll({
+            //     where: search_to_use,
+            //     include: [
+            //         {
+            //             model: db.User,
+            //             as: as_search,
+            //             attributes: ["username", "profile_pic"],
+            //         },
+            //         // {
+            //         //     model: db.User,
+            //         //     as: "user_id_details",
+            //         //     attributes: ["username", "profile_pic"]
+            //         // }
+            //     ],
+            // });
+            const all_accounts_initial = await db.Follower.findAll({
                 where: search_to_use,
-                include: [
-                    {
-                        model: db.User,
-                        as: as_search,
-                        attributes: ["username", "profile_pic"],
-                    },
-                    // {
-                    //     model: db.User,
-                    //     as: "user_id_details",
-                    //     attributes: ["username", "profile_pic"]
-                    // }
-                ],
             });
+
+            const all_accounts = [];
+            await Promise.all(
+                all_accounts_initial.map(async (item) => {
+                    all_accounts.push({
+                        ...JSON.parse(JSON.stringify(item)),
+                        user_details: await db.User.findOne({
+                            where: {
+                                id:
+                                    type === "follower"
+                                        ? item.followed_by
+                                        : item.user_id,
+                            },
+                            attributes: ["username", "profile_pic"],
+                        }),
+                    });
+                })
+            );
 
             // when there are no followers, this array will be = []
             response.json({

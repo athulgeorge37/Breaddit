@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
+            reply_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            parent_comment_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
         },
         {
             timestamps: false,

@@ -72,16 +72,6 @@ const sign_out = async () => {
     return response.data;
 };
 
-const delete_user = async () => {
-    const response = await axios.delete(`${CUSTOM_ENDPOINT}/delete_user`, {
-        headers: {
-            web_access_token: get_item_session_storage("web_access_token"),
-        },
-    });
-
-    return response.data;
-};
-
 const edit_user_details = async ({
     email = null,
     username = null,
@@ -169,7 +159,6 @@ export {
     create_user,
     sign_in_request,
     sign_out,
-    delete_user,
     edit_user_details,
     get_user_details,
     get_editable_user_details,

@@ -89,22 +89,46 @@ router.get("/get_post_votes_by_user", async (request, response) => {
             return vote_field.post_id;
         });
 
-        const all_posts = await db.Post.findAll({
+        // const all_posts = await db.Post.findAll({
+        //     where: {
+        //         id: list_of_post_ids,
+        //         is_inappropriate: false,
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_posts_initial = await db.Post.findAll({
             where: {
                 id: list_of_post_ids,
-                is_inappropriate: false,
+                // is_inappropriate: false,
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const all_posts = [];
+        await Promise.all(
+            all_posts_initial.map(async (post) => {
+                all_posts.push({
+                    ...JSON.parse(JSON.stringify(post)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: post.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                });
+            })
+        );
 
         response.json({
             msg: "succefully got all posts",
@@ -150,22 +174,46 @@ router.get("/get_comment_votes_by_user", async (request, response) => {
             return vote_field.comment_id;
         });
 
-        const all_comments = await db.Comment.findAll({
+        // const all_comments = await db.Comment.findAll({
+        //     where: {
+        //         id: list_of_comment_ids,
+        //         // is_inappropriate: false,
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_comments_initial = await db.Comment.findAll({
             where: {
                 id: list_of_comment_ids,
                 // is_inappropriate: false,
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const all_comments = [];
+        await Promise.all(
+            all_comments_initial.map(async (comment) => {
+                all_comments.push({
+                    ...JSON.parse(JSON.stringify(comment)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: comment.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                });
+            })
+        );
 
         response.json({
             msg: "succefully got all comments",
@@ -213,19 +261,40 @@ router.get("/get_reply_votes_by_user", async (request, response) => {
             return vote_field.comment_id;
         });
 
-        const all_user_replies = await db.Comment.findAll({
+        // const all_user_replies = await db.Comment.findAll({
+        //     where: {
+        //         id: list_of_reply_ids,
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        // });
+        const all_user_replies_initial = await db.Comment.findAll({
             where: {
                 id: list_of_reply_ids,
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
         });
+
+        const all_user_replies = [];
+        await Promise.all(
+            all_user_replies_initial.map(async (reply) => {
+                all_user_replies.push({
+                    ...JSON.parse(JSON.stringify(reply)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: reply.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                });
+            })
+        );
 
         const all_parent_comment_ids = await db.Reply.findAll({
             where: {
@@ -236,21 +305,34 @@ router.get("/get_reply_votes_by_user", async (request, response) => {
         const all_reply_and_parent_comments = [];
         await Promise.all(
             all_parent_comment_ids.map(async (item, index) => {
+                // const parent_comment = await db.Comment.findOne({
+                //     where: {
+                //         id: item.parent_comment_id,
+                //     },
+                //     include: [
+                //         {
+                //             model: db.User,
+                //             as: "author_details",
+                //             attributes: ["username", "profile_pic"],
+                //         },
+                //     ],
+                // });
                 const parent_comment = await db.Comment.findOne({
                     where: {
                         id: item.parent_comment_id,
                     },
-                    include: [
-                        {
-                            model: db.User,
-                            as: "author_details",
-                            attributes: ["username", "profile_pic"],
-                        },
-                    ],
                 });
 
                 all_reply_and_parent_comments.push({
-                    parent_comment: parent_comment,
+                    parent_comment: {
+                        ...JSON.parse(JSON.stringify(parent_comment)),
+                        author_details: await db.User.findOne({
+                            where: {
+                                id: parent_comment.author_id,
+                            },
+                            attributes: ["username", "profile_pic"],
+                        }),
+                    },
                     reply_comment: all_user_replies[index],
                 });
             })
@@ -561,22 +643,46 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
             };
         }
 
-        const all_voters = await db.Vote.findAll({
+        // const all_voters = await db.Vote.findAll({
+        //     where: {
+        //         ...parent_id_to_use,
+        //         parent_type: parent_type,
+        //         up_vote: up_vote,
+        //     },
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "voter_details",
+        //             attributes: ["username", "profile_pic", "id"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_voters_initial = await db.Vote.findAll({
             where: {
                 ...parent_id_to_use,
                 parent_type: parent_type,
                 up_vote: up_vote,
             },
-            include: [
-                {
-                    model: db.User,
-                    as: "voter_details",
-                    attributes: ["username", "profile_pic", "id"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const all_voters = [];
+        await Promise.all(
+            all_voters_initial.map(async (voter) => {
+                all_voters.push({
+                    ...JSON.parse(JSON.stringify(voter)),
+                    voter_details: await db.User.findOne({
+                        where: {
+                            id: voter.user_id,
+                        },
+                        attributes: ["username", "profile_pic", "id"],
+                    }),
+                });
+            })
+        );
 
         if (request.role === "public_user") {
             // when user is public user, we do not need to check
@@ -614,8 +720,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
         response.json({
             msg: "got all profiles for all_voters",
             all_voters: new_follower_data,
-            // all_voters: all_voters,
-            //new_follower_data: new_follower_data,
         });
     } catch (e) {
         response.json({

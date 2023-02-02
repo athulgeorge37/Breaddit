@@ -23,7 +23,7 @@ router.put(
                 {
                     where: {
                         id: comment_id,
-                        // author_id: request.user_id
+                        author_id: request.user_id,
                     },
                 }
             );
@@ -49,7 +49,7 @@ router.get(
         // when type === reply, in which case parent_id is for a comment
 
         try {
-            const type = request.params.type;
+            const type = request.params.type.toLowerCase();
             const parent_id = request.params.id;
 
             let is_any;
@@ -113,22 +113,46 @@ router.get("/get_all_comments_by_user", async (request, response) => {
             },
         });
 
-        const all_user_comments = await db.Comment.findAll({
+        // const all_user_comments = await db.Comment.findAll({
+        //     where: {
+        //         author_id: user_details.id,
+        //         is_reply: is_reply === "true" ? true : false,
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const all_user_comments_initial = await db.Comment.findAll({
             where: {
                 author_id: user_details.id,
                 is_reply: is_reply === "true" ? true : false,
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const all_user_comments = [];
+        await Promise.all(
+            all_user_comments_initial.map(async (comment) => {
+                all_user_comments.push({
+                    ...JSON.parse(JSON.stringify(comment)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: comment.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                });
+            })
+        );
 
         if (is_reply === "false") {
             response.json({
@@ -148,6 +172,28 @@ router.get("/get_all_comments_by_user", async (request, response) => {
             },
         });
 
+        // const all_reply_and_parent_comments = [];
+        // await Promise.all(
+        //     all_parent_comment_ids.map(async (item, index) => {
+        //         const parent_comment = await db.Comment.findOne({
+        //             where: {
+        //                 id: item.parent_comment_id,
+        //             },
+        //             include: [
+        //                 {
+        //                     model: db.User,
+        //                     as: "author_details",
+        //                     attributes: ["username", "profile_pic"],
+        //                 },
+        //             ],
+        //         });
+
+        //         all_reply_and_parent_comments.push({
+        //             parent_comment: parent_comment,
+        //             reply_comment: all_user_comments[index],
+        //         });
+        //     })
+        // );
         const all_reply_and_parent_comments = [];
         await Promise.all(
             all_parent_comment_ids.map(async (item, index) => {
@@ -155,17 +201,18 @@ router.get("/get_all_comments_by_user", async (request, response) => {
                     where: {
                         id: item.parent_comment_id,
                     },
-                    include: [
-                        {
-                            model: db.User,
-                            as: "author_details",
-                            attributes: ["username", "profile_pic"],
-                        },
-                    ],
                 });
 
                 all_reply_and_parent_comments.push({
-                    parent_comment: parent_comment,
+                    parent_comment: {
+                        ...JSON.parse(JSON.stringify(parent_comment)),
+                        author_details: await db.User.findOne({
+                            where: {
+                                id: parent_comment.author_id,
+                            },
+                            attributes: ["username", "profile_pic"],
+                        }),
+                    },
                     reply_comment: all_user_comments[index],
                 });
             })
@@ -197,22 +244,50 @@ router.get("/get_all_comments", async (request, response) => {
 
         const order_by = determine_order_by(request.query.filter_by);
 
-        const list_of_comments = await db.Comment.findAll({
+        // const list_of_comments = await db.Comment.findAll({
+        //     where: {
+        //         post_id: post_id,
+        //         is_reply: false,
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const list_of_comments_initial = await db.Comment.findAll({
             where: {
                 post_id: post_id,
                 is_reply: false,
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const list_of_comments = [];
+        await Promise.all(
+            list_of_comments_initial.map(async (comment) => {
+                list_of_comments.push(
+                    JSON.parse(
+                        JSON.stringify({
+                            ...JSON.parse(JSON.stringify(comment)),
+                            author_details: await db.User.findOne({
+                                where: {
+                                    id: comment.author_id,
+                                },
+                                attributes: ["username", "profile_pic"],
+                            }),
+                        })
+                    )
+                );
+            })
+        );
 
         response.json({
             msg: "succesfully got comments of post_id",
@@ -253,21 +328,44 @@ router.get("/get_all_replies", async (request, response) => {
             (row) => row.reply_id
         );
 
-        const list_of_replies = await db.Comment.findAll({
+        // const list_of_replies = await db.Comment.findAll({
+        //     where: {
+        //         id: list_of_reply_ids, // getting all comment details using the reply ids
+        //     },
+        //     order: order_by,
+        //     include: [
+        //         {
+        //             model: db.User,
+        //             as: "author_details",
+        //             attributes: ["username", "profile_pic"],
+        //         },
+        //     ],
+        //     limit: limit,
+        //     offset: offset,
+        // });
+        const list_of_replies_initial = await db.Comment.findAll({
             where: {
                 id: list_of_reply_ids, // getting all comment details using the reply ids
             },
             order: order_by,
-            include: [
-                {
-                    model: db.User,
-                    as: "author_details",
-                    attributes: ["username", "profile_pic"],
-                },
-            ],
             limit: limit,
             offset: offset,
         });
+
+        const list_of_replies = [];
+        await Promise.all(
+            list_of_replies_initial.map(async (comment) => {
+                list_of_replies.push({
+                    ...JSON.parse(JSON.stringify(comment)),
+                    author_details: await db.User.findOne({
+                        where: {
+                            id: comment.author_id,
+                        },
+                        attributes: ["username", "profile_pic"],
+                    }),
+                });
+            })
+        );
 
         response.json({
             msg: "succesfully got replies of parent_comment_id",
@@ -304,6 +402,7 @@ router.post(
                     msg: `succesfully created comment`,
                     new_comment_or_reply_details: new_comment_details,
                 });
+                return;
             } else if (type === "reply") {
                 const new_reply_details = await db.Comment.create({
                     post_id: post_id,
@@ -323,10 +422,12 @@ router.post(
                     msg: `succesfully created reply`,
                     new_comment_or_reply_details: new_reply_details,
                 });
+                return;
             } else {
                 response.json({
                     error: `${type} is not a valid type`,
                 });
+                return;
             }
         } catch (e) {
             response.json({

@@ -23,6 +23,18 @@ module.exports = (sequelize, DataTypes) => {
                 // down_vote = false
                 // no like = not in the table
             },
+            post_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
+            comment_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
+            user_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
         },
         {
             timestamps: true,

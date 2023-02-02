@@ -11,5 +11,6 @@
       "src": "/(.*)",
       "dest": "index.js"
     }
-  ]
+  ],
+  "regions": ["syd1"]
 }

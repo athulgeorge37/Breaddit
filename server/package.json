@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node index.js",
     "seed": "npx sequelize-cli db:seed:all",
     "drop": "npx sequelize-cli db:seed:undo:all"
   },

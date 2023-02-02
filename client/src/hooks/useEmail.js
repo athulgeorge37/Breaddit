@@ -47,7 +47,7 @@ const useEmail = (email, original_email = null) => {
 
             const data = await is_unique_email_request(debounced_search);
             if (data.error) {
-                console.log({ data });
+                //console.log({ data });
                 return;
             }
             set_is_unique_email(data.is_unique);

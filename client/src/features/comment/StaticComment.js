@@ -63,7 +63,7 @@ function StaticComment({
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log({ error: data.error });
+                    // console.log({ error: data.error });
                     return;
                 }
                 set_allow_replies_section_btn(data.is_any);

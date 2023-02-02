@@ -117,10 +117,10 @@ db.sequelize
 
             // httpServer contains both subscription server, apollo server and app server
             httpServer.listen(process.env.PORT || 3001, () => {
-                console.log("server running on port 3001");
+                //console.log("server running on port 3001");
             });
         });
     })
     .catch((e) => {
-        console.log(e);
+        //console.log(e);
     });

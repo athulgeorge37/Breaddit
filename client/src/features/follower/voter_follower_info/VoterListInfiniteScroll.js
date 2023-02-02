@@ -67,7 +67,7 @@ function VoterListInfiniteScroll({
                 return lastPage.all_voters.length ? allPages.length : undefined;
             },
             onError: (data) => {
-                console.log({ infinite_voters: data });
+                // console.log({ infinite_voters: data });
             },
         }
     );

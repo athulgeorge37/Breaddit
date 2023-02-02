@@ -36,7 +36,7 @@ function Footer() {
                         "Unable to report an issue, try again later",
                         "ERROR"
                     );
-                    console.log({ data });
+                    //console.log({ data });
                     return;
                 }
 

@@ -75,7 +75,7 @@ function PostData({ user_id, username, profile_pic }) {
         });
 
         if (up_vote_response.error) {
-            console.log(up_vote_response);
+            //console.log(up_vote_response);
             return;
         }
 
@@ -90,7 +90,7 @@ function PostData({ user_id, username, profile_pic }) {
         });
 
         if (down_vote_response.error) {
-            console.log(down_vote_response);
+            //console.log(down_vote_response);
             return;
         }
 

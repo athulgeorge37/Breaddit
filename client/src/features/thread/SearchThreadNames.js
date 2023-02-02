@@ -37,7 +37,7 @@ function SearchThreadNames() {
 
             const data = await get_thread_names(debounced_search);
             if (data.error) {
-                console.log({ data });
+                //console.log({ data });
                 return;
             }
             set_threads_list(data.threads);

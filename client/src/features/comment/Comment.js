@@ -65,7 +65,7 @@ function Comment({
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log({ error: data.error });
+                    // console.log({ error: data.error });
                     return;
                 }
                 set_allow_replies_section_btn(data.is_any);
@@ -79,7 +79,7 @@ function Comment({
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log(data);
+                    // console.log(data);
                     add_notification("Cannot delete comment", "ERROR");
                     return;
                 }

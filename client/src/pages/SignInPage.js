@@ -56,7 +56,7 @@ function SignInPage() {
                     ) {
                         add_notification(data.error, "ERROR");
                     } else {
-                        console.log({ data });
+                        //console.log({ data });
                         add_notification(
                             "An error occured while Signing In, please try again later",
                             "ERROR"
@@ -86,7 +86,7 @@ function SignInPage() {
                 }, 1500);
             },
             onError: (data) => {
-                console.log({ data });
+                //console.log({ data });
                 add_notification(
                     "Unable to Sign In, please try again later",
                     "ERROR"
@@ -118,60 +118,67 @@ function SignInPage() {
     return (
         <div className="SignInPage">
             <div className="sign_in_card">
-                <h2>Sign In:</h2>
-                <Input
-                    label_text="Email:"
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => set_email(e.target.value)}
-                />
+                <h2>Sign In</h2>
 
-                {is_unique_email === true && email !== "" && (
-                    <div className="sign_in_redirect_div">
-                        This email is not connected to an account.
+                <div className="inputs">
+                    <Input
+                        label_text="Email:"
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => set_email(e.target.value)}
+                    />
+
+                    {is_unique_email === true && email !== "" && (
+                        <div className="sign_in_redirect_div">
+                            This email is not connected to an account.
+                            <button
+                                className="sign_up_redirect"
+                                onClick={() => navigate("/signup")}
+                            >
+                                Sign Up
+                            </button>
+                        </div>
+                    )}
+
+                    <PasswordInput
+                        password={password}
+                        set_password={set_password}
+                        set_validity={() => {}}
+                        input_props={{
+                            label_text: "Password:",
+                            id: "password",
+                        }}
+                        show_errors={false}
+                    />
+
+                    {loading_sign_in ? (
+                        <div className="loading_div">
+                            <Loading />
+                        </div>
+                    ) : (
                         <button
-                            className="sign_up_redirect"
-                            onClick={() => navigate("/signup")}
+                            className="sign_in_btn"
+                            onClick={handle_sign_in}
                         >
-                            Sign Up
+                            Sign In
                         </button>
-                    </div>
-                )}
+                    )}
 
-                <PasswordInput
-                    password={password}
-                    set_password={set_password}
-                    set_validity={() => {}}
-                    input_props={{
-                        label_text: "Password:",
-                        id: "password",
-                    }}
-                    show_errors={false}
-                />
+                    {sign_in_data?.is_banned === true && (
+                        <div className="is_banned_error error">
+                            The account associated with this email adress has
+                            been banned.
+                        </div>
+                    )}
 
-                {loading_sign_in ? (
-                    <div className="loading_div">
-                        <Loading />
-                    </div>
-                ) : (
-                    <button className="sign_in_btn" onClick={handle_sign_in}>
-                        Sign In
-                    </button>
-                )}
-
-                {sign_in_data?.is_banned === true && (
-                    <div className="is_banned_error error">
-                        The account associated with this email adress has been
-                        banned.
-                    </div>
-                )}
-
-                {sign_in_data?.error === "Wrong Email Password Combination" && (
-                    <div className="invalid_credentials error">
-                        Invalid Email Password Combination
-                    </div>
-                )}
+                    {sign_in_data?.error ===
+                        "Wrong Email Password Combination" && (
+                        <div className="invalid_credentials error">
+                            Invalid Email Password Combination
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="sign_in_as_guest_div">
                 Don't want to create an account?

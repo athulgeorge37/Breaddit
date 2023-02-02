@@ -55,7 +55,7 @@ function FollowerData({ user_id, username }) {
         });
 
         if (follower_response.error) {
-            console.log(follower_response);
+            // console.log(follower_response);
             return;
         }
 

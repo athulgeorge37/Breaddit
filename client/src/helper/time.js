@@ -8,7 +8,7 @@ export const get_current_date = (date_ISO) => {
 };
 
 export const get_current_date_since_inception = (date_since) => {
-    console.log(new Date(date_since));
+    //console.log(new Date(date_since));
 
     // const date_since_epoch = new Date(date_since / 1000);
     // console.log(date_since_epoch)

@@ -63,7 +63,7 @@ function CommentSectionInfiniteScroll({ post_id }) {
             // fetching next intersection observer
             intObserver.current = new IntersectionObserver((comments) => {
                 if (comments[0].isIntersecting && hasNextPage) {
-                    console.log("Fetching more comments");
+                    // console.log("Fetching more comments");
                     fetchNextPage();
                 }
             });

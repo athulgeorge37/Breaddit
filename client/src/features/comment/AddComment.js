@@ -62,7 +62,7 @@ function AddComment({
                 add_notification(`Succesfully Added ${btn_text}`);
             },
             onError: (error) => {
-                console.log({ error });
+                // console.log({ error });
             },
         }
     );

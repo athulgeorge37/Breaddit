@@ -59,7 +59,7 @@ const useUsername = (username, original_username = null) => {
 
             const data = await is_unique_username_request(debounced_search);
             if (data.error) {
-                console.log({ data });
+                //console.log({ data });
                 return;
             }
             set_is_unique_username(data.is_unique);

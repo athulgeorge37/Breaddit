@@ -54,7 +54,7 @@ function Votes({
                     if (data.error.message === "jwt malformed") {
                         return;
                     }
-                    console.log(data);
+                    //console.log(data);
                 }
                 set_curr_user_vote(data.curr_user_vote);
             },
@@ -67,7 +67,7 @@ function Votes({
         },
         {
             onSuccess: (data) => {
-                console.log(data);
+                //console.log(data);
                 // queryClient.invalidateQueries([
                 //     "curr_user_vote",
                 //     { vote_type, vote_id },

@@ -46,10 +46,10 @@ function CreateThread() {
                 onSuccess: (data) => {
                     if (data.error) {
                         add_notification("Unable to create thread", "ERROR");
-                        console.log({ data });
+                        //console.log({ data });
                         return;
                     }
-                    console.log({ data });
+                    //console.log({ data });
                     add_notification("Succesfully created Thread");
                     navigate(
                         `/?${query_string_generator({
@@ -59,7 +59,7 @@ function CreateThread() {
                 },
                 onError: (data) => {
                     add_notification("Unable to create thread", "ERROR");
-                    console.log({ data });
+                    //console.log({ data });
                 },
             }
         );

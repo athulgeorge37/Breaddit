@@ -64,7 +64,7 @@ function EditEmail({ original_email, original_username }) {
                     if (data.error.name === "SequelizeUniqueConstraintError") {
                         add_notification("Email must be unique", "ERROR");
                     } else {
-                        console.log(data.error);
+                        //console.log(data.error);
                     }
                     return;
                 }

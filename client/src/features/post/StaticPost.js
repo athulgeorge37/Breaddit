@@ -63,7 +63,7 @@ function StaticPost({ post_details }) {
 
         // console.log("initialising all comments")
         if (response.error) {
-            console.log(response);
+            //console.log(response);
             return;
         }
 

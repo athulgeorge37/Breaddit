@@ -95,7 +95,7 @@ function VotedPostsInfiniteScroll({
                 return lastPage.all_items.length ? allPages.length : undefined;
             },
             onError: (data) => {
-                console.log({ infinite_items: data });
+                //console.log({ infinite_items: data });
             },
         }
     );
@@ -120,7 +120,7 @@ function VotedPostsInfiniteScroll({
                 //     hasNextPage,
                 // });
                 if (items[0].isIntersecting && hasNextPage) {
-                    console.log("Fetching more items");
+                    //console.log("Fetching more items");
                     fetchNextPage();
                 }
             });

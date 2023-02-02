@@ -36,7 +36,7 @@ function ThreadDetails({ thread_title = null, post_id = null }) {
                         "An error occured while getting thread details",
                         "ERROR"
                     );
-                    console.log({ data });
+                    //console.log({ data });
                     return;
                 }
             },
@@ -45,7 +45,7 @@ function ThreadDetails({ thread_title = null, post_id = null }) {
                     "An error occured while getting thread details",
                     "ERROR"
                 );
-                console.log({ thread_data_error: data });
+                // console.log({ thread_data_error: data });
             },
         }
     );

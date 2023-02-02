@@ -31,7 +31,7 @@ function ProfileVisitsData({ user_id, username }) {
         });
 
         if (profile_visitors_response.error) {
-            console.log(profile_visitors_response);
+            //console.log(profile_visitors_response);
             return;
         }
 

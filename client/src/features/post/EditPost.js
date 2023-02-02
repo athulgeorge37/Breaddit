@@ -48,7 +48,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 add_notification("Image Succesfully Uploaded");
             },
             onError: (data) => {
-                console.log(data);
+                //console.log(data);
                 add_notification(
                     "Unable to upload image, try again later",
                     "ERROR"
@@ -64,7 +64,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log(data);
+                    //console.log(data);
                     add_notification(
                         "An Error occured when trying to create a post",
                         "ERROR"
@@ -77,7 +77,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 navigate(`/post/${data.new_post_details.id}`);
             },
             onError: (data) => {
-                console.log(data);
+                //console.log(data);
                 add_notification(
                     "An Error occured when trying to create a post",
                     "ERROR"
@@ -117,7 +117,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 // removing post on client side when deleted from db
 
                 if (data.error) {
-                    console.log(data);
+                    //console.log(data);
                     add_notification(
                         "An Error occured when trying to edit the post",
                         "ERROR"
@@ -134,7 +134,7 @@ function EditPost({ post_details, set_edit_btn_active, mode = "edit" }) {
                 add_notification("Succesfully Edited Post");
             },
             onError: (data) => {
-                console.log(data);
+                //console.log(data);
                 add_notification(
                     "An Error occured when trying to edit the post",
                     "ERROR"
@@ -347,7 +347,7 @@ function AddThread({ set_thread_id }) {
 
             const data = await get_thread_names(debounced_search);
             if (data.error) {
-                console.log({ data });
+                //console.log({ data });
                 return;
             }
             set_threads_list(data.threads);

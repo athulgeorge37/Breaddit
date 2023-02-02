@@ -40,7 +40,7 @@ function EditUsername({ original_username }) {
                     if (data.error.name === "SequelizeUniqueConstraintError") {
                         add_notification("Username must be unique", "ERROR");
                     } else {
-                        console.log(data.error);
+                        //console.log(data.error);
                     }
                     return;
                 }

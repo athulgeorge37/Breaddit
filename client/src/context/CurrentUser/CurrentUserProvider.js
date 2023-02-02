@@ -28,13 +28,13 @@ export default function CurrentUserProvider({ children }) {
             set_current_user_in_app(data);
         },
         onError: (data) => {
-            console.log(data);
+            // console.log(data);
         },
     });
 
     const set_current_user_in_app = (valid_web_token) => {
         if (valid_web_token.error) {
-            console.log("user is invalid");
+            // console.log("user is invalid");
             set_current_user(DEFAULT_CURR_USER_STATE);
         } else {
             // console.log({
@@ -52,7 +52,7 @@ export default function CurrentUserProvider({ children }) {
     };
 
     const initialise_curr_user = async () => {
-        console.log("initialising curr user");
+        // console.log("initialising curr user");
         const response = await is_valid_web_token();
 
         // response here is the web token
@@ -83,7 +83,7 @@ export default function CurrentUserProvider({ children }) {
         set_current_user(DEFAULT_CURR_USER_STATE);
 
         // prefferably add notifcation here
-        console.log("curr user has been removed");
+        // console.log("curr user has been removed");
     };
 
     return (

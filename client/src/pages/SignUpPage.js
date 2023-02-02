@@ -85,7 +85,7 @@ function SignUpPage() {
                 }, 1500);
             },
             onError: (data) => {
-                console.log(data);
+                //console.log(data);
                 add_notification(
                     "Unable To Sign Up, please try again later",
                     "ERROR"
@@ -132,202 +132,222 @@ function SignUpPage() {
 
     return (
         <div className="SignUpPage">
-            <h2>Sign Up:</h2>
-            <Input
-                label_text="Username:"
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => set_username(e.target.value)}
-                errors={[
-                    {
-                        id: "min_three_char",
-                        msg: "Must contain atleast 3 characters",
-                        is_error: !min_three_char,
-                        hidden: username === "" ? true : false,
-                    },
-                    {
-                        id: "max_fifteen_char",
-                        msg: "Must be less than 15 characters",
-                        is_error: !max_fifteen_char,
-                        hidden: username === "" ? true : false,
-                    },
-                    {
-                        id: "contains_space",
-                        msg: "Must not contain a space",
-                        is_error: contains_space,
-                        hidden: username === "" ? true : false,
-                    },
-                    {
-                        id: "is_unique",
-                        msg: "Must be a unique username",
-                        is_error: !is_unique_username,
-                        hidden: username === "" ? true : false,
-                    },
-                ]}
-            />
+            <div className="sign_up_card">
+                <h2>Sign Up</h2>
 
-            <Input
-                label_text="Email:"
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => {
-                    set_email(e.target.value);
-                    set_email_is_verified(false);
-                    set_verification_code(null);
-                }}
-                errors={[
-                    {
-                        id: "is_valid",
-                        msg: "Must be a valid email",
-                        is_error: !is_valid_email,
-                        hidden: email === "" ? true : false,
-                    },
-                    {
-                        id: "is_unique",
-                        msg: "Must be a unique email",
-                        is_error: !is_unique_email,
-                        hidden: email === "" ? true : false,
-                    },
-                ]}
-            />
+                <div className="inputs">
+                    <Input
+                        label_text="Username:"
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => set_username(e.target.value)}
+                        errors={[
+                            {
+                                id: "min_three_char",
+                                msg: "Must contain atleast 3 characters",
+                                is_error: !min_three_char,
+                                hidden: username === "" ? true : false,
+                            },
+                            {
+                                id: "max_fifteen_char",
+                                msg: "Must be less than 15 characters",
+                                is_error: !max_fifteen_char,
+                                hidden: username === "" ? true : false,
+                            },
+                            {
+                                id: "contains_space",
+                                msg: "Must not contain a space",
+                                is_error: contains_space,
+                                hidden: username === "" ? true : false,
+                            },
+                            {
+                                id: "is_unique",
+                                msg: "Must be a unique username",
+                                is_error: !is_unique_username,
+                                hidden: username === "" ? true : false,
+                            },
+                        ]}
+                    />
 
-            {email_is_verified ? (
-                <div className="email_is_verified">
-                    Your email has been succesfully verified.
-                </div>
-            ) : (
-                <>
-                    {verification_code_loading ? (
-                        <div className="loading_div">
-                            <Loading />
+                    <Input
+                        label_text="Email:"
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => {
+                            set_email(e.target.value);
+                            set_email_is_verified(false);
+                            set_verification_code(null);
+                        }}
+                        errors={[
+                            {
+                                id: "is_valid",
+                                msg: "Must be a valid email",
+                                is_error: !is_valid_email,
+                                hidden: email === "" ? true : false,
+                            },
+                            {
+                                id: "is_unique",
+                                msg: "Must be a unique email",
+                                is_error: !is_unique_email,
+                                hidden: email === "" ? true : false,
+                            },
+                        ]}
+                    />
+
+                    {email_is_verified ? (
+                        <div className="email_is_verified">
+                            Your email has been succesfully verified.
                         </div>
                     ) : (
                         <>
-                            {email !== "" && is_valid_email && (
+                            {verification_code_loading ? (
+                                <div className="loading_div">
+                                    <Loading />
+                                </div>
+                            ) : (
                                 <>
-                                    {is_unique_email ? (
+                                    {email !== "" && is_valid_email && (
                                         <>
-                                            {verification_code === null ? (
-                                                <button
-                                                    className="send_verification_btn"
-                                                    onClick={() => {
-                                                        if (is_valid_username) {
-                                                            send_verification_code();
-                                                        } else {
-                                                            add_notification(
-                                                                "Please ensure username is valid first",
-                                                                "ERROR"
-                                                            );
-                                                        }
-                                                    }}
-                                                >
-                                                    Send Verification Code
-                                                </button>
-                                            ) : (
+                                            {is_unique_email ? (
                                                 <>
-                                                    <button
-                                                        className="send_verification_btn"
-                                                        onClick={() => {
-                                                            if (
-                                                                is_valid_username
-                                                            ) {
-                                                                send_verification_code();
-                                                            }
-                                                        }}
-                                                    >
-                                                        Resend Verification Code
-                                                    </button>
-                                                    <div className="verification_code_div">
-                                                        <OTPInput
-                                                            input_length={6}
-                                                            onComplete={(
-                                                                user_inputted_code
-                                                            ) => {
+                                                    {verification_code ===
+                                                    null ? (
+                                                        <button
+                                                            className="send_verification_btn"
+                                                            onClick={() => {
                                                                 if (
-                                                                    user_inputted_code.toString() ===
-                                                                    verification_code.toString()
+                                                                    is_valid_username
                                                                 ) {
-                                                                    add_notification(
-                                                                        "Your Email Has Been Verified"
-                                                                    );
-                                                                    set_email_is_verified(
-                                                                        true
-                                                                    );
+                                                                    send_verification_code();
                                                                 } else {
                                                                     add_notification(
-                                                                        "Invalid Code",
+                                                                        "Please ensure username is valid first",
                                                                         "ERROR"
                                                                     );
                                                                 }
                                                             }}
-                                                        />
-                                                    </div>
+                                                        >
+                                                            Send Verification
+                                                            Code
+                                                        </button>
+                                                    ) : (
+                                                        <>
+                                                            <button
+                                                                className="send_verification_btn"
+                                                                onClick={() => {
+                                                                    if (
+                                                                        is_valid_username
+                                                                    ) {
+                                                                        send_verification_code();
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Resend
+                                                                Verification
+                                                                Code
+                                                            </button>
+                                                            <div className="verification_code_div">
+                                                                <OTPInput
+                                                                    input_length={
+                                                                        6
+                                                                    }
+                                                                    onComplete={(
+                                                                        user_inputted_code
+                                                                    ) => {
+                                                                        if (
+                                                                            user_inputted_code.toString() ===
+                                                                            verification_code.toString()
+                                                                        ) {
+                                                                            add_notification(
+                                                                                "Your Email Has Been Verified"
+                                                                            );
+                                                                            set_email_is_verified(
+                                                                                true
+                                                                            );
+                                                                        } else {
+                                                                            add_notification(
+                                                                                "Invalid Code",
+                                                                                "ERROR"
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </>
+                                                    )}
                                                 </>
+                                            ) : (
+                                                <div className="sign_in_redirect">
+                                                    This email already has an
+                                                    account.
+                                                    <button
+                                                        className="sign_in_btn"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                "/signin",
+                                                                {
+                                                                    state: {
+                                                                        initialise_email:
+                                                                            email,
+                                                                    },
+                                                                }
+                                                            )
+                                                        }
+                                                    >
+                                                        Sign In
+                                                    </button>
+                                                </div>
                                             )}
                                         </>
-                                    ) : (
-                                        <div className="sign_in_redirect">
-                                            This email already has an account.
-                                            <button
-                                                className="sign_in_btn"
-                                                onClick={() =>
-                                                    navigate("/signin", {
-                                                        state: {
-                                                            initialise_email:
-                                                                email,
-                                                        },
-                                                    })
-                                                }
-                                            >
-                                                Sign In
-                                            </button>
-                                        </div>
                                     )}
                                 </>
                             )}
                         </>
                     )}
-                </>
-            )}
 
-            <PasswordInput
-                password={password}
-                set_password={set_password}
-                set_validity={set_password_validity}
-                input_props={{
-                    label_text: "Password:",
-                    id: "password",
-                }}
-                show_errors={password === "" ? false : true}
-            />
+                    <PasswordInput
+                        password={password}
+                        set_password={set_password}
+                        set_validity={set_password_validity}
+                        input_props={{
+                            label_text: "Password:",
+                            id: "password",
+                        }}
+                        show_errors={password === "" ? false : true}
+                    />
 
-            {is_loading_redirect ? (
-                <div className="loading_div">
-                    <Loading />
+                    {is_loading_redirect ? (
+                        <div className="loading_div">
+                            <Loading />
+                        </div>
+                    ) : (
+                        <button
+                            className="sign_up_btn"
+                            disabled={is_loading_redirect || sign_up_is_loading}
+                            onClick={handle_sign_up}
+                        >
+                            Sign Up
+                        </button>
+                    )}
                 </div>
-            ) : (
-                <button
-                    className="sign_up_btn"
-                    disabled={is_loading_redirect || sign_up_is_loading}
-                    onClick={handle_sign_up}
-                >
-                    Sign Up
-                </button>
-            )}
+            </div>
 
-            <button
-                onClick={() =>
-                    navigate("/signin", {
-                        state: {
-                            sign_in_as_guest: true,
-                        },
-                    })
-                }
-            >
-                Sign In as Guest
-            </button>
+            <div className="sign_in_as_guest_div">
+                <span>Don't want to create an account?</span>
+                <button
+                    onClick={() =>
+                        navigate("/signin", {
+                            state: {
+                                sign_in_as_guest: true,
+                            },
+                        })
+                    }
+                >
+                    Sign In as Guest
+                </button>
+            </div>
         </div>
     );
 }

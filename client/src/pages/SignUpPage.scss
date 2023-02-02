@@ -1,53 +1,80 @@
 @import "../variables.scss";
 
 .SignUpPage {
-    
-    background-color: var(--background-color-secondary);
-    padding: calc(1.5 * $padding);
-    border-radius: $border-radius;
-    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    gap: $padding;
-    width: 350px;
+    gap: calc(1.5 * $padding);
 
-    h2 {
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .send_verification_btn {
-        @include btn-styles(var(--blue));
-    } 
+    .sign_up_card {
+        background-color: var(--background-color-secondary);
+        
+        border-radius: $border-radius;
+        border: 1px solid var(--border-color);
+        
 
+        h2 {
+            border-bottom: 1px solid var(--border-color);
+            padding: calc(1.5 * $padding);
+            padding-bottom: 10px;
 
-    .verification_code_div {
-        display: flex;
-        justify-content: center;
+        }
+        .inputs {
+            padding: calc(1.5 * $padding);
+            display: flex;
+            flex-direction: column;
+            gap: $padding;
+            width: 350px;
+
+            .send_verification_btn {
+                @include btn-styles(var(--blue));
+            } 
+        
+        
+            .verification_code_div {
+                display: flex;
+                justify-content: center;
+            }
+            
+            
+            .loading_div {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .sign_in_redirect {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--blue);
+                
+                button {
+                    @include btn-style-text(var(--blue));
+                    
+                    text-decoration: underline;
+                    
+                }
+            }
+            
+            
+            .sign_up_btn {
+                @include btn-styles(var(--green));
+            }
+        }
+    
+        
+        
+        
     }
-    
-    
-    .loading_div {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .sign_in_redirect {
+
+    .sign_in_as_guest_div {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        color: var(--blue);
-        
+        padding: calc(0.5 * $padding);
+
         button {
             @include btn-style-text(var(--blue));
-            
-            text-decoration: underline;
-            
         }
     }
     
-    
-    .sign_up_btn {
-        @include btn-styles(var(--green));
-    }
 }

@@ -9,47 +9,57 @@
 
     .sign_in_card {
         background-color: var(--background-color-secondary);
-        padding: calc(1.5 * $padding);
+        
         border-radius: $border-radius;
         border: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        gap: $padding;
-        width: 350px;
+        
+        
 
         h2 {
             border-bottom: 1px solid var(--border-color);
+            padding: calc(1.5 * $padding);
+            padding-bottom: 10px;
         }
 
-        .sign_in_redirect_div {
+        .inputs {
+            padding: calc(1.5 * $padding);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--blue);
-            
-            button {
-                @include btn-style-text(var(--blue));
+            flex-direction: column;
+            gap: $padding;
+            width: 350px;
+
+            .sign_in_redirect_div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--blue);
                 
-                text-decoration: underline;
-                
+                button {
+                    @include btn-style-text(var(--blue));
+                    
+                    text-decoration: underline;
+                    
+                }
+            }
+    
+            .loading_div {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+    
+    
+            .sign_in_btn {
+                @include btn-styles(var(--green));
+            }
+    
+    
+            .error {
+                color: var(--red);
             }
         }
 
-        .loading_div {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-
-        .sign_in_btn {
-            @include btn-styles(var(--green));
-        }
-
-
-        .error {
-            color: var(--red);
-        }
+        
     }
 
     .sign_in_as_guest_div {

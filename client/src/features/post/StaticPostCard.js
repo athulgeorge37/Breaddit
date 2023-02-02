@@ -52,7 +52,7 @@ function StaticPostCard({ post_details }) {
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log({ error: data.error });
+                    //console.log({ error: data.error });
                     return;
                 }
                 set_allow_comments_section_btn(data.is_any);

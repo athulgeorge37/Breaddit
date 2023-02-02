@@ -56,7 +56,7 @@ function FollowerListInfiniteScroll({
                     : undefined;
             },
             onError: (data) => {
-                console.log({ infinite_followers: data });
+                // console.log({ infinite_followers: data });
             },
         }
     );

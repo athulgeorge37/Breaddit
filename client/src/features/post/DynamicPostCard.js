@@ -61,7 +61,7 @@ function DynamicPostCard({ post_id, location }) {
                 // removing post on client side when deleted from db
 
                 if (data.error) {
-                    console.log(data);
+                    // console.log(data);
                     add_notification("Cannot delete post", "ERROR");
                     return;
                 }

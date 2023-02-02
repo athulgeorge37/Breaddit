@@ -56,7 +56,7 @@ function UserOverview() {
         });
 
         if (response.error) {
-            console.log(response);
+            // console.log(response);
             return;
         }
 

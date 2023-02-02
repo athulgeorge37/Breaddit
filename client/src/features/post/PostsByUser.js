@@ -93,7 +93,7 @@ function PostsByUser() {
                 //     hasNextPage,
                 // });
                 if (posts[0].isIntersecting && hasNextPage) {
-                    console.log("Fetching more posts");
+                    //console.log("Fetching more posts");
                     fetchNextPage();
                 }
             });

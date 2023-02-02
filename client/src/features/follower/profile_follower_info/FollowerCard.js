@@ -21,7 +21,7 @@ function FollowerCard({ follower_data, close_modal, user_id }) {
         follower_data?.is_following ?? null
     );
 
-    console.log({ follower_data });
+    // console.log({ follower_data });
 
     const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {

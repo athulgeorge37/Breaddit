@@ -95,7 +95,7 @@ function PostsPage() {
                 return lastPage.all_posts.length ? allPages.length : undefined;
             },
             onError: (data) => {
-                console.log({ infinite_posts: data });
+                //console.log({ infinite_posts: data });
             },
         }
     );
@@ -120,7 +120,7 @@ function PostsPage() {
                 //     hasNextPage,
                 // });
                 if (posts[0].isIntersecting && hasNextPage) {
-                    console.log("Fetching more posts");
+                    //console.log("Fetching more posts");
                     fetchNextPage();
                 }
             });

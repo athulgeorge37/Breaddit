@@ -21,7 +21,7 @@ function VoterFollowerCard({ voter_data, close_modal, voter_info_query }) {
         voter_data?.is_following ?? null
     );
 
-    console.log({ voter_data });
+    // console.log({ voter_data });
 
     const { mutate: follow_or_unfollow_account } = useMutation(
         (account_id) => {
@@ -29,7 +29,7 @@ function VoterFollowerCard({ voter_data, close_modal, voter_info_query }) {
         },
         {
             onSuccess: (data) => {
-                console.log({ data });
+                // console.log({ data });
                 queryClient.invalidateQueries(["voter_info", voter_info_query]);
                 set_is_following(data.is_following);
             },

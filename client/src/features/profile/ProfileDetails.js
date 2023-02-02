@@ -76,7 +76,7 @@ function ProfileDetails() {
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log("is_following username error", data.error);
+                    //console.log("is_following username error", data.error);
                     return;
                 }
             },
@@ -96,7 +96,7 @@ function ProfileDetails() {
 
     const { mutate: handle_sign_out } = useMutation(sign_out, {
         onSuccess: (data) => {
-            console.log({ sign_out_time: data });
+            //console.log({ sign_out_time: data });
             set_is_signing_out(true);
             setTimeout(() => {
                 navigate("/signin");
@@ -114,7 +114,7 @@ function ProfileDetails() {
     }
 
     if (data.isError) {
-        console.log(data);
+        //console.log(data);
         return <p>An Error has occured, check console</p>;
     }
 

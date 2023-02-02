@@ -33,7 +33,7 @@ function ProfilePage() {
         {
             onSuccess: (data) => {
                 if (data.error) {
-                    console.log("user_details error", data.error);
+                    //console.log("user_details error", data.error);
                     return;
                 }
                 // set_user_id(data.user_details.id);
@@ -75,7 +75,7 @@ function ProfilePage() {
     }
 
     if (isError) {
-        console.log(data);
+        //console.log(data);
         return <p>An Error has occured, check console</p>;
     }
 

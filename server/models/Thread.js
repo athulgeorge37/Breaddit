@@ -47,37 +47,37 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    Thread.associate = (models) => {
-        Thread.belongsTo(models.User, {
-            foreignKey: {
-                allowNull: false,
-                name: "creator_id",
-            },
-            as: "creator_details",
-            // when using include when findAll, and we want an alias
-            // we use"as" here and there so sequelize knows what to use
-        });
+    // Thread.associate = (models) => {
+    //     // Thread.belongsTo(models.User, {
+    //     //     foreignKey: {
+    //     //         // allowNull: false,
+    //     //         name: "creator_id",
+    //     //     },
+    //     //     as: "creator_details",
+    //     //     // when using include when findAll, and we want an alias
+    //     //     // we use"as" here and there so sequelize knows what to use
+    //     // });
 
-        Thread.hasMany(models.Rule, {
-            foreignKey: {
-                allowNull: false,
-                name: "thread_id",
-            },
-            // onDelete: "cascade",
-            // hooks: true
-            as: "thread_rules",
-        });
+    //     Thread.hasMany(models.Rule, {
+    //         foreignKey: {
+    //             // allowNull: false,
+    //             name: "thread_id",
+    //         },
+    //         onDelete: "cascade",
+    //         // hooks: true
+    //         as: "thread_rules",
+    //     });
 
-        Thread.hasMany(models.Post, {
-            foreignKey: {
-                allowNull: false,
-                name: "thread_id",
-            },
-            // onDelete: "cascade",
-            // hooks: true
-            as: "thread_posts",
-        });
-    };
+    //     Thread.hasMany(models.Post, {
+    //         foreignKey: {
+    //             // allowNull: false,
+    //             name: "thread_id",
+    //         },
+    //         onDelete: "cascade",
+    //         // hooks: true
+    //         as: "thread_posts",
+    //     });
+    // };
 
     return Thread;
 };

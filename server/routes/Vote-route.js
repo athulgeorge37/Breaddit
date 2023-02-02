@@ -71,10 +71,6 @@ router.get("/get_post_votes_by_user", async (request, response) => {
         const page_num = parseInt(request.query.page_num);
         const offset = limit * page_num;
 
-        // console.log("");
-        // console.log({ query: request.query });
-        // console.log("in get_post_votes_by_user");
-
         const user_details = await db.User.findOne({
             where: {
                 username: username,
@@ -171,14 +167,6 @@ router.get("/get_comment_votes_by_user", async (request, response) => {
             offset: offset,
         });
 
-        // console.log("");
-        // console.log({
-        //     query: request.query,
-        //     list_of_comment_ids: JSON.stringify(list_of_comment_ids),
-        //     all_comments: JSON.stringify(all_comments),
-        // });
-        // console.log("in get_comment_votes_by_user");
-
         response.json({
             msg: "succefully got all comments",
             all_items: all_comments,
@@ -244,17 +232,6 @@ router.get("/get_reply_votes_by_user", async (request, response) => {
                 reply_id: list_of_reply_ids,
             },
         });
-
-        // console.log("");
-        // console.log({
-        //     query: request.query,
-        //     all_votes: JSON.stringify(all_votes),
-        //     list_of_reply_ids: JSON.stringify(list_of_reply_ids),
-        //     all_user_replies: JSON.stringify(all_user_replies),
-        //     all_parent_comment_ids: JSON.stringify(all_parent_comment_ids),
-        // });
-        // console.log("in get_reply_votes_by_user");
-        // console.log("");
 
         const all_reply_and_parent_comments = [];
         await Promise.all(
@@ -408,16 +385,6 @@ router.post("/make_vote", validate_request, async (request, response) => {
             // this function will ensure the vote count for the respective DB
             // matches the
 
-            // console.log("");
-            // console.log({
-            //     vote_id,
-            //     vote_type,
-            //     up_vote,
-            //     direction,
-            //     update_other,
-            // });
-            // console.log("");
-
             // does the user want to increment or decrement their vote counts
             const increment_by =
                 direction === "postive" ? 1 : direction === "negative" ? -1 : 0;
@@ -540,9 +507,6 @@ router.post("/make_vote", validate_request, async (request, response) => {
         response.json({
             error: e,
         });
-        //response.json({
-        //     error: e.errors[0].message
-        // })
     }
 });
 
@@ -554,14 +518,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
         const limit = parseInt(request.query.limit);
         const page_num = parseInt(request.query.page_num);
         const offset = limit * page_num;
-
-        // console.log("");
-        // console.log({
-        //     query: request.query,
-        //     role: request.role,
-        //     // all_voters: JSON.stringify(all_voters),
-        // });
-        // console.log("");
 
         let can_continue = false;
         const allowed_up_votes = ["true", "false"];
@@ -633,14 +589,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
             return;
         }
 
-        console.log("");
-        console.log({
-            query: request.query,
-            role: request.role,
-            all_voters: JSON.stringify(all_voters[0]),
-        });
-        console.log("");
-
         const new_follower_data = [];
         await Promise.all(
             all_voters.map(async (row) => {
@@ -655,13 +603,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
 
                 const is_following = following_details === null ? false : true;
 
-                // console.log({
-                //     is_following,
-                //     person: row.voter_details.username,
-                // });
-
-                // const voter_details = row.voter_details;
-
                 new_follower_data.push({
                     voter_details: row.voter_details,
                     is_following: is_following,
@@ -669,12 +610,6 @@ router.get("/get_all_voters", validate_role, async (request, response) => {
                 });
             })
         );
-
-        // console.log("");
-        // console.log({
-        //     new_follower_data,
-        // });
-        // console.log("");
 
         response.json({
             msg: "got all profiles for all_voters",

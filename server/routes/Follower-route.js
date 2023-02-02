@@ -71,10 +71,6 @@ router.get("/get_all_followers", validate_role, async (request, response) => {
             // since they themselves do not have an account
 
             const all_followers = all_profiles.map((row) => {
-                console.log("");
-                console.log(JSON.stringify(row));
-                console.log("");
-
                 if (follower_type === "followers") {
                     return {
                         follower_details: row.followed_by_user_details,

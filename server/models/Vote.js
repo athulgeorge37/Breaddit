@@ -72,29 +72,29 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    Vote.associate = (models) => {
-        Vote.belongsTo(models.Post, {
-            foreignKey: {
-                // can be null,
-                name: "post_id",
-            },
-        });
+    // Vote.associate = (models) => {
+    //     Vote.belongsTo(models.Post, {
+    //         foreignKey: {
+    //             // can be null,
+    //             name: "post_id",
+    //         },
+    //     });
 
-        Vote.belongsTo(models.Comment, {
-            foreignKey: {
-                // can be null
-                name: "comment_id",
-            },
-        });
+    //     Vote.belongsTo(models.Comment, {
+    //         foreignKey: {
+    //             // can be null
+    //             name: "comment_id",
+    //         },
+    //     });
 
-        Vote.belongsTo(models.User, {
-            foreignKey: {
-                allowNull: false,
-                name: "user_id",
-            },
-            as: "voter_details",
-        });
-    };
+    //     Vote.belongsTo(models.User, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "user_id",
+    //         },
+    //         as: "voter_details",
+    //     });
+    // };
 
     return Vote;
 };

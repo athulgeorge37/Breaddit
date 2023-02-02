@@ -19,10 +19,6 @@ router.get("/get_all_posts", async (request, response) => {
 
         const thread_title = request.query.thread_title;
 
-        console.log("");
-        console.log({ query: request.query }, "in post route /get_all");
-        console.log("");
-
         let where_search = {};
 
         if (thread_title !== "null") {
@@ -31,10 +27,6 @@ router.get("/get_all_posts", async (request, response) => {
                     title: thread_title,
                 },
             });
-
-            // console.log("");
-            // console.log({ thread_details }, "in post route /get_all");
-            // console.log("");
 
             where_search = {
                 thread_id: thread_details.id,
@@ -60,10 +52,6 @@ router.get("/get_all_posts", async (request, response) => {
             };
         }
 
-        console.log("");
-        console.log({ where_search }, "in post route");
-        console.log("");
-
         const all_posts = await db.Post.findAll({
             where: { ...where_search, is_inappropriate: false },
             order: order_by,
@@ -77,12 +65,6 @@ router.get("/get_all_posts", async (request, response) => {
             limit: limit,
             offset: offset,
         });
-
-        // console.log("");
-        // console.log({
-        //     all_posts,
-        // });
-        // console.log("");
 
         response.json({
             msg: "succesfully got list of posts",
@@ -268,10 +250,6 @@ router.delete(
         try {
             const post_id = parseInt(request.params.post_id);
             const user_id = request.user_id;
-
-            // console.log("");
-            // console.log({ post_id: post_id, user_id });
-            // console.log("");
 
             const result = await delete_post(post_id, user_id);
 

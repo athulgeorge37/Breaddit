@@ -20,15 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    Rule.associate = (models) => {
-        Rule.belongsTo(models.Thread, {
-            foreignKey: {
-                allowNull: false,
-                name: "thread_id",
-            },
-            as: "all_rules",
-        });
-    };
+    // Rule.associate = (models) => {
+    //     Rule.belongsTo(models.Thread, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "thread_id",
+    //         },
+    //         as: "all_rules",
+    //     });
+    // };
 
     return Rule;
 };

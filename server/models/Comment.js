@@ -43,69 +43,69 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    Comment.associate = (models) => {
-        Comment.belongsTo(models.User, {
-            foreignKey: {
-                allowNull: false,
-                name: "author_id",
-            },
-            as: "author_details",
-        });
+    // Comment.associate = (models) => {
+    //     Comment.belongsTo(models.User, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "author_id",
+    //         },
+    //         as: "author_details",
+    //     });
 
-        Comment.belongsTo(models.Post, {
-            foreignKey: {
-                allowNull: false,
-                name: "post_id",
-            },
-        });
+    //     Comment.belongsTo(models.Post, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "post_id",
+    //         },
+    //     });
 
-        Comment.hasMany(models.Vote, {
-            foreignKey: {
-                // can be null
-                name: "comment_id",
-            },
-            // onDelete: "cascade",
-        });
+    //     Comment.hasMany(models.Vote, {
+    //         foreignKey: {
+    //             // can be null
+    //             name: "comment_id",
+    //         },
+    //         onDelete: "cascade",
+    //     });
 
-        // associations to Replys
+    //     // associations to Replys
 
-        // Comment.belongsToMany(models.Comment, {
-        //     foreignKey: {
-        //         allowNull: false,
-        //         name: "comment_id"
-        //     },
-        //     as: "replies",
-        //     through: "Replies",
-        // })
+    //     // Comment.belongsToMany(models.Comment, {
+    //     //     foreignKey: {
+    //     //         allowNull: false,
+    //     //         name: "comment_id"
+    //     //     },
+    //     //     as: "replies",
+    //     //     through: "Replies",
+    //     // })
 
-        Comment.belongsToMany(models.Comment, {
-            through: models.Reply,
-            as: "Reply_IDs",
-            foreignKey: "reply_id",
+    //     Comment.belongsToMany(models.Comment, {
+    //         through: models.Reply,
+    //         as: "Reply_IDs",
+    //         foreignKey: "reply_id",
 
-            // onDelete: "cascade",
-        });
-        Comment.belongsToMany(models.Comment, {
-            through: models.Reply,
-            as: "Parent_Comment_IDs",
-            foreignKey: "parent_comment_id",
+    //         onDelete: "cascade",
+    //     });
+    //     Comment.belongsToMany(models.Comment, {
+    //         through: models.Reply,
+    //         as: "Parent_Comment_IDs",
+    //         foreignKey: "parent_comment_id",
 
-            // onDelete: "cascade",
-        });
+    //         onDelete: "cascade",
+    //     });
 
-        Comment.hasMany(models.Reply, {
-            foreignKey: "reply_id",
-            // as: 'FollowerLinks',
+    //     Comment.hasMany(models.Reply, {
+    //         foreignKey: "reply_id",
+    //         // as: 'FollowerLinks',
 
-            // onDelete: "cascade"
-        });
-        Comment.hasMany(models.Reply, {
-            foreignKey: "parent_comment_id",
-            // as: 'FollowingLinks',
+    //         // onDelete: "cascade"
+    //     });
+    //     Comment.hasMany(models.Reply, {
+    //         foreignKey: "parent_comment_id",
+    //         // as: 'FollowingLinks',
 
-            // onDelete: "cascade"
-        });
-    };
+    //         // onDelete: "cascade"
+    //     });
+    // };
 
     return Comment;
 };

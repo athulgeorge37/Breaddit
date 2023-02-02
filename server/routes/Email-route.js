@@ -34,14 +34,6 @@ router.post("/send_verification_code", async (request, response) => {
             },
         });
 
-        // console.log("");
-        // console.log({
-        //     user: process.env.EMAIL_USERNAME,
-        //     pass: process.env.EMAIL_PASSWORD,
-        //     to: email,
-        // });
-        // console.log("");
-
         transport.sendMail(
             {
                 from: process.env.EMAIL_FROM,
@@ -75,12 +67,6 @@ router.post(
     async (request, response) => {
         try {
             const { topic, description } = request.body;
-
-            // console.log("");
-            // console.log({
-            //     role: request.role,
-            // });
-            // console.log("");
 
             let email_subject = "";
             if (request.role === "user") {

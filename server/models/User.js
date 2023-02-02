@@ -70,61 +70,61 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    User.associate = (models) => {
-        User.hasMany(models.Post, {
-            // the foreign key when we create a post will be called "author_id"
-            foreignKey: "author_id",
-            // when a row in User is deleted,
-            // any table that relates to this will also be deleted
-            // // onDelete: "cascade",
-        });
+    // User.associate = (models) => {
+    //     User.hasMany(models.Post, {
+    //         // the foreign key when we create a post will be called "author_id"
+    //         foreignKey: "author_id",
+    //         // when a row in User is deleted,
+    //         // any table that relates to this will also be deleted
+    //         onDelete: "cascade",
+    //     });
 
-        User.hasMany(models.Comment, {
-            foreignKey: "author_id",
-            // // onDelete: "cascade",
-        });
+    //     User.hasMany(models.Comment, {
+    //         foreignKey: "author_id",
+    //         onDelete: "cascade",
+    //     });
 
-        User.hasMany(models.Vote, {
-            foreignKey: "user_id",
-            // // onDelete: "cascade",
-        });
+    //     User.hasMany(models.Vote, {
+    //         foreignKey: "user_id",
+    //         onDelete: "cascade",
+    //     });
 
-        User.hasMany(models.Thread, {
-            foreignKey: "creator_id",
-            // // onDelete: "cascade",
-        });
+    //     User.hasMany(models.Thread, {
+    //         foreignKey: "creator_id",
+    //         onDelete: "cascade",
+    //     });
 
-        // assoications for user login/logout activity
-        User.hasMany(models.UserActivity, {
-            foreignKey: "user_id",
-            // // onDelete: "cascade",
-        });
+    //     // assoications for user login/logout activity
+    //     User.hasMany(models.UserActivity, {
+    //         foreignKey: "user_id",
+    //         onDelete: "cascade",
+    //     });
 
-        // associations for follower table
-        User.belongsToMany(models.User, {
-            through: models.Follower,
-            as: "User_ids",
-            foreignKey: "user_id",
-        });
-        User.belongsToMany(models.User, {
-            through: models.Follower,
-            as: "Followed_by",
-            foreignKey: "followed_by",
-        });
+    //     // associations for follower table
+    //     User.belongsToMany(models.User, {
+    //         through: models.Follower,
+    //         as: "User_ids",
+    //         foreignKey: "user_id",
+    //     });
+    //     User.belongsToMany(models.User, {
+    //         through: models.Follower,
+    //         as: "Followed_by",
+    //         foreignKey: "followed_by",
+    //     });
 
-        User.hasMany(models.Follower, {
-            foreignKey: "user_id",
-            // as: 'FollowerLinks',
+    //     User.hasMany(models.Follower, {
+    //         foreignKey: "user_id",
+    //         // as: 'FollowerLinks',
 
-            // // onDelete: "cascade",
-        });
-        User.hasMany(models.Follower, {
-            foreignKey: "followed_by",
-            // as: 'FollowingLinks',
+    //         onDelete: "cascade",
+    //     });
+    //     User.hasMany(models.Follower, {
+    //         foreignKey: "followed_by",
+    //         // as: 'FollowingLinks',
 
-            // // onDelete: "cascade",
-        });
-    };
+    //         onDelete: "cascade",
+    //     });
+    // };
 
     return User;
 };

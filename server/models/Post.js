@@ -65,46 +65,46 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     // the asssociation this table has with other tables
-    Post.associate = (models) => {
-        // Post.hasMany(models.Comment, {
-        //     onDelete: "cascade"
-        // });
+    // Post.associate = (models) => {
+    //     // Post.hasMany(models.Comment, {
+    //     //     onDelete: "cascade"
+    //     // });
 
-        Post.belongsTo(models.User, {
-            foreignKey: {
-                allowNull: false,
-                name: "author_id",
-            },
-            as: "author_details",
-            // when using include when findAll, and we want an alias
-            // we use"as" here and there so sequelize knows what to use
-        });
+    //     Post.belongsTo(models.User, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "author_id",
+    //         },
+    //         as: "author_details",
+    //         // when using include when findAll, and we want an alias
+    //         // we use"as" here and there so sequelize knows what to use
+    //     });
 
-        Post.belongsTo(models.Thread, {
-            foreignKey: {
-                allowNull: true,
-                name: "thread_id",
-            },
-            as: "thread_posts",
-        });
+    //     Post.belongsTo(models.Thread, {
+    //         foreignKey: {
+    //             allowNull: true,
+    //             name: "thread_id",
+    //         },
+    //         as: "thread_posts",
+    //     });
 
-        Post.hasMany(models.Comment, {
-            foreignKey: {
-                allowNull: false,
-                name: "post_id",
-            },
-            // onDelete: "cascade",
-            // hooks: true
-        });
+    //     Post.hasMany(models.Comment, {
+    //         foreignKey: {
+    //             allowNull: false,
+    //             name: "post_id",
+    //         },
+    //         onDelete: "cascade",
+    //         // hooks: true
+    //     });
 
-        Post.hasMany(models.Vote, {
-            foreignKey: {
-                // can be null
-                name: "post_id",
-            },
-            // onDelete: "cascade",
-        });
-    };
+    //     Post.hasMany(models.Vote, {
+    //         foreignKey: {
+    //             // can be null
+    //             name: "post_id",
+    //         },
+    //         onDelete: "cascade",
+    //     });
+    // };
 
     return Post;
 };

@@ -53,7 +53,7 @@ router.get(
         // when user does not exist, response is null
 
         try {
-            const username = request.query.username;
+            // const username = request.query.username;
             const user_details = await db.User.findByPk(request.user_id);
 
             response.json({
@@ -90,30 +90,31 @@ router.get("/check_is_unique_email/:new_email", async (request, response) => {
 
 router.get("/check_is_unique_username", async (request, response) => {
     // checks if the entered username is unique
-    const username = request.query.username;
-    const users_with_new_username = await db.User.findOne({
-        where: {
-            username: username,
-        },
-    });
 
-    // console.log("");
-    // console.log({ users: JSON.stringify(users_with_new_username) });
-    // console.log("");
-    let is_unique = true;
-    if (
-        users_with_new_username !== null &&
-        users_with_new_username.username === username
-    ) {
-        is_unique = false;
+    try {
+        const username = request.query.username;
+        const users_with_new_username = await db.User.findOne({
+            where: {
+                username: username,
+            },
+        });
+
+        let is_unique = true;
+        if (
+            users_with_new_username !== null &&
+            users_with_new_username.username === username
+        ) {
+            is_unique = false;
+        }
+
+        response.json({
+            is_unique: is_unique,
+        });
+    } catch (e) {
+        response.json({
+            error: e,
+        });
     }
-
-    response.json({
-        is_unique: is_unique,
-    });
-    // response.json({
-    //     is_unique: users_with_new_username === 0 ? true : false,
-    // });
 });
 
 router.get(
@@ -145,14 +146,6 @@ router.get(
 // for testing purposes, we will send a json response
 // to show that the request worked
 router.post("/create_user", async (request, response) => {
-    // where user_details = {
-    //     "email": "email3@gmail.com",
-    //     "username": "donkey",
-    //     "password": "Pass1!",
-    //     "profile_pic": "https://fd.png",
-    //     "bio": "This isfdsfsmy bio"
-    // }
-
     try {
         // getting the data from the request url
         const { email, username, password, profile_pic, bio } = request.body;
@@ -356,12 +349,6 @@ router.put(
                 },
             });
 
-            // console.log("");
-            // console.log({
-            //     profile_pic: updated_user_details.profile_pic,
-            // });
-            // console.log("");
-
             response.json({
                 msg: "Succesfully edited profile in db",
             });
@@ -380,14 +367,6 @@ router.put("/change_password", validate_request, async (request, response) => {
 
         const user_details = await db.User.findByPk(user_id);
 
-        // console.log("");
-        // console.log({
-        //     user_details: JSON.stringify(user_details),
-        //     current_password,
-        //     new_password,
-        // });
-        // console.log("");
-
         if (!user_details) {
             response.json({
                 error: `No user with user_id ${user_id}`,
@@ -403,9 +382,6 @@ router.put("/change_password", validate_request, async (request, response) => {
             user_details.password
         );
 
-        // console.log(" matching current_password with user_details.password");
-        // console.log({ match });
-        // console.log("");
         // if they do not match, send error
         if (match === false) {
             response.json({

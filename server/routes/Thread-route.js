@@ -42,10 +42,6 @@ router.get("/get_thread_details", async (request, response) => {
         const thread_title = request.query.thread_title;
         const post_id = request.query.post_id;
 
-        console.log("");
-        console.log({ thread_title }, "from thread_route get by title");
-        console.log("");
-
         if (thread_title === "null" && post_id === "null") {
             response.json({
                 msg: "no thread selected",
@@ -96,10 +92,6 @@ router.get("/get_thread_details", async (request, response) => {
                 ],
             });
         }
-
-        console.log("");
-        console.log({ thread_details, thread_title, post_id });
-        console.log("");
 
         response.json({
             msg: "successfully found thread details",

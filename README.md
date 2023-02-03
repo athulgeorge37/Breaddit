@@ -1,5 +1,7 @@
 # Breaddit A FullStack Reddit Clone:
 
+See the live demo here : [breaddit-theta.vercel.app](https://breaddit-theta.vercel.app/)
+
 Stack:
 
 -   React
@@ -16,33 +18,6 @@ Areas Covered:
 -   JSON Web Tokens
 -   Protected Routes
 
-## Installation
-
-cd into server and client folder and run:
-
-```
-npm install
-```
-
-followed by:
-
-```
-npm start
-```
-
-ensure you have added env variables
-
--   client
-
-    -   REACT_APP_REST_API_URL
-    -   REACT_APP_CLOUDINARY_UPLOAD_PRESET
-    -   REACT_APP_CLOUDINARY_CLOUD_NAME
-
--   server
-    -   EMAIL_FROM
-    -   EMAIL_USERNAME
-    -   EMAIL_PASSWORD
-    -   WEB_TOKEN_SECRET
 
 ## Contents
 

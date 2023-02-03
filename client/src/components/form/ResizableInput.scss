@@ -7,10 +7,15 @@
     box-sizing: border-box;
     width: 100%;
     resize: none;
-    overflow-y: hidden;
     
+
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
+}
+
+
+.ResizableInput::-webkit-scrollbar {
+    display: none;
 }

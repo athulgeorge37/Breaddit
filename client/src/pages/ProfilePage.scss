@@ -40,11 +40,15 @@
             @include btn-styles(var(--background-color-secondary));
             text-decoration: none;
             padding: $padding;
+            color: var(--text-color-primary);
+            border: 1px solid var(--background-color-primary);
         }
     
         a.active {
             // border-bottom: 1px solid var(--blue);
             background-color: var(--blue);
+            color: var(--text-color-primary-inversed);
+            border: 1px solid var(--blue);
         }
     }
 

@@ -142,12 +142,14 @@ function ProfileDetails() {
                         disable_tooltip
                         margin_right={0}
                     />
-                    <p className="username">{user_details.username}</p>
-                    <div className="join_data">
-                        <label htmlFor="join_date">Joined On:</label>
-                        <p id="join_date">
-                            {human_readable_date(user_details.createdAt)}
-                        </p>
+                    <div className="user_details_info">
+                        <p className="username">{user_details.username}</p>
+                        <div className="join_data">
+                            <label htmlFor="join_date">Joined On:</label>
+                            <p id="join_date">
+                                {human_readable_date(user_details.createdAt)}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div className="user_data_and_bio">

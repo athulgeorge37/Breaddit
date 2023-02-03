@@ -4,7 +4,7 @@ import "./Navbar.scss";
 // hooks
 import { useCurrentUser } from "../context/CurrentUser/CurrentUserProvider";
 import { useDarkMode } from "../context/DarkMode/DarkModeProvider";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // components
 import { NavLink } from "react-router-dom";
@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 
 function Navbar() {
     const { pathname } = useLocation();
+    const navigate = useNavigate();
 
     const { current_user } = useCurrentUser();
     const { is_dark_mode, set_is_dark_mode } = useDarkMode();
@@ -25,7 +26,7 @@ function Navbar() {
     return (
         <nav>
             <div className="nav_content">
-                <div className="logo">
+                <div className="logo" onClick={() => navigate("/")}>
                     <img
                         src="../images/breaddit_logo.png"
                         alt="logo"

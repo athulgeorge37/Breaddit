@@ -24,7 +24,7 @@ const DARK_MODE_COLORS = {
 
 const LIGHT_MODE_COLORS = {
     "--background-color-primary": "#cbd5e1",
-    "--background-color-secondary": "#94a3b8",
+    "--background-color-secondary": "#f1f5f9",
     "--background-color-tertiary": "#64748b",
 
     "--text-color-primary": "#1f2937",

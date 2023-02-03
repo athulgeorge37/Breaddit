@@ -24,7 +24,7 @@
         // padding: $padding;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         gap: 10px;
 
         .Input {
@@ -39,7 +39,7 @@
         }
 
         .img_btns {
-            // margin-top: 18px;
+            margin-top: 20px;
 
             display: flex;
             
@@ -48,6 +48,7 @@
                 @include btn-styles(var(--background-color-secondary));
                 padding: 5px;
                 transition: none;
+                
 
                 display: flex;
                 align-items: center;
@@ -55,7 +56,7 @@
                 .image_icon, .remove_img_icon {
                     width: 25px;
                     height: 25px;
-                    color: var(--text-color-secondary);
+                    color: var(--blue);
                 }
             }
 

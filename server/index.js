@@ -35,10 +35,6 @@ app.use("/api/email", emailRoutes);
 app.use("/api/profile_visits", profileVisitRoutes);
 app.use("/api/thread", threadRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Express on Vercel");
-});
-
 // graphql typedefs and resolvers, required for our apollo server
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 const { typeDefs } = require("./schema/TypeDefs");
@@ -126,7 +122,5 @@ db.sequelize
         });
     })
     .catch((e) => {
-        //console.log(e);
+        console.log(e);
     });
-
-module.exports = server;

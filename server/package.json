@@ -8,9 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "seed": "npx sequelize-cli db:seed:all",
-    "drop": "npx sequelize-cli db:seed:undo:all"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +27,7 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
-    "sequelize": "^6.23.0",
+    "sequelize": "^6.28.0",
     "sequelize-cli": "^6.4.1",
     "ws": "^8.9.0"
   }
